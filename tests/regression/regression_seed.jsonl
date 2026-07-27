@@ -1,0 +1,3 @@
+{"id":"reg-001","query":"我这个项目怎么讲才能匹配大模型应用岗位","failure_type":"router_error","expected_intent":"match_resume","expected_sources":["jd","resume","project_logs"],"note":"多意图 query 可能同时命中项目讲解和简历匹配，后续需要支持多 source 或更细优先级。"}
+{"id":"reg-002","query":"这个岗位是否还有效，最近更新时间是什么时候","failure_type":"retrieval_miss","expected_sources":["jd"],"note":"需要 freshness_filter 或 metadata 查询能力，当前关键词检索可能只返回正文而忽略时效性字段。"}
+{"id":"reg-003","query":"请只根据引用说明我是否满足每周实习 4 天以上","failure_type":"citation_error","expected_sources":["jd","user_profile"],"note":"需要 citation accuracy 检查，确保回答中的判断同时被 JD 要求和用户画像支持。"}

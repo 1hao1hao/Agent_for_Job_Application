@@ -1,0 +1,1 @@
+"""Internship RAG project package."""

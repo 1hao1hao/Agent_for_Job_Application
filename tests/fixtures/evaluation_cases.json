@@ -1,0 +1,37 @@
+{
+  "retrieval_cases": [
+    {
+      "query": "这个大模型实习岗位要求什么",
+      "relevant_chunk_ids": ["jd-backend_intern-0-a1da3e9ac6ca"],
+      "retrieved_chunk_ids": ["jd-backend_intern-0-a1da3e9ac6ca", "resume-sample_resume-0-placeholder"]
+    },
+    {
+      "query": "RAG 面试常见问题有哪些",
+      "relevant_chunk_ids": ["interview-rag_notes-0-placeholder", "interview-rag_notes-1-placeholder"],
+      "retrieved_chunk_ids": ["interview-rag_notes-1-placeholder", "resume-sample_resume-0-placeholder"]
+    }
+  ],
+  "router_cases": [
+    {
+      "query": "分析这个岗位要求",
+      "expected_intent": "analyze_jd",
+      "predicted_intent": "analyze_jd",
+      "expected_sources": ["jd"],
+      "predicted_sources": ["jd"]
+    },
+    {
+      "query": "我的简历和这个 JD 匹配吗",
+      "expected_intent": "match_resume",
+      "predicted_intent": "match_resume",
+      "expected_sources": ["jd", "resume"],
+      "predicted_sources": ["jd", "resume"]
+    },
+    {
+      "query": "面试 RAG 项目时常见追问怎么回答",
+      "expected_intent": "interview_prepare",
+      "predicted_intent": "interview_prepare",
+      "expected_sources": ["interview", "jd", "resume"],
+      "predicted_sources": ["interview", "jd", "resume"]
+    }
+  ]
+}
