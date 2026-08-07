@@ -31,9 +31,9 @@
 | 单来源、多来源和拒答固定 Demo | `scripts/export_fixed_demos.py`、`examples/fixed_demos/` | verified; replay saved frozen artifacts |
 | 标准 BM25、离线 index 与统一 Retriever 接口 | `src/intern_rag/retrieval/bm25.py`、`tests/unit/test_bm25_retrieval.py` | verified |
 | Keyword/BM25/Dense/BM25+Dense RRF dev 消融 | `reports/ablations/p1-d1-bm25-dev-20260807/` | verified; BM25 not selected as final config |
-| FastAPI Query/Trace/Evaluation Job 接口 | `src/intern_rag/serving/`、API tests | verified locally |
-| PostgreSQL 状态持久化与 Redis Evaluation Worker | `src/intern_rag/persistence/`、`src/intern_rag/worker/`、stack integration test | verified locally with real services |
-| Docker Compose 四服务编排 | `compose.yaml`、`.github/workflows/p1-service.yml` | config verified; runtime CI pending |
+| FastAPI Query/Trace/Evaluation Job 接口 | `src/intern_rag/serving/`、API tests、CI run 31167280941 | verified locally and in Docker CI |
+| PostgreSQL 状态持久化与 Redis Evaluation Worker | `src/intern_rag/persistence/`、`src/intern_rag/worker/`、stack integration test | verified with real local services and Docker CI |
+| Docker Compose 四服务编排 | `compose.yaml`、[CI run 31167280941](https://github.com/1hao1hao/Agent_for_Job_Application/actions/runs/31167280941) | verified; health、Query/Trace、Queue/Worker/Report 均通过 |
 
 这些事实不能被扩写为：
 
@@ -42,7 +42,6 @@
 - 神经 CrossEncoder Reranker 带来指标提升。
 - contract-level Unsupported Answer Rate 等于真实 LLM 幻觉率。
 - BM25 或 BM25+Dense 已优于当前 frozen Hybrid 最终配置。
-- Docker Compose 已完成运行验证（在 CI 成功前）。
 
 ## 最终简历描述
 
@@ -153,4 +152,4 @@ Regression Case:
 - [x] 固定 Demo 包含 answered trace 和 abstain trace。
 - [x] 面试材料包含一个失败闭环及其延迟边界。
 - [x] README 与简历数字一致。
-- [ ] GitHub 默认分支包含对应代码和报告。
+- [x] GitHub 默认分支包含对应代码和报告。

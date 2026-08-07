@@ -39,10 +39,15 @@ local PostgreSQL 10.19 and Redis 7.2.7 processes:
 
 Completed job evidence: [completed_job.json](completed_job.json).
 
-## Docker Boundary
+## Docker Validation
 
-`docker-compose 5.4.0 config --quiet` passed. Local `compose up` could not run because
-`/var/run/docker.sock` does not exist and the account has no sudo access. The repository
-therefore includes `.github/workflows/p1-service.yml`, which performs the complete Compose
-Query/Trace/Queue/Worker flow on a Docker-enabled GitHub runner. This report must not mark
-Docker runtime validation complete until that workflow succeeds.
+`docker-compose 5.4.0 config --quiet` passed locally. Local `compose up` could not run because
+`/var/run/docker.sock` does not exist and the account has no sudo access, so the same Compose
+file was executed on a Docker-enabled GitHub runner.
+
+The first CI run exposed a shared-volume copy-up race while API and Worker started together.
+The fix separated Trace and Report volume ownership and set the shared index volume to
+`nocopy`. The second run built all images, passed service healthchecks, completed Query/Trace
+and asynchronous Evaluation Job flows, recorded four running services, and shut down cleanly.
+
+Successful run: [P1 Service Integration #31167280941](https://github.com/1hao1hao/Agent_for_Job_Application/actions/runs/31167280941).

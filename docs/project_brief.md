@@ -46,8 +46,10 @@ Harness 指围绕模型和 RAG 核心能力提供运行控制与质量保障的�
 - 一次请求一条 JSONL Agent Trace，记录多次 attempt、阶段延迟与 token。
 - Router、Retrieval、Citation、Abstention、Semantic Key-Point、Claim-Level
   Grounding 和 Regression 评测。
-- 真实 DeepSeek dev/test Run、frozen retrieval 对照和 123 个自动化测试。
+- 真实 DeepSeek dev/test Run、frozen retrieval 对照和 142 个自动化测试。
 - 单来源、多来源、拒答固定 Demo，以及 README、最终报告和面试材料。
+- 标准 BM25、FastAPI HTTP 契约、PostgreSQL 状态持久化、Redis Evaluation Worker
+  和通过 GitHub Actions 验证的四服务 Docker Compose 部署。
 
 当前真实限制：
 
@@ -58,8 +60,8 @@ Harness 指围绕模型和 RAG 核心能力提供运行控制与质量保障的�
 - Claim-Level Grounding 与 Generator 使用同模型家族；frozen 有 3 条 unknown，
   因此严格 E2E 为 unavailable，不能宣称零幻觉。
 - Reranker 在 dev 负向消融后关闭；没有实测神经 CrossEncoder 提升。
-- FastAPI、PostgreSQL、Redis Worker 与 Docker Compose 已进入 `P1-D1` 实施计划，
-  在代码、测试和容器验证完成前仍不能作为当前成果；可视化和高并发压测继续暂缓。
+- BM25 在 dev 消融中未优于既有最终 Hybrid，因此保留为可选检索配置，而不是
+  替换冻结配置；可视化、高并发压测和 pgvector 继续暂缓。
 
 ## 项目文档怎么读
 
@@ -106,7 +108,7 @@ Query
 - 一次 query 对应一条完整 Trace。
 - Keyword、Dense、Hybrid 三种检索策略可配置切换。
 - 一个命令运行离线评测并生成报告。
-- 一个稳定 CLI 运行入口；FastAPI 只在核心指标闭环后按时间选择。
+- 一个稳定 CLI 运行入口；P1 在相同 Pipeline 上增加 FastAPI 服务，不复制核心逻辑。
 
 ### P0 数据与评测交付
 

@@ -31,6 +31,13 @@
     "config_validation": "passed",
     "local_up": "blocked_no_docker_daemon",
     "ci_workflow": ".github/workflows/p1-service.yml",
-    "ci_status": "pending"
+    "ci_status": "passed",
+    "ci_run_id": 31167280941,
+    "ci_run_url": "https://github.com/1hao1hao/Agent_for_Job_Application/actions/runs/31167280941",
+    "verified_flows": [
+      "compose_healthchecks",
+      "query_to_persisted_trace",
+      "evaluation_job_to_redis_worker_report"
+    ]
   }
 }
