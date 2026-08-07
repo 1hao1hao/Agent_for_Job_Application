@@ -25,8 +25,10 @@ class EvidenceConfig:
     min_scores: Mapping[str, float] = field(
         default_factory=lambda: {
             "keyword": 0.1,
+            "bm25": 0.0,
             "dense": 0.45,
             "hybrid": 0.02,
+            "bm25_hybrid": 0.02,
         }
     )
     require_source_coverage: bool = True

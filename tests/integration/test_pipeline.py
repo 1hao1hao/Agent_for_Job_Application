@@ -143,6 +143,36 @@ class PipelineIntegrationTests(unittest.TestCase):
 
         self.assertEqual(response.status, "answered")
 
+    def test_request_can_select_configured_bm25_hybrid_retriever(self) -> None:
+        def bm25_hybrid(query, chunks, top_k=5, source_types=None):
+            del query, top_k, source_types
+            chunk = chunks[0]
+            return [RetrievalResult(chunk.id, 0.03, 1, chunk, "fake bm25 rrf")]
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            trace_path = Path(temp_dir) / "trace.jsonl"
+            pipeline = RagPipeline(
+                chunks=_chunks(),
+                llm_client=FakeLlmClient([_raw_generation(
+                    answer="岗位要求 Python。",
+                    cited_chunk_ids=["jd-1"],
+                    sufficient=True,
+                    reason="证据充分",
+                )]),
+                config=PipelineConfig(model="fake-model"),
+                trace_path=trace_path,
+                retrievers={"bm25_hybrid": bm25_hybrid},
+            )
+
+            response = pipeline.run(RagRequest(
+                query="分析岗位要求",
+                retriever="bm25_hybrid",
+            ))
+            trace = read_traces_jsonl(trace_path)[0]
+
+        self.assertEqual(response.status, "answered")
+        self.assertEqual(trace.retrieval["retriever"], "bm25_hybrid")
+
     def test_insufficient_query_returns_controlled_abstention(self) -> None:
         response, traces = self._run_pipeline(
             "资料中有没有量子芯片流片经历？",

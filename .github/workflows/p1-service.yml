@@ -1,0 +1,88 @@
+name: P1 Service Integration
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  compose-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Compose
+        run: docker compose -f compose.yaml config --quiet
+
+      - name: Start API, Worker, PostgreSQL and Redis
+        run: EVALRAG_GIT_COMMIT=${GITHUB_SHA} docker compose -f compose.yaml up -d --build
+
+      - name: Wait for API health
+        run: |
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://localhost:8000/health > /tmp/health.json; then
+              cat /tmp/health.json
+              exit 0
+            fi
+            sleep 2
+          done
+          docker compose -f compose.yaml ps
+          docker compose -f compose.yaml logs
+          exit 1
+
+      - name: Run Query and Trace flow
+        run: |
+          curl --fail --silent \
+            -H 'Content-Type: application/json' \
+            -d '{"query":"请分析大模型应用研发实习生的岗位要求","retriever":"bm25","top_k":5}' \
+            http://localhost:8000/v1/query > /tmp/query.json
+          python - <<'PY'
+          import json
+          import urllib.request
+          payload = json.load(open('/tmp/query.json', encoding='utf-8'))
+          assert payload['status'] == 'answered', payload
+          assert payload['citations'], payload
+          trace = json.load(urllib.request.urlopen(
+              f"http://localhost:8000/v1/traces/{payload['trace_id']}"
+          ))
+          assert trace['retrieval']['retriever'] == 'bm25', trace
+          print(json.dumps({'query_status': payload['status'], 'trace_id': payload['trace_id']}))
+          PY
+
+      - name: Run asynchronous Evaluation Job flow
+        run: |
+          curl --fail --silent \
+            -H 'Content-Type: application/json' \
+            -H 'Idempotency-Key: github-actions-p1-d1' \
+            -d '{"dataset_version":"evalrag_v0.2","split":"dev","run_config":{"run_id":"p1-d1-compose-ci","retriever_config_path":"configs/retrieval/bm25_v0.2.json"}}' \
+            http://localhost:8000/v1/evaluation-jobs > /tmp/job.json
+          python - <<'PY'
+          import json
+          import time
+          import urllib.request
+          job = json.load(open('/tmp/job.json', encoding='utf-8'))
+          url = f"http://localhost:8000/v1/evaluation-jobs/{job['job_id']}"
+          for _ in range(120):
+              current = json.load(urllib.request.urlopen(url))
+              if current['status'] == 'succeeded':
+                  assert current['report_path'], current
+                  print(json.dumps(current))
+                  break
+              if current['status'] == 'failed':
+                  raise AssertionError(current)
+              time.sleep(1)
+          else:
+              raise TimeoutError('evaluation job did not finish')
+          PY
+
+      - name: Record container status
+        run: docker compose -f compose.yaml ps
+
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose -f compose.yaml logs
+
+      - name: Stop stack
+        if: always()
+        run: docker compose -f compose.yaml down -v

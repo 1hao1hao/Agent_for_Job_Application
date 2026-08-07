@@ -1,0 +1,11 @@
+{
+  "job_id": "bc8daff1-7a83-4144-8f58-8c8b5f57bcca",
+  "status": "succeeded",
+  "attempt_count": 1,
+  "dataset_version": "evalrag_v0.2",
+  "split": "dev",
+  "retriever": "bm25",
+  "report_path": "reports/runs/p1-d1-stack-c108812d-8507-4ba4-a3dc-4991d1e22972",
+  "state_source": "PostgreSQL",
+  "queue": "Redis 7.2.7"
+}

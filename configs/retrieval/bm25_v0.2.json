@@ -1,0 +1,10 @@
+{
+  "retriever_name": "bm25",
+  "top_k": 5,
+  "chunk_max_chars": 420,
+  "bm25_index_path": "data/processed/indexes/evalrag_v0.2/bm25-v1/index.json",
+  "k1": 1.5,
+  "b": 0.75,
+  "tokenizer_version": "mixed-char-bigram-v1",
+  "calibration_split": "dev"
+}

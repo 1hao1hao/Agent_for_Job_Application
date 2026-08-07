@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 from datetime import datetime, timezone
 import json
+import os
 from pathlib import Path
 import subprocess
 
@@ -115,21 +116,28 @@ def _default_run_id(split: str, candidate: bool) -> str:
 
 
 def _git_revision() -> str:
-    """记录当前 commit；工作区有未提交修改时追加 dirty。"""
+    """记录当前代码版本，容器中优先使用构建时注入的版本。"""
 
-    commit = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.strip()
-    dirty = subprocess.run(
-        ["git", "status", "--porcelain"],
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.strip()
-    return f"{commit}-dirty" if dirty else commit
+    configured_revision = os.getenv("EVALRAG_GIT_COMMIT", "").strip()
+    if configured_revision:
+        return configured_revision
+
+    try:
+        commit = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        dirty = subprocess.run(
+            ["git", "status", "--porcelain"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        return f"{commit}-dirty" if dirty else commit
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return "unavailable"
 
 
 if __name__ == "__main__":

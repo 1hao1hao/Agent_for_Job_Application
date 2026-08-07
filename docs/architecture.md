@@ -572,13 +572,16 @@ Pipeline 直接复用 `RagPipeline`，每条 Case 生成 `RagResponse` 和请求
 汇总 token、价格快照成本和阶段延迟。模型返回的 `sufficient` 与 citations 不被
 直接信任，仍由确定性 Validator 决定最终状态。
 
-## Serving
+## Serving 与异步评测
 
-P0 在质量闭环之后增加最小 FastAPI：
+P1-D1 在质量闭环之后增加 FastAPI 服务：
 
 ```text
 POST /v1/query
 GET  /health
+GET  /v1/traces/{trace_id}
+POST /v1/evaluation-jobs
+GET  /v1/evaluation-jobs/{job_id}
 ```
 
 服务层负责：
@@ -595,7 +598,29 @@ GET  /health
 - 在 Web 请求中运行完整批量评测。
 - 用内存变量伪装持久化队列。
 
-批量评测首先使用 CLI。只有出现真实异步需求和可测量收益时，P1 才增加 Redis Queue 与 worker。
+批量评测已经具备明显的长任务属性，不能阻塞 HTTP 请求。P1-D1 使用如下职责划分：
+
+```text
+EvaluationJobRequest
+  -> FastAPI 创建 PostgreSQL job（queued）
+  -> Redis Queue 入队
+  -> Evaluation Worker 更新 running
+  -> 复用 Evaluation Runner 生成标准工件
+  -> PostgreSQL 更新 succeeded / failed 与 report_path
+```
+
+- PostgreSQL 是请求索引、Trace、Evaluation Job 和 Run 元数据的持久化真相来源。
+- Redis 只负责队列与 Worker 协调，不作为最终任务状态数据库。
+- 完整 report、case results 和 failures 保存到持久化 volume，数据库保存路径与摘要。
+- idempotency key 防止同一评测配置重复入队。
+- Worker 重试次数受配置约束，失败必须保存 error type，不允许无限循环。
+
+### 为什么暂不使用 pgvector
+
+当前语料只有 310 个 Chunk，Dense Retriever 的精确扫描仍能直接工作。P1-D1 保持
+现有离线向量 index，把 PostgreSQL 用在真正需要事务和持久状态的服务数据上。
+只有 profiling 证明向量扫描成为主要延迟或内存瓶颈后，才引入 pgvector/ANN，并通过
+Recall、P95 和资源占用对照证明迁移价值。
 
 ## 运行工件目录
 

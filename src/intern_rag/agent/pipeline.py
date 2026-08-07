@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from time import perf_counter
-from typing import Mapping
+from typing import Callable, Mapping
 from uuid import uuid4
 
 from intern_rag.agent.context import build_context
@@ -22,6 +22,7 @@ from intern_rag.ingestion import Chunk
 from intern_rag.retrieval import RetrievalResult, Retriever, retrieve_top_k
 from intern_rag.routing import RouteDecision, Router, route_query
 from intern_rag.tracing import (
+    AgentTrace,
     ErrorType,
     build_agent_trace,
     write_trace_jsonl,
@@ -83,6 +84,7 @@ class RagPipeline:
         routers: Mapping[str, Router] | None = None,
         retriever: Retriever = retrieve_top_k,
         retrievers: Mapping[str, Retriever] | None = None,
+        trace_sink: Callable[[AgentTrace], None] | None = None,
     ) -> None:
         self.chunks = list(chunks)
         self.llm_client = llm_client
@@ -96,6 +98,7 @@ class RagPipeline:
         self.retrievers: dict[str, Retriever] = {"keyword": retriever}
         if retrievers is not None:
             self.retrievers.update(retrievers)
+        self.trace_sink = trace_sink
 
     def run(self, request: RagRequest) -> RagResponse:
         """执行门控与有限重试，并始终只追加一条请求级 Trace。"""
@@ -456,6 +459,8 @@ class RagPipeline:
             },
         )
         write_trace_jsonl(trace, self.trace_path)
+        if self.trace_sink is not None:
+            self.trace_sink(trace)
         return response
 
     @staticmethod

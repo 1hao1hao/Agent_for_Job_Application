@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from intern_rag.retrieval.base import Retriever
+from intern_rag.retrieval.bm25 import BM25Retriever, load_bm25_index
 from intern_rag.retrieval.dense import DenseRetriever, load_dense_index
 from intern_rag.retrieval.hybrid import HybridRetriever
 from intern_rag.retrieval.keyword import retrieve_top_k
@@ -19,7 +20,21 @@ def build_retriever_from_config(config: dict[str, object]) -> Retriever:
     retriever_name = str(config.get("retriever_name", ""))
     if retriever_name == "keyword":
         return retrieve_top_k
-    if retriever_name not in {"dense", "hybrid", "hybrid_rerank"}:
+    bm25: BM25Retriever | None = None
+    if retriever_name in {"bm25", "bm25_hybrid"}:
+        bm25_index_path = Path(str(config.get("bm25_index_path", "")))
+        if not str(bm25_index_path) or not bm25_index_path.exists():
+            raise ValueError(f"BM25 index does not exist: {bm25_index_path}")
+        bm25 = BM25Retriever(
+            load_bm25_index(bm25_index_path),
+            k1=float(config.get("k1", 1.5)),
+            b=float(config.get("b", 0.75)),
+        )
+        if retriever_name == "bm25":
+            return bm25
+    if retriever_name not in {
+        "dense", "hybrid", "hybrid_rerank", "bm25_hybrid"
+    }:
         raise ValueError(f"unknown retriever: {retriever_name}")
 
     index_dir = Path(str(config.get("index_dir", "")))
@@ -29,13 +44,15 @@ def build_retriever_from_config(config: dict[str, object]) -> Retriever:
     dense = DenseRetriever(index, model)
     if retriever_name == "dense":
         return dense
+    lexical_retriever = bm25 if bm25 is not None else retrieve_top_k
     hybrid = HybridRetriever(
-        retrieve_top_k,
+        lexical_retriever,
         dense,
         rrf_k=int(config.get("rrf_k", 60)),
         candidate_multiplier=int(config.get("candidate_multiplier", 4)),
+        lexical_name="bm25" if bm25 is not None else "keyword",
     )
-    if retriever_name == "hybrid":
+    if retriever_name in {"hybrid", "bm25_hybrid"}:
         return hybrid
     scorer_kind = str(config.get("reranker_kind", "cross_encoder"))
     if scorer_kind == "token_overlap":

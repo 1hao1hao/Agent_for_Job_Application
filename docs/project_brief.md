@@ -58,7 +58,8 @@ Harness 指围绕模型和 RAG 核心能力提供运行控制与质量保障的�
 - Claim-Level Grounding 与 Generator 使用同模型家族；frozen 有 3 条 unknown，
   因此严格 E2E 为 unavailable，不能宣称零幻觉。
 - Reranker 在 dev 负向消融后关闭；没有实测神经 CrossEncoder 提升。
-- FastAPI、Docker、可视化和高并发压测属于 P1，不是当前成果。
+- FastAPI、PostgreSQL、Redis Worker 与 Docker Compose 已进入 `P1-D1` 实施计划，
+  在代码、测试和容器验证完成前仍不能作为当前成果；可视化和高并发压测继续暂缓。
 
 ## 项目文档怎么读
 
@@ -270,17 +271,20 @@ docs/
 
 ## P1 工程增强
 
-P0 指标闭环完成后，再考虑：
+`P1-D1` 一次性完成：
 
-- FastAPI/Docker 完整服务化。
-- FastAPI 批量评测任务。
-- Redis Queue 与独立 Evaluation Worker。
-- 运行状态查询和任务恢复。
-- 评测报告持久化。
-- 大规模向量数据库与 ANN 索引；当前 Reranker 已因 P0-D3 的 MRR 瓶颈前移到 P0-D5。
-- 可视化 Trace 页面。
+- 标准 BM25 Retriever 与 Keyword/BM25/Dense/RRF dev 消融。
+- FastAPI 在线 Query、Trace 查询和 Evaluation Job 接口。
+- PostgreSQL 持久化请求、Trace、Job 和 Run 元数据。
+- Redis Queue 与独立 Evaluation Worker，异步执行长时间批量评测。
+- Docker Compose 编排 API、Worker、PostgreSQL 与 Redis，并验证重启后状态可恢复。
 
-P1 不是重新投递的前置条件。没有真实并发、耗时任务和队列测量时，不为了“分布式”标签硬加 Redis。
+PostgreSQL 与 Redis 有明确分工：PostgreSQL 是任务状态真相来源，Redis 只做队列；
+完整报告保存在持久化 volume。当前 310 Chunk 的 Dense 精确扫描尚未证明需要向量
+数据库，因此 P1-D1 不引入 pgvector。大规模 ANN/pgvector 必须由 profiling 和同集
+Recall/P95 对照驱动。
+
+后续再考虑 Trace 可视化，不默认增加前端、Kubernetes 或微服务拆分。
 
 ## 非目标
 

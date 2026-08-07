@@ -74,3 +74,24 @@ flowchart TD
 | Grounding | claim-level，unknown 不算 supported | Judge 失败不能伪装成答案可靠 |
 
 对应数字和工件见 [最终实验报告](final_experiment_report.md)。
+
+## P1 服务与异步评测链路
+
+```mermaid
+flowchart LR
+    HTTP[HTTP RagRequest] --> API[FastAPI]
+    API --> PIPE[RagPipeline]
+    PIPE --> RESP[RagResponse]
+    PIPE --> PG[(PostgreSQL\nrequest + trace)]
+
+    JOB[EvaluationJobRequest] --> API
+    API -->|queued| PG
+    API --> REDIS[(Redis Queue)]
+    REDIS --> WORKER[Evaluation Worker]
+    WORKER --> RUNNER[Evaluation Runner]
+    RUNNER --> ART[Report Artifacts]
+    WORKER -->|succeeded / failed| PG
+```
+
+PostgreSQL 是任务状态真相来源，Redis 只传递 job id；完整报告保存在持久化 volume。
+当前 310 Chunk 的 Dense 精确扫描没有证明需要 pgvector，因此向量 index 继续离线保存。

@@ -27,9 +27,15 @@ htmlcov/
 
 # 本地运行 trace
 traces/*.jsonl
+traces/**/*.jsonl
 
 # 可由 scripts/build_dense_index.py 重建的离线索引
 data/processed/indexes/
+
+# P1 本地集成测试每次生成随机 run；只保留任务报告引用的一次证据。
+reports/runs/p1-d1-stack-*/
+!reports/runs/p1-d1-stack-c108812d-8507-4ba4-a3dc-4991d1e22972/
+!reports/runs/p1-d1-stack-c108812d-8507-4ba4-a3dc-4991d1e22972/**
 
 # 本地 AI 协作、任务提示与个人学习记录
 AGENTS.md

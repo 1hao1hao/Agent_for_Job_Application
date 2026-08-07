@@ -1,6 +1,14 @@
 """统一检索接口及 Keyword、Dense、Hybrid 实现。"""
 
 from intern_rag.retrieval.base import RetrievalResult, Retriever
+from intern_rag.retrieval.bm25 import (
+    BM25Index,
+    BM25Retriever,
+    build_bm25_index,
+    load_bm25_index,
+    save_bm25_index,
+    tokenize_bm25,
+)
 from intern_rag.retrieval.dense import (
     DenseIndex,
     DenseIndexMetadata,
@@ -32,6 +40,12 @@ from intern_rag.retrieval.keyword import (
 __all__ = [
     "RetrievalResult",
     "Retriever",
+    "BM25Index",
+    "BM25Retriever",
+    "build_bm25_index",
+    "load_bm25_index",
+    "save_bm25_index",
+    "tokenize_bm25",
     "DenseIndex",
     "DenseIndexMetadata",
     "DenseRetriever",

@@ -1,0 +1,83 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: evalrag
+      POSTGRES_USER: evalrag
+      POSTGRES_PASSWORD: evalrag-local
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U evalrag -d evalrag"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - redis_data:/data
+
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://evalrag:evalrag-local@postgres:5432/evalrag
+      REDIS_URL: redis://redis:6379/0
+      EVALRAG_LLM_BACKEND: ${EVALRAG_LLM_BACKEND:-fake}
+      EVALRAG_MODEL: ${EVALRAG_MODEL:-deterministic-demo}
+      EVALRAG_GIT_COMMIT: ${EVALRAG_GIT_COMMIT:-container-build}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      TRACE_PATH: /app/traces/service/agent_trace.jsonl
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=2)",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - reports_data:/app/reports
+      - traces_data:/app/traces
+      - indexes_data:/app/data/processed/indexes
+
+  worker:
+    build: .
+    command: ["python", "-m", "intern_rag.worker.main"]
+    environment:
+      DATABASE_URL: postgresql://evalrag:evalrag-local@postgres:5432/evalrag
+      REDIS_URL: redis://redis:6379/0
+      EVALUATION_TIMEOUT_SECONDS: 1800
+      EVALRAG_GIT_COMMIT: ${EVALRAG_GIT_COMMIT:-container-build}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - reports_data:/app/reports
+      - traces_data:/app/traces
+      - indexes_data:/app/data/processed/indexes
+
+volumes:
+  postgres_data:
+  redis_data:
+  reports_data:
+  traces_data:
+  indexes_data:

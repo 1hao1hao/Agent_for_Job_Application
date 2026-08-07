@@ -9,18 +9,22 @@ class HybridRetriever:
 
     def __init__(
         self,
-        keyword_retriever: Retriever,
+        lexical_retriever: Retriever,
         dense_retriever: Retriever,
         *,
         rrf_k: int = 60,
         candidate_multiplier: int = 4,
+        lexical_name: str = "keyword",
     ) -> None:
         if rrf_k <= 0 or candidate_multiplier <= 0:
             raise ValueError("rrf_k and candidate_multiplier must be positive")
-        self.keyword_retriever = keyword_retriever
+        if lexical_name not in {"keyword", "bm25"}:
+            raise ValueError("lexical_name must be keyword or bm25")
+        self.lexical_retriever = lexical_retriever
         self.dense_retriever = dense_retriever
         self.rrf_k = rrf_k
         self.candidate_multiplier = candidate_multiplier
+        self.lexical_name = lexical_name
 
     def __call__(
         self,
@@ -34,31 +38,32 @@ class HybridRetriever:
         if top_k <= 0:
             return []
         candidate_k = max(top_k, top_k * self.candidate_multiplier)
-        keyword_results = self.keyword_retriever(
+        lexical_results = self.lexical_retriever(
             query, chunks, candidate_k, source_types
         )
         dense_results = self.dense_retriever(
             query, chunks, candidate_k, source_types
         )
         by_id: dict[str, dict[str, object]] = {}
+        lexical_rank_key = f"{self.lexical_name}_rank"
         for route_name, results in (
-            ("keyword", keyword_results),
+            (self.lexical_name, lexical_results),
             ("dense", dense_results),
         ):
             for result in results:
                 item = by_id.setdefault(
                     result.chunk_id,
-                    {"chunk": result.chunk, "keyword_rank": None, "dense_rank": None},
+                    {"chunk": result.chunk, lexical_rank_key: None, "dense_rank": None},
                 )
                 item[f"{route_name}_rank"] = result.rank
 
         fused: list[tuple[float, str, dict[str, object]]] = []
         for chunk_id, item in by_id.items():
-            keyword_rank = item["keyword_rank"]
+            lexical_rank = item[lexical_rank_key]
             dense_rank = item["dense_rank"]
             score = sum(
                 1.0 / (self.rrf_k + int(rank))
-                for rank in (keyword_rank, dense_rank)
+                for rank in (lexical_rank, dense_rank)
                 if rank is not None
             )
             fused.append((score, chunk_id, item))
@@ -66,7 +71,7 @@ class HybridRetriever:
         fused.sort(key=lambda item: (-item[0], item[1]))
         results: list[RetrievalResult] = []
         for rank, (score, chunk_id, item) in enumerate(fused[:top_k], start=1):
-            keyword_rank = item["keyword_rank"]
+            lexical_rank = item[lexical_rank_key]
             dense_rank = item["dense_rank"]
             results.append(
                 RetrievalResult(
@@ -75,11 +80,11 @@ class HybridRetriever:
                     rank=rank,
                     chunk=item["chunk"],  # type: ignore[arg-type]
                     reason=(
-                        f"rrf keyword_rank={keyword_rank}, "
+                        f"rrf {lexical_rank_key}={lexical_rank}, "
                         f"dense_rank={dense_rank}, fused_score={score:.6f}"
                     ),
                     details={
-                        "keyword_rank": keyword_rank,  # type: ignore[dict-item]
+                        lexical_rank_key: lexical_rank,  # type: ignore[dict-item]
                         "dense_rank": dense_rank,  # type: ignore[dict-item]
                         "fused_score": score,
                     },

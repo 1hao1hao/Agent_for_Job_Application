@@ -71,8 +71,36 @@ python -m pip install -r requirements.txt
 PYTHONPATH=src python -m unittest discover -s tests -p 'test_*.py'
 ```
 
-当前全量结果为 123 tests passed（2026-08-07）；测试通过证明代码行为稳定，不代表
+当前全量结果为 142 tests passed（2026-08-07，包含本地 PostgreSQL/Redis 集成测试）；测试通过证明代码行为稳定，不代表
 回答准确率。
+
+### HTTP 与异步 Evaluation
+
+P1 服务层复用相同 `RagRequest`、`RagResponse`、Citation 和 AgentTrace：
+
+```text
+HTTP Query -> FastAPI -> RagPipeline -> PostgreSQL request/trace
+Evaluation Job -> PostgreSQL queued -> Redis -> Worker -> report + final status
+```
+
+在 Docker 可用的机器上启动完整服务：
+
+```bash
+docker compose up --build
+curl http://localhost:8000/health
+```
+
+提交 BM25 Query：
+
+```bash
+curl -X POST http://localhost:8000/v1/query \
+  -H 'Content-Type: application/json' \
+  -d '{"query":"请分析大模型应用研发实习生的岗位要求","retriever":"bm25"}'
+```
+
+批量 Evaluation 通过 `POST /v1/evaluation-jobs` 创建，接口只返回 job id；独立
+Worker 执行后可通过 `GET /v1/evaluation-jobs/{job_id}` 查询状态。Compose 端到端
+流程由 [P1 Service Integration](.github/workflows/p1-service.yml) 自动验证。
 
 导出不访问网络的三个固定 Demo：
 
@@ -101,12 +129,15 @@ PYTHONPATH=src python scripts/run_rag_smoke.py
 |---|---|---|
 | Ingestion | `src/intern_rag/ingestion/chunking.py` | 统一 Document/Chunk 与 metadata |
 | Router | `src/intern_rag/routing/factory.py` | Rule/Semantic/Hybrid 路由切换 |
-| Retrieval | `src/intern_rag/retrieval/factory.py` | Keyword/Dense/Hybrid/Rerank 统一接口 |
+| Retrieval | `src/intern_rag/retrieval/factory.py` | Keyword/BM25/Dense/RRF/Rerank 统一接口 |
 | Agent | `src/intern_rag/agent/pipeline.py` | 门控、有限重试、生成与引用校验 |
 | Trace | `src/intern_rag/tracing/trace.py` | 一次请求一条可回放 Trace |
 | Evaluation | `src/intern_rag/evaluation/runner.py` | 运行预测并保存标准工件 |
 | Semantic Audit | `src/intern_rag/evaluation/semantic_audit.py` | 要点覆盖与逐 claim Grounding |
 | Regression | `src/intern_rag/evaluation/regression.py` | fixed/open 失败案例自动化检查 |
+| Serving | `src/intern_rag/serving/api.py` | Query、Trace、异步 Evaluation HTTP 契约 |
+| Persistence | `src/intern_rag/persistence/postgres.py` | PostgreSQL 请求、Trace、Job 与 Run 元数据 |
+| Worker | `src/intern_rag/worker/evaluation_worker.py` | Redis Queue 与独立 Evaluation Worker |
 
 ## 实验与边界
 
@@ -118,5 +149,5 @@ PYTHONPATH=src python scripts/run_rag_smoke.py
   Claim-Level Grounding 使用模型评分，均不等于人工答案准确率。
 
 项目使用原生 Python 实现核心 Harness；Sentence Transformers/scikit-learn 用于向量
-编码，OpenAI-compatible client 仅作为真实 LLM adapter。FastAPI、Docker、可视化和
-工作流框架不属于当前 P0 结果。
+编码，OpenAI-compatible client 作为可替换 LLM adapter。P1 使用 FastAPI、PostgreSQL、
+Redis Worker 和 Docker Compose 提供可复现服务链；不包含前端、Kubernetes 或微服务拆分。

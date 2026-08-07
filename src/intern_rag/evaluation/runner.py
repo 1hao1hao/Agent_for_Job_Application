@@ -37,10 +37,12 @@ class EvaluationRunConfig:
         """拒绝未知检索器、非法 split 和不足以计算 Recall@5 的配置。"""
 
         if self.retriever_name not in {
-            "keyword", "dense", "hybrid", "hybrid_rerank"
+            "keyword", "bm25", "dense", "hybrid", "bm25_hybrid",
+            "hybrid_rerank"
         }:
             raise ValueError(
-                "retriever_name must be keyword, dense, hybrid or hybrid_rerank"
+                "retriever_name must be keyword, bm25, dense, hybrid, "
+                "bm25_hybrid or hybrid_rerank"
             )
         if self.split not in {"dev", "test"}:
             raise ValueError("split must be dev or test")

@@ -1,0 +1,14 @@
+{
+  "retriever_name": "bm25_hybrid",
+  "top_k": 5,
+  "chunk_max_chars": 420,
+  "bm25_index_path": "data/processed/indexes/evalrag_v0.2/bm25-v1/index.json",
+  "k1": 1.5,
+  "b": 0.75,
+  "index_dir": "data/processed/indexes/evalrag_v0.2/bge-small-zh-v1.5",
+  "embedding_name": "BAAI/bge-small-zh-v1.5",
+  "embedding_revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "rrf_k": 60,
+  "candidate_multiplier": 4,
+  "calibration_split": "dev"
+}

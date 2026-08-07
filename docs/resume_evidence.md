@@ -16,7 +16,7 @@
 | AgentTrace JSONL | `src/intern_rag/tracing/`、tests | verified |
 | Recall@k 与 Router Accuracy 代码 | `src/intern_rag/evaluation/`、tests | verified |
 | Rag 请求响应契约与预算感知 Context Builder | `src/intern_rag/agent/schemas.py`、`context.py`、tests | verified |
-| 123 个自动化测试覆盖核心链路、DeepSeek adapter、Semantic/Grounding grader 与固定 Demo 导出 | `PYTHONPATH=src python -m unittest discover -s tests -p 'test_*.py'` | verified at 2026-08-07 |
+| 142 个自动化测试覆盖核心链路、真实 PostgreSQL/Redis 集成、DeepSeek adapter、Semantic/Grounding grader 与固定 Demo 导出 | `PYTHONPATH=src python -m unittest discover -s tests -p 'test_*.py'` | verified at 2026-08-07 |
 | 30 份五类语料和 60 条四类 Query 已审核 | `data/evaluation/`、审核报告 | verified |
 | Keyword dev 正式 baseline 与标准 Run Artifacts | `reports/runs/keyword-dev-formal-v0.1-20260730/` | verified |
 | 100 文档、310 Chunk、120 Query 的 v0.2 检索 benchmark | `data/evaluation/`、`data/processed/chunks/` | verified; project-authored synthetic benchmark |
@@ -29,6 +29,11 @@
 | DeepSeek 真实 Pipeline dev/frozen Run | `reports/final/p0-d5-live-llm-v0.2/` | verified; 80 dev / 40 test |
 | Semantic Key-Point 与 Claim-Level Grounding 离线审核 | `src/intern_rag/evaluation/semantic_audit.py`、`reports/final/p0-d6-semantic-grounding-v0.2/` | verified；frozen 3 条 unknown |
 | 单来源、多来源和拒答固定 Demo | `scripts/export_fixed_demos.py`、`examples/fixed_demos/` | verified; replay saved frozen artifacts |
+| 标准 BM25、离线 index 与统一 Retriever 接口 | `src/intern_rag/retrieval/bm25.py`、`tests/unit/test_bm25_retrieval.py` | verified |
+| Keyword/BM25/Dense/BM25+Dense RRF dev 消融 | `reports/ablations/p1-d1-bm25-dev-20260807/` | verified; BM25 not selected as final config |
+| FastAPI Query/Trace/Evaluation Job 接口 | `src/intern_rag/serving/`、API tests | verified locally |
+| PostgreSQL 状态持久化与 Redis Evaluation Worker | `src/intern_rag/persistence/`、`src/intern_rag/worker/`、stack integration test | verified locally with real services |
+| Docker Compose 四服务编排 | `compose.yaml`、`.github/workflows/p1-service.yml` | config verified; runtime CI pending |
 
 这些事实不能被扩写为：
 
@@ -36,6 +41,8 @@
 - 已证明预训练神经 embedding 优于 Keyword。
 - 神经 CrossEncoder Reranker 带来指标提升。
 - contract-level Unsupported Answer Rate 等于真实 LLM 幻觉率。
+- BM25 或 BM25+Dense 已优于当前 frozen Hybrid 最终配置。
+- Docker Compose 已完成运行验证（在 CI 成功前）。
 
 ## 最终简历描述
 
@@ -114,6 +121,9 @@
 | Live LLM Tokens | `evalrag_v0.2/test` | unavailable | DeepSeek live E2E | 39,147 | `reports/runs/p0-d5-v02-frozen-test-20260804-deepseek-v4-flash/summary.json` |
 | Estimated Cost | `evalrag_v0.2/test` | unavailable | DeepSeek live E2E | $0.006317 | `reports/runs/p0-d5-v02-frozen-test-20260804-deepseek-v4-flash/summary.json` |
 | Fixed Regression Pass Rate | `regression v0.2` | fixed cases | fixed cases | 100% (1/1) | `reports/regression/p0-d5-v0.2/summary.json` |
+| BM25 Recall@5 | `evalrag_v0.2/dev` | Keyword 80.56% | BM25 | 78.89%（-1.67 pp） | `reports/ablations/p1-d1-bm25-dev-20260807/summary.json` |
+| BM25 MRR | `evalrag_v0.2/dev` | Keyword 85.97% | BM25 | 68.33%（-17.64 pp） | `reports/ablations/p1-d1-bm25-dev-20260807/summary.json` |
+| BM25+Dense Recall@3 | `evalrag_v0.2/dev` | Keyword 73.33% | BM25+Dense RRF | 73.89%（+0.56 pp） | `reports/ablations/p1-d1-bm25-dev-20260807/summary.json` |
 
 ## 失败案例模板
 

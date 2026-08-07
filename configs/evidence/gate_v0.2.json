@@ -4,8 +4,10 @@
   "min_results": 1,
   "min_scores": {
     "keyword": 0.1,
+    "bm25": 0.0,
     "dense": 0.45,
-    "hybrid": 0.02
+    "hybrid": 0.02,
+    "bm25_hybrid": 0.02
   },
   "require_source_coverage": true,
   "max_source_retries": 1,

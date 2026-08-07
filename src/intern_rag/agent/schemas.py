@@ -8,7 +8,7 @@ from intern_rag.agent.answer import Citation
 
 
 RagStatus = Literal["answered", "insufficient_evidence", "error"]
-RetrieverName = Literal["keyword", "dense", "hybrid"]
+RetrieverName = Literal["keyword", "bm25", "dense", "hybrid", "bm25_hybrid"]
 RouterName = Literal["rule", "semantic", "hybrid"]
 
 

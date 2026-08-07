@@ -1,0 +1,6 @@
+# Docker 服务 profile 只运行 BM25/API/Worker，不下载 CPU embedding 模型权重。
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+psycopg[binary]>=3.2,<4
+redis>=5,<7
+openai>=1.40,<3
