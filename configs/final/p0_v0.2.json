@@ -1,0 +1,21 @@
+{
+  "config_version": "p0-v0.2-frozen-20260804",
+  "locked_at": "2026-08-04T16:00:00+08:00",
+  "dataset_version": "evalrag_v0.2",
+  "split_for_tuning": "dev",
+  "frozen_test_split": "test",
+  "dataset_sha256": "565ce04ecd7af1fb5bf81dcbc24092a5bde2377255feb916ee807ef6ee4fe647",
+  "chunks_sha256": "d4bc5124492aa25b89e487a46b76d29d06b1bee5a87fc40434d67150117645b1",
+  "router_config": "configs/routing/hybrid_v0.2.json",
+  "router_config_sha256": "75c2f85afe2b9836aac855a14210cae7f9966c7803bf1fd814a1803301dfbce9",
+  "retriever_config": "configs/retrieval/hybrid_v0.2.json",
+  "retriever_config_sha256": "aa374f9a0fe3b1ca31692e0a7052b9fac421fae608d4f2457256994857eddeec",
+  "evidence_config": "configs/evidence/gate_v0.2.json",
+  "evidence_config_sha256": "a483e4f6b0060ce8bae2c0e41621fdf057e74817e313aec19fab29790d6fb6c5",
+  "reranker_enabled": false,
+  "reranker_dev_candidate": "configs/retrieval/hybrid_rerank_v0.2.json",
+  "reranker_decision_report": "reports/ablations/p0-d5-reranker-dev-20260804/report.md",
+  "decision": "Disable token-overlap reranker because all retrieval quality metrics regressed and P95 increased on dev.",
+  "git_revision": "d3a80c08c3c4baf13b4a87be7c3d44cdde2f9f07-dirty",
+  "frozen_test_policy": "Run each declared comparison once; do not tune after viewing test."
+}

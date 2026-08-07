@@ -1,0 +1,611 @@
+{
+  "ablation_id": "p0-d4-v02-dev-20260803",
+  "dataset_version": "evalrag_v0.2",
+  "split": "dev",
+  "case_count": 80,
+  "run_dirs": {
+    "rule": "reports/runs/p0-d4-v02-dev-20260803-rule-fixed",
+    "semantic": "reports/runs/p0-d4-v02-dev-20260803-semantic",
+    "hybrid": "reports/runs/p0-d4-v02-dev-20260803-hybrid"
+  },
+  "summaries": {
+    "rule": {
+      "run_id": "p0-d4-v02-dev-20260803-rule-fixed",
+      "report_status": "formal",
+      "created_at": "2026-08-03T08:00:13.418996+00:00",
+      "dataset_version": "evalrag_v0.2",
+      "split": "dev",
+      "case_count": 80,
+      "answerable_case_count": 60,
+      "category_counts": {
+        "single_source": 20,
+        "semantic_paraphrase": 20,
+        "multi_source": 20,
+        "unanswerable": 20
+      },
+      "category_metrics": {
+        "multi_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.39999999999999997,
+          "recall_at_5": 0.5666666666666667,
+          "mrr": 0.825
+        },
+        "semantic_paraphrase": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.85,
+          "recall_at_5": 0.85,
+          "mrr": 0.85
+        },
+        "single_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.95,
+          "recall_at_5": 1.0,
+          "mrr": 0.9041666666666667
+        },
+        "unanswerable": {
+          "case_count": 20,
+          "answerable_case_count": 0,
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        }
+      },
+      "failure_counts": {
+        "router_wrong": 7,
+        "retrieval_incomplete": 17
+      },
+      "metrics": {
+        "router_accuracy": 0.9125,
+        "recall_at_3": 0.7333333333333333,
+        "recall_at_5": 0.8055555555555556,
+        "mrr": 0.8597222222222223
+      },
+      "latency_ms": {
+        "retrieval": {
+          "count": 80,
+          "p50": 6.927278824150562,
+          "p95": 10.64270455390215
+        },
+        "routing": {
+          "count": 80,
+          "p50": 0.00821240246295929,
+          "p95": 0.011420808732509613
+        },
+        "total": {
+          "count": 80,
+          "p50": 6.94225262850523,
+          "p95": 10.657607577741146
+        }
+      },
+      "metric_scope": {
+        "router_accuracy": "all selected cases",
+        "recall_at_3": "answerable cases with relevant ids",
+        "recall_at_5": "answerable cases with relevant ids",
+        "mrr": "answerable cases with relevant ids"
+      },
+      "metric_formulas": {
+        "router_accuracy": "strict intent and source-set matches / all selected cases",
+        "recall_at_k": "|top-k retrieved ids intersect relevant ids| / |relevant ids|, macro average",
+        "mrr": "macro average of 1 / first relevant rank",
+        "latency_percentile": "nearest-rank percentile"
+      },
+      "runtime_environment": {
+        "python": "3.11.7",
+        "platform": "Linux-4.18.0-372.32.1.el8_6.x86_64-x86_64-with-glibc2.28",
+        "latency_mode": "single process; exported chunks preloaded"
+      },
+      "limitations": [
+        "Retrieval metrics do not measure final answer correctness."
+      ]
+    },
+    "semantic": {
+      "run_id": "p0-d4-v02-dev-20260803-semantic",
+      "report_status": "formal",
+      "created_at": "2026-08-03T08:03:54.801196+00:00",
+      "dataset_version": "evalrag_v0.2",
+      "split": "dev",
+      "case_count": 80,
+      "answerable_case_count": 60,
+      "category_counts": {
+        "single_source": 20,
+        "semantic_paraphrase": 20,
+        "multi_source": 20,
+        "unanswerable": 20
+      },
+      "category_metrics": {
+        "multi_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.39999999999999997,
+          "recall_at_5": 0.6333333333333333,
+          "mrr": 0.775
+        },
+        "semantic_paraphrase": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.75,
+          "recall_at_5": 0.85,
+          "mrr": 0.77
+        },
+        "single_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.95,
+          "recall_at_5": 1.0,
+          "mrr": 0.9041666666666667
+        },
+        "unanswerable": {
+          "case_count": 20,
+          "answerable_case_count": 0,
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        }
+      },
+      "failure_counts": {
+        "router_wrong": 10,
+        "retrieval_incomplete": 17
+      },
+      "metrics": {
+        "router_accuracy": 0.875,
+        "recall_at_3": 0.7,
+        "recall_at_5": 0.8277777777777777,
+        "mrr": 0.8163888888888889
+      },
+      "latency_ms": {
+        "retrieval": {
+          "count": 80,
+          "p50": 11.22062373906374,
+          "p95": 98.83884713053703
+        },
+        "routing": {
+          "count": 80,
+          "p50": 1611.4876922219992,
+          "p95": 2414.531024172902
+        },
+        "total": {
+          "count": 80,
+          "p50": 1699.154489673674,
+          "p95": 2509.6440352499485
+        }
+      },
+      "metric_scope": {
+        "router_accuracy": "all selected cases",
+        "recall_at_3": "answerable cases with relevant ids",
+        "recall_at_5": "answerable cases with relevant ids",
+        "mrr": "answerable cases with relevant ids"
+      },
+      "metric_formulas": {
+        "router_accuracy": "strict intent and source-set matches / all selected cases",
+        "recall_at_k": "|top-k retrieved ids intersect relevant ids| / |relevant ids|, macro average",
+        "mrr": "macro average of 1 / first relevant rank",
+        "latency_percentile": "nearest-rank percentile"
+      },
+      "runtime_environment": {
+        "python": "3.11.7",
+        "platform": "Linux-4.18.0-372.32.1.el8_6.x86_64-x86_64-with-glibc2.28",
+        "latency_mode": "single process; exported chunks preloaded"
+      },
+      "limitations": [
+        "Retrieval metrics do not measure final answer correctness."
+      ]
+    },
+    "hybrid": {
+      "run_id": "p0-d4-v02-dev-20260803-hybrid",
+      "report_status": "formal",
+      "created_at": "2026-08-03T08:06:28.306867+00:00",
+      "dataset_version": "evalrag_v0.2",
+      "split": "dev",
+      "case_count": 80,
+      "answerable_case_count": 60,
+      "category_counts": {
+        "single_source": 20,
+        "semantic_paraphrase": 20,
+        "multi_source": 20,
+        "unanswerable": 20
+      },
+      "category_metrics": {
+        "multi_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.39999999999999997,
+          "recall_at_5": 0.6333333333333333,
+          "mrr": 0.775
+        },
+        "semantic_paraphrase": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.85,
+          "recall_at_5": 0.95,
+          "mrr": 0.87
+        },
+        "single_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.95,
+          "recall_at_5": 1.0,
+          "mrr": 0.9041666666666667
+        },
+        "unanswerable": {
+          "case_count": 20,
+          "answerable_case_count": 0,
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        }
+      },
+      "failure_counts": {
+        "router_wrong": 3,
+        "retrieval_incomplete": 15
+      },
+      "metrics": {
+        "router_accuracy": 0.9625,
+        "recall_at_3": 0.7333333333333333,
+        "recall_at_5": 0.8611111111111112,
+        "mrr": 0.8497222222222223
+      },
+      "latency_ms": {
+        "retrieval": {
+          "count": 80,
+          "p50": 7.829621434211731,
+          "p95": 97.2578888759017
+        },
+        "routing": {
+          "count": 80,
+          "p50": 1508.8276444002986,
+          "p95": 2600.2726880833507
+        },
+        "total": {
+          "count": 80,
+          "p50": 1518.0821726098657,
+          "p95": 2696.8099223449826
+        }
+      },
+      "metric_scope": {
+        "router_accuracy": "all selected cases",
+        "recall_at_3": "answerable cases with relevant ids",
+        "recall_at_5": "answerable cases with relevant ids",
+        "mrr": "answerable cases with relevant ids"
+      },
+      "metric_formulas": {
+        "router_accuracy": "strict intent and source-set matches / all selected cases",
+        "recall_at_k": "|top-k retrieved ids intersect relevant ids| / |relevant ids|, macro average",
+        "mrr": "macro average of 1 / first relevant rank",
+        "latency_percentile": "nearest-rank percentile"
+      },
+      "runtime_environment": {
+        "python": "3.11.7",
+        "platform": "Linux-4.18.0-372.32.1.el8_6.x86_64-x86_64-with-glibc2.28",
+        "latency_mode": "single process; exported chunks preloaded"
+      },
+      "limitations": [
+        "Retrieval metrics do not measure final answer correctness."
+      ]
+    }
+  },
+  "classification": {
+    "rule": {
+      "by_category": {
+        "multi_source": {
+          "correct": 16,
+          "total": 20,
+          "accuracy": 0.8
+        },
+        "semantic_paraphrase": {
+          "correct": 17,
+          "total": 20,
+          "accuracy": 0.85
+        },
+        "single_source": {
+          "correct": 20,
+          "total": 20,
+          "accuracy": 1.0
+        },
+        "unanswerable": {
+          "correct": 20,
+          "total": 20,
+          "accuracy": 1.0
+        }
+      },
+      "intent_confusion": {
+        "analyze_jd->analyze_jd": 12,
+        "application_plan->application_plan": 4,
+        "interview_prepare->analyze_jd": 5,
+        "interview_prepare->interview_prepare": 15,
+        "match_resume->analyze_jd": 1,
+        "match_resume->match_resume": 15,
+        "project_explain->analyze_jd": 1,
+        "project_explain->project_explain": 7,
+        "unknown->unknown": 20
+      }
+    },
+    "semantic": {
+      "by_category": {
+        "multi_source": {
+          "correct": 20,
+          "total": 20,
+          "accuracy": 1.0
+        },
+        "semantic_paraphrase": {
+          "correct": 14,
+          "total": 20,
+          "accuracy": 0.7
+        },
+        "single_source": {
+          "correct": 20,
+          "total": 20,
+          "accuracy": 1.0
+        },
+        "unanswerable": {
+          "correct": 16,
+          "total": 20,
+          "accuracy": 0.8
+        }
+      },
+      "intent_confusion": {
+        "analyze_jd->analyze_jd": 7,
+        "analyze_jd->interview_prepare": 2,
+        "analyze_jd->match_resume": 1,
+        "analyze_jd->unknown": 2,
+        "application_plan->application_plan": 4,
+        "interview_prepare->interview_prepare": 20,
+        "match_resume->match_resume": 16,
+        "project_explain->interview_prepare": 1,
+        "project_explain->project_explain": 7,
+        "unknown->analyze_jd": 1,
+        "unknown->application_plan": 1,
+        "unknown->match_resume": 2,
+        "unknown->unknown": 16
+      }
+    },
+    "hybrid": {
+      "by_category": {
+        "multi_source": {
+          "correct": 20,
+          "total": 20,
+          "accuracy": 1.0
+        },
+        "semantic_paraphrase": {
+          "correct": 17,
+          "total": 20,
+          "accuracy": 0.85
+        },
+        "single_source": {
+          "correct": 20,
+          "total": 20,
+          "accuracy": 1.0
+        },
+        "unanswerable": {
+          "correct": 20,
+          "total": 20,
+          "accuracy": 1.0
+        }
+      },
+      "intent_confusion": {
+        "analyze_jd->analyze_jd": 10,
+        "analyze_jd->interview_prepare": 2,
+        "application_plan->application_plan": 4,
+        "interview_prepare->interview_prepare": 20,
+        "match_resume->match_resume": 16,
+        "project_explain->analyze_jd": 1,
+        "project_explain->project_explain": 7,
+        "unknown->unknown": 20
+      }
+    }
+  },
+  "strategy_differences": [
+    {
+      "case_id": "v02_multi_005",
+      "category": "multi_source",
+      "query": "面试时如何结合岗位和个人经历回答混合检索问题",
+      "expected_intent": "interview_prepare",
+      "correct": {
+        "rule": false,
+        "semantic": true,
+        "hybrid": true
+      },
+      "predicted_intents": {
+        "rule": "analyze_jd",
+        "semantic": "interview_prepare",
+        "hybrid": "interview_prepare"
+      },
+      "reasons": {
+        "rule": "rule_keywords_matched",
+        "semantic": "semantic_prototype_matched",
+        "hybrid": "semantic_overrode_weak_rule"
+      }
+    },
+    {
+      "case_id": "v02_multi_010",
+      "category": "multi_source",
+      "query": "面试时如何结合岗位和个人经历回答引用校验问题",
+      "expected_intent": "interview_prepare",
+      "correct": {
+        "rule": false,
+        "semantic": true,
+        "hybrid": true
+      },
+      "predicted_intents": {
+        "rule": "analyze_jd",
+        "semantic": "interview_prepare",
+        "hybrid": "interview_prepare"
+      },
+      "reasons": {
+        "rule": "rule_keywords_matched",
+        "semantic": "semantic_prototype_matched",
+        "hybrid": "semantic_overrode_weak_rule"
+      }
+    },
+    {
+      "case_id": "v02_multi_015",
+      "category": "multi_source",
+      "query": "面试时如何结合岗位和个人经历回答请求追踪问题",
+      "expected_intent": "interview_prepare",
+      "correct": {
+        "rule": false,
+        "semantic": true,
+        "hybrid": true
+      },
+      "predicted_intents": {
+        "rule": "analyze_jd",
+        "semantic": "interview_prepare",
+        "hybrid": "interview_prepare"
+      },
+      "reasons": {
+        "rule": "rule_keywords_matched",
+        "semantic": "semantic_prototype_matched",
+        "hybrid": "semantic_overrode_weak_rule"
+      }
+    },
+    {
+      "case_id": "v02_multi_020",
+      "category": "multi_source",
+      "query": "面试时如何结合岗位和个人经历回答意图路由问题",
+      "expected_intent": "interview_prepare",
+      "correct": {
+        "rule": false,
+        "semantic": true,
+        "hybrid": true
+      },
+      "predicted_intents": {
+        "rule": "analyze_jd",
+        "semantic": "interview_prepare",
+        "hybrid": "interview_prepare"
+      },
+      "reasons": {
+        "rule": "rule_keywords_matched",
+        "semantic": "semantic_prototype_matched",
+        "hybrid": "semantic_overrode_weak_rule"
+      }
+    },
+    {
+      "case_id": "v02_semantic_001",
+      "category": "semantic_paraphrase",
+      "query": "岗位分析：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+      "expected_intent": "analyze_jd",
+      "correct": {
+        "rule": true,
+        "semantic": false,
+        "hybrid": true
+      },
+      "predicted_intents": {
+        "rule": "analyze_jd",
+        "semantic": "unknown",
+        "hybrid": "analyze_jd"
+      },
+      "reasons": {
+        "rule": "rule_keywords_matched",
+        "semantic": "semantic_threshold_not_met",
+        "hybrid": "rule_preserved"
+      }
+    },
+    {
+      "case_id": "v02_semantic_002",
+      "category": "semantic_paraphrase",
+      "query": "岗位分析：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+      "expected_intent": "analyze_jd",
+      "correct": {
+        "rule": true,
+        "semantic": false,
+        "hybrid": true
+      },
+      "predicted_intents": {
+        "rule": "analyze_jd",
+        "semantic": "match_resume",
+        "hybrid": "analyze_jd"
+      },
+      "reasons": {
+        "rule": "rule_keywords_matched",
+        "semantic": "semantic_prototype_matched",
+        "hybrid": "rule_preserved"
+      }
+    },
+    {
+      "case_id": "v02_semantic_005",
+      "category": "semantic_paraphrase",
+      "query": "岗位分析：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+      "expected_intent": "analyze_jd",
+      "correct": {
+        "rule": true,
+        "semantic": false,
+        "hybrid": true
+      },
+      "predicted_intents": {
+        "rule": "analyze_jd",
+        "semantic": "unknown",
+        "hybrid": "analyze_jd"
+      },
+      "reasons": {
+        "rule": "rule_keywords_matched",
+        "semantic": "semantic_threshold_not_met",
+        "hybrid": "rule_preserved"
+      }
+    },
+    {
+      "case_id": "v02_semantic_007",
+      "category": "semantic_paraphrase",
+      "query": "简历优势：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+      "expected_intent": "match_resume",
+      "correct": {
+        "rule": false,
+        "semantic": true,
+        "hybrid": true
+      },
+      "predicted_intents": {
+        "rule": "analyze_jd",
+        "semantic": "match_resume",
+        "hybrid": "match_resume"
+      },
+      "reasons": {
+        "rule": "rule_keywords_matched",
+        "semantic": "semantic_prototype_matched",
+        "hybrid": "semantic_overrode_weak_rule"
+      }
+    },
+    {
+      "case_id": "v02_semantic_013",
+      "category": "semantic_paraphrase",
+      "query": "面试怎么回答：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+      "expected_intent": "interview_prepare",
+      "correct": {
+        "rule": false,
+        "semantic": true,
+        "hybrid": true
+      },
+      "predicted_intents": {
+        "rule": "analyze_jd",
+        "semantic": "interview_prepare",
+        "hybrid": "interview_prepare"
+      },
+      "reasons": {
+        "rule": "rule_keywords_matched",
+        "semantic": "semantic_prototype_matched",
+        "hybrid": "semantic_overrode_weak_rule"
+      }
+    },
+    {
+      "case_id": "v02_unanswerable_002",
+      "category": "unanswerable",
+      "query": "请告诉我卫星轨道参数。",
+      "expected_intent": "unknown",
+      "correct": {
+        "rule": true,
+        "semantic": false,
+        "hybrid": true
+      },
+      "predicted_intents": {
+        "rule": "unknown",
+        "semantic": "application_plan",
+        "hybrid": "unknown"
+      },
+      "reasons": {
+        "rule": "no_rule_keyword_matched",
+        "semantic": "semantic_prototype_matched",
+        "hybrid": "rule_preserved"
+      }
+    }
+  ]
+}

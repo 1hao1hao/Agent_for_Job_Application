@@ -1,0 +1,5 @@
+{
+  "router_name": "rule",
+  "dataset_version": "evalrag_v0.2",
+  "note": "P0-D4 dev-only rule baseline; removed the overly broad company keyword"
+}

@@ -16,9 +16,14 @@ ErrorType = Literal[
     "ingestion_error",
     "retrieval_miss",
     "router_error",
+    "retriever_error",
     "rerank_error",
     "tool_error",
+    "llm_error",
+    "llm_format_error",
+    "llm_timeout",
     "citation_error",
+    "citation_invalid",
     "hallucination",
     "unknown_error",
 ]
@@ -41,10 +46,23 @@ class AgentTrace:
     latency_ms: dict[str, float]
     error_type: ErrorType = "none"
     created_at: str = ""
+    trace_id: str = field(default_factory=lambda: str(uuid4()))
     rerank_results: list[TraceDict] = field(default_factory=list)
     tool_calls: list[TraceDict] = field(default_factory=list)
     citations: list[TraceDict] = field(default_factory=list)
     answer: str = ""
+    routing: TraceDict = field(default_factory=dict)
+    retrieval: TraceDict = field(default_factory=dict)
+    context: TraceDict = field(default_factory=dict)
+    evidence: TraceDict = field(default_factory=dict)
+    generation: TraceDict = field(default_factory=dict)
+    validation: TraceDict = field(default_factory=dict)
+    model_config: TraceDict = field(default_factory=dict)
+    prompt_version: str = ""
+    response_status: str = ""
+    error_message: str = ""
+    attempts: list[TraceDict] = field(default_factory=list)
+    token_usage: TraceDict = field(default_factory=dict)
 
     def to_dict(self) -> TraceDict:
         """转换成可写入 JSONL 的普通字典。"""
@@ -64,10 +82,23 @@ class AgentTrace:
             latency_ms=dict(trace_data["latency_ms"]),  # type: ignore[arg-type]
             error_type=_normalize_error_type(str(trace_data.get("error_type", "none"))),
             created_at=str(trace_data.get("created_at", "")),
+            trace_id=str(trace_data.get("trace_id", "")),
             rerank_results=list(trace_data.get("rerank_results", [])),  # type: ignore[arg-type]
             tool_calls=list(trace_data.get("tool_calls", [])),  # type: ignore[arg-type]
             citations=list(trace_data.get("citations", [])),  # type: ignore[arg-type]
             answer=str(trace_data.get("answer", "")),
+            routing=dict(trace_data.get("routing", {})),  # type: ignore[arg-type]
+            retrieval=dict(trace_data.get("retrieval", {})),  # type: ignore[arg-type]
+            context=dict(trace_data.get("context", {})),  # type: ignore[arg-type]
+            evidence=dict(trace_data.get("evidence", {})),  # type: ignore[arg-type]
+            generation=dict(trace_data.get("generation", {})),  # type: ignore[arg-type]
+            validation=dict(trace_data.get("validation", {})),  # type: ignore[arg-type]
+            model_config=dict(trace_data.get("model_config", {})),  # type: ignore[arg-type]
+            prompt_version=str(trace_data.get("prompt_version", "")),
+            response_status=str(trace_data.get("response_status", "")),
+            error_message=str(trace_data.get("error_message", "")),
+            attempts=list(trace_data.get("attempts", [])),  # type: ignore[arg-type]
+            token_usage=dict(trace_data.get("token_usage", {})),  # type: ignore[arg-type]
         )
 
 
@@ -79,6 +110,21 @@ def build_agent_trace(
     error_type: ErrorType = "none",
     request_id: str | None = None,
     created_at: str | None = None,
+    trace_id: str | None = None,
+    citations: list[TraceDict] | None = None,
+    answer: str = "",
+    routing: TraceDict | None = None,
+    retrieval: TraceDict | None = None,
+    context: TraceDict | None = None,
+    evidence: TraceDict | None = None,
+    generation: TraceDict | None = None,
+    validation: TraceDict | None = None,
+    model_config: TraceDict | None = None,
+    prompt_version: str = "",
+    response_status: str = "",
+    error_message: str = "",
+    attempts: list[TraceDict] | None = None,
+    token_usage: TraceDict | None = None,
 ) -> AgentTrace:
     """根据单轮 routing 和 retrieval 结果构造 AgentTrace。
 
@@ -96,6 +142,21 @@ def build_agent_trace(
         latency_ms=latency_ms,
         error_type=error_type,
         created_at=created_at or datetime.now(timezone.utc).isoformat(),
+        trace_id=trace_id or str(uuid4()),
+        citations=citations or [],
+        answer=answer,
+        routing=routing or {},
+        retrieval=retrieval or {},
+        context=context or {},
+        evidence=evidence or {},
+        generation=generation or {},
+        validation=validation or {},
+        model_config=model_config or {},
+        prompt_version=prompt_version,
+        response_status=response_status,
+        error_message=error_message,
+        attempts=attempts or [],
+        token_usage=token_usage or {},
     )
 
 

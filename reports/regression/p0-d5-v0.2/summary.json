@@ -1,0 +1,51 @@
+{
+  "case_results": [
+    {
+      "case_id": "reg-router-company-list-v1",
+      "status": "fixed",
+      "failure_type": "router_wrong",
+      "passed": true,
+      "expected": {
+        "intent": "unknown",
+        "sources": []
+      },
+      "actual": {
+        "intent": "unknown",
+        "sources": []
+      },
+      "error": ""
+    },
+    {
+      "case_id": "reg-multi-intent-project-match-v1",
+      "status": "open",
+      "failure_type": "router_multi_intent",
+      "passed": null,
+      "note": "open regression is not included in pass rate"
+    },
+    {
+      "case_id": "reg-jd-freshness-v1",
+      "status": "open",
+      "failure_type": "freshness_missing",
+      "passed": null,
+      "note": "open regression is not included in pass rate"
+    },
+    {
+      "case_id": "reg-cross-source-citation-v1",
+      "status": "open",
+      "failure_type": "citation_support",
+      "passed": null,
+      "note": "open regression is not included in pass rate"
+    },
+    {
+      "case_id": "reg-uncited-context-claim-v1",
+      "status": "open",
+      "failure_type": "unsupported_answer",
+      "passed": null,
+      "note": "open regression is not included in pass rate"
+    }
+  ],
+  "fixed_count": 1,
+  "fixed_passed": 1,
+  "open_count": 4,
+  "fixed_pass_rate": 1.0
+}

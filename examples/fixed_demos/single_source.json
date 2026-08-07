@@ -1,0 +1,267 @@
+{
+  "case": {
+    "case_id": "v02_single_022",
+    "category": "single_source",
+    "query": "这个项目的意图路由模块是怎么实现和复盘的？",
+    "answerable": true
+  },
+  "response": {
+    "status": "answered",
+    "answer": "根据检索证据，意图路由模块的实现和复盘主要围绕以下要点：\n\n- **实现方案**：采用 Semantic Router 作为主要方案，并使用 Router Accuracy 观察效果。\n- **核心风险**：当前最需要处理的风险是“多意图规则冲突”。\n- **复盘方法**：先固定输入与版本，再记录各阶段的结果和失败原因，不能只展示成功样例。\n\n证据中提到了迭代目标、实现记录、失败复盘、下一实验等不同阶段，但未提供具体实现细节或复盘结果。",
+    "citations": [
+      {
+        "chunk_id": "project_logs-v02_04_project_logs-2-3ffa5ae7120a",
+        "source_type": "project_logs",
+        "source_path": "data/raw/project_logs/v02_04_project_logs.md"
+      },
+      {
+        "chunk_id": "project_logs-v02_04_project_logs-0-7b9e19c08d99",
+        "source_type": "project_logs",
+        "source_path": "data/raw/project_logs/v02_04_project_logs.md"
+      },
+      {
+        "chunk_id": "project_logs-v02_04_project_logs-1-a235637cddf5",
+        "source_type": "project_logs",
+        "source_path": "data/raw/project_logs/v02_04_project_logs.md"
+      },
+      {
+        "chunk_id": "resume-v02_04_resume-0-d746bc710a36",
+        "source_type": "resume",
+        "source_path": "data/raw/resume/v02_04_resume.md"
+      },
+      {
+        "chunk_id": "project_logs-v02_04_project_logs-3-7a704a35e6de",
+        "source_type": "project_logs",
+        "source_path": "data/raw/project_logs/v02_04_project_logs.md"
+      }
+    ],
+    "error_type": null
+  },
+  "trace": {
+    "query": "这个项目的意图路由模块是怎么实现和复盘的？",
+    "routing": {
+      "intent": "project_explain",
+      "routed_sources": [
+        "project_logs",
+        "resume"
+      ],
+      "matched_keywords": [
+        "项目",
+        "模块"
+      ],
+      "strategy": "hybrid",
+      "confidence": 1.0,
+      "reason": "rule_semantic_agree",
+      "details": {
+        "rule_intent": "project_explain",
+        "semantic_intent": "project_explain",
+        "semantic_score": 0.5581459522767025,
+        "semantic_margin": 0.1289009516502545,
+        "rule_keyword_count": 2
+      }
+    },
+    "retrieval": {
+      "retriever": "hybrid",
+      "top_k": 5,
+      "result_count": 5,
+      "chunk_ids": [
+        "project_logs-v02_04_project_logs-2-3ffa5ae7120a",
+        "project_logs-v02_04_project_logs-0-7b9e19c08d99",
+        "project_logs-v02_04_project_logs-1-a235637cddf5",
+        "resume-v02_04_resume-0-d746bc710a36",
+        "project_logs-v02_04_project_logs-3-7a704a35e6de"
+      ]
+    },
+    "retrieved_chunks": [
+      {
+        "chunk_id": "project_logs-v02_04_project_logs-2-3ffa5ae7120a",
+        "rank": 1,
+        "score": 0.03278688524590164,
+        "source_type": "project_logs",
+        "source_path": "data/raw/project_logs/v02_04_project_logs.md",
+        "reason": "rrf keyword_rank=1, dense_rank=1, fused_score=0.032787"
+      },
+      {
+        "chunk_id": "project_logs-v02_04_project_logs-0-7b9e19c08d99",
+        "rank": 2,
+        "score": 0.03200204813108039,
+        "source_type": "project_logs",
+        "source_path": "data/raw/project_logs/v02_04_project_logs.md",
+        "reason": "rrf keyword_rank=3, dense_rank=2, fused_score=0.032002"
+      },
+      {
+        "chunk_id": "project_logs-v02_04_project_logs-1-a235637cddf5",
+        "rank": 3,
+        "score": 0.031754032258064516,
+        "source_type": "project_logs",
+        "source_path": "data/raw/project_logs/v02_04_project_logs.md",
+        "reason": "rrf keyword_rank=2, dense_rank=4, fused_score=0.031754"
+      },
+      {
+        "chunk_id": "resume-v02_04_resume-0-d746bc710a36",
+        "rank": 4,
+        "score": 0.03125763125763126,
+        "source_type": "resume",
+        "source_path": "data/raw/resume/v02_04_resume.md",
+        "reason": "rrf keyword_rank=5, dense_rank=3, fused_score=0.031258"
+      },
+      {
+        "chunk_id": "project_logs-v02_04_project_logs-3-7a704a35e6de",
+        "rank": 5,
+        "score": 0.031009615384615385,
+        "source_type": "project_logs",
+        "source_path": "data/raw/project_logs/v02_04_project_logs.md",
+        "reason": "rrf keyword_rank=4, dense_rank=5, fused_score=0.031010"
+      }
+    ],
+    "evidence": {
+      "status": "sufficient",
+      "reason": "sufficient_evidence",
+      "message": "检索数量、分数和来源覆盖均满足当前门槛。",
+      "observed_sources": [
+        "project_logs",
+        "resume"
+      ],
+      "missing_sources": [],
+      "top_score": 0.03278688524590164,
+      "retry_count": 0
+    },
+    "context": {
+      "used_chunk_ids": [
+        "project_logs-v02_04_project_logs-2-3ffa5ae7120a",
+        "project_logs-v02_04_project_logs-0-7b9e19c08d99",
+        "project_logs-v02_04_project_logs-1-a235637cddf5",
+        "resume-v02_04_resume-0-d746bc710a36",
+        "project_logs-v02_04_project_logs-3-7a704a35e6de"
+      ],
+      "skipped_chunk_ids": [],
+      "char_count": 2188,
+      "max_chars": 4000,
+      "is_truncated": false
+    },
+    "generation": {
+      "status": "parsed",
+      "sufficient": true,
+      "cited_chunk_ids": [
+        "project_logs-v02_04_project_logs-2-3ffa5ae7120a",
+        "project_logs-v02_04_project_logs-0-7b9e19c08d99",
+        "project_logs-v02_04_project_logs-1-a235637cddf5",
+        "resume-v02_04_resume-0-d746bc710a36",
+        "project_logs-v02_04_project_logs-3-7a704a35e6de"
+      ],
+      "reason": "检索证据提供了意图路由模块的实现方案（Semantic Router）、评估指标（Router Accuracy）、主要风险（多意图规则冲突）以及复盘方法（固定输入与版本、记录各阶段结果和失败原因），足以回答用户问题。"
+    },
+    "validation": {
+      "is_valid": true,
+      "citation_ids": [
+        "project_logs-v02_04_project_logs-2-3ffa5ae7120a",
+        "project_logs-v02_04_project_logs-0-7b9e19c08d99",
+        "project_logs-v02_04_project_logs-1-a235637cddf5",
+        "resume-v02_04_resume-0-d746bc710a36",
+        "project_logs-v02_04_project_logs-3-7a704a35e6de"
+      ],
+      "issues": []
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "type": "initial_retrieval",
+        "source_filter": [
+          "project_logs",
+          "resume"
+        ],
+        "retrieved_chunk_ids": [
+          "project_logs-v02_04_project_logs-2-3ffa5ae7120a",
+          "project_logs-v02_04_project_logs-0-7b9e19c08d99",
+          "project_logs-v02_04_project_logs-1-a235637cddf5",
+          "resume-v02_04_resume-0-d746bc710a36",
+          "project_logs-v02_04_project_logs-3-7a704a35e6de"
+        ],
+        "evidence": {
+          "status": "sufficient",
+          "reason": "sufficient_evidence",
+          "message": "检索数量、分数和来源覆盖均满足当前门槛。",
+          "observed_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "missing_sources": [],
+          "top_score": 0.03278688524590164,
+          "retry_count": 0
+        },
+        "latency_ms": {
+          "retrieval": 201.11015252768993,
+          "evidence": 0.03822334110736847
+        }
+      },
+      {
+        "attempt": 2,
+        "type": "initial_generation",
+        "status": "parsed",
+        "latency_ms": {
+          "generation": 16960.232481360435
+        },
+        "token_usage": {
+          "input_tokens": 1347,
+          "output_tokens": 312,
+          "total_tokens": 1659,
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1347,
+          "source": "llm_client"
+        }
+      }
+    ],
+    "response_status": "answered",
+    "error_type": "none",
+    "latency_ms": {
+      "routing": 1400.224708020687,
+      "retrieval": 201.11015252768993,
+      "context": 0.10425504297018051,
+      "generation": 16960.232481360435,
+      "validation": 0.06388593465089798,
+      "evidence": 0.03822334110736847,
+      "total": 18561.936450190842
+    },
+    "token_usage": {
+      "attempts": [
+        {
+          "input_tokens": 1347,
+          "output_tokens": 312,
+          "total_tokens": 1659,
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1347,
+          "source": "llm_client"
+        }
+      ],
+      "source": "client_reported_or_explicitly_unavailable"
+    }
+  },
+  "config": {
+    "run_id": "p0-d5-v02-frozen-test-20260804-deepseek-v4-flash",
+    "dataset_version": "evalrag_v0.2",
+    "split": "test",
+    "router_name": "hybrid",
+    "retriever_name": "hybrid",
+    "top_k": 5,
+    "context_max_chars": 4000,
+    "key_point_threshold": 0.5,
+    "model": "deepseek-v4-flash",
+    "temperature": 0.0,
+    "prompt_version": "p0-deepseek-json-v1",
+    "max_source_retries": 1,
+    "max_format_retries": 1,
+    "input_cache_hit_usd_per_million": 0.0028,
+    "input_cache_miss_usd_per_million": 0.14,
+    "output_usd_per_million": 0.28,
+    "pricing_source": "https://api-docs.deepseek.com/quick_start/pricing",
+    "pricing_checked_at": "2026-08-04",
+    "git_revision": "d3a80c08c3c4baf13b4a87be7c3d44cdde2f9f07-dirty",
+    "command": "PYTHONPATH=src python scripts/run_live_llm_evaluation.py --split test --run-id p0-d5-v02-frozen-test-20260804-deepseek-v4-flash",
+    "generator_name": "deepseek_chat_json_mode",
+    "unsupported_grader": "manual_support_review"
+  },
+  "provenance": {
+    "source_run": "reports/runs/p0-d5-v02-frozen-test-20260804-deepseek-v4-flash",
+    "note": "由已保存 frozen prediction 导出，未重新调用 LLM。"
+  }
+}

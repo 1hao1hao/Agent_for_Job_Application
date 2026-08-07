@@ -1,3 +1,14 @@
+---
+source_type: resume
+source_platform: project_authored
+source_url: unknown
+collected_at: 2026-06-13
+public_status: project_owned
+anonymized: true
+content_origin: user_provided_sample
+human_reviewed: true
+---
+
 # 示例简历
 
 ## 基本信息

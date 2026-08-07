@@ -1,0 +1,44 @@
+{
+  "dataset_version": "evalrag_v0.1",
+  "reviewed_document_count": 30,
+  "approved_document_count": 30,
+  "rejected_document_count": 0,
+  "reviewed_case_count": 60,
+  "approved_case_count": 60,
+  "rejected_case_count": 0,
+  "split_counts": {
+    "dev": 40,
+    "test": 20
+  },
+  "approved_split_counts": {
+    "dev": 40,
+    "test": 20
+  },
+  "category_counts": {
+    "single_source": 15,
+    "multi_source": 15,
+    "semantic_paraphrase": 15,
+    "unanswerable": 15
+  },
+  "approved_category_counts": {
+    "single_source": 15,
+    "multi_source": 15,
+    "semantic_paraphrase": 15,
+    "unanswerable": 15
+  },
+  "corrected_case_ids": [
+    "single_001",
+    "multi_001",
+    "multi_002",
+    "multi_012",
+    "multi_014",
+    "multi_015",
+    "semantic_003",
+    "semantic_014",
+    "semantic_015"
+  ],
+  "rejected_document_paths": [],
+  "rejected_case_ids": [],
+  "missing_chunk_ids": [],
+  "duplicate_query_candidates": []
+}

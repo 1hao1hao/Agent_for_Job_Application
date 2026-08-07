@@ -1,0 +1,272 @@
+{
+  "case": {
+    "case_id": "v02_multi_027",
+    "category": "multi_source",
+    "query": "结合岗位、简历和面试资料准备失败回归追问",
+    "answerable": true
+  },
+  "response": {
+    "status": "answered",
+    "answer": "结合岗位、简历和面试资料，准备失败回归追问时，应围绕“让修复过的问题不再复发”这一核心目标。具体而言，需要先固定输入与版本，再记录各阶段（如第1、2、3、4阶段）的结果和失败原因，不能只展示成功样例。主要方案是使用Regression Suite，并通过Regression Pass Rate观察效果。当前最需要处理的风险是“旧失败重新出现”。",
+    "citations": [
+      {
+        "chunk_id": "interview-v02_06_interview-3-a3b323498d4b",
+        "source_type": "interview",
+        "source_path": "data/raw/interview/v02_06_interview.md"
+      },
+      {
+        "chunk_id": "jd-v02_06_jd-0-da24eed18137",
+        "source_type": "jd",
+        "source_path": "data/raw/jd/v02_06_jd.md"
+      },
+      {
+        "chunk_id": "resume-v02_06_resume-0-a5d2b355f77c",
+        "source_type": "resume",
+        "source_path": "data/raw/resume/v02_06_resume.md"
+      },
+      {
+        "chunk_id": "jd-v02_06_jd-1-f2cd4ba2b2e1",
+        "source_type": "jd",
+        "source_path": "data/raw/jd/v02_06_jd.md"
+      },
+      {
+        "chunk_id": "jd-v02_06_jd-2-f9bf91bccd78",
+        "source_type": "jd",
+        "source_path": "data/raw/jd/v02_06_jd.md"
+      }
+    ],
+    "error_type": null
+  },
+  "trace": {
+    "query": "结合岗位、简历和面试资料准备失败回归追问",
+    "routing": {
+      "intent": "interview_prepare",
+      "routed_sources": [
+        "interview",
+        "jd",
+        "resume"
+      ],
+      "matched_keywords": [
+        "面试",
+        "准备",
+        "追问"
+      ],
+      "strategy": "hybrid",
+      "confidence": 1.0,
+      "reason": "rule_semantic_agree",
+      "details": {
+        "rule_intent": "interview_prepare",
+        "semantic_intent": "interview_prepare",
+        "semantic_score": 0.7577936202214364,
+        "semantic_margin": 0.10223626896203819,
+        "rule_keyword_count": 3
+      }
+    },
+    "retrieval": {
+      "retriever": "hybrid",
+      "top_k": 5,
+      "result_count": 5,
+      "chunk_ids": [
+        "interview-v02_06_interview-3-a3b323498d4b",
+        "jd-v02_06_jd-0-da24eed18137",
+        "resume-v02_06_resume-0-a5d2b355f77c",
+        "jd-v02_06_jd-1-f2cd4ba2b2e1",
+        "jd-v02_06_jd-2-f9bf91bccd78"
+      ]
+    },
+    "retrieved_chunks": [
+      {
+        "chunk_id": "interview-v02_06_interview-3-a3b323498d4b",
+        "rank": 1,
+        "score": 0.03278688524590164,
+        "source_type": "interview",
+        "source_path": "data/raw/interview/v02_06_interview.md",
+        "reason": "rrf keyword_rank=1, dense_rank=1, fused_score=0.032787"
+      },
+      {
+        "chunk_id": "jd-v02_06_jd-0-da24eed18137",
+        "rank": 2,
+        "score": 0.031754032258064516,
+        "source_type": "jd",
+        "source_path": "data/raw/jd/v02_06_jd.md",
+        "reason": "rrf keyword_rank=2, dense_rank=4, fused_score=0.031754"
+      },
+      {
+        "chunk_id": "resume-v02_06_resume-0-a5d2b355f77c",
+        "rank": 3,
+        "score": 0.03128054740957967,
+        "source_type": "resume",
+        "source_path": "data/raw/resume/v02_06_resume.md",
+        "reason": "rrf keyword_rank=6, dense_rank=2, fused_score=0.031281"
+      },
+      {
+        "chunk_id": "jd-v02_06_jd-1-f2cd4ba2b2e1",
+        "rank": 4,
+        "score": 0.03057889822595705,
+        "source_type": "jd",
+        "source_path": "data/raw/jd/v02_06_jd.md",
+        "reason": "rrf keyword_rank=3, dense_rank=8, fused_score=0.030579"
+      },
+      {
+        "chunk_id": "jd-v02_06_jd-2-f9bf91bccd78",
+        "rank": 5,
+        "score": 0.03055037313432836,
+        "source_type": "jd",
+        "source_path": "data/raw/jd/v02_06_jd.md",
+        "reason": "rrf keyword_rank=4, dense_rank=7, fused_score=0.030550"
+      }
+    ],
+    "evidence": {
+      "status": "sufficient",
+      "reason": "sufficient_evidence",
+      "message": "检索数量、分数和来源覆盖均满足当前门槛。",
+      "observed_sources": [
+        "interview",
+        "jd",
+        "resume"
+      ],
+      "missing_sources": [],
+      "top_score": 0.03278688524590164,
+      "retry_count": 0
+    },
+    "context": {
+      "used_chunk_ids": [
+        "interview-v02_06_interview-3-a3b323498d4b",
+        "jd-v02_06_jd-0-da24eed18137",
+        "resume-v02_06_resume-0-a5d2b355f77c",
+        "jd-v02_06_jd-1-f2cd4ba2b2e1",
+        "jd-v02_06_jd-2-f9bf91bccd78"
+      ],
+      "skipped_chunk_ids": [],
+      "char_count": 2020,
+      "max_chars": 4000,
+      "is_truncated": false
+    },
+    "generation": {
+      "status": "parsed",
+      "sufficient": true,
+      "cited_chunk_ids": [
+        "interview-v02_06_interview-3-a3b323498d4b",
+        "jd-v02_06_jd-0-da24eed18137",
+        "resume-v02_06_resume-0-a5d2b355f77c",
+        "jd-v02_06_jd-1-f2cd4ba2b2e1",
+        "jd-v02_06_jd-2-f9bf91bccd78"
+      ],
+      "reason": "检索证据中，岗位资料、简历经历和面试笔记均围绕失败回归展开，提供了可核验的事实：固定输入与版本、记录各阶段结果和失败原因、使用Regression Suite和Regression Pass Rate、关注旧失败重新出现的风险。这些信息足以回答用户问题，且引用的chunk id均在允许范围内。"
+    },
+    "validation": {
+      "is_valid": true,
+      "citation_ids": [
+        "interview-v02_06_interview-3-a3b323498d4b",
+        "jd-v02_06_jd-0-da24eed18137",
+        "resume-v02_06_resume-0-a5d2b355f77c",
+        "jd-v02_06_jd-1-f2cd4ba2b2e1",
+        "jd-v02_06_jd-2-f9bf91bccd78"
+      ],
+      "issues": []
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "type": "initial_retrieval",
+        "source_filter": [
+          "interview",
+          "jd",
+          "resume"
+        ],
+        "retrieved_chunk_ids": [
+          "interview-v02_06_interview-3-a3b323498d4b",
+          "jd-v02_06_jd-0-da24eed18137",
+          "resume-v02_06_resume-0-a5d2b355f77c",
+          "jd-v02_06_jd-1-f2cd4ba2b2e1",
+          "jd-v02_06_jd-2-f9bf91bccd78"
+        ],
+        "evidence": {
+          "status": "sufficient",
+          "reason": "sufficient_evidence",
+          "message": "检索数量、分数和来源覆盖均满足当前门槛。",
+          "observed_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "missing_sources": [],
+          "top_score": 0.03278688524590164,
+          "retry_count": 0
+        },
+        "latency_ms": {
+          "retrieval": 203.17088905721903,
+          "evidence": 0.023315660655498505
+        }
+      },
+      {
+        "attempt": 2,
+        "type": "initial_generation",
+        "status": "parsed",
+        "latency_ms": {
+          "generation": 3622.185125015676
+        },
+        "token_usage": {
+          "input_tokens": 1309,
+          "output_tokens": 292,
+          "total_tokens": 1601,
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1309,
+          "source": "llm_client"
+        }
+      }
+    ],
+    "response_status": "answered",
+    "error_type": "none",
+    "latency_ms": {
+      "routing": 21.750456653535366,
+      "retrieval": 203.17088905721903,
+      "context": 0.041219405829906464,
+      "generation": 3622.185125015676,
+      "validation": 0.045629218220710754,
+      "evidence": 0.023315660655498505,
+      "total": 3847.343656234443
+    },
+    "token_usage": {
+      "attempts": [
+        {
+          "input_tokens": 1309,
+          "output_tokens": 292,
+          "total_tokens": 1601,
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1309,
+          "source": "llm_client"
+        }
+      ],
+      "source": "client_reported_or_explicitly_unavailable"
+    }
+  },
+  "config": {
+    "run_id": "p0-d5-v02-frozen-test-20260804-deepseek-v4-flash",
+    "dataset_version": "evalrag_v0.2",
+    "split": "test",
+    "router_name": "hybrid",
+    "retriever_name": "hybrid",
+    "top_k": 5,
+    "context_max_chars": 4000,
+    "key_point_threshold": 0.5,
+    "model": "deepseek-v4-flash",
+    "temperature": 0.0,
+    "prompt_version": "p0-deepseek-json-v1",
+    "max_source_retries": 1,
+    "max_format_retries": 1,
+    "input_cache_hit_usd_per_million": 0.0028,
+    "input_cache_miss_usd_per_million": 0.14,
+    "output_usd_per_million": 0.28,
+    "pricing_source": "https://api-docs.deepseek.com/quick_start/pricing",
+    "pricing_checked_at": "2026-08-04",
+    "git_revision": "d3a80c08c3c4baf13b4a87be7c3d44cdde2f9f07-dirty",
+    "command": "PYTHONPATH=src python scripts/run_live_llm_evaluation.py --split test --run-id p0-d5-v02-frozen-test-20260804-deepseek-v4-flash",
+    "generator_name": "deepseek_chat_json_mode",
+    "unsupported_grader": "manual_support_review"
+  },
+  "provenance": {
+    "source_run": "reports/runs/p0-d5-v02-frozen-test-20260804-deepseek-v4-flash",
+    "note": "由已保存 frozen prediction 导出，未重新调用 LLM。"
+  }
+}

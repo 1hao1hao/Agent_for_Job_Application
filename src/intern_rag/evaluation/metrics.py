@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 import json
 from pathlib import Path
+from statistics import mean
 from typing import Any
 
 
@@ -108,6 +109,191 @@ def calculate_router_accuracy(cases: list[RouterEvalCase]) -> float:
             correct_count += 1
 
     return correct_count / len(cases)
+
+
+def calculate_citation_validity(
+    citation_ids: list[str],
+    context_ids: list[str],
+    *,
+    status: str,
+) -> float | None:
+    """计算回答引用 ID 在本轮 Context 中存在的比例。"""
+
+    if status != "answered":
+        return None
+    if not citation_ids:
+        return 0.0
+    valid_count = sum(chunk_id in set(context_ids) for chunk_id in citation_ids)
+    return valid_count / len(citation_ids)
+
+
+def calculate_key_point_coverage(
+    answer: str,
+    expected_points: list[str],
+) -> tuple[float | None, list[str]]:
+    """用规范化关键词匹配计算要点覆盖率，并返回已覆盖要点。"""
+
+    if not expected_points:
+        return None, []
+    normalized_answer = _normalize_text(answer)
+    covered = [
+        point
+        for point in expected_points
+        if _normalize_text(point) in normalized_answer
+    ]
+    return len(covered) / len(expected_points), covered
+
+
+def summarize_end_to_end_results(
+    case_results: list[dict[str, object]],
+    *,
+    key_point_threshold: float,
+) -> dict[str, object]:
+    """按协议汇总 Grounding、Abstention、Safety 与端到端成功率。"""
+
+    if not 0.0 <= key_point_threshold <= 1.0:
+        raise ValueError("key_point_threshold must be between 0 and 1")
+    evaluated = [
+        _evaluate_end_to_end_case(result, key_point_threshold)
+        for result in case_results
+    ]
+    answerable = [item for item in evaluated if bool(item["answerable"])]
+    unanswerable = [item for item in evaluated if not bool(item["answerable"])]
+    answered = [item for item in evaluated if item["status"] == "answered"]
+    unsupported_reviewed = [
+        item for item in answered if item["unsupported_answer"] is not None
+    ]
+    e2e_known = [item for item in evaluated if item["end_to_end_success"] is not None]
+
+    return {
+        "case_metrics": evaluated,
+        "metrics": {
+            "citation_validity": _mean_optional(
+                item["citation_validity"] for item in answerable
+            ),
+            "key_point_coverage": _mean_optional(
+                item["key_point_coverage"] for item in answerable
+            ),
+            "abstention_accuracy": (
+                mean(float(bool(item["correct_abstention"])) for item in unanswerable)
+                if unanswerable else None
+            ),
+            "unsupported_answer_rate": (
+                mean(
+                    float(bool(item["unsupported_answer"]))
+                    for item in unsupported_reviewed
+                )
+                if unsupported_reviewed else None
+            ),
+            "end_to_end_success_rate": (
+                mean(float(bool(item["end_to_end_success"])) for item in e2e_known)
+                if len(e2e_known) == len(evaluated) and evaluated else None
+            ),
+        },
+        "counts": {
+            "total": len(evaluated),
+            "answerable": len(answerable),
+            "unanswerable": len(unanswerable),
+            "answered": len(answered),
+            "unexpected_abstention": sum(
+                bool(item["unexpected_abstention"]) for item in evaluated
+            ),
+            "should_abstain_but_answered": sum(
+                bool(item["should_abstain_but_answered"]) for item in evaluated
+            ),
+            "unsupported_reviewed": len(unsupported_reviewed),
+        },
+        "category_metrics": _summarize_categories(evaluated),
+        "key_point_threshold": key_point_threshold,
+        "metric_formulas": {
+            "citation_validity": "valid citation ids / all returned citation ids",
+            "key_point_coverage": "matched expected points / all expected points",
+            "abstention_accuracy": "correct abstentions / all unanswerable cases",
+
+            "unsupported_answer_rate": "reviewed unsupported answers / reviewed answered cases",#编造不存在证据的回答比例
+
+            #   分子：满足全部成功条件的 Case 数量 “整个 RAG 请求是否在路由、检索、回答、引用和拒答方面都达到要求。”
+            #   分母：全部可计算端到端结果的 EvaluationCase 数量
+            "end_to_end_success_rate": "successful cases / all evaluated cases",
+        },
+    }
+
+
+def _evaluate_end_to_end_case(
+    result: dict[str, object],
+    key_point_threshold: float,
+) -> dict[str, object]:
+    answerable = bool(result["answerable"])
+    status = str(result["status"])
+    citation_validity = result.get("citation_validity")
+    key_point_coverage = result.get("key_point_coverage")
+    unsupported = result.get("unsupported_answer")
+    correct_abstention = not answerable and status == "insufficient_evidence"
+    unexpected_abstention = answerable and status != "answered"
+    should_abstain_but_answered = not answerable and status == "answered"
+
+    if answerable:
+        if status != "answered":
+            # 可回答样例被拒答是明确失败，不依赖答案支持性标签。
+            success: bool | None = False
+        elif unsupported is None:
+            success = None
+        else:
+            success = (
+                bool(result["router_correct"])
+                and float(result["recall_at_5"] or 0.0) > 0.0
+                and citation_validity == 1.0
+                and key_point_coverage is not None
+                and float(key_point_coverage) >= key_point_threshold
+                and unsupported is False
+            )
+    else:
+        success = (
+            correct_abstention
+            and not list(result["citation_ids"])  # type: ignore[arg-type]
+            and unsupported is not True
+        )
+    return {
+        **result,
+        "correct_abstention": correct_abstention,
+        "unexpected_abstention": unexpected_abstention,
+        "should_abstain_but_answered": should_abstain_but_answered,
+        "end_to_end_success": success,
+    }
+
+
+def _summarize_categories(
+    evaluated: list[dict[str, object]],
+) -> dict[str, dict[str, float | int | None]]:
+    categories = sorted({str(item["category"]) for item in evaluated})
+    summary: dict[str, dict[str, float | int | None]] = {}
+    for category in categories:
+        items = [item for item in evaluated if item["category"] == category]
+        successes = [item["end_to_end_success"] for item in items]
+        summary[category] = {
+            "case_count": len(items),
+            "citation_validity": _mean_optional(
+                item["citation_validity"] for item in items
+            ),
+            "key_point_coverage": _mean_optional(
+                item["key_point_coverage"] for item in items
+            ),
+            "end_to_end_success_rate": (
+                mean(float(bool(value)) for value in successes)
+                if all(value is not None for value in successes) and successes
+                else None
+            ),
+        }
+    return summary
+
+
+def _mean_optional(values: Any) -> float | None:
+    numbers = [float(value) for value in values if value is not None]
+    return mean(numbers) if numbers else None
+
+
+def _normalize_text(text: str) -> str:
+    return "".join(text.casefold().split())
 
 
 def evaluate_cases(

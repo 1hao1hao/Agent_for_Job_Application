@@ -1,0 +1,10 @@
+{
+  "router_name": "semantic",
+  "dataset_version": "evalrag_v0.2",
+  "embedding_index_dir": "data/processed/indexes/evalrag_v0.2/bge-small-zh-v1.5",
+  "embedding_name": "BAAI/bge-small-zh-v1.5",
+  "embedding_revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "semantic_min_score": 0.45,
+  "semantic_min_margin": 0.02,
+  "calibration_split": "dev"
+}

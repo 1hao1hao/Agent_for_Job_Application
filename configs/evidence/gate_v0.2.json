@@ -1,0 +1,14 @@
+{
+  "dataset_version": "evalrag_v0.2",
+  "calibration_split": "dev",
+  "min_results": 1,
+  "min_scores": {
+    "keyword": 0.1,
+    "dense": 0.45,
+    "hybrid": 0.02
+  },
+  "require_source_coverage": true,
+  "max_source_retries": 1,
+  "max_format_retries": 1,
+  "note": "不同 Retriever 的 score 不可横向比较，因此分别配置门槛。"
+}

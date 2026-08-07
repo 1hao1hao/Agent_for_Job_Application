@@ -1,0 +1,780 @@
+{
+  "ablation_id": "p0-d3-v02-dev-20260801",
+  "dataset_version": "evalrag_v0.2",
+  "split": "dev",
+  "run_dirs": {
+    "keyword": "reports/runs/p0-d3-v02-dev-20260801-keyword",
+    "dense": "reports/runs/p0-d3-v02-dev-20260801-dense",
+    "hybrid": "reports/runs/p0-d3-v02-dev-20260801-hybrid"
+  },
+  "summaries": {
+    "keyword": {
+      "run_id": "p0-d3-v02-dev-20260801-keyword",
+      "report_status": "formal",
+      "created_at": "2026-08-01T06:34:58.174392+00:00",
+      "dataset_version": "evalrag_v0.2",
+      "split": "dev",
+      "case_count": 80,
+      "answerable_case_count": 60,
+      "category_counts": {
+        "single_source": 20,
+        "semantic_paraphrase": 20,
+        "multi_source": 20,
+        "unanswerable": 20
+      },
+      "category_metrics": {
+        "multi_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.39999999999999997,
+          "recall_at_5": 0.5666666666666667,
+          "mrr": 0.825
+        },
+        "semantic_paraphrase": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.85,
+          "recall_at_5": 0.85,
+          "mrr": 0.85
+        },
+        "single_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.95,
+          "recall_at_5": 1.0,
+          "mrr": 0.9041666666666667
+        },
+        "unanswerable": {
+          "case_count": 20,
+          "answerable_case_count": 0,
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        }
+      },
+      "failure_counts": {
+        "router_wrong": 9,
+        "retrieval_incomplete": 17
+      },
+      "metrics": {
+        "router_accuracy": 0.8875,
+        "recall_at_3": 0.7333333333333333,
+        "recall_at_5": 0.8055555555555556,
+        "mrr": 0.8597222222222223
+      },
+      "latency_ms": {
+        "retrieval": {
+          "count": 80,
+          "p50": 9.232754819095135,
+          "p95": 14.086141251027584
+        },
+        "routing": {
+          "count": 80,
+          "p50": 0.009383074939250946,
+          "p95": 0.010266900062561035
+        },
+        "total": {
+          "count": 80,
+          "p50": 9.248564951121807,
+          "p95": 14.102916233241558
+        }
+      },
+      "metric_scope": {
+        "router_accuracy": "all selected cases",
+        "recall_at_3": "answerable cases with relevant ids",
+        "recall_at_5": "answerable cases with relevant ids",
+        "mrr": "answerable cases with relevant ids"
+      },
+      "metric_formulas": {
+        "router_accuracy": "strict intent and source-set matches / all selected cases",
+        "recall_at_k": "|top-k retrieved ids intersect relevant ids| / |relevant ids|, macro average",
+        "mrr": "macro average of 1 / first relevant rank",
+        "latency_percentile": "nearest-rank percentile"
+      },
+      "runtime_environment": {
+        "python": "3.11.7",
+        "platform": "Linux-4.18.0-372.32.1.el8_6.x86_64-x86_64-with-glibc2.28",
+        "latency_mode": "single process; exported chunks preloaded"
+      },
+      "limitations": [
+        "Retrieval metrics do not measure final answer correctness."
+      ]
+    },
+    "dense": {
+      "run_id": "p0-d3-v02-dev-20260801-dense",
+      "report_status": "formal",
+      "created_at": "2026-08-01T06:35:37.598884+00:00",
+      "dataset_version": "evalrag_v0.2",
+      "split": "dev",
+      "case_count": 80,
+      "answerable_case_count": 60,
+      "category_counts": {
+        "single_source": 20,
+        "semantic_paraphrase": 20,
+        "multi_source": 20,
+        "unanswerable": 20
+      },
+      "category_metrics": {
+        "multi_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.5833333333333334,
+          "recall_at_5": 0.725,
+          "mrr": 0.775
+        },
+        "semantic_paraphrase": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.7,
+          "recall_at_5": 0.75,
+          "mrr": 0.41833333333333333
+        },
+        "single_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.9,
+          "recall_at_5": 0.95,
+          "mrr": 0.8291666666666667
+        },
+        "unanswerable": {
+          "case_count": 20,
+          "answerable_case_count": 0,
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        }
+      },
+      "failure_counts": {
+        "router_wrong": 9,
+        "retrieval_incomplete": 15
+      },
+      "metrics": {
+        "router_accuracy": 0.8875,
+        "recall_at_3": 0.7277777777777777,
+        "recall_at_5": 0.8083333333333333,
+        "mrr": 0.6741666666666667
+      },
+      "latency_ms": {
+        "retrieval": {
+          "count": 80,
+          "p50": 198.93104303628206,
+          "p95": 1391.5255153551698
+        },
+        "routing": {
+          "count": 80,
+          "p50": 0.03102421760559082,
+          "p95": 0.044912099838256836
+        },
+        "total": {
+          "count": 80,
+          "p50": 199.00355022400618,
+          "p95": 1391.5697988122702
+        }
+      },
+      "metric_scope": {
+        "router_accuracy": "all selected cases",
+        "recall_at_3": "answerable cases with relevant ids",
+        "recall_at_5": "answerable cases with relevant ids",
+        "mrr": "answerable cases with relevant ids"
+      },
+      "metric_formulas": {
+        "router_accuracy": "strict intent and source-set matches / all selected cases",
+        "recall_at_k": "|top-k retrieved ids intersect relevant ids| / |relevant ids|, macro average",
+        "mrr": "macro average of 1 / first relevant rank",
+        "latency_percentile": "nearest-rank percentile"
+      },
+      "runtime_environment": {
+        "python": "3.11.7",
+        "platform": "Linux-4.18.0-372.32.1.el8_6.x86_64-x86_64-with-glibc2.28",
+        "latency_mode": "single process; exported chunks preloaded"
+      },
+      "limitations": [
+        "Retrieval metrics do not measure final answer correctness."
+      ]
+    },
+    "hybrid": {
+      "run_id": "p0-d3-v02-dev-20260801-hybrid",
+      "report_status": "formal",
+      "created_at": "2026-08-01T06:36:10.694182+00:00",
+      "dataset_version": "evalrag_v0.2",
+      "split": "dev",
+      "case_count": 80,
+      "answerable_case_count": 60,
+      "category_counts": {
+        "single_source": 20,
+        "semantic_paraphrase": 20,
+        "multi_source": 20,
+        "unanswerable": 20
+      },
+      "category_metrics": {
+        "multi_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.625,
+          "recall_at_5": 0.7166666666666667,
+          "mrr": 0.925
+        },
+        "semantic_paraphrase": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.8,
+          "recall_at_5": 0.85,
+          "mrr": 0.6541666666666667
+        },
+        "single_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "mrr": 0.9166666666666666
+        },
+        "unanswerable": {
+          "case_count": 20,
+          "answerable_case_count": 0,
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        }
+      },
+      "failure_counts": {
+        "router_wrong": 9,
+        "retrieval_incomplete": 13
+      },
+      "metrics": {
+        "router_accuracy": 0.8875,
+        "recall_at_3": 0.8083333333333333,
+        "recall_at_5": 0.8555555555555555,
+        "mrr": 0.8319444444444445
+      },
+      "latency_ms": {
+        "retrieval": {
+          "count": 80,
+          "p50": 202.90056057274342,
+          "p95": 1095.1532805338502
+        },
+        "routing": {
+          "count": 80,
+          "p50": 0.025311484932899475,
+          "p95": 0.0431770458817482
+        },
+        "total": {
+          "count": 80,
+          "p50": 202.95243337750435,
+          "p95": 1095.255016349256
+        }
+      },
+      "metric_scope": {
+        "router_accuracy": "all selected cases",
+        "recall_at_3": "answerable cases with relevant ids",
+        "recall_at_5": "answerable cases with relevant ids",
+        "mrr": "answerable cases with relevant ids"
+      },
+      "metric_formulas": {
+        "router_accuracy": "strict intent and source-set matches / all selected cases",
+        "recall_at_k": "|top-k retrieved ids intersect relevant ids| / |relevant ids|, macro average",
+        "mrr": "macro average of 1 / first relevant rank",
+        "latency_percentile": "nearest-rank percentile"
+      },
+      "runtime_environment": {
+        "python": "3.11.7",
+        "platform": "Linux-4.18.0-372.32.1.el8_6.x86_64-x86_64-with-glibc2.28",
+        "latency_mode": "single process; exported chunks preloaded"
+      },
+      "limitations": [
+        "Retrieval metrics do not measure final answer correctness."
+      ]
+    }
+  },
+  "strategy_differences": [
+    {
+      "case_id": "v02_semantic_010",
+      "category": "semantic_paraphrase",
+      "query": "简历优势：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+      "difference_score": 2.0,
+      "metrics": {
+        "keyword": {
+          "router_correct": true,
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        "dense": {
+          "router_correct": true,
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        "hybrid": {
+          "router_correct": true,
+          "recall_at_3": 0.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.25
+        }
+      },
+      "top_chunk_ids": {
+        "keyword": [
+          "resume-v02_10_resume-0-bdf42818d7b7",
+          "resume-v02_10_resume-1-1a6f37293848",
+          "resume-v02_10_resume-2-6b5573f02404",
+          "resume-v02_10_resume-3-40ea6a97bdb6",
+          "jd-v02_10_jd-0-bf2b65c523d3"
+        ],
+        "dense": [
+          "resume-v02_10_resume-2-6b5573f02404",
+          "resume-v02_10_resume-1-1a6f37293848",
+          "resume-v02_10_resume-3-40ea6a97bdb6",
+          "resume-v02_14_resume-2-2f71203ee774",
+          "jd-v02_10_jd-1-779d13170104"
+        ],
+        "hybrid": [
+          "resume-v02_10_resume-2-6b5573f02404",
+          "resume-v02_10_resume-1-1a6f37293848",
+          "resume-v02_10_resume-3-40ea6a97bdb6",
+          "resume-v02_10_resume-0-bdf42818d7b7",
+          "jd-v02_10_jd-1-779d13170104"
+        ]
+      }
+    },
+    {
+      "case_id": "v02_semantic_017",
+      "category": "semantic_paraphrase",
+      "query": "面试怎么回答：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+      "difference_score": 2.0,
+      "metrics": {
+        "keyword": {
+          "router_correct": true,
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        "dense": {
+          "router_correct": true,
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        "hybrid": {
+          "router_correct": true,
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5
+        }
+      },
+      "top_chunk_ids": {
+        "keyword": [
+          "interview-v02_11_interview-0-5028a5a6c8fe",
+          "interview-v02_11_interview-1-46e864fd1f4c",
+          "interview-v02_11_interview-2-6f7e8015cd96",
+          "interview-v02_11_interview-3-bcc3d1220cbd",
+          "jd-v02_11_jd-0-2f1e6093a191"
+        ],
+        "dense": [
+          "interview-v02_11_interview-3-bcc3d1220cbd",
+          "resume-v02_11_resume-1-3e5b480c0084",
+          "jd-v02_11_jd-2-cf15bfdbef98",
+          "interview-v02_11_interview-2-6f7e8015cd96",
+          "jd-v02_11_jd-1-04a993d0393c"
+        ],
+        "hybrid": [
+          "interview-v02_11_interview-3-bcc3d1220cbd",
+          "interview-v02_11_interview-0-5028a5a6c8fe",
+          "interview-v02_11_interview-2-6f7e8015cd96",
+          "interview-v02_11_interview-1-46e864fd1f4c",
+          "jd-v02_11_jd-2-cf15bfdbef98"
+        ]
+      }
+    },
+    {
+      "case_id": "v02_single_015",
+      "category": "single_source",
+      "query": "面试准备中，请求追踪应该怎样解释和排查？",
+      "difference_score": 2.0,
+      "metrics": {
+        "keyword": {
+          "router_correct": true,
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        "dense": {
+          "router_correct": true,
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0
+        },
+        "hybrid": {
+          "router_correct": true,
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5
+        }
+      },
+      "top_chunk_ids": {
+        "keyword": [
+          "interview-v02_03_interview-0-fdd59dfde720",
+          "interview-v02_03_interview-2-20c79510747c",
+          "interview-v02_03_interview-1-715f1c308913",
+          "interview-v02_03_interview-3-a85e2fc581ce",
+          "jd-v02_03_jd-0-2b620372e327"
+        ],
+        "dense": [
+          "interview-v02_04_interview-2-c8cf090d4aae",
+          "interview-v02_01_interview-2-6c37140c7406",
+          "interview-v02_02_interview-2-22cc4d9e8a6e",
+          "interview-v02_03_interview-2-20c79510747c",
+          "interview-v02_10_interview-2-94663619236d"
+        ],
+        "hybrid": [
+          "interview-v02_03_interview-2-20c79510747c",
+          "interview-v02_03_interview-0-fdd59dfde720",
+          "interview-v02_01_interview-2-6c37140c7406",
+          "interview-v02_03_interview-3-a85e2fc581ce",
+          "interview-v02_09_interview-2-e4d912069b5a"
+        ]
+      }
+    },
+    {
+      "case_id": "v02_multi_012",
+      "category": "multi_source",
+      "query": "结合岗位、简历和面试资料准备请求追踪追问",
+      "difference_score": 1.4166666666666667,
+      "metrics": {
+        "keyword": {
+          "router_correct": true,
+          "recall_at_3": 0.3333333333333333,
+          "recall_at_5": 0.6666666666666666,
+          "reciprocal_rank": 1.0
+        },
+        "dense": {
+          "router_correct": true,
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.3333333333333333,
+          "reciprocal_rank": 0.25
+        },
+        "hybrid": {
+          "router_correct": true,
+          "recall_at_3": 0.6666666666666666,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0
+        }
+      },
+      "top_chunk_ids": {
+        "keyword": [
+          "jd-v02_03_jd-0-2b620372e327",
+          "jd-v02_03_jd-1-fdfda89fb205",
+          "jd-v02_03_jd-2-a8955ec68394",
+          "jd-v02_03_jd-3-bd56ee27eafe",
+          "resume-v02_03_resume-0-3c1472e83ae1"
+        ],
+        "dense": [
+          "interview-v02_02_interview-3-a2c56e1ea3e2",
+          "interview-v02_03_interview-3-a85e2fc581ce",
+          "interview-v02_04_interview-3-3c43c879c26e",
+          "interview-v02_03_interview-0-fdd59dfde720",
+          "interview-v02_13_interview-3-b3e8781baa77"
+        ],
+        "hybrid": [
+          "jd-v02_03_jd-0-2b620372e327",
+          "interview-v02_03_interview-3-a85e2fc581ce",
+          "interview-v02_03_interview-0-fdd59dfde720",
+          "interview-v02_02_interview-3-a2c56e1ea3e2",
+          "resume-v02_03_resume-0-3c1472e83ae1"
+        ]
+      }
+    },
+    {
+      "case_id": "v02_multi_017",
+      "category": "multi_source",
+      "query": "结合岗位、简历和面试资料准备意图路由追问",
+      "difference_score": 1.1666666666666667,
+      "metrics": {
+        "keyword": {
+          "router_correct": true,
+          "recall_at_3": 0.3333333333333333,
+          "recall_at_5": 0.3333333333333333,
+          "reciprocal_rank": 0.5
+        },
+        "dense": {
+          "router_correct": true,
+          "recall_at_3": 0.6666666666666666,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        "hybrid": {
+          "router_correct": true,
+          "recall_at_3": 0.6666666666666666,
+          "recall_at_5": 0.6666666666666666,
+          "reciprocal_rank": 1.0
+        }
+      },
+      "top_chunk_ids": {
+        "keyword": [
+          "interview-v02_04_interview-3-3c43c879c26e",
+          "jd-v02_04_jd-0-4a1efd74ccdf",
+          "jd-v02_04_jd-1-5d673f5531f0",
+          "jd-v02_04_jd-2-c72b535eb6a2",
+          "jd-v02_04_jd-3-cebba6d2a906"
+        ],
+        "dense": [
+          "resume-v02_04_resume-0-d746bc710a36",
+          "jd-v02_04_jd-0-4a1efd74ccdf",
+          "resume-v02_04_resume-1-09868fa78308",
+          "interview-v02_04_interview-0-acb6bf26d47d",
+          "interview-v02_04_interview-3-3c43c879c26e"
+        ],
+        "hybrid": [
+          "jd-v02_04_jd-0-4a1efd74ccdf",
+          "interview-v02_04_interview-3-3c43c879c26e",
+          "resume-v02_04_resume-0-d746bc710a36",
+          "jd-v02_04_jd-1-5d673f5531f0",
+          "resume-v02_04_resume-1-09868fa78308"
+        ]
+      }
+    },
+    {
+      "case_id": "v02_multi_011",
+      "category": "multi_source",
+      "query": "结合岗位和简历分析请求追踪匹配度",
+      "difference_score": 1.0,
+      "metrics": {
+        "keyword": {
+          "router_correct": true,
+          "recall_at_3": 0.5,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        "dense": {
+          "router_correct": true,
+          "recall_at_3": 0.5,
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.5
+        },
+        "hybrid": {
+          "router_correct": true,
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0
+        }
+      },
+      "top_chunk_ids": {
+        "keyword": [
+          "resume-v02_03_resume-0-3c1472e83ae1",
+          "resume-v02_03_resume-1-759d4f855042",
+          "resume-v02_03_resume-2-bc61af744241",
+          "resume-v02_03_resume-3-bb04ffd9cdd0",
+          "jd-v02_03_jd-0-2b620372e327"
+        ],
+        "dense": [
+          "jd-v02_04_jd-2-c72b535eb6a2",
+          "jd-v02_03_jd-0-2b620372e327",
+          "jd-v02_04_jd-1-5d673f5531f0",
+          "jd-search_algorithm_intern-0-3717dbcae501",
+          "resume-v02_04_resume-1-09868fa78308"
+        ],
+        "hybrid": [
+          "jd-v02_03_jd-0-2b620372e327",
+          "resume-v02_03_resume-0-3c1472e83ae1",
+          "jd-v02_03_jd-1-fdfda89fb205",
+          "resume-v02_09_resume-1-7a6b96b0087b",
+          "resume-v02_09_resume-2-e12214f13cc6"
+        ]
+      }
+    },
+    {
+      "case_id": "v02_multi_004",
+      "category": "multi_source",
+      "query": "结合用户画像、岗位和简历制定混合检索投递计划",
+      "difference_score": 0.8333333333333333,
+      "metrics": {
+        "keyword": {
+          "router_correct": true,
+          "recall_at_3": 0.3333333333333333,
+          "recall_at_5": 0.3333333333333333,
+          "reciprocal_rank": 0.5
+        },
+        "dense": {
+          "router_correct": true,
+          "recall_at_3": 0.6666666666666666,
+          "recall_at_5": 0.6666666666666666,
+          "reciprocal_rank": 1.0
+        },
+        "hybrid": {
+          "router_correct": true,
+          "recall_at_3": 0.3333333333333333,
+          "recall_at_5": 0.3333333333333333,
+          "reciprocal_rank": 1.0
+        }
+      },
+      "top_chunk_ids": {
+        "keyword": [
+          "user_profile-v02_01_user_profile-3-4cdb3dfbb88f",
+          "user_profile-v02_01_user_profile-0-0ef6940a7be3",
+          "user_profile-v02_01_user_profile-1-d3d0ac2a879b",
+          "user_profile-v02_01_user_profile-2-e71f141757e3",
+          "user_profile-v02_05_user_profile-3-90804fa7d091"
+        ],
+        "dense": [
+          "user_profile-v02_01_user_profile-0-0ef6940a7be3",
+          "resume-v02_01_resume-0-9acdbaec4702",
+          "user_profile-v02_01_user_profile-1-d3d0ac2a879b",
+          "user_profile-v02_01_user_profile-3-4cdb3dfbb88f",
+          "user_profile-profile-0-70751fced17f"
+        ],
+        "hybrid": [
+          "user_profile-v02_01_user_profile-0-0ef6940a7be3",
+          "user_profile-v02_01_user_profile-3-4cdb3dfbb88f",
+          "user_profile-v02_01_user_profile-1-d3d0ac2a879b",
+          "user_profile-v02_09_user_profile-3-10c1fca62633",
+          "user_profile-profile-0-70751fced17f"
+        ]
+      }
+    },
+    {
+      "case_id": "v02_semantic_016",
+      "category": "semantic_paraphrase",
+      "query": "面试怎么回答：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+      "difference_score": 0.8,
+      "metrics": {
+        "keyword": {
+          "router_correct": true,
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0
+        },
+        "dense": {
+          "router_correct": true,
+          "recall_at_3": 0.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.2
+        },
+        "hybrid": {
+          "router_correct": true,
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333
+        }
+      },
+      "top_chunk_ids": {
+        "keyword": [
+          "interview-v02_10_interview-0-bbf97c502c7f",
+          "interview-v02_10_interview-1-77691ae9f475",
+          "interview-v02_10_interview-2-94663619236d",
+          "interview-v02_10_interview-3-cdff928ecfc5",
+          "jd-v02_10_jd-0-bf2b65c523d3"
+        ],
+        "dense": [
+          "interview-v02_10_interview-3-cdff928ecfc5",
+          "interview-v02_10_interview-1-77691ae9f475",
+          "jd-v02_10_jd-1-779d13170104",
+          "interview-v02_10_interview-2-94663619236d",
+          "interview-v02_10_interview-0-bbf97c502c7f"
+        ],
+        "hybrid": [
+          "interview-v02_10_interview-1-77691ae9f475",
+          "interview-v02_10_interview-3-cdff928ecfc5",
+          "interview-v02_10_interview-0-bbf97c502c7f",
+          "interview-v02_10_interview-2-94663619236d",
+          "jd-v02_10_jd-1-779d13170104"
+        ]
+      }
+    },
+    {
+      "case_id": "v02_multi_015",
+      "category": "multi_source",
+      "query": "面试时如何结合岗位和个人经历回答请求追踪问题",
+      "difference_score": 0.75,
+      "metrics": {
+        "keyword": {
+          "router_correct": false,
+          "recall_at_3": 0.3333333333333333,
+          "recall_at_5": 0.3333333333333333,
+          "reciprocal_rank": 1.0
+        },
+        "dense": {
+          "router_correct": false,
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.3333333333333333,
+          "reciprocal_rank": 0.25
+        },
+        "hybrid": {
+          "router_correct": false,
+          "recall_at_3": 0.3333333333333333,
+          "recall_at_5": 0.3333333333333333,
+          "reciprocal_rank": 1.0
+        }
+      },
+      "top_chunk_ids": {
+        "keyword": [
+          "jd-v02_03_jd-0-2b620372e327",
+          "jd-v02_03_jd-1-fdfda89fb205",
+          "jd-v02_03_jd-2-a8955ec68394",
+          "jd-v02_03_jd-3-bd56ee27eafe",
+          "jd-v02_02_jd-0-8629190192da"
+        ],
+        "dense": [
+          "jd-v02_14_jd-1-bfd9c8dccf8b",
+          "jd-v02_14_jd-2-a8a8f4bf4b67",
+          "jd-v02_14_jd-0-03226f034bd5",
+          "jd-v02_03_jd-0-2b620372e327",
+          "jd-v02_04_jd-2-c72b535eb6a2"
+        ],
+        "hybrid": [
+          "jd-v02_03_jd-0-2b620372e327",
+          "jd-v02_03_jd-1-fdfda89fb205",
+          "jd-v02_03_jd-2-a8955ec68394",
+          "jd-v02_02_jd-0-8629190192da",
+          "jd-v02_02_jd-1-5e0a3227f758"
+        ]
+      }
+    },
+    {
+      "case_id": "v02_multi_002",
+      "category": "multi_source",
+      "query": "结合岗位、简历和面试资料准备混合检索追问",
+      "difference_score": 0.6666666666666667,
+      "metrics": {
+        "keyword": {
+          "router_correct": true,
+          "recall_at_3": 0.3333333333333333,
+          "recall_at_5": 0.3333333333333333,
+          "reciprocal_rank": 0.5
+        },
+        "dense": {
+          "router_correct": true,
+          "recall_at_3": 0.6666666666666666,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5
+        },
+        "hybrid": {
+          "router_correct": true,
+          "recall_at_3": 0.6666666666666666,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5
+        }
+      },
+      "top_chunk_ids": {
+        "keyword": [
+          "interview-v02_01_interview-3-496202dd322d",
+          "jd-v02_01_jd-0-d5b93648b57f",
+          "jd-v02_01_jd-1-3f4f1a424286",
+          "jd-v02_01_jd-2-920269f8f001",
+          "jd-v02_01_jd-3-f96a0383c59a"
+        ],
+        "dense": [
+          "interview-v02_01_interview-3-496202dd322d",
+          "resume-v02_01_resume-0-9acdbaec4702",
+          "interview-v02_01_interview-0-f13b089588ff",
+          "interview-v02_02_interview-3-a2c56e1ea3e2",
+          "jd-v02_01_jd-0-d5b93648b57f"
+        ],
+        "hybrid": [
+          "interview-v02_01_interview-3-496202dd322d",
+          "jd-v02_01_jd-0-d5b93648b57f",
+          "resume-v02_01_resume-0-9acdbaec4702",
+          "interview-v02_01_interview-0-f13b089588ff",
+          "interview-v02_01_interview-2-6c37140c7406"
+        ]
+      }
+    }
+  ]
+}

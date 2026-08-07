@@ -1,0 +1,42 @@
+{
+  "run_id": "p0-d5-v02-frozen-test-20260804-hybrid_rerank_candidate",
+  "dataset_version": "evalrag_v0.2",
+  "split": "test",
+  "retriever_name": "hybrid_rerank",
+  "top_k": 5,
+  "chunk_max_chars": 800,
+  "git_commit": "d3a80c08c3c4baf13b4a87be7c3d44cdde2f9f07-dirty",
+  "command": "PYTHONPATH=src python scripts/run_evaluation.py --dataset-version evalrag_v0.2 --split test --config configs/retrieval/hybrid_rerank_v0.2.json --run-id p0-d5-v02-frozen-test-20260804-hybrid_rerank_candidate --allow-frozen-test --router-config configs/routing/hybrid_v0.2.json",
+  "candidate_run": false,
+  "retriever_config": {
+    "retriever_name": "hybrid_rerank",
+    "dataset_version": "evalrag_v0.2",
+    "top_k": 5,
+    "chunk_max_chars": 800,
+    "index_dir": "data/processed/indexes/evalrag_v0.2/bge-small-zh-v1.5",
+    "embedding_name": "BAAI/bge-small-zh-v1.5",
+    "embedding_revision": "7999e1d3359715c523056ef9478215996d62a620",
+    "rrf_k": 60,
+    "candidate_multiplier": 4,
+    "reranker_kind": "token_overlap",
+    "reranker_name": "chinese-token-overlap",
+    "reranker_version": "v1",
+    "reranker_candidate_k": 20,
+    "calibration_split": "dev",
+    "note": "CrossEncoder adapter exists but external weights were unavailable; this run uses deterministic Chinese token overlap and must not be described as neural reranking."
+  },
+  "router_name": "hybrid",
+  "router_config": {
+    "router_name": "hybrid",
+    "dataset_version": "evalrag_v0.2",
+    "embedding_index_dir": "data/processed/indexes/evalrag_v0.2/bge-small-zh-v1.5",
+    "embedding_name": "BAAI/bge-small-zh-v1.5",
+    "embedding_revision": "7999e1d3359715c523056ef9478215996d62a620",
+    "semantic_min_score": 0.45,
+    "semantic_min_margin": 0.02,
+    "semantic_override_score": 0.55,
+    "semantic_override_margin": 0.04,
+    "max_weak_rule_keywords": 2,
+    "calibration_split": "dev"
+  }
+}

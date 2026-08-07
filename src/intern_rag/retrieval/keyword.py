@@ -1,27 +1,12 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import re
 
 from intern_rag.ingestion import Chunk
+from intern_rag.retrieval.base import RetrievalResult
 
 
 ENGLISH_OR_NUMBER_PATTERN = re.compile(r"[a-zA-Z0-9]+")
-
-
-@dataclass(frozen=True)
-class RetrievalResult:
-    """一次关键词检索命中的结果。
-
-    `chunk_id`、`score` 和 `rank` 是后续评测最关心的字段；`chunk` 保留
-    原始证据，方便调用方继续做 citation（引用）或回答生成。
-    """
-
-    chunk_id: str
-    score: float
-    rank: int
-    chunk: Chunk
-    reason: str | None = None #相关关键词
 
 
 def tokenize_text(text: str) -> set[str]:
@@ -101,6 +86,7 @@ def retrieve_top_k(
                 rank=0,
                 chunk=chunk,
                 reason=", ".join(sorted(matched_tokens)) if matched_tokens else None,
+                details={"matched_token_count": len(matched_tokens)},
             )
         )
 
@@ -115,6 +101,7 @@ def retrieve_top_k(
             rank=rank,
             chunk=result.chunk,
             reason=result.reason,
+            details=result.details,
         )
         for rank, result in enumerate(sorted_results[:top_k], start=1)
     ]

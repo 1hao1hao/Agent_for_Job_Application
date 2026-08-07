@@ -1,0 +1,18 @@
+{
+  "errors": [],
+  "warnings": [],
+  "case_count": 120,
+  "split_counts": {
+    "dev": 80,
+    "test": 40
+  },
+  "category_counts": {
+    "single_source": 30,
+    "semantic_paraphrase": 30,
+    "multi_source": 30,
+    "unanswerable": 30
+  },
+  "reviewed_case_count": 120,
+  "human_review_required": true,
+  "is_valid": true
+}

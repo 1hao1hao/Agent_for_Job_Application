@@ -1,0 +1,210 @@
+{
+  "task": "P0-D5 live LLM completion",
+  "model": "deepseek-v4-flash",
+  "thinking": "disabled",
+  "prompt_version": "p0-deepseek-json-v1",
+  "dataset_version": "evalrag_v0.2",
+  "dev": {
+    "run_id": "p0-d5-v02-dev-20260804-deepseek-v4-flash",
+    "case_count": 80,
+    "metrics": {
+      "citation_validity": 1.0,
+      "key_point_coverage": 0.4888888888888889,
+      "abstention_accuracy": 1.0,
+      "unsupported_answer_rate": 0.0,
+      "end_to_end_success_rate": 0.625
+    },
+    "counts": {
+      "total": 80,
+      "answerable": 60,
+      "unanswerable": 20,
+      "answered": 34,
+      "unexpected_abstention": 26,
+      "should_abstain_but_answered": 0,
+      "unsupported_reviewed": 34
+    },
+    "status_counts": {
+      "answered": 34,
+      "insufficient_evidence": 45,
+      "error": 1
+    },
+    "error_counts": {
+      "none": 54,
+      "retrieval_miss": 25,
+      "citation_invalid": 1
+    },
+    "failure_counts": {
+      "key_point_incomplete": 3,
+      "unexpected_abstention": 26,
+      "router_wrong": 1
+    },
+    "format_retry_count": 0,
+    "citation_invalid_case_ids": [
+      "v02_semantic_009"
+    ],
+    "latency_ms": {
+      "routing": {
+        "count": 80,
+        "mean": 327.90278689935803,
+        "p50": 173.57454635202885,
+        "p95": 1072.0074512064457
+      },
+      "retrieval": {
+        "count": 80,
+        "mean": 554.6258226269856,
+        "p50": 372.86369502544403,
+        "p95": 1698.379261419177
+      },
+      "context": {
+        "count": 80,
+        "mean": 0.023923709522932768,
+        "p50": 0.0,
+        "p95": 0.06281491369009018
+      },
+      "generation": {
+        "count": 80,
+        "mean": 1548.8899814896286,
+        "p50": 0.0,
+        "p95": 4137.743147090077
+      },
+      "validation": {
+        "count": 80,
+        "mean": 0.01498303608968854,
+        "p50": 0.0,
+        "p95": 0.04585925489664078
+      },
+      "evidence": {
+        "count": 80,
+        "mean": 1.1407104087993503,
+        "p50": 0.03496091812849045,
+        "p95": 0.09469408541917801
+      },
+      "total": {
+        "count": 80,
+        "mean": 2432.7193782432005,
+        "p50": 1604.6260697767138,
+        "p95": 5774.238668382168
+      }
+    },
+    "tokens": {
+      "input_tokens": 46293,
+      "output_tokens": 8697,
+      "total_tokens": 54990,
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 46293,
+      "llm_call_count": 35,
+      "status": "client_reported"
+    },
+    "estimated_cost_usd": 0.008916180000000001,
+    "support_review": {
+      "grader": "codex_evidence_review",
+      "answered_count": 34,
+      "reviewed_answered_count": 34,
+      "complete": true,
+      "independent_human_review": false
+    },
+    "run_path": "reports/runs/p0-d5-v02-dev-20260804-deepseek-v4-flash"
+  },
+  "frozen_test": {
+    "run_id": "p0-d5-v02-frozen-test-20260804-deepseek-v4-flash",
+    "case_count": 40,
+    "metrics": {
+      "citation_validity": 1.0,
+      "key_point_coverage": 0.6888888888888889,
+      "abstention_accuracy": 1.0,
+      "unsupported_answer_rate": 0.0,
+      "end_to_end_success_rate": 0.675
+    },
+    "counts": {
+      "total": 40,
+      "answerable": 30,
+      "unanswerable": 10,
+      "answered": 23,
+      "unexpected_abstention": 7,
+      "should_abstain_but_answered": 0,
+      "unsupported_reviewed": 23
+    },
+    "status_counts": {
+      "insufficient_evidence": 16,
+      "answered": 23,
+      "error": 1
+    },
+    "error_counts": {
+      "retrieval_miss": 6,
+      "none": 33,
+      "citation_invalid": 1
+    },
+    "failure_counts": {
+      "unexpected_abstention": 7,
+      "router_wrong": 1,
+      "retrieval_miss": 5
+    },
+    "format_retry_count": 0,
+    "citation_invalid_case_ids": [
+      "v02_multi_026"
+    ],
+    "latency_ms": {
+      "routing": {
+        "count": 40,
+        "mean": 257.429054309614,
+        "p50": 97.23591431975365,
+        "p95": 899.7269012033939
+      },
+      "retrieval": {
+        "count": 40,
+        "mean": 359.91880705114454,
+        "p50": 203.17088905721903,
+        "p95": 904.6214371919632
+      },
+      "context": {
+        "count": 40,
+        "mean": 0.034404522739350796,
+        "p50": 0.040587037801742554,
+        "p95": 0.07771328091621399
+      },
+      "generation": {
+        "count": 40,
+        "mean": 2258.7956245755777,
+        "p50": 2529.521363787353,
+        "p95": 3639.3062192946672
+      },
+      "validation": {
+        "count": 40,
+        "mean": 0.022136629559099674,
+        "p50": 0.024478882551193237,
+        "p95": 0.05222577601671219
+      },
+      "evidence": {
+        "count": 40,
+        "mean": 0.03738419618457556,
+        "p50": 0.026874244213104248,
+        "p95": 0.09293109178543091
+      },
+      "total": {
+        "count": 40,
+        "mean": 2876.3542322441936,
+        "p50": 3226.9324399530888,
+        "p95": 4136.71453949064
+      }
+    },
+    "tokens": {
+      "input_tokens": 33170,
+      "output_tokens": 5977,
+      "total_tokens": 39147,
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 33170,
+      "llm_call_count": 25,
+      "status": "client_reported"
+    },
+    "estimated_cost_usd": 0.00631736,
+    "support_review": {
+      "grader": "codex_evidence_review",
+      "answered_count": 23,
+      "reviewed_answered_count": 23,
+      "complete": true,
+      "independent_human_review": false
+    },
+    "run_path": "reports/runs/p0-d5-v02-frozen-test-20260804-deepseek-v4-flash"
+  },
+  "review_boundary": "Unsupported answers were reviewed by Codex against cited current context; this is not independent human review or LLM-as-a-Judge."
+}

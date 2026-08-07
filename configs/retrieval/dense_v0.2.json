@@ -1,0 +1,9 @@
+{
+  "retriever_name": "dense",
+  "top_k": 5,
+  "chunk_max_chars": 420,
+  "index_dir": "data/processed/indexes/evalrag_v0.2/bge-small-zh-v1.5",
+  "embedding_name": "BAAI/bge-small-zh-v1.5",
+  "embedding_revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "dimensions": 512
+}

@@ -1,0 +1,126 @@
+{
+  "run_id": "p0-d5-v02-frozen-test-20260804-deepseek-v4-flash",
+  "report_status": "formal_live_llm_codex_reviewed",
+  "created_at": "2026-08-04T09:07:58.581564+00:00",
+  "dataset_version": "evalrag_v0.2",
+  "split": "test",
+  "case_count": 40,
+  "metrics": {
+    "citation_validity": 1.0,
+    "key_point_coverage": 0.6888888888888889,
+    "abstention_accuracy": 1.0,
+    "unsupported_answer_rate": 0.0,
+    "end_to_end_success_rate": 0.675
+  },
+  "counts": {
+    "total": 40,
+    "answerable": 30,
+    "unanswerable": 10,
+    "answered": 23,
+    "unexpected_abstention": 7,
+    "should_abstain_but_answered": 0,
+    "unsupported_reviewed": 23
+  },
+  "category_metrics": {
+    "multi_source": {
+      "case_count": 10,
+      "citation_validity": 1.0,
+      "key_point_coverage": 0.6,
+      "end_to_end_success_rate": 0.6
+    },
+    "semantic_paraphrase": {
+      "case_count": 10,
+      "citation_validity": 1.0,
+      "key_point_coverage": 0.7666666666666666,
+      "end_to_end_success_rate": 0.4
+    },
+    "single_source": {
+      "case_count": 10,
+      "citation_validity": 1.0,
+      "key_point_coverage": 0.7,
+      "end_to_end_success_rate": 0.7
+    },
+    "unanswerable": {
+      "case_count": 10,
+      "citation_validity": null,
+      "key_point_coverage": null,
+      "end_to_end_success_rate": 1.0
+    }
+  },
+  "key_point_threshold": 0.5,
+  "metric_formulas": {
+    "citation_validity": "valid citation ids / all returned citation ids",
+    "key_point_coverage": "matched expected points / all expected points",
+    "abstention_accuracy": "correct abstentions / all unanswerable cases",
+    "unsupported_answer_rate": "reviewed unsupported answers / reviewed answered cases",
+    "end_to_end_success_rate": "successful cases / all evaluated cases"
+  },
+  "latency_ms": {
+    "routing": {
+      "count": 40,
+      "mean": 257.429054309614,
+      "p50": 97.23591431975365,
+      "p95": 899.7269012033939
+    },
+    "retrieval": {
+      "count": 40,
+      "mean": 359.91880705114454,
+      "p50": 203.17088905721903,
+      "p95": 904.6214371919632
+    },
+    "context": {
+      "count": 40,
+      "mean": 0.034404522739350796,
+      "p50": 0.040587037801742554,
+      "p95": 0.07771328091621399
+    },
+    "generation": {
+      "count": 40,
+      "mean": 2258.7956245755777,
+      "p50": 2529.521363787353,
+      "p95": 3639.3062192946672
+    },
+    "validation": {
+      "count": 40,
+      "mean": 0.022136629559099674,
+      "p50": 0.024478882551193237,
+      "p95": 0.05222577601671219
+    },
+    "evidence": {
+      "count": 40,
+      "mean": 0.03738419618457556,
+      "p50": 0.026874244213104248,
+      "p95": 0.09293109178543091
+    },
+    "total": {
+      "count": 40,
+      "mean": 2876.3542322441936,
+      "p50": 3226.9324399530888,
+      "p95": 4136.71453949064
+    }
+  },
+  "tokens": {
+    "input_tokens": 33170,
+    "output_tokens": 5977,
+    "total_tokens": 39147,
+    "prompt_cache_hit_tokens": 0,
+    "prompt_cache_miss_tokens": 33170,
+    "llm_call_count": 25,
+    "status": "client_reported"
+  },
+  "estimated_cost_usd": 0.00631736,
+  "cost_status": "estimated_from_client_reported_usage",
+  "support_review": {
+    "grader": "codex_evidence_review",
+    "answered_count": 23,
+    "reviewed_answered_count": 23,
+    "complete": true,
+    "independent_human_review": false
+  },
+  "limitations": [
+    "Key-point coverage uses normalized substring matching.",
+    "Citation validity does not prove semantic citation support.",
+    "Estimated cost uses the pricing snapshot stored in run config."
+  ],
+  "metrics_recomputed_from_saved_predictions": true
+}

@@ -1,0 +1,266 @@
+{
+  "run_id": "p0-d6-v02-dev-20260804-deepseek-v4-flash",
+  "report_status": "semantic_audit_with_unknowns",
+  "created_at": "2026-08-04T12:16:22.926322+00:00",
+  "dataset_version": "evalrag_v0.2",
+  "split": "dev",
+  "source_prediction_run_id": "p0-d5-v02-dev-20260804-deepseek-v4-flash",
+  "prediction_reused_without_generation": true,
+  "case_count": 80,
+  "metrics": {
+    "citation_validity": 1.0,
+    "key_point_coverage": 0.5444444444444444,
+    "abstention_accuracy": 1.0,
+    "unsupported_answer_rate": 0.030303030303030304,
+    "end_to_end_success_rate": null
+  },
+  "counts": {
+    "total": 80,
+    "answerable": 60,
+    "unanswerable": 20,
+    "answered": 34,
+    "unexpected_abstention": 26,
+    "should_abstain_but_answered": 0,
+    "unsupported_reviewed": 33
+  },
+  "category_metrics": {
+    "multi_source": {
+      "case_count": 20,
+      "citation_validity": 1.0,
+      "key_point_coverage": 0.7,
+      "end_to_end_success_rate": null
+    },
+    "semantic_paraphrase": {
+      "case_count": 20,
+      "citation_validity": 1.0,
+      "key_point_coverage": 0.5333333333333333,
+      "end_to_end_success_rate": 0.5
+    },
+    "single_source": {
+      "case_count": 20,
+      "citation_validity": 1.0,
+      "key_point_coverage": 0.4,
+      "end_to_end_success_rate": 0.4
+    },
+    "unanswerable": {
+      "case_count": 20,
+      "citation_validity": null,
+      "key_point_coverage": null,
+      "end_to_end_success_rate": 1.0
+    }
+  },
+  "key_point_threshold": 0.5,
+  "metric_formulas": {
+    "citation_validity": "valid citation ids / all returned citation ids",
+    "key_point_coverage": "matched expected points / all expected points",
+    "abstention_accuracy": "correct abstentions / all unanswerable cases",
+    "unsupported_answer_rate": "reviewed unsupported answers / reviewed answered cases",
+    "end_to_end_success_rate": "successful cases / all evaluated cases"
+  },
+  "coverage_comparison": {
+    "comparable_case_count": 60,
+    "unknown_case_count": 0,
+    "lexical_macro_coverage": 0.4888888888888889,
+    "semantic_macro_coverage": 0.5444444444444444,
+    "improved_case_count": 9,
+    "regressed_case_count": 1,
+    "agreement_case_count": 50,
+    "difference_case_count": 10,
+    "analysis_case_count": 10,
+    "analysis_cases": [
+      {
+        "case_id": "v02_single_002",
+        "category": "single_source",
+        "query": "这个岗位对引用校验提出了什么职责和要求？",
+        "lexical_coverage": 0.3333333333333333,
+        "semantic_coverage": 1.0,
+        "delta": 0.6666666666666667,
+        "lexical_covered_points": [
+          "模型编造证据编号"
+        ],
+        "semantic_covered_points": [
+          "Citation Validator",
+          "Citation Validity",
+          "模型编造证据编号"
+        ]
+      },
+      {
+        "case_id": "v02_semantic_001",
+        "category": "semantic_paraphrase",
+        "query": "岗位分析：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+        "lexical_coverage": 0.6666666666666666,
+        "semantic_coverage": 1.0,
+        "delta": 0.33333333333333337,
+        "lexical_covered_points": [
+          "freshness filter",
+          "freshness hit rate"
+        ],
+        "semantic_covered_points": [
+          "岗位时效性",
+          "freshness filter",
+          "freshness hit rate"
+        ]
+      },
+      {
+        "case_id": "v02_semantic_002",
+        "category": "semantic_paraphrase",
+        "query": "岗位分析：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+        "lexical_coverage": 0.6666666666666666,
+        "semantic_coverage": 1.0,
+        "delta": 0.33333333333333337,
+        "lexical_covered_points": [
+          "tool validator",
+          "Tool Success Rate"
+        ],
+        "semantic_covered_points": [
+          "工具调用",
+          "tool validator",
+          "Tool Success Rate"
+        ]
+      },
+      {
+        "case_id": "v02_semantic_005",
+        "category": "semantic_paraphrase",
+        "query": "岗位分析：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+        "lexical_coverage": 0.6666666666666666,
+        "semantic_coverage": 1.0,
+        "delta": 0.33333333333333337,
+        "lexical_covered_points": [
+          "importer adapter",
+          "import success rate"
+        ],
+        "semantic_covered_points": [
+          "数据导入",
+          "importer adapter",
+          "import success rate"
+        ]
+      },
+      {
+        "case_id": "v02_semantic_007",
+        "category": "semantic_paraphrase",
+        "query": "简历优势：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+        "lexical_coverage": 0.6666666666666666,
+        "semantic_coverage": 1.0,
+        "delta": 0.33333333333333337,
+        "lexical_covered_points": [
+          "freshness filter",
+          "freshness hit rate"
+        ],
+        "semantic_covered_points": [
+          "岗位时效性",
+          "freshness filter",
+          "freshness hit rate"
+        ]
+      },
+      {
+        "case_id": "v02_semantic_011",
+        "category": "semantic_paraphrase",
+        "query": "简历优势：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+        "lexical_coverage": 0.6666666666666666,
+        "semantic_coverage": 1.0,
+        "delta": 0.33333333333333337,
+        "lexical_covered_points": [
+          "importer adapter",
+          "import success rate"
+        ],
+        "semantic_covered_points": [
+          "数据导入",
+          "importer adapter",
+          "import success rate"
+        ]
+      },
+      {
+        "case_id": "v02_semantic_019",
+        "category": "semantic_paraphrase",
+        "query": "项目怎么讲：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+        "lexical_coverage": 0.6666666666666666,
+        "semantic_coverage": 1.0,
+        "delta": 0.33333333333333337,
+        "lexical_covered_points": [
+          "freshness filter",
+          "freshness hit rate"
+        ],
+        "semantic_covered_points": [
+          "岗位时效性",
+          "freshness filter",
+          "freshness hit rate"
+        ]
+      },
+      {
+        "case_id": "v02_multi_005",
+        "category": "multi_source",
+        "query": "面试时如何结合岗位和个人经历回答混合检索问题",
+        "lexical_coverage": 0.3333333333333333,
+        "semantic_coverage": 0.0,
+        "delta": -0.3333333333333333,
+        "lexical_covered_points": [
+          "混合检索"
+        ],
+        "semantic_covered_points": []
+      },
+      {
+        "case_id": "v02_multi_007",
+        "category": "multi_source",
+        "query": "结合岗位、简历和面试资料准备引用校验追问",
+        "lexical_coverage": 0.3333333333333333,
+        "semantic_coverage": 1.0,
+        "delta": 0.6666666666666667,
+        "lexical_covered_points": [
+          "引用校验"
+        ],
+        "semantic_covered_points": [
+          "引用校验",
+          "Citation Validator",
+          "Citation Validity"
+        ]
+      },
+      {
+        "case_id": "v02_multi_010",
+        "category": "multi_source",
+        "query": "面试时如何结合岗位和个人经历回答引用校验问题",
+        "lexical_coverage": 0.6666666666666666,
+        "semantic_coverage": 1.0,
+        "delta": 0.33333333333333337,
+        "lexical_covered_points": [
+          "引用校验",
+          "Citation Validator"
+        ],
+        "semantic_covered_points": [
+          "引用校验",
+          "Citation Validator",
+          "Citation Validity"
+        ]
+      }
+    ]
+  },
+  "grader_usage": {
+    "call_count": 94,
+    "completed_count": 93,
+    "unavailable_count": 1,
+    "p50_latency_ms": 3467.8581757470965,
+    "p95_latency_ms": 10848.30211289227,
+    "tokens": {
+      "input_tokens": 43742,
+      "output_tokens": 35997,
+      "total_tokens": 79739,
+      "prompt_cache_hit_tokens": 4224,
+      "prompt_cache_miss_tokens": 39518
+    },
+    "estimated_cost_usd": 0.015623507200000003,
+    "cost_status": "estimated_from_client_reported_usage"
+  },
+  "grounding_review": {
+    "answered_count": 34,
+    "known_count": 33,
+    "unknown_count": 1,
+    "complete": false,
+    "independent_human_review": false,
+    "independence": "same_provider_model_not_independent_human"
+  },
+  "limitations": [
+    "Semantic and grounding verdicts are model-based, not independent human labels.",
+    "The same provider/model family generated and graded answers, so self-evaluation bias may remain.",
+    "Lexical coverage remains in each case as a deterministic baseline.",
+    "Frozen predictions were reused; only evaluation verdicts and metrics were recomputed."
+  ]
+}

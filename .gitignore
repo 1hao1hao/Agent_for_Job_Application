@@ -27,3 +27,16 @@ htmlcov/
 
 # 本地运行 trace
 traces/*.jsonl
+
+# 可由 scripts/build_dense_index.py 重建的离线索引
+data/processed/indexes/
+
+# 本地 AI 协作、任务提示与个人学习记录
+AGENTS.md
+docs/coding_rules.md
+docs/data_annotation_prompt.md
+docs/decision_log.md
+docs/dev_log.md
+docs/dev_log_*.md
+docs/task_board.md
+docs/task_prompt_template.md

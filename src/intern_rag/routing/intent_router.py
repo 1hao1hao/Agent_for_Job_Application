@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Literal
 
 
@@ -30,7 +30,6 @@ INTENT_KEYWORDS: dict[Intent, tuple[str, ...]] = {
         "职责",
         "要求",
         "招聘",
-        "公司",
         "实习天数",
         "分析岗位",
     ),
@@ -91,6 +90,10 @@ class RouteDecision:
     intent: Intent
     routed_sources: list[str]
     matched_keywords: list[str]
+    strategy: str = "rule"
+    confidence: float | None = None
+    reason: str = ""
+    details: dict[str, object] = field(default_factory=dict)
 
 
 def route_query(query: str) -> RouteDecision:
@@ -128,6 +131,14 @@ def _build_decision(intent: Intent, matched_keywords: list[str]) -> RouteDecisio
         intent=intent,
         routed_sources=INTENT_TO_SOURCES[intent],
         matched_keywords=matched_keywords,
+        strategy="rule",
+        confidence=min(1.0, len(matched_keywords) / 2.0),
+        reason=(
+            "no_rule_keyword_matched"
+            if intent == "unknown"
+            else "rule_keywords_matched"
+        ),
+        details={"matched_keyword_count": len(matched_keywords)},
     )
 
 

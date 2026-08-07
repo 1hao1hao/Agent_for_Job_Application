@@ -55,6 +55,7 @@ class TracingTests(unittest.TestCase):
         self.assertEqual(trace.routed_sources, ["jd"])
         self.assertEqual(trace.error_type, "none")
         self.assertEqual(trace.latency_ms["retrieval"], 2.5)
+        self.assertTrue(trace.trace_id)
         self.assertEqual(trace.retrieved_chunks[0]["chunk_id"], "jd-1")
         self.assertEqual(trace.retrieved_chunks[0]["rank"], 1)
         self.assertEqual(trace.retrieved_chunks[0]["source_type"], "jd")
@@ -68,6 +69,11 @@ class TracingTests(unittest.TestCase):
             retrieved_chunks=[retrieval_result_to_trace(_retrieval_result())],
             latency_ms={"total": 3.0},
             created_at="2026-06-18T00:00:00+00:00",
+            trace_id="trace-2",
+            context={"used_chunk_ids": ["jd-1"]},
+            generation={"status": "parsed"},
+            validation={"is_valid": True},
+            response_status="answered",
         )
 
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -78,6 +84,12 @@ class TracingTests(unittest.TestCase):
         self.assertEqual(len(loaded_traces), 1)
         self.assertEqual(loaded_traces[0].request_id, "req-2")
         self.assertEqual(loaded_traces[0].intent, "match_resume")
+        self.assertEqual(loaded_traces[0].trace_id, "trace-2")
+        self.assertEqual(
+            loaded_traces[0].context["used_chunk_ids"],
+            ["jd-1"],
+        )
+        self.assertEqual(loaded_traces[0].response_status, "answered")
         self.assertEqual(loaded_traces[0].retrieved_chunks[0]["chunk_id"], "jd-1")
 
     def test_write_trace_jsonl_appends_multiple_traces(self) -> None:

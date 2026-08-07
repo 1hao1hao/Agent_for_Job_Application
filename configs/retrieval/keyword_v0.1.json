@@ -1,0 +1,5 @@
+{
+  "retriever_name": "keyword",
+  "top_k": 5,
+  "chunk_max_chars": 800
+}

@@ -1,0 +1,29 @@
+{
+  "case_id": "v02_unanswerable_011",
+  "hypothesis": "规则词“公司”过于宽泛，把无关的未公开薪资名单误判为岗位分析。",
+  "single_variable_change": "从 analyze_jd 的 INTENT_KEYWORDS 中删除“公司”，其他 Router 和 Retriever 参数不变。",
+  "original_run": "reports/runs/p0-d3-v02-dev-20260801-keyword",
+  "fixed_run": "reports/runs/p0-d4-v02-dev-20260803-rule-fixed",
+  "original_prediction": {
+    "intent": "analyze_jd",
+    "sources": ["jd"],
+    "matched_keywords": ["公司"]
+  },
+  "fixed_prediction": {
+    "intent": "unknown",
+    "sources": [],
+    "matched_keywords": []
+  },
+  "full_dev_before": {
+    "router_accuracy": 0.8875,
+    "router_wrong": 9
+  },
+  "full_dev_after": {
+    "router_accuracy": 0.9125,
+    "router_wrong": 7
+  },
+  "regression_test": "tests.unit.test_routing.RoutingTests.test_unpublished_company_list_stays_unknown_regression",
+  "git_revision": "d3a80c08c3c4baf13b4a87be7c3d44cdde2f9f07-dirty",
+  "fixed_commit": null,
+  "fixed_commit_note": "当前工作区包含项目作者尚未提交的 P0 改动，本任务未擅自创建 commit。"
+}

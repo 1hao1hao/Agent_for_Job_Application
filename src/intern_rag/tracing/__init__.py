@@ -1,4 +1,4 @@
-"""Agent Trace 记录模块。"""
+"""Agent Trace 记录与 JSONL 持久化模块。"""
 
 from intern_rag.tracing.trace import (
     AgentTrace,

@@ -1,0 +1,17 @@
+{
+  "retriever_name": "hybrid_rerank",
+  "dataset_version": "evalrag_v0.2",
+  "top_k": 5,
+  "chunk_max_chars": 800,
+  "index_dir": "data/processed/indexes/evalrag_v0.2/bge-small-zh-v1.5",
+  "embedding_name": "BAAI/bge-small-zh-v1.5",
+  "embedding_revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "rrf_k": 60,
+  "candidate_multiplier": 4,
+  "reranker_kind": "token_overlap",
+  "reranker_name": "chinese-token-overlap",
+  "reranker_version": "v1",
+  "reranker_candidate_k": 20,
+  "calibration_split": "dev",
+  "note": "CrossEncoder adapter exists but external weights were unavailable; this run uses deterministic Chinese token overlap and must not be described as neural reranking."
+}

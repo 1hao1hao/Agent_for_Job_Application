@@ -1,0 +1,11 @@
+# CPU-only PyTorch，避免默认 PyPI CUDA 依赖。
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.5.1+cpu
+# P0-D3 fallback Dense baseline：字符 TF-IDF + LSA、索引持久化。
+scikit-learn==1.2.2
+# 正式中文 Dense adapter。
+sentence-transformers==5.6.1
+# 同时满足 transformers 的 CLI 依赖和共享环境 Streamlit 1.30。
+rich>=13.8,<14
+# DeepSeek/OpenAI 兼容 Chat Completions 客户端。
+openai>=1.40,<3

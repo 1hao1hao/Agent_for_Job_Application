@@ -1,3 +1,14 @@
+---
+source_type: user_profile
+source_platform: project_authored
+source_url: unknown
+collected_at: 2026-06-13
+public_status: private_anonymized
+anonymized: true
+content_origin: user_provided_sample
+human_reviewed: true
+---
+
 # 用户画像
 
 ## 求职目标

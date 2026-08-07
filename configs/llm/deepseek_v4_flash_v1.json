@@ -1,0 +1,23 @@
+{
+  "config_version": "deepseek-v4-flash-v1-20260804",
+  "provider": "deepseek",
+  "model": "deepseek-v4-flash",
+  "base_url": "https://api.deepseek.com",
+  "api_key_env": "DEEPSEEK_API_KEY",
+  "thinking": "disabled",
+  "temperature": 0.0,
+  "max_tokens": 1200,
+  "timeout_seconds": 90.0,
+  "prompt_version": "p0-deepseek-json-v1",
+  "context_max_chars": 4000,
+  "key_point_threshold": 0.5,
+  "max_source_retries": 1,
+  "max_format_retries": 1,
+  "pricing_usd_per_million_tokens": {
+    "input_cache_hit": 0.0028,
+    "input_cache_miss": 0.14,
+    "output": 0.28
+  },
+  "pricing_source": "https://api-docs.deepseek.com/quick_start/pricing",
+  "pricing_checked_at": "2026-08-04"
+}

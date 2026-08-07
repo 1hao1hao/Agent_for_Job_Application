@@ -1,0 +1,91 @@
+{
+  "task_id": "P0-D5",
+  "dataset_version": "evalrag_v0.2",
+  "frozen_test_case_count": 40,
+  "selected_final_strategy": "hybrid",
+  "reranker_enabled": false,
+  "reranker_dev": {
+    "baseline": {
+      "router_accuracy": 0.9125,
+      "recall_at_3": 0.8083333333333333,
+      "recall_at_5": 0.8555555555555555,
+      "mrr": 0.8319444444444445
+    },
+    "candidate": {
+      "router_accuracy": 0.9125,
+      "recall_at_3": 0.7333333333333333,
+      "recall_at_5": 0.8388888888888889,
+      "mrr": 0.7944444444444444
+    },
+    "decision": {
+      "reranker_enabled": false,
+      "reason": "Recall@3, Recall@5 and MRR regressed while P95 increased."
+    }
+  },
+  "frozen_retrieval": {
+    "keyword": {
+      "router_accuracy": 0.95,
+      "recall_at_3": 0.5555555555555556,
+      "recall_at_5": 0.6722222222222222,
+      "mrr": 0.6083333333333333
+    },
+    "dense": {
+      "router_accuracy": 0.95,
+      "recall_at_3": 0.5666666666666667,
+      "recall_at_5": 0.7444444444444445,
+      "mrr": 0.5927777777777777
+    },
+    "hybrid": {
+      "router_accuracy": 0.95,
+      "recall_at_3": 0.6833333333333333,
+      "recall_at_5": 0.7444444444444445,
+      "mrr": 0.6677777777777778
+    },
+    "hybrid_rerank_candidate": {
+      "router_accuracy": 0.95,
+      "recall_at_3": 0.6,
+      "recall_at_5": 0.7333333333333333,
+      "mrr": 0.6166666666666667
+    }
+  },
+  "end_to_end_extractive": {
+    "citation_validity": 1.0,
+    "key_point_coverage": 0.8,
+    "abstention_accuracy": 0.9,
+    "unsupported_answer_rate": 0.0,
+    "end_to_end_success_rate": 0.675
+  },
+  "end_to_end_counts": {
+    "total": 40,
+    "answerable": 30,
+    "unanswerable": 10,
+    "answered": 25,
+    "unexpected_abstention": 6,
+    "should_abstain_but_answered": 1,
+    "unsupported_reviewed": 25
+  },
+  "end_to_end_total_latency_ms": {
+    "count": 40,
+    "p50": 303.7823075428605,
+    "p95": 1498.391036875546
+  },
+  "tokens": {
+    "input_tokens": null,
+    "output_tokens": null,
+    "total_tokens": null,
+    "status": "unavailable_no_llm_call"
+  },
+  "estimated_cost_usd": null,
+  "regression": {
+    "fixed_count": 1,
+    "fixed_passed": 1,
+    "fixed_pass_rate": 1.0,
+    "open_count": 3
+  },
+  "limitations": [
+    "The neural CrossEncoder adapter was implemented but not used in the formal ablation because model weights were unavailable locally.",
+    "The end-to-end run uses deterministic extractive generation, not a live LLM.",
+    "Unsupported Answer Rate is contract-level and is not independent human semantic grading.",
+    "Frozen test predictions were not rerun after inspection; a metric bug was fixed by recomputing from saved case results."
+  ]
+}

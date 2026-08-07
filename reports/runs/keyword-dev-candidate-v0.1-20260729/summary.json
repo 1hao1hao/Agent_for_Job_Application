@@ -1,0 +1,64 @@
+{
+  "run_id": "keyword-dev-candidate-v0.1-20260729",
+  "report_status": "candidate_not_human_verified",
+  "created_at": "2026-07-29T08:38:55.358511+00:00",
+  "dataset_version": "evalrag_v0.1",
+  "split": "dev",
+  "case_count": 40,
+  "answerable_case_count": 30,
+  "category_counts": {
+    "single_source": 10,
+    "multi_source": 10,
+    "semantic_paraphrase": 10,
+    "unanswerable": 10
+  },
+  "failure_counts": {
+    "router_wrong": 31,
+    "retrieval_incomplete": 19
+  },
+  "metrics": {
+    "router_accuracy": 0.225,
+    "recall_at_3": 0.4111111111111111,
+    "recall_at_5": 0.55,
+    "mrr": 0.4588888888888889
+  },
+  "latency_ms": {
+    "retrieval": {
+      "count": 40,
+      "p50": 0.21199975162744522,
+      "p95": 0.6603384390473366
+    },
+    "routing": {
+      "count": 40,
+      "p50": 0.006063841283321381,
+      "p95": 0.007384456694126129
+    },
+    "total": {
+      "count": 40,
+      "p50": 0.2233944833278656,
+      "p95": 0.6712591275572777
+    }
+  },
+  "metric_scope": {
+    "router_accuracy": "all selected cases",
+    "recall_at_3": "answerable cases with relevant ids",
+    "recall_at_5": "answerable cases with relevant ids",
+    "mrr": "answerable cases with relevant ids"
+  },
+  "metric_formulas": {
+    "router_accuracy": "strict intent and source-set matches / all selected cases",
+    "recall_at_k": "|top-k retrieved ids intersect relevant ids| / |relevant ids|, macro average",
+    "mrr": "macro average of 1 / first relevant rank",
+    "latency_percentile": "nearest-rank percentile"
+  },
+  "runtime_environment": {
+    "python": "3.11.7",
+    "platform": "Linux-4.18.0-372.32.1.el8_6.x86_64-x86_64-with-glibc2.28",
+    "latency_mode": "single process; exported chunks preloaded"
+  },
+  "limitations": [
+    "Keyword baseline only; no Dense or Hybrid comparison.",
+    "Retrieval metrics do not measure final answer correctness.",
+    "Candidate runs use labels pending human review and cannot be reported as formal evaluation."
+  ]
+}

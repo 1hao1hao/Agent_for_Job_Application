@@ -1,3 +1,14 @@
+---
+source_type: project_logs
+source_platform: project_repository
+source_url: unknown
+collected_at: 2026-06-13
+public_status: project_owned
+anonymized: true
+content_origin: project_record
+human_reviewed: true
+---
+
 # 项目日志 Day 1
 
 ## 今日目标

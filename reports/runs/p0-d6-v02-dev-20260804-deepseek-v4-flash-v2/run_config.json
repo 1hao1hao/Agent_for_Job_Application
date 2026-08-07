@@ -1,0 +1,18 @@
+{
+  "run_id": "p0-d6-v02-dev-20260804-deepseek-v4-flash-v2",
+  "dataset_version": "evalrag_v0.2",
+  "split": "dev",
+  "source_prediction_run_id": "p0-d5-v02-dev-20260804-deepseek-v4-flash",
+  "model": "deepseek-v4-flash",
+  "temperature": 0.0,
+  "key_point_prompt_version": "p0-d6-key-point-v1",
+  "grounding_prompt_version": "p0-d6-grounding-v1",
+  "key_point_threshold": 0.5,
+  "input_cache_hit_usd_per_million": 0.0028,
+  "input_cache_miss_usd_per_million": 0.14,
+  "output_usd_per_million": 0.28,
+  "pricing_source": "https://api-docs.deepseek.com/quick_start/pricing",
+  "pricing_checked_at": "2026-08-04",
+  "command": "PYTHONPATH=src python scripts/run_semantic_audit.py --split dev --run-id p0-d6-v02-dev-20260804-deepseek-v4-flash-v2",
+  "grader_independence": "same_provider_model_not_independent_human"
+}

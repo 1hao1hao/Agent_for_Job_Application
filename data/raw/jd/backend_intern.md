@@ -10,6 +10,11 @@ last_seen_at: 2026-06-13
 status: active
 version: 1
 source_priority: 3
+collected_at: 2026-06-13
+public_status: synthetic_candidate
+anonymized: true
+content_origin: user_provided_sample
+human_reviewed: true
 ---
 
 # 大模型应用研发实习生

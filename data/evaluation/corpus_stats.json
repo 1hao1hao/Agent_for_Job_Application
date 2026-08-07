@@ -1,0 +1,19 @@
+{
+  "document_count": 100,
+  "source_counts": {
+    "interview": 20,
+    "jd": 20,
+    "project_logs": 20,
+    "resume": 20,
+    "user_profile": 20
+  },
+  "chunk_count": 310,
+  "chunk_length_min": 121,
+  "chunk_length_max": 376,
+  "chunk_length_mean": 253.1451612903226,
+  "chunk_length_p50": 261,
+  "chunk_length_p95": 277,
+  "empty_documents": [],
+  "duplicate_content_hashes": {},
+  "human_reviewed_documents": 100
+}

@@ -1,0 +1,92 @@
+{
+  "run_id": "p0-d5-v02-frozen-test-20260804-hybrid",
+  "report_status": "formal",
+  "created_at": "2026-08-04T08:01:09.100804+00:00",
+  "dataset_version": "evalrag_v0.2",
+  "split": "test",
+  "case_count": 40,
+  "answerable_case_count": 30,
+  "category_counts": {
+    "single_source": 10,
+    "semantic_paraphrase": 10,
+    "multi_source": 10,
+    "unanswerable": 10
+  },
+  "category_metrics": {
+    "multi_source": {
+      "case_count": 10,
+      "answerable_case_count": 10,
+      "recall_at_3": 0.75,
+      "recall_at_5": 0.8333333333333334,
+      "mrr": 0.85
+    },
+    "semantic_paraphrase": {
+      "case_count": 10,
+      "answerable_case_count": 10,
+      "recall_at_3": 0.4,
+      "recall_at_5": 0.4,
+      "mrr": 0.4
+    },
+    "single_source": {
+      "case_count": 10,
+      "answerable_case_count": 10,
+      "recall_at_3": 0.9,
+      "recall_at_5": 1.0,
+      "mrr": 0.7533333333333333
+    },
+    "unanswerable": {
+      "case_count": 10,
+      "answerable_case_count": 0,
+      "recall_at_3": 0.0,
+      "recall_at_5": 0.0,
+      "mrr": 0.0
+    }
+  },
+  "failure_counts": {
+    "router_wrong": 2,
+    "retrieval_incomplete": 10
+  },
+  "metrics": {
+    "router_accuracy": 0.95,
+    "recall_at_3": 0.6833333333333333,
+    "recall_at_5": 0.7444444444444445,
+    "mrr": 0.6677777777777778
+  },
+  "latency_ms": {
+    "retrieval": {
+      "count": 40,
+      "p50": 201.1578632518649,
+      "p95": 802.5029292330146
+    },
+    "routing": {
+      "count": 40,
+      "p50": 98.80571998655796,
+      "p95": 801.7334584146738
+    },
+    "total": {
+      "count": 40,
+      "p50": 400.77783539891243,
+      "p95": 1501.906224526465
+    }
+  },
+  "metric_scope": {
+    "router_accuracy": "all selected cases",
+    "recall_at_3": "answerable cases with relevant ids",
+    "recall_at_5": "answerable cases with relevant ids",
+    "mrr": "answerable cases with relevant ids"
+  },
+  "metric_formulas": {
+    "router_accuracy": "strict intent and source-set matches / all selected cases",
+    "recall_at_k": "|top-k retrieved ids intersect relevant ids| / |relevant ids|, macro average",
+    "mrr": "macro average of 1 / first relevant rank",
+    "latency_percentile": "nearest-rank percentile"
+  },
+  "runtime_environment": {
+    "python": "3.11.7",
+    "platform": "Linux-4.18.0-372.32.1.el8_6.x86_64-x86_64-with-glibc2.28",
+    "latency_mode": "single process; exported chunks preloaded"
+  },
+  "limitations": [
+    "Retrieval metrics do not measure final answer correctness."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "run_id": "keyword-dev-candidate-v0.1-20260729",
+  "dataset_version": "evalrag_v0.1",
+  "split": "dev",
+  "retriever_name": "keyword",
+  "top_k": 5,
+  "chunk_max_chars": 800,
+  "git_commit": "d3a80c08c3c4baf13b4a87be7c3d44cdde2f9f07-dirty",
+  "command": "PYTHONPATH=src python scripts/run_evaluation.py --dataset-version evalrag_v0.1 --split dev --config configs/retrieval/keyword_v0.1.json --candidate --run-id keyword-dev-candidate-v0.1-20260729",
+  "candidate_run": true
+}

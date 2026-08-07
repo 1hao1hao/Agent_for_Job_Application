@@ -1,0 +1,438 @@
+{
+  "dataset_version": "evalrag_v0.2",
+  "grader_model": "deepseek-v4-flash",
+  "dev_run_id": "p0-d6-v02-dev-20260804-deepseek-v4-flash-v2",
+  "test_run_id": "p0-d6-v02-test-20260804-deepseek-v4-flash",
+  "source_prediction_hashes": {
+    "dev_case_results": "c4fc5233d221bec2d85eaced11253fc27dbb1298977882555bb82a48eba89f12",
+    "dev_traces": "24ec23fa2d920ac31916f8dd8252ed8042073bf098ceec81c65ac438d85f2362",
+    "test_case_results": "bf020ca916c0dba1ab0ae85a82d9a16fa84f2e2421e893d6d16c89bda96b9061",
+    "test_traces": "8a3af2a1481810a17d07fe37a87cd56dbac406e373ff0a0bf4779836a37c6615"
+  },
+  "dev": {
+    "case_count": 80,
+    "metrics": {
+      "citation_validity": 1.0,
+      "key_point_coverage": 0.5444444444444444,
+      "abstention_accuracy": 1.0,
+      "unsupported_answer_rate": 0.03125,
+      "end_to_end_success_rate": null
+    },
+    "coverage_comparison": {
+      "comparable_case_count": 60,
+      "unknown_case_count": 0,
+      "lexical_macro_coverage": 0.4888888888888889,
+      "semantic_macro_coverage": 0.5444444444444444,
+      "improved_case_count": 9,
+      "regressed_case_count": 1,
+      "agreement_case_count": 50,
+      "difference_case_count": 10,
+      "analysis_case_count": 10,
+      "analysis_cases": [
+        {
+          "case_id": "v02_single_002",
+          "category": "single_source",
+          "query": "这个岗位对引用校验提出了什么职责和要求？",
+          "lexical_coverage": 0.3333333333333333,
+          "semantic_coverage": 1.0,
+          "delta": 0.6666666666666667,
+          "lexical_covered_points": [
+            "模型编造证据编号"
+          ],
+          "semantic_covered_points": [
+            "Citation Validator",
+            "Citation Validity",
+            "模型编造证据编号"
+          ]
+        },
+        {
+          "case_id": "v02_semantic_001",
+          "category": "semantic_paraphrase",
+          "query": "岗位分析：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "lexical_coverage": 0.6666666666666666,
+          "semantic_coverage": 1.0,
+          "delta": 0.33333333333333337,
+          "lexical_covered_points": [
+            "freshness filter",
+            "freshness hit rate"
+          ],
+          "semantic_covered_points": [
+            "岗位时效性",
+            "freshness filter",
+            "freshness hit rate"
+          ]
+        },
+        {
+          "case_id": "v02_semantic_005",
+          "category": "semantic_paraphrase",
+          "query": "岗位分析：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "lexical_coverage": 0.6666666666666666,
+          "semantic_coverage": 1.0,
+          "delta": 0.33333333333333337,
+          "lexical_covered_points": [
+            "importer adapter",
+            "import success rate"
+          ],
+          "semantic_covered_points": [
+            "数据导入",
+            "importer adapter",
+            "import success rate"
+          ]
+        },
+        {
+          "case_id": "v02_semantic_007",
+          "category": "semantic_paraphrase",
+          "query": "简历优势：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "lexical_coverage": 0.6666666666666666,
+          "semantic_coverage": 1.0,
+          "delta": 0.33333333333333337,
+          "lexical_covered_points": [
+            "freshness filter",
+            "freshness hit rate"
+          ],
+          "semantic_covered_points": [
+            "岗位时效性",
+            "freshness filter",
+            "freshness hit rate"
+          ]
+        },
+        {
+          "case_id": "v02_semantic_008",
+          "category": "semantic_paraphrase",
+          "query": "简历优势：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "lexical_coverage": 0.6666666666666666,
+          "semantic_coverage": 1.0,
+          "delta": 0.33333333333333337,
+          "lexical_covered_points": [
+            "tool validator",
+            "Tool Success Rate"
+          ],
+          "semantic_covered_points": [
+            "工具调用",
+            "tool validator",
+            "Tool Success Rate"
+          ]
+        },
+        {
+          "case_id": "v02_semantic_011",
+          "category": "semantic_paraphrase",
+          "query": "简历优势：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "lexical_coverage": 0.6666666666666666,
+          "semantic_coverage": 1.0,
+          "delta": 0.33333333333333337,
+          "lexical_covered_points": [
+            "importer adapter",
+            "import success rate"
+          ],
+          "semantic_covered_points": [
+            "数据导入",
+            "importer adapter",
+            "import success rate"
+          ]
+        },
+        {
+          "case_id": "v02_semantic_019",
+          "category": "semantic_paraphrase",
+          "query": "项目怎么讲：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "lexical_coverage": 0.6666666666666666,
+          "semantic_coverage": 1.0,
+          "delta": 0.33333333333333337,
+          "lexical_covered_points": [
+            "freshness filter",
+            "freshness hit rate"
+          ],
+          "semantic_covered_points": [
+            "岗位时效性",
+            "freshness filter",
+            "freshness hit rate"
+          ]
+        },
+        {
+          "case_id": "v02_multi_005",
+          "category": "multi_source",
+          "query": "面试时如何结合岗位和个人经历回答混合检索问题",
+          "lexical_coverage": 0.3333333333333333,
+          "semantic_coverage": 0.0,
+          "delta": -0.3333333333333333,
+          "lexical_covered_points": [
+            "混合检索"
+          ],
+          "semantic_covered_points": []
+        },
+        {
+          "case_id": "v02_multi_007",
+          "category": "multi_source",
+          "query": "结合岗位、简历和面试资料准备引用校验追问",
+          "lexical_coverage": 0.3333333333333333,
+          "semantic_coverage": 1.0,
+          "delta": 0.6666666666666667,
+          "lexical_covered_points": [
+            "引用校验"
+          ],
+          "semantic_covered_points": [
+            "引用校验",
+            "Citation Validator",
+            "Citation Validity"
+          ]
+        },
+        {
+          "case_id": "v02_multi_010",
+          "category": "multi_source",
+          "query": "面试时如何结合岗位和个人经历回答引用校验问题",
+          "lexical_coverage": 0.6666666666666666,
+          "semantic_coverage": 1.0,
+          "delta": 0.33333333333333337,
+          "lexical_covered_points": [
+            "引用校验",
+            "Citation Validator"
+          ],
+          "semantic_covered_points": [
+            "引用校验",
+            "Citation Validator",
+            "Citation Validity"
+          ]
+        }
+      ]
+    },
+    "grader_usage": {
+      "call_count": 68,
+      "completed_count": 66,
+      "unavailable_count": 2,
+      "p50_latency_ms": 3897.904264740646,
+      "p95_latency_ms": 9799.487535841763,
+      "tokens": {
+        "input_tokens": 43742,
+        "output_tokens": 36160,
+        "total_tokens": 79902,
+        "prompt_cache_hit_tokens": 39424,
+        "prompt_cache_miss_tokens": 4318
+      },
+      "estimated_cost_usd": 0.010839707200000001,
+      "cost_status": "estimated_from_client_reported_usage"
+    },
+    "grounding_review": {
+      "answered_count": 34,
+      "known_count": 32,
+      "unknown_count": 2,
+      "complete": false,
+      "independent_human_review": false,
+      "independence": "same_provider_model_not_independent_human"
+    }
+  },
+  "test": {
+    "case_count": 40,
+    "metrics": {
+      "citation_validity": 1.0,
+      "key_point_coverage": 0.7444444444444445,
+      "abstention_accuracy": 1.0,
+      "unsupported_answer_rate": 0.0,
+      "end_to_end_success_rate": null
+    },
+    "coverage_comparison": {
+      "comparable_case_count": 30,
+      "unknown_case_count": 0,
+      "lexical_macro_coverage": 0.6888888888888889,
+      "semantic_macro_coverage": 0.7444444444444445,
+      "improved_case_count": 5,
+      "regressed_case_count": 0,
+      "agreement_case_count": 25,
+      "difference_case_count": 5,
+      "analysis_case_count": 10,
+      "analysis_cases": [
+        {
+          "case_id": "v02_semantic_021",
+          "category": "semantic_paraphrase",
+          "query": "项目怎么讲：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "lexical_coverage": 0.6666666666666666,
+          "semantic_coverage": 1.0,
+          "delta": 0.33333333333333337,
+          "lexical_covered_points": [
+            "LlmClient Protocol",
+            "format success rate"
+          ],
+          "semantic_covered_points": [
+            "模型适配",
+            "LlmClient Protocol",
+            "format success rate"
+          ]
+        },
+        {
+          "case_id": "v02_semantic_023",
+          "category": "semantic_paraphrase",
+          "query": "项目怎么讲：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "lexical_coverage": 0.6666666666666666,
+          "semantic_coverage": 1.0,
+          "delta": 0.33333333333333337,
+          "lexical_covered_points": [
+            "importer adapter",
+            "import success rate"
+          ],
+          "semantic_covered_points": [
+            "数据导入",
+            "importer adapter",
+            "import success rate"
+          ]
+        },
+        {
+          "case_id": "v02_semantic_025",
+          "category": "semantic_paraphrase",
+          "query": "求职计划：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "lexical_coverage": 0.6666666666666666,
+          "semantic_coverage": 1.0,
+          "delta": 0.33333333333333337,
+          "lexical_covered_points": [
+            "freshness filter",
+            "freshness hit rate"
+          ],
+          "semantic_covered_points": [
+            "岗位时效性",
+            "freshness filter",
+            "freshness hit rate"
+          ]
+        },
+        {
+          "case_id": "v02_semantic_028",
+          "category": "semantic_paraphrase",
+          "query": "求职计划：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+          "lexical_coverage": 0.6666666666666666,
+          "semantic_coverage": 1.0,
+          "delta": 0.33333333333333337,
+          "lexical_covered_points": [
+            "Evidence Gate",
+            "Abstention Accuracy"
+          ],
+          "semantic_covered_points": [
+            "证据门控",
+            "Evidence Gate",
+            "Abstention Accuracy"
+          ]
+        },
+        {
+          "case_id": "v02_semantic_029",
+          "category": "semantic_paraphrase",
+          "query": "求职计划：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "lexical_coverage": 0.6666666666666666,
+          "semantic_coverage": 1.0,
+          "delta": 0.33333333333333337,
+          "lexical_covered_points": [
+            "importer adapter",
+            "import success rate"
+          ],
+          "semantic_covered_points": [
+            "数据导入",
+            "importer adapter",
+            "import success rate"
+          ]
+        },
+        {
+          "case_id": "v02_single_021",
+          "category": "single_source",
+          "query": "这个项目的请求追踪模块是怎么实现和复盘的？",
+          "lexical_coverage": 0.0,
+          "semantic_coverage": 0.0,
+          "delta": 0.0,
+          "lexical_covered_points": [],
+          "semantic_covered_points": []
+        },
+        {
+          "case_id": "v02_single_022",
+          "category": "single_source",
+          "query": "这个项目的意图路由模块是怎么实现和复盘的？",
+          "lexical_coverage": 1.0,
+          "semantic_coverage": 1.0,
+          "delta": 0.0,
+          "lexical_covered_points": [
+            "Semantic Router",
+            "Router Accuracy",
+            "多意图规则冲突"
+          ],
+          "semantic_covered_points": [
+            "Semantic Router",
+            "Router Accuracy",
+            "多意图规则冲突"
+          ]
+        },
+        {
+          "case_id": "v02_single_023",
+          "category": "single_source",
+          "query": "这个项目的上下文预算模块是怎么实现和复盘的？",
+          "lexical_coverage": 1.0,
+          "semantic_coverage": 1.0,
+          "delta": 0.0,
+          "lexical_covered_points": [
+            "Context Builder",
+            "context utilization",
+            "关键证据被截断"
+          ],
+          "semantic_covered_points": [
+            "Context Builder",
+            "context utilization",
+            "关键证据被截断"
+          ]
+        },
+        {
+          "case_id": "v02_single_024",
+          "category": "single_source",
+          "query": "这个项目的失败回归模块是怎么实现和复盘的？",
+          "lexical_coverage": 1.0,
+          "semantic_coverage": 1.0,
+          "delta": 0.0,
+          "lexical_covered_points": [
+            "Regression Suite",
+            "Regression Pass Rate",
+            "旧失败重新出现"
+          ],
+          "semantic_covered_points": [
+            "Regression Suite",
+            "Regression Pass Rate",
+            "旧失败重新出现"
+          ]
+        },
+        {
+          "case_id": "v02_single_025",
+          "category": "single_source",
+          "query": "投递规划里，我对混合检索的目标和短板是什么？",
+          "lexical_coverage": 1.0,
+          "semantic_coverage": 1.0,
+          "delta": 0.0,
+          "lexical_covered_points": [
+            "RRF",
+            "Recall@5",
+            "单路召回偏科"
+          ],
+          "semantic_covered_points": [
+            "RRF",
+            "Recall@5",
+            "单路召回偏科"
+          ]
+        }
+      ]
+    },
+    "grader_usage": {
+      "call_count": 46,
+      "completed_count": 43,
+      "unavailable_count": 3,
+      "p50_latency_ms": 4059.2326279729605,
+      "p95_latency_ms": 8803.108492866158,
+      "tokens": {
+        "input_tokens": 28990,
+        "output_tokens": 25178,
+        "total_tokens": 54168,
+        "prompt_cache_hit_tokens": 3200,
+        "prompt_cache_miss_tokens": 25790
+      },
+      "estimated_cost_usd": 0.0106694,
+      "cost_status": "estimated_from_client_reported_usage"
+    },
+    "grounding_review": {
+      "answered_count": 23,
+      "known_count": 20,
+      "unknown_count": 3,
+      "complete": false,
+      "independent_human_review": false,
+      "independence": "same_provider_model_not_independent_human"
+    }
+  },
+  "frozen_predictions_regenerated": false,
+  "independent_human_review": false
+}

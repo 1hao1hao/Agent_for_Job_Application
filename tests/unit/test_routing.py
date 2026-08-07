@@ -53,6 +53,14 @@ class RoutingTests(unittest.TestCase):
         self.assertEqual(decision.intent, "unknown")
         self.assertEqual(decision.routed_sources, [])
 
+    def test_unpublished_company_list_stays_unknown_regression(self) -> None:
+        """回归 P0-D4 中泛化“公司”关键词造成的不可回答误路由。"""
+
+        decision = route_query("请告诉我未公开公司薪资名单。")
+
+        self.assertEqual(decision.intent, "unknown")
+        self.assertEqual(decision.routed_sources, [])
+
 
 if __name__ == "__main__":
     unittest.main()

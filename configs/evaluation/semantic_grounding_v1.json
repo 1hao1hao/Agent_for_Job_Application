@@ -1,0 +1,26 @@
+{
+  "config_version": "semantic-grounding-v1-20260804",
+  "dataset_version": "evalrag_v0.2",
+  "provider": "deepseek",
+  "model": "deepseek-v4-flash",
+  "api_key_env": "DEEPSEEK_API_KEY",
+  "temperature": 0.0,
+  "timeout_seconds": 90.0,
+  "max_tokens": 2400,
+  "max_retries": 0,
+  "key_point_prompt_version": "p0-d6-key-point-v1",
+  "grounding_prompt_version": "p0-d6-grounding-v1",
+  "key_point_threshold": 0.5,
+  "source_prediction_runs": {
+    "dev": "p0-d5-v02-dev-20260804-deepseek-v4-flash",
+    "test": "p0-d5-v02-frozen-test-20260804-deepseek-v4-flash"
+  },
+  "pricing_usd_per_million_tokens": {
+    "input_cache_hit": 0.0028,
+    "input_cache_miss": 0.14,
+    "output": 0.28
+  },
+  "pricing_source": "https://api-docs.deepseek.com/quick_start/pricing",
+  "pricing_checked_at": "2026-08-04",
+  "independence": "same_provider_model_not_independent_human"
+}

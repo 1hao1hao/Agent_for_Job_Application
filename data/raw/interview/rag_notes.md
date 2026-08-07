@@ -1,3 +1,14 @@
+---
+source_type: interview
+source_platform: project_authored
+source_url: unknown
+collected_at: 2026-06-13
+public_status: project_owned
+anonymized: true
+content_origin: project_authored_note
+human_reviewed: true
+---
+
 # RAG 面试笔记
 
 ## 常见问题
