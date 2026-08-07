@@ -53,9 +53,12 @@ services:
       timeout: 3s
       retries: 20
     volumes:
-      - reports_data:/app/reports
       - traces_data:/app/traces
-      - indexes_data:/app/data/processed/indexes
+      - type: volume
+        source: indexes_data
+        target: /app/data/processed/indexes
+        volume:
+          nocopy: true
 
   worker:
     build: .
@@ -72,8 +75,11 @@ services:
         condition: service_healthy
     volumes:
       - reports_data:/app/reports
-      - traces_data:/app/traces
-      - indexes_data:/app/data/processed/indexes
+      - type: volume
+        source: indexes_data
+        target: /app/data/processed/indexes
+        volume:
+          nocopy: true
 
 volumes:
   postgres_data:
