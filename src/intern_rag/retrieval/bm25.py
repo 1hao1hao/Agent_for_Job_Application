@@ -142,14 +142,15 @@ class BM25Retriever:
     ) -> list[RetrievalResult]:
         """计算 Query 的 BM25 分数，过滤来源后稳定返回 top-k。
 
-        输入是统一 Chunk 列表；处理时只读取离线 index 中对应 Chunk 的词频和
-        长度；输出继续使用 `RetrievalResult`，因此 Pipeline 无需了解 BM25 细节。
+        输入是统一 Chunk 列表；处理时只读取离线 index 中对应 Chunk 的词频和长度；
+        输出继续使用 `RetrievalResult`，因此 Pipeline 无需了解 BM25 细节。
         """
 
         query_tokens = list(dict.fromkeys(tokenize_bm25(query)))
         if not query_tokens or top_k <= 0:
             return []
         chunk_by_id = {chunk.id: chunk for chunk in chunks}
+        # 读取离线保存的 BM25 index
         document_count = len(self.index.chunk_ids)
         average_length = self.index.average_document_length or 1.0
         scored: list[tuple[float, str, Chunk, list[str]]] = []
@@ -164,6 +165,20 @@ class BM25Retriever:
             document_length = self.index.document_lengths[position]
             score = 0.0
             matched_tokens: list[str] = []
+
+            """
+            第四步：计算 BM25 分数
+            BM25 主要考虑三个因素：
+                1.词是否稀有： 越少文档出现的词，区分能力越强，IDF 越大。
+                2.词在当前 Chunk 中出现几次： 出现次数越多通常越相关，但收益会逐渐饱和。
+                3.Chunk 长度： 避免长 Chunk 仅因为包含的词多就天然获得高分。
+            可以简化理解为：
+                BM25 分数
+                = 查询词稀有程度
+                × 查询词在当前 Chunk 中的出现情况
+                × 文档长度修正
+            k1 控制词频饱和速度，b 控制文档长度修正强度。面试时理解到这里就够了，不需要背公式。
+            """
             for token in query_tokens:
                 term_frequency = frequencies.get(token, 0)
                 if term_frequency <= 0:
