@@ -10,7 +10,7 @@ EvalRAG 是一个围绕 RAG 运行与质量评估设计的轻量 Agent Harness�
 - 实验能够复现。
 - 修改能够回归验证。
 
-新人第一次理解项目时先读 `docs/project_map_zh.md`。本文件用于补充详细职责、
+新人第一次理解项目时先读 `docs/overview/project_map_zh.md`。本文件用于补充详细职责、
 约束和设计取舍，不要求按文件顺序一次读完。
 
 ## 系统边界
@@ -503,7 +503,7 @@ Regression：
 
 - Regression Pass Rate。
 
-固定公式、分割方式与运行规则见 `docs/evaluation_protocol.md`。
+固定公式、分割方式与运行规则见 `docs/evaluation/evaluation_protocol.md`。
 
 ## Failure Taxonomy
 

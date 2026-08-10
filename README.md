@@ -1,8 +1,8 @@
 # EvalRAG
 
-EvalRAG 是一个面向多源知识问答的、可观测、可评测、可回归的 RAG Agent
-Harness。当前以中文实习求职资料作为演示 profile，重点解决三类问题：一次回答为何
-产生、失败发生在哪个阶段、系统修改后是否真的改善。
+EvalRAG 是一个面向求职知识问答的、可观测、可评测、可回归的 RAG Agent Harness。
+系统融合岗位 JD、技术面经、项目文档和个人经历等中文多源知识，重点解决三类问题：
+一次回答为何产生、失败发生在哪个阶段、系统修改后是否真的改善。
 
 ## 核心结果
 
@@ -59,8 +59,8 @@ flowchart LR
     F --> REG[Fixed / Open Regression]
 ```
 
-更完整的数据结构和失败分支见 [架构图](docs/architecture_diagram.md) 与
-[项目地图](docs/project_map_zh.md)。
+更完整的数据结构和失败分支见 [架构图](docs/overview/architecture_diagram.md) 与
+[项目地图](docs/overview/project_map_zh.md)。
 
 ## 可复现验证
 
@@ -141,9 +141,8 @@ PYTHONPATH=src python scripts/run_rag_smoke.py
 
 ## 实验与边界
 
-- [最终实验报告](docs/final_experiment_report.md)：数据、检索、Router、可靠性、成本和失败闭环。
-- [简历证据表](docs/resume_evidence.md)：每条表述对应代码与报告路径。
-- [三分钟讲稿与追问](docs/interview_guide_zh.md)：按系统主线讲解，不依赖逐文件背代码。
+- [文档导航](docs/README.md)：项目概览、评测协议、架构与模块说明。
+- [最终实验报告](docs/evaluation/final_experiment_report.md)：数据、检索、Router、可靠性、成本和失败闭环。
 - `evalrag_v0.2` 是项目自建、人工审核的半真实 benchmark，不代表线上业务分布。
 - Recall@k/MRR 只衡量检索；Citation Validity 只验证引用 ID；Semantic Coverage 与
   Claim-Level Grounding 使用模型评分，均不等于人工答案准确率。

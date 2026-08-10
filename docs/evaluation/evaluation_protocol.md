@@ -18,8 +18,8 @@ data/evaluation/evalrag_v0.1.jsonl
 
 P0-D3 新增 `evalrag_v0.2`：100 份五类文档、310 个自然 Chunk、120 条 Case，
 按 80 dev / 40 frozen test 划分，四类 Query 各 30 条。新增 70 份材料明确标记为
-`project_authored_synthetic_benchmark`；标签由项目作者委托 Codex 完成全量一致性
-审核，不应描述为独立第三方人工标注或真实业务流量。P0-D3 只运行 dev，test
+`project_authored_synthetic_benchmark`；标签经过模型辅助一致性审核，不应描述为
+独立第三方人工标注或真实业务流量。P0-D3 只运行 dev，test
 继续冻结。
 
 P0-D3 正式 Dense 配置为 `BAAI/bge-small-zh-v1.5`，固定 revision
@@ -368,9 +368,9 @@ reports/final/p0-d5-live-llm-v0.2/
 ```
 
 token 直接使用 Provider usage；成本根据 RunConfig 中 2026-08-04 官方美元单价
-快照估算。P0-D5 的 Unsupported Answer 标签来自 Codex 审核流程，但没有保存逐
+快照估算。P0-D5 的 Unsupported Answer 标签来自模型辅助审核流程，但没有保存逐
 claim/evidence 判定，现标记为 provisional，并由 P0-D6 Claim-Level Grounding
-工件替代；两者都不是独立人工审核，报告和简历必须保留这一边界。
+工件替代；两者都不是独立人工审核，对外报告必须保留这一边界。
 
 ## Run Artifacts
 
@@ -427,13 +427,13 @@ evidence_thresholds
 8. frozen test 影响。
 9. regression case id。
 
-## 简历数字发布规则
+## 对外指标发布规则
 
-一个数字只有同时满足以下条件才能写入简历：
+一个指标只有同时满足以下条件才能作为项目结论发布：
 
 - 来自正式 Run Artifact。
 - 关联 dataset version 和 Git commit。
 - 指标公式在本协议中定义。
 - baseline 和优化方案使用相同数据。
 - 能解释样例规模、分割和运行环境。
-- 已填写 `docs/resume_evidence.md`。
+- 能从 summary 定位到逐 Case 结果、失败记录和对应代码配置。

@@ -47,7 +47,7 @@ Harness 指围绕模型和 RAG 核心能力提供运行控制与质量保障的�
 - Router、Retrieval、Citation、Abstention、Semantic Key-Point、Claim-Level
   Grounding 和 Regression 评测。
 - 真实 DeepSeek dev/test Run、frozen retrieval 对照和 142 个自动化测试。
-- 单来源、多来源、拒答固定 Demo，以及 README、最终报告和面试材料。
+- 单来源、多来源、拒答固定 Demo，以及 README、架构和最终实验报告。
 - 标准 BM25、FastAPI HTTP 契约、PostgreSQL 状态持久化、Redis Evaluation Worker
   和通过 GitHub Actions 验证的四服务 Docker Compose 部署。
 
@@ -63,22 +63,17 @@ Harness 指围绕模型和 RAG 核心能力提供运行控制与质量保障的�
 - BM25 在 dev 消融中未优于既有最终 Hybrid，因此保留为可选检索配置，而不是
   替换冻结配置；可视化、高并发压测和 pgvector 继续暂缓。
 
-## 项目文档怎么读
+## 项目文档入口
 
-后续不再从具体代码文件开始理解项目，统一使用以下顺序：
-
-1. `docs/project_map_zh.md`：先建立最终形态、两条主链和数据结构变化。
-2. `docs/task_board.md`：查看当前任务卡在系统中的位置、输入输出和验收。
-3. `docs/architecture.md`：需要了解设计取舍时再读详细架构。
-4. 具体代码：只读任务总结列出的入口函数、核心 schema 和一条主流程测试。
-5. `docs/dev_log_P0.md`：用自己的语言复述并回答面试追问。
-
-理解一个任务分三层：系统层说明位置和理由，模块层说明输入、处理和输出，
-代码层只掌握核心路径。辅助函数和语法细节在影响主流程时再补。
+1. `docs/overview/project_map_zh.md`：系统主链和核心数据结构。
+2. `docs/overview/system_flows_explained_zh.md`：在线、离线和服务化数据流。
+3. `docs/overview/architecture.md`：模块职责、失败分支和设计取舍。
+4. `docs/evaluation/evaluation_protocol.md`：数据划分、指标公式和实验约束。
+5. `docs/evaluation/final_experiment_report.md`：正式结果和失败分析。
 
 ## P0 最终形态
 
-P0 是重新投递简历前必须完成的版本，目标链路为：
+P0 是第一个可复现发布版本，目标链路为：
 
 ```text
 Query
@@ -202,11 +197,11 @@ P0 不做无目的的功能堆叠，围绕三个可回答的实验问题推进�
 | Cost | Input/Output Tokens、Estimated Cost | 模型调用成本 |
 | Regression | Regression Pass Rate | 已固化失败样例是否仍通过 |
 
-每个指标的固定口径见 `docs/evaluation_protocol.md`。
+每个指标的固定口径见 `docs/evaluation/evaluation_protocol.md`。
 
 ## P0 目标值与真实值
 
-目标用于判断是否继续优化，不能以完成时态写入简历。
+目标用于判断是否继续优化，不能作为已经取得的实测结论发布。
 
 | 指标 | P0 目标 | 实测值 |
 |---|---:|---:|
@@ -235,7 +230,7 @@ P0 使用中文实习求职知识作为评测 profile：
 
 ## 发布工件
 
-简历上的每项结论都必须能够链接到以下工件之一：
+对外发布的每项结论都必须能够链接到以下工件之一：
 
 ```text
 data/evaluation/
@@ -256,8 +251,17 @@ examples/fixed_demos/
   abstention.json
 
 docs/
-  evaluation_protocol.md
-  resume_evidence.md
+  README.md
+  overview/
+    project_map_zh.md
+    architecture.md
+    architecture_diagram.md
+    system_flows_explained_zh.md
+  evaluation/
+    evaluation_protocol.md
+    final_experiment_report.md
+  guides/
+    chunking_explained_zh.md
 ```
 
 报告至少记录：
@@ -286,6 +290,15 @@ PostgreSQL 与 Redis 有明确分工：PostgreSQL 是任务状态真相来源，
 数据库，因此 P1-D1 不引入 pgvector。大规模 ANN/pgvector 必须由 profiling 和同集
 Recall/P95 对照驱动。
 
+P1 后续优先级：
+
+1. P1-D2 把请求生命周期、Stage Event、异常捕获和 Trace sink 收口到 Agent Runtime，
+   通过故障注入与重构前后行为一致性证明 Harness 解耦。
+2. P1-D3 引入多轮 Context Manager、PostgreSQL/Redis 会话状态和摘要压缩，并比较
+   full/window/summary 策略的 Prompt token、质量、延迟和成本。
+3. Skill Registry 仅在 Runtime 稳定且出现多个真实执行计划后做对照；Multi-Agent、
+   无业务工具的 MCP 和心理风险流程不进入 EvalRAG 主线。
+
 后续再考虑 Trace 可视化，不默认增加前端、Kubernetes 或微服务拆分。
 
 ## 非目标
@@ -301,10 +314,10 @@ Recall/P95 对照驱动。
 - 非合规爬虫。
 - 为使用框架而迁移到 LangGraph、LangChain 或 LlamaIndex。
 
-## 最终项目故事
+## 设计演进
 
-最终面试叙事应当是：
+项目的主要演进路径是：
 
 > 我先用原生 Python 建立可解释的 Rule Router 与 Keyword Retrieval Baseline，并为路由、召回、引用和耗时设计 Trace。正式 dev 结果暴露 Router Accuracy 和语义召回瓶颈后，我增加 Semantic/Hybrid Router、Dense Retrieval 和 RRF Hybrid，在同一冻结数据集上比较 Router Accuracy、Recall@k、MRR 和延迟。生成阶段不直接相信模型输出，而是通过 Citation Validator 和 Evidence Gate 决定回答、重试或拒答。最后，我把真实失败 Trace 固化为 Regression Case，确保路由、检索和 Prompt 修改不会让旧问题复发。
 
-这段故事中的所有数字，必须来自仓库内可复现报告。
+其中所有数字都来自仓库内可复现报告。

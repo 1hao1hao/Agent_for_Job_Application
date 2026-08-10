@@ -73,7 +73,7 @@ flowchart TD
 | Generation | JSON contract，temperature=0 | 便于解析、引用校验和复现 |
 | Grounding | claim-level，unknown 不算 supported | Judge 失败不能伪装成答案可靠 |
 
-对应数字和工件见 [最终实验报告](final_experiment_report.md)。
+对应数字和工件见 [最终实验报告](../evaluation/final_experiment_report.md)。
 
 ## P1 服务与异步评测链路
 

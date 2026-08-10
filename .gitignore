@@ -39,10 +39,7 @@ reports/runs/p1-d1-stack-*/
 
 # 本地 AI 协作、任务提示与个人学习记录
 AGENTS.md
-docs/coding_rules.md
-docs/data_annotation_prompt.md
-docs/decision_log.md
-docs/dev_log.md
-docs/dev_log_*.md
-docs/task_board.md
-docs/task_prompt_template.md
+docs/development/
+
+# 含手机号、邮箱等个人信息的本地简历文件
+resume/

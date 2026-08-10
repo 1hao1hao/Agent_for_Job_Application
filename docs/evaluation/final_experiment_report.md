@@ -6,7 +6,7 @@
 - Corpus：100 文档、310 Chunk；JD、简历、面经、项目日志、用户画像各 20 份。
 - Query：120 条，单来源、多来源、语义改写、不可回答各 30 条；80 dev / 40 frozen test。
 - Frozen 规则：只在 dev 选择配置；test 上每个声明策略运行一次，查看结果后不调参。
-- Corpus 统计：[corpus_stats.json](../data/evaluation/corpus_stats.json)；标签校验：[evalrag_v0.2_validation.json](../data/evaluation/evalrag_v0.2_validation.json)。
+- Corpus 统计：[corpus_stats.json](../../data/evaluation/corpus_stats.json)；标签校验：[evalrag_v0.2_validation.json](../../data/evaluation/evalrag_v0.2_validation.json)。
 
 Chunk 长度为 121--376 字符，均值 253.15，P50 261，P95 277；空文档和重复
 content hash 均为 0。数据为项目自建半真实材料，不等同于线上业务数据。
@@ -23,7 +23,7 @@ content hash 均为 0。数据为项目自建半真实材料，不等同于线�
 
 Hybrid 增加了多来源候选覆盖，但 dev MRR 低于 Keyword，说明语义候选进入前排也会
 引入排序噪声。差异 Case 与分类指标保存在
-[P0-D3 Ablation](../reports/ablations/p0-d3-v02-dev-20260801/report.md)。
+[P0-D3 Ablation](../../reports/ablations/p0-d3-v02-dev-20260801/report.md)。
 
 ### Frozen test
 
@@ -35,18 +35,18 @@ Hybrid 增加了多来源候选覆盖，但 dev MRR 低于 Keyword，说明语�
 
 最终选择 Hybrid：相比 Keyword，Recall@3 +12.77 pp、Recall@5 +7.22 pp、MRR
 +5.95 pp；代价是 P95 +702.96 ms。原始工件见
-[Frozen Comparison](../reports/comparisons/p0-d5-v02-frozen-test-20260804/report.md)。
+[Frozen Comparison](../../reports/comparisons/p0-d5-v02-frozen-test-20260804/report.md)。
 
 Reranker 只在 dev 对比：token-overlap candidate 将 Hybrid Recall@3 从 80.83% 降至
 73.33%、Recall@5 从 85.56% 降至 83.89%、MRR 从 83.19% 降至 79.44%，P95
 从 700.21 ms 增至 902.75 ms，因此冻结配置为关闭。负向结果见
-[Reranker Ablation](../reports/ablations/p0-d5-reranker-dev-20260804/report.md)。
+[Reranker Ablation](../../reports/ablations/p0-d5-reranker-dev-20260804/report.md)。
 
 ## 3. Router 与可靠性
 
 Rule、Semantic、Hybrid Router 在相同 80 条 dev 上的 Accuracy 分别为 91.25%、
 87.50%、96.25%；Hybrid P95 为 2600.27 ms，表明质量提升伴随显著 CPU 语义编码
-开销。完整分类结果见 [Router Ablation](../reports/ablations/p0-d4-v02-dev-20260803/report.md)。
+开销。完整分类结果见 [Router Ablation](../../reports/ablations/p0-d4-v02-dev-20260803/report.md)。
 
 真实 LLM frozen Trace 的阶段干预统计如下：
 
@@ -62,7 +62,7 @@ Rule、Semantic、Hybrid Router 在相同 80 条 dev 上的 Accuracy 分别为 9
 因此不能声称 Gate 单独带来多少百分点提升。10 条不可回答 Case 最终全部拒答，其中
 9 条由 Gate 直接处理、1 条由 Generator 声明证据不足；Validator 还拦截了 1 条结构
 矛盾输出。同时，required-source coverage 过严造成 6 条 retrieval miss。Case 与
-Trace 位于 [Live Frozen Run](../reports/runs/p0-d5-v02-frozen-test-20260804-deepseek-v4-flash/)。
+Trace 位于 [Live Frozen Run](../../reports/runs/p0-d5-v02-frozen-test-20260804-deepseek-v4-flash/)。
 
 ## 4. 端到端、延迟与成本
 
@@ -77,9 +77,9 @@ Trace 位于 [Live Frozen Run](../reports/runs/p0-d5-v02-frozen-test-20260804-de
 | LLM calls / tokens | 25 / 39,147 | 33,170 input + 5,977 output |
 | Estimated cost | $0.006317 | 2026-08-04 Provider 价格快照 |
 
-真实生成工件见 [P0-D5 Live LLM](../reports/final/p0-d5-live-llm-v0.2/report.md)；离线
+真实生成工件见 [P0-D5 Live LLM](../../reports/final/p0-d5-live-llm-v0.2/report.md)；离线
 Semantic/Grounding 审核复用保存 predictions，没有重新运行 Generator，见
-[P0-D6 Audit](../reports/final/p0-d6-semantic-grounding-v0.2/report.md)。
+[P0-D6 Audit](../../reports/final/p0-d6-semantic-grounding-v0.2/report.md)。
 
 ## 5. 失败驱动修复
 
@@ -89,9 +89,9 @@ Accuracy 从 88.75% 提升到 91.25%，完整 dev 未隐藏退化。该 Case 被
 `reg-router-company-list-v1`，fixed regression 1/1 通过；另有 4 条 open case 明确
 不进入通过率分母。
 
-- Root cause：[failure analysis](../reports/failure_analysis/p0-d4-company-keyword/analysis.json)
-- Before/after：[P0-D4 report](../reports/ablations/p0-d4-v02-dev-20260803/report.md)
-- Regression：[summary](../reports/regression/p0-d5-v0.2/summary.json)
+- Root cause：[failure analysis](../../reports/failure_analysis/p0-d4-company-keyword/analysis.json)
+- Before/after：[P0-D4 report](../../reports/ablations/p0-d4-v02-dev-20260803/report.md)
+- Regression：[summary](../../reports/regression/p0-d5-v0.2/summary.json)
 
 ## 6. 结论与限制
 
