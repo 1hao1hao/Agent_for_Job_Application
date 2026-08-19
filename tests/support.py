@@ -5,7 +5,8 @@ from datetime import datetime, timezone
 from uuid import uuid4
 
 from intern_rag.agent import RagRequest, RagResponse
-from intern_rag.persistence import EvaluationJob, EvaluationRunRecord
+from intern_rag.agent.context_engine import ConversationMessage, MemoryItem, UserProfile
+from intern_rag.persistence import EvaluationJob, EvaluationRunRecord, SessionRecord
 from intern_rag.tracing import AgentTrace
 
 
@@ -19,6 +20,11 @@ class InMemoryPersistenceRepository:
         self.idempotency: dict[str, str] = {}
         self.runs: dict[str, EvaluationRunRecord] = {}
         self.available = True
+        self.sessions: dict[str, SessionRecord] = {}
+        self.messages: dict[str, list[ConversationMessage]] = {}
+        self.summaries: dict[str, str] = {}
+        self.profiles: dict[str, UserProfile] = {}
+        self.memories: dict[str, MemoryItem] = {}
 
     def initialize(self) -> None:
         return None
@@ -151,6 +157,72 @@ class InMemoryPersistenceRepository:
 
     def save_run(self, run: EvaluationRunRecord) -> None:
         self.runs[run.run_id] = run
+
+    def create_session(self, user_id: str, title: str) -> SessionRecord:
+        now = _now()
+        value = SessionRecord(str(uuid4()), user_id, title, now, now)
+        self.sessions[value.session_id] = value
+        return value
+
+    def get_session(self, user_id: str, session_id: str) -> SessionRecord | None:
+        value = self.sessions.get(session_id)
+        return value if value is not None and value.user_id == user_id else None
+
+    def append_message(self, message: ConversationMessage) -> None:
+        if self.get_session(message.user_id, message.session_id) is None:
+            raise PermissionError("session does not belong to user")
+        self.messages.setdefault(message.session_id, []).append(message)
+
+    def list_messages(self, user_id: str, session_id: str, limit: int = 50) -> list[ConversationMessage]:
+        if self.get_session(user_id, session_id) is None:
+            return []
+        return self.messages.get(session_id, [])[-limit:]
+
+    def save_summary(self, user_id: str, session_id: str, summary: str, version: int) -> None:
+        del version
+        if self.get_session(user_id, session_id) is None:
+            raise PermissionError("session does not belong to user")
+        self.summaries[session_id] = summary
+
+    def get_summary(self, user_id: str, session_id: str) -> str | None:
+        if self.get_session(user_id, session_id) is None:
+            return None
+        return self.summaries.get(session_id)
+
+    def upsert_profile(self, profile: UserProfile, expected_version: int | None) -> UserProfile:
+        current = self.profiles.get(profile.user_id)
+        current_version = current.version if current else 0
+        if expected_version is not None and expected_version != current_version:
+            raise ValueError("profile version conflict")
+        value = replace(profile, version=current_version + 1, updated_at=_now())
+        self.profiles[profile.user_id] = value
+        return value
+
+    def get_profile(self, user_id: str) -> UserProfile | None:
+        return self.profiles.get(user_id)
+
+    def save_memory(self, item: MemoryItem, embedding: list[float] | None = None) -> None:
+        del embedding
+        if not item.confirmed:
+            raise ValueError("unconfirmed memory")
+        current = self.memories.get(item.memory_id)
+        if current is None or item.version > current.version:
+            self.memories[item.memory_id] = item
+
+    def list_memories(self, user_id: str, limit: int = 20) -> list[MemoryItem]:
+        values = [item for item in self.memories.values() if item.user_id == user_id and item.is_available]
+        return sorted(values, key=lambda item: (-item.importance, item.memory_id))[:limit]
+
+    def search_memories(self, user_id: str, query_embedding: list[float], top_k: int = 5) -> list[MemoryItem]:
+        del query_embedding
+        return self.list_memories(user_id, top_k)
+
+    def delete_memory(self, user_id: str, memory_id: str) -> bool:
+        item = self.memories.get(memory_id)
+        if item is None or item.user_id != user_id:
+            return False
+        self.memories[memory_id] = replace(item, active=False)
+        return True
 
     def _require(self, job_id: str) -> EvaluationJob:
         job = self.jobs.get(job_id)

@@ -1,0 +1,5242 @@
+{
+  "run_id": "p1-d6-router-feedback-v01-dev-20260816",
+  "dataset_version": "evalrag_v0.2",
+  "split": "dev",
+  "case_count": 80,
+  "feedback_count": 3,
+  "model": "BAAI/bge-small-zh-v1.5",
+  "model_revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "online_self_learning": false,
+  "results": {
+    "rule-v0.2": {
+      "case_count": 80,
+      "accuracy": 0.9125,
+      "unknown_precision": 1.0,
+      "unknown_recall": 1.0,
+      "latency_ms": {
+        "p50": 0.005570240318775177,
+        "p95": 0.008977018296718597
+      },
+      "cases": [
+        {
+          "case_id": "v02_single_001",
+          "query": "这个岗位对混合检索提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.047499313950538635,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_002",
+          "query": "这个岗位对引用校验提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.012048520147800446,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_003",
+          "query": "这个岗位对请求追踪提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.007459893822669983,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_004",
+          "query": "这个岗位对意图路由提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.006058253347873688,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_005",
+          "query": "这个岗位对上下文预算提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.005570240318775177,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_006",
+          "query": "这个岗位对失败回归提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.0065658241510391235,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_007",
+          "query": "简历匹配时，我在混合检索方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.008469447493553162,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_008",
+          "query": "简历匹配时，我在引用校验方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.008977018296718597,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_009",
+          "query": "简历匹配时，我在请求追踪方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.006751157343387604,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_010",
+          "query": "简历匹配时，我在意图路由方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005727633833885193,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_011",
+          "query": "简历匹配时，我在上下文预算方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.006509944796562195,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_012",
+          "query": "简历匹配时，我在失败回归方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.006198883056640625,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_013",
+          "query": "面试准备中，混合检索应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.006333924829959869,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_014",
+          "query": "面试准备中，引用校验应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005792826414108276,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_015",
+          "query": "面试准备中，请求追踪应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.0056158751249313354,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_016",
+          "query": "面试准备中，意图路由应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.0053085386753082275,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_017",
+          "query": "面试准备中，上下文预算应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005769543349742889,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_018",
+          "query": "面试准备中，失败回归应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005476176738739014,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_019",
+          "query": "这个项目的混合检索模块是怎么实现和复盘的？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.0066785141825675964,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_single_020",
+          "query": "这个项目的引用校验模块是怎么实现和复盘的？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.0057248398661613464,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_001",
+          "query": "岗位分析：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.0074570998549461365,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_002",
+          "query": "岗位分析：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.006866641342639923,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_003",
+          "query": "岗位分析：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.0063925981521606445,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_004",
+          "query": "岗位分析：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.0054603442549705505,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_005",
+          "query": "岗位分析：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.0068498775362968445,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_006",
+          "query": "岗位分析：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.005898997187614441,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_007",
+          "query": "简历优势：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": false,
+          "latency_ms": 0.00558607280254364,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_008",
+          "query": "简历优势：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005559995770454407,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_009",
+          "query": "简历优势：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005414709448814392,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_010",
+          "query": "简历优势：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005248934030532837,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_011",
+          "query": "简历优势：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.006225891411304474,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_012",
+          "query": "简历优势：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005895271897315979,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_013",
+          "query": "面试怎么回答：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": false,
+          "latency_ms": 0.007062219083309174,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_014",
+          "query": "面试怎么回答：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.006467103958129883,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_015",
+          "query": "面试怎么回答：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005445443093776703,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_016",
+          "query": "面试怎么回答：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.00566430389881134,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_017",
+          "query": "面试怎么回答：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.011099502444267273,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_018",
+          "query": "面试怎么回答：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005508773028850555,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_019",
+          "query": "项目怎么讲：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": false,
+          "latency_ms": 0.005752779543399811,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_semantic_020",
+          "query": "项目怎么讲：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005427747964859009,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_001",
+          "query": "结合岗位和简历分析混合检索匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.013452954590320587,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_002",
+          "query": "结合岗位、简历和面试资料准备混合检索追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005786307156085968,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_003",
+          "query": "结合项目日志和简历说明混合检索亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005718320608139038,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_004",
+          "query": "结合用户画像、岗位和简历制定混合检索投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.0060927122831344604,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_005",
+          "query": "面试时如何结合岗位和个人经历回答混合检索问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": false,
+          "latency_ms": 0.005437992513179779,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_006",
+          "query": "结合岗位和简历分析引用校验匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005465932190418243,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_007",
+          "query": "结合岗位、简历和面试资料准备引用校验追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005185604095458984,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_008",
+          "query": "结合项目日志和简历说明引用校验亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005782581865787506,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_009",
+          "query": "结合用户画像、岗位和简历制定引用校验投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005386769771575928,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_010",
+          "query": "面试时如何结合岗位和个人经历回答引用校验问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": false,
+          "latency_ms": 0.005583278834819794,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_011",
+          "query": "结合岗位和简历分析请求追踪匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.00539049506187439,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_012",
+          "query": "结合岗位、简历和面试资料准备请求追踪追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005194917321205139,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_013",
+          "query": "结合项目日志和简历说明请求追踪亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005248934030532837,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_014",
+          "query": "结合用户画像、岗位和简历制定请求追踪投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005451031029224396,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_015",
+          "query": "面试时如何结合岗位和个人经历回答请求追踪问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": false,
+          "latency_ms": 0.007918104529380798,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_016",
+          "query": "结合岗位和简历分析意图路由匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.0052247196435928345,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_017",
+          "query": "结合岗位、简历和面试资料准备意图路由追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.004932284355163574,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_018",
+          "query": "结合项目日志和简历说明意图路由亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005123205482959747,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_019",
+          "query": "结合用户画像、岗位和简历制定意图路由投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.005144625902175903,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_multi_020",
+          "query": "面试时如何结合岗位和个人经历回答意图路由问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": false,
+          "latency_ms": 0.00531412661075592,
+          "reason": "rule_keywords_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_001",
+          "query": "请告诉我量子芯片流片编号。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.006576068699359894,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_002",
+          "query": "请告诉我卫星轨道参数。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.005825422704219818,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_003",
+          "query": "请告诉我药物临床试验剂量。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.005340203642845154,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_004",
+          "query": "请告诉我古籍拍卖成交价。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.005369074642658234,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_005",
+          "query": "请告诉我海底光缆维修坐标。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.00523589551448822,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_006",
+          "query": "请告诉我核反应堆燃料批次。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.004977919161319733,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_007",
+          "query": "请告诉我电影票房分账比例。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.005017034709453583,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_008",
+          "query": "请告诉我航班实时登机口。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.004959292709827423,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_009",
+          "query": "请告诉我商品明日成交价格。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.004808418452739716,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_010",
+          "query": "请告诉我个人银行卡余额。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.004981644451618195,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_011",
+          "query": "请告诉我未公开公司薪资名单。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.005301088094711304,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_012",
+          "query": "请告诉我候选人身份证号码。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.004814937710762024,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_013",
+          "query": "请告诉我火星车电池温度。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.004840083420276642,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_014",
+          "query": "请告诉我世界杯下一届冠军。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.005014240741729736,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_015",
+          "query": "请告诉我彩票开奖号码。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.006081536412239075,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_016",
+          "query": "请告诉我医院患者病历。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.0053122639656066895,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_017",
+          "query": "请告诉我保密合同原文。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.0048317015171051025,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_018",
+          "query": "请告诉我公司内部裁员名单。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.005268491804599762,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_019",
+          "query": "请告诉我实时道路事故位置。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.005377456545829773,
+          "reason": "no_rule_keyword_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_020",
+          "query": "请告诉我私人邮件密码。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 0.004949048161506653,
+          "reason": "no_rule_keyword_matched"
+        }
+      ]
+    },
+    "semantic-v0.2": {
+      "case_count": 80,
+      "accuracy": 0.875,
+      "unknown_precision": 0.8888888888888888,
+      "unknown_recall": 0.8,
+      "latency_ms": {
+        "p50": 95.97390331327915,
+        "p95": 394.2590691149235
+      },
+      "cases": [
+        {
+          "case_id": "v02_single_001",
+          "query": "这个岗位对混合检索提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 97.38708194345236,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_002",
+          "query": "这个岗位对引用校验提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 697.8826811537147,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_003",
+          "query": "这个岗位对请求追踪提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 7.347472012042999,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_004",
+          "query": "这个岗位对意图路由提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 94.48711201548576,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_005",
+          "query": "这个岗位对上下文预算提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 6.3117146492004395,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_006",
+          "query": "这个岗位对失败回归提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 100.84282793104649,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_007",
+          "query": "简历匹配时，我在混合检索方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 94.44229304790497,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_008",
+          "query": "简历匹配时，我在引用校验方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 4.856638610363007,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_009",
+          "query": "简历匹配时，我在请求追踪方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 94.39086262136698,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_010",
+          "query": "简历匹配时，我在意图路由方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 4.966136999428272,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_011",
+          "query": "简历匹配时，我在上下文预算方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 195.94781473279,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_012",
+          "query": "简历匹配时，我在失败回归方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.94408702105284,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_013",
+          "query": "面试准备中，混合检索应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.068410187959671,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_014",
+          "query": "面试准备中，引用校验应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 94.86498590558767,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_015",
+          "query": "面试准备中，请求追踪应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 4.930187948048115,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_016",
+          "query": "面试准备中，意图路由应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.97390331327915,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_017",
+          "query": "面试准备中，上下文预算应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 200.13759937137365,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_018",
+          "query": "面试准备中，失败回归应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 8.018622174859047,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_019",
+          "query": "这个项目的混合检索模块是怎么实现和复盘的？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 490.85457995533943,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_single_020",
+          "query": "这个项目的引用校验模块是怎么实现和复盘的？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 302.91477125138044,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_001",
+          "query": "岗位分析：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": false,
+          "latency_ms": 6.385616026818752,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_semantic_002",
+          "query": "岗位分析：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": false,
+          "latency_ms": 192.4622943624854,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_003",
+          "query": "岗位分析：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": false,
+          "latency_ms": 100.12159217149019,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_004",
+          "query": "岗位分析：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 5.836160853505135,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_005",
+          "query": "岗位分析：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": false,
+          "latency_ms": 295.3047752380371,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_semantic_006",
+          "query": "岗位分析：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": false,
+          "latency_ms": 98.20551797747612,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_007",
+          "query": "简历优势：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 102.98779234290123,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_008",
+          "query": "简历优势：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 598.1290079653263,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_009",
+          "query": "简历优势：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 399.6030269190669,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_010",
+          "query": "简历优势：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 306.00258708000183,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_011",
+          "query": "简历优势：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 194.40618064254522,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_012",
+          "query": "简历优势：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 201.3359535485506,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_013",
+          "query": "面试怎么回答：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 99.20138027518988,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_014",
+          "query": "面试怎么回答：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 99.98489636927843,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_015",
+          "query": "面试怎么回答：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.765000522136688,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_016",
+          "query": "面试怎么回答：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 394.2590691149235,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_017",
+          "query": "面试怎么回答：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 198.730681091547,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_018",
+          "query": "面试怎么回答：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 97.17314038425684,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_019",
+          "query": "项目怎么讲：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": false,
+          "latency_ms": 104.59945537149906,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_semantic_020",
+          "query": "项目怎么讲：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 97.47930616140366,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_001",
+          "query": "结合岗位和简历分析混合检索匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.168120540678501,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_002",
+          "query": "结合岗位、简历和面试资料准备混合检索追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.9354666993022,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_003",
+          "query": "结合项目日志和简历说明混合检索亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.70747334510088,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_004",
+          "query": "结合用户画像、岗位和简历制定混合检索投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.6724753230810165,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_005",
+          "query": "面试时如何结合岗位和个人经历回答混合检索问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.3940600156784,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_006",
+          "query": "结合岗位和简历分析引用校验匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 202.49743945896626,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_007",
+          "query": "结合岗位、简历和面试资料准备引用校验追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 102.42031421512365,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_008",
+          "query": "结合项目日志和简历说明引用校验亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 100.19023343920708,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_009",
+          "query": "结合用户画像、岗位和简历制定引用校验投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 102.70437970757484,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_010",
+          "query": "面试时如何结合岗位和个人经历回答引用校验问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.95208894461393,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_011",
+          "query": "结合岗位和简历分析请求追踪匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 299.4247069582343,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_012",
+          "query": "结合岗位、简历和面试资料准备请求追踪追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 200.98554994910955,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_013",
+          "query": "结合项目日志和简历说明请求追踪亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 97.06910979002714,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_014",
+          "query": "结合用户画像、岗位和简历制定请求追踪投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 7.220224477350712,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_015",
+          "query": "面试时如何结合岗位和个人经历回答请求追踪问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 98.23750890791416,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_016",
+          "query": "结合岗位和简历分析意图路由匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.90126480907202,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_017",
+          "query": "结合岗位、简历和面试资料准备意图路由追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.828822962939739,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_018",
+          "query": "结合项目日志和简历说明意图路由亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 295.4648993909359,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_019",
+          "query": "结合用户画像、岗位和简历制定意图路由投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 97.79804851859808,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_multi_020",
+          "query": "面试时如何结合岗位和个人经历回答意图路由问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.419898942112923,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_001",
+          "query": "请告诉我量子芯片流片编号。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 96.42105642706156,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_002",
+          "query": "请告诉我卫星轨道参数。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": false,
+          "latency_ms": 97.86547999829054,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_003",
+          "query": "请告诉我药物临床试验剂量。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 5.513578653335571,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_004",
+          "query": "请告诉我古籍拍卖成交价。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 194.8652509599924,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_005",
+          "query": "请告诉我海底光缆维修坐标。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 96.23209480196238,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_006",
+          "query": "请告诉我核反应堆燃料批次。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 5.340351723134518,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_007",
+          "query": "请告诉我电影票房分账比例。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 96.20100911706686,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_008",
+          "query": "请告诉我航班实时登机口。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 5.382324568927288,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_009",
+          "query": "请告诉我商品明日成交价格。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 94.93204113095999,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_010",
+          "query": "请告诉我个人银行卡余额。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 4.507250152528286,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_011",
+          "query": "请告诉我未公开公司薪资名单。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 95.34269757568836,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_012",
+          "query": "请告诉我候选人身份证号码。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": false,
+          "latency_ms": 5.091621540486813,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_013",
+          "query": "请告诉我火星车电池温度。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 194.60773933678865,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_014",
+          "query": "请告诉我世界杯下一届冠军。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 6.128433160483837,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_015",
+          "query": "请告诉我彩票开奖号码。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 94.4859366863966,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_016",
+          "query": "请告诉我医院患者病历。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": false,
+          "latency_ms": 4.606974311172962,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_017",
+          "query": "请告诉我保密合同原文。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 94.56427954137325,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_018",
+          "query": "请告诉我公司内部裁员名单。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": false,
+          "latency_ms": 6.60430733114481,
+          "reason": "semantic_prototype_matched"
+        },
+        {
+          "case_id": "v02_unanswerable_019",
+          "query": "请告诉我实时道路事故位置。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 94.89092230796814,
+          "reason": "semantic_threshold_not_met"
+        },
+        {
+          "case_id": "v02_unanswerable_020",
+          "query": "请告诉我私人邮件密码。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 4.381462931632996,
+          "reason": "semantic_threshold_not_met"
+        }
+      ]
+    },
+    "hybrid-v0.2": {
+      "case_count": 80,
+      "accuracy": 0.9625,
+      "unknown_precision": 1.0,
+      "unknown_recall": 1.0,
+      "latency_ms": {
+        "p50": 96.41884732991457,
+        "p95": 389.73334804177284
+      },
+      "cases": [
+        {
+          "case_id": "v02_single_001",
+          "query": "这个岗位对混合检索提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 295.65133061259985,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_002",
+          "query": "这个岗位对引用校验提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 5.826911889016628,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_003",
+          "query": "这个岗位对请求追踪提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 94.12351623177528,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_004",
+          "query": "这个岗位对意图路由提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 5.24879340082407,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_005",
+          "query": "这个岗位对上下文预算提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 94.82348058372736,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_006",
+          "query": "这个岗位对失败回归提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 5.188643001019955,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_007",
+          "query": "简历匹配时，我在混合检索方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.46194598078728,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_008",
+          "query": "简历匹配时，我在引用校验方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 96.61162365227938,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_009",
+          "query": "简历匹配时，我在请求追踪方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 7.926669903099537,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_010",
+          "query": "简历匹配时，我在意图路由方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 94.74260732531548,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_011",
+          "query": "简历匹配时，我在上下文预算方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.271897651255131,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_012",
+          "query": "简历匹配时，我在失败回归方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 94.61466502398252,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_013",
+          "query": "面试准备中，混合检索应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.269515328109264,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_014",
+          "query": "面试准备中，引用校验应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 97.51501958817244,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_015",
+          "query": "面试准备中，请求追踪应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 99.03897996991873,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_016",
+          "query": "面试准备中，意图路由应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 195.4548843204975,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_017",
+          "query": "面试准备中，上下文预算应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.344634108245373,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_018",
+          "query": "面试准备中，失败回归应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 96.80972713977098,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_019",
+          "query": "这个项目的混合检索模块是怎么实现和复盘的？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 297.09916841238737,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_020",
+          "query": "这个项目的引用校验模块是怎么实现和复盘的？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 103.43256127089262,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_001",
+          "query": "岗位分析：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 196.6697731986642,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_semantic_002",
+          "query": "岗位分析：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 7.873205468058586,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_semantic_003",
+          "query": "岗位分析：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": false,
+          "latency_ms": 193.0129937827587,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_semantic_004",
+          "query": "岗位分析：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 98.0154424905777,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_005",
+          "query": "岗位分析：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 8.424532599747181,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_semantic_006",
+          "query": "岗位分析：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": false,
+          "latency_ms": 97.88382425904274,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_semantic_007",
+          "query": "简历优势：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 98.49204309284687,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_semantic_008",
+          "query": "简历优势：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 198.73362500220537,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_009",
+          "query": "简历优势：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 97.26489335298538,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_010",
+          "query": "简历优势：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.6506946459412575,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_011",
+          "query": "简历优势：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 97.68288489431143,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_012",
+          "query": "简历优势：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 96.62729222327471,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_013",
+          "query": "面试怎么回答：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 98.47937244921923,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_semantic_014",
+          "query": "面试怎么回答：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.87567051500082,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_015",
+          "query": "面试怎么回答：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 97.03095350414515,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_016",
+          "query": "面试怎么回答：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 96.55671752989292,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_017",
+          "query": "面试怎么回答：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.66274968534708,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_018",
+          "query": "面试怎么回答：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 397.9976652190089,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_019",
+          "query": "项目怎么讲：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": false,
+          "latency_ms": 98.46786875277758,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_semantic_020",
+          "query": "项目怎么讲：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 97.60250709950924,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_001",
+          "query": "结合岗位和简历分析混合检索匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.920809857547283,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_002",
+          "query": "结合岗位、简历和面试资料准备混合检索追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 196.55693788081408,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_003",
+          "query": "结合项目日志和简历说明混合检索亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 398.75803235918283,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_004",
+          "query": "结合用户画像、岗位和简历制定混合检索投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 196.11671473830938,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_005",
+          "query": "面试时如何结合岗位和个人经历回答混合检索问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 7.044787518680096,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_multi_006",
+          "query": "结合岗位和简历分析引用校验匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 96.07212990522385,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_007",
+          "query": "结合岗位、简历和面试资料准备引用校验追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.210406146943569,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_008",
+          "query": "结合项目日志和简历说明引用校验亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 94.6579622104764,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_009",
+          "query": "结合用户画像、岗位和简历制定引用校验投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.037024617195129,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_010",
+          "query": "面试时如何结合岗位和个人经历回答引用校验问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 193.51931475102901,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_multi_011",
+          "query": "结合岗位和简历分析请求追踪匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.596597842872143,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_012",
+          "query": "结合岗位、简历和面试资料准备请求追踪追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 96.41884732991457,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_013",
+          "query": "结合项目日志和简历说明请求追踪亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 395.1951842755079,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_014",
+          "query": "结合用户画像、岗位和简历制定请求追踪投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 403.40967662632465,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_015",
+          "query": "面试时如何结合岗位和个人经历回答请求追踪问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.811346858739853,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_multi_016",
+          "query": "结合岗位和简历分析意图路由匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 195.09058818221092,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_017",
+          "query": "结合岗位、简历和面试资料准备意图路由追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 97.47019317001104,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_018",
+          "query": "结合项目日志和简历说明意图路由亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 200.54443180561066,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_019",
+          "query": "结合用户画像、岗位和简历制定意图路由投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.653561092913151,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_020",
+          "query": "面试时如何结合岗位和个人经历回答意图路由问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 197.68839702010155,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_unanswerable_001",
+          "query": "请告诉我量子芯片流片编号。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 96.56201396137476,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_002",
+          "query": "请告诉我卫星轨道参数。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 97.78381232172251,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_003",
+          "query": "请告诉我药物临床试验剂量。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 7.086264900863171,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_004",
+          "query": "请告诉我古籍拍卖成交价。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 98.1982983648777,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_005",
+          "query": "请告诉我海底光缆维修坐标。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 96.99243679642677,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_006",
+          "query": "请告诉我核反应堆燃料批次。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 96.27466090023518,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_007",
+          "query": "请告诉我电影票房分账比例。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 106.1573177576065,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_008",
+          "query": "请告诉我航班实时登机口。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 94.28403247147799,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_009",
+          "query": "请告诉我商品明日成交价格。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 5.9867724776268005,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_010",
+          "query": "请告诉我个人银行卡余额。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 5.890841595828533,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_011",
+          "query": "请告诉我未公开公司薪资名单。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 389.73334804177284,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_012",
+          "query": "请告诉我候选人身份证号码。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 5.522608757019043,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_013",
+          "query": "请告诉我火星车电池温度。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 96.88339848071337,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_014",
+          "query": "请告诉我世界杯下一届冠军。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 5.31509704887867,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_015",
+          "query": "请告诉我彩票开奖号码。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 94.04954873025417,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_016",
+          "query": "请告诉我医院患者病历。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 4.891719669103622,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_017",
+          "query": "请告诉我保密合同原文。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 96.34110424667597,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_018",
+          "query": "请告诉我公司内部裁员名单。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 94.9059659615159,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_019",
+          "query": "请告诉我实时道路事故位置。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 5.009537562727928,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_020",
+          "query": "请告诉我私人邮件密码。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 4.58887405693531,
+          "reason": "rule_preserved"
+        }
+      ]
+    },
+    "hybrid-feedback-v0.3": {
+      "case_count": 80,
+      "accuracy": 1.0,
+      "unknown_precision": 1.0,
+      "unknown_recall": 1.0,
+      "latency_ms": {
+        "p50": 94.95028108358383,
+        "p95": 200.07142890244722
+      },
+      "cases": [
+        {
+          "case_id": "v02_single_001",
+          "query": "这个岗位对混合检索提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 96.97978012263775,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_002",
+          "query": "这个岗位对引用校验提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 200.10407641530037,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_003",
+          "query": "这个岗位对请求追踪提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 295.6089209765196,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_004",
+          "query": "这个岗位对意图路由提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 6.302201189100742,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_005",
+          "query": "这个岗位对上下文预算提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 394.0710639581084,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_006",
+          "query": "这个岗位对失败回归提出了什么职责和要求？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 96.2285166606307,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_007",
+          "query": "简历匹配时，我在混合检索方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.5705981105566025,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_008",
+          "query": "简历匹配时，我在引用校验方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 97.22815547138453,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_009",
+          "query": "简历匹配时，我在请求追踪方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 96.49343509227037,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_010",
+          "query": "简历匹配时，我在意图路由方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 8.279342204332352,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_011",
+          "query": "简历匹配时，我在上下文预算方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 96.26472182571888,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_012",
+          "query": "简历匹配时，我在失败回归方面有哪些项目经历？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.70482466369867,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_013",
+          "query": "面试准备中，混合检索应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 102.69629396498203,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_014",
+          "query": "面试准备中，引用校验应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.328783765435219,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_015",
+          "query": "面试准备中，请求追踪应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 193.3945845812559,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_016",
+          "query": "面试准备中，意图路由应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.534865126013756,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_017",
+          "query": "面试准备中，上下文预算应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.0150303542614,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_018",
+          "query": "面试准备中，失败回归应该怎样解释和排查？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.475089885294437,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_019",
+          "query": "这个项目的混合检索模块是怎么实现和复盘的？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 94.33796536177397,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_single_020",
+          "query": "这个项目的引用校验模块是怎么实现和复盘的？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.326013080775738,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_001",
+          "query": "岗位分析：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.14429818838834763,
+          "reason": "confirmed_feedback_anchor_override"
+        },
+        {
+          "case_id": "v02_semantic_002",
+          "query": "岗位分析：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.0030137598514556885,
+          "reason": "confirmed_feedback_anchor_override"
+        },
+        {
+          "case_id": "v02_semantic_003",
+          "query": "岗位分析：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.002007000148296356,
+          "reason": "confirmed_feedback_anchor_override"
+        },
+        {
+          "case_id": "v02_semantic_004",
+          "query": "岗位分析：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.0021578744053840637,
+          "reason": "confirmed_feedback_anchor_override"
+        },
+        {
+          "case_id": "v02_semantic_005",
+          "query": "岗位分析：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.0021066516637802124,
+          "reason": "confirmed_feedback_anchor_override"
+        },
+        {
+          "case_id": "v02_semantic_006",
+          "query": "岗位分析：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.002028420567512512,
+          "reason": "confirmed_feedback_anchor_override"
+        },
+        {
+          "case_id": "v02_semantic_007",
+          "query": "简历优势：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 191.45531579852104,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_semantic_008",
+          "query": "简历优势：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.718596443533897,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_009",
+          "query": "简历优势：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 96.38932067900896,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_010",
+          "query": "简历优势：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.31405133754015,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_011",
+          "query": "简历优势：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.73632664978504,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_012",
+          "query": "简历优势：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.88642325252295,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_013",
+          "query": "面试怎么回答：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 7.103007286787033,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_semantic_014",
+          "query": "面试怎么回答：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 192.84263905137777,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_015",
+          "query": "面试怎么回答：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 98.93518500030041,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_016",
+          "query": "面试怎么回答：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 8.07367917150259,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_017",
+          "query": "面试怎么回答：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.84364481270313,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_018",
+          "query": "面试怎么回答：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.63917759805918,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_semantic_019",
+          "query": "项目怎么讲：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.008751638233661652,
+          "reason": "confirmed_feedback_anchor_override"
+        },
+        {
+          "case_id": "v02_semantic_020",
+          "query": "项目怎么讲：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.0023031607270240784,
+          "reason": "confirmed_feedback_anchor_override"
+        },
+        {
+          "case_id": "v02_multi_001",
+          "query": "结合岗位和简历分析混合检索匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 4.867733456194401,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_002",
+          "query": "结合岗位、简历和面试资料准备混合检索追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.29176168143749,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_003",
+          "query": "结合项目日志和简历说明混合检索亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 4.810036160051823,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_004",
+          "query": "结合用户画像、岗位和简历制定混合检索投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.80959379673004,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_005",
+          "query": "面试时如何结合岗位和个人经历回答混合检索问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.4702630043029785,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_multi_006",
+          "query": "结合岗位和简历分析引用校验匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.17872333526611,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_007",
+          "query": "结合岗位、简历和面试资料准备引用校验追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 102.29767952114344,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_008",
+          "query": "结合项目日志和简历说明引用校验亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 97.84726053476334,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_009",
+          "query": "结合用户画像、岗位和简历制定引用校验投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 6.079085171222687,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_010",
+          "query": "面试时如何结合岗位和个人经历回答引用校验问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 98.91071263700724,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_multi_011",
+          "query": "结合岗位和简历分析请求追踪匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.3364884480834,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_012",
+          "query": "结合岗位、简历和面试资料准备请求追踪追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.242303013801575,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_013",
+          "query": "结合项目日志和简历说明请求追踪亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.07245011627674,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_014",
+          "query": "结合用户画像、岗位和简历制定请求追踪投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.364970304071903,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_015",
+          "query": "面试时如何结合岗位和个人经历回答请求追踪问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 191.98929984122515,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_multi_016",
+          "query": "结合岗位和简历分析意图路由匹配度",
+          "expected_intent": "match_resume",
+          "expected_sources": [
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "match_resume",
+          "predicted_sources": [
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.119148641824722,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_017",
+          "query": "结合岗位、简历和面试资料准备意图路由追问",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.84845136851072,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_018",
+          "query": "结合项目日志和简历说明意图路由亮点",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.431748926639557,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_019",
+          "query": "结合用户画像、岗位和简历制定意图路由投递计划",
+          "expected_intent": "application_plan",
+          "expected_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "application_plan",
+          "predicted_sources": [
+            "user_profile",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 95.41011974215508,
+          "reason": "rule_semantic_agree"
+        },
+        {
+          "case_id": "v02_multi_020",
+          "query": "面试时如何结合岗位和个人经历回答意图路由问题",
+          "expected_intent": "interview_prepare",
+          "expected_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 5.1695723086595535,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        {
+          "case_id": "v02_unanswerable_001",
+          "query": "请告诉我量子芯片流片编号。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 95.09707987308502,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_002",
+          "query": "请告诉我卫星轨道参数。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 4.893834702670574,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_003",
+          "query": "请告诉我药物临床试验剂量。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 94.7801349684596,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_004",
+          "query": "请告诉我古籍拍卖成交价。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 4.702605307102203,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_005",
+          "query": "请告诉我海底光缆维修坐标。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 94.86036840826273,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_006",
+          "query": "请告诉我核反应堆燃料批次。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 5.416358821094036,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_007",
+          "query": "请告诉我电影票房分账比例。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 94.95028108358383,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_008",
+          "query": "请告诉我航班实时登机口。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 200.07142890244722,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_009",
+          "query": "请告诉我商品明日成交价格。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 7.125132717192173,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_010",
+          "query": "请告诉我个人银行卡余额。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 96.12172469496727,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_011",
+          "query": "请告诉我未公开公司薪资名单。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 97.83870074898005,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_012",
+          "query": "请告诉我候选人身份证号码。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 5.572439171373844,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_013",
+          "query": "请告诉我火星车电池温度。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 95.11017892509699,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_014",
+          "query": "请告诉我世界杯下一届冠军。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 4.83318604528904,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_015",
+          "query": "请告诉我彩票开奖号码。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 294.14262622594833,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_016",
+          "query": "请告诉我医院患者病历。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 5.038594827055931,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_017",
+          "query": "请告诉我保密合同原文。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 97.84248098731041,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_018",
+          "query": "请告诉我公司内部裁员名单。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 95.39794456213713,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_019",
+          "query": "请告诉我实时道路事故位置。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 5.384898744523525,
+          "reason": "rule_preserved"
+        },
+        {
+          "case_id": "v02_unanswerable_020",
+          "query": "请告诉我私人邮件密码。",
+          "expected_intent": "unknown",
+          "expected_sources": [],
+          "predicted_intent": "unknown",
+          "predicted_sources": [],
+          "correct": true,
+          "latency_ms": 95.56564409285784,
+          "reason": "rule_preserved"
+        }
+      ]
+    }
+  },
+  "shadow_gate": {
+    "passed": true,
+    "checks": {
+      "accuracy": true,
+      "unknown_precision": true,
+      "unknown_recall": true,
+      "p95": true,
+      "no_case_regression": true
+    },
+    "differences": [
+      {
+        "case_id": "v02_semantic_003",
+        "before": {
+          "case_id": "v02_semantic_003",
+          "query": "岗位分析：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": false,
+          "latency_ms": 193.0129937827587,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        "after": {
+          "case_id": "v02_semantic_003",
+          "query": "岗位分析：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.002007000148296356,
+          "reason": "confirmed_feedback_anchor_override"
+        },
+        "change": "improved"
+      },
+      {
+        "case_id": "v02_semantic_006",
+        "before": {
+          "case_id": "v02_semantic_006",
+          "query": "岗位分析：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "interview_prepare",
+          "predicted_sources": [
+            "interview",
+            "jd",
+            "resume"
+          ],
+          "correct": false,
+          "latency_ms": 97.88382425904274,
+          "reason": "semantic_overrode_weak_rule"
+        },
+        "after": {
+          "case_id": "v02_semantic_006",
+          "query": "岗位分析：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+          "expected_intent": "analyze_jd",
+          "expected_sources": [
+            "jd"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": true,
+          "latency_ms": 0.002028420567512512,
+          "reason": "confirmed_feedback_anchor_override"
+        },
+        "change": "improved"
+      },
+      {
+        "case_id": "v02_semantic_019",
+        "before": {
+          "case_id": "v02_semantic_019",
+          "query": "项目怎么讲：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "analyze_jd",
+          "predicted_sources": [
+            "jd"
+          ],
+          "correct": false,
+          "latency_ms": 98.46786875277758,
+          "reason": "rule_preserved"
+        },
+        "after": {
+          "case_id": "v02_semantic_019",
+          "query": "项目怎么讲：怎样识别下架和版本过期的招聘信息，并避免过期岗位污染回答？",
+          "expected_intent": "project_explain",
+          "expected_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "predicted_intent": "project_explain",
+          "predicted_sources": [
+            "project_logs",
+            "resume"
+          ],
+          "correct": true,
+          "latency_ms": 0.008751638233661652,
+          "reason": "confirmed_feedback_anchor_override"
+        },
+        "change": "improved"
+      }
+    ]
+  }
+}

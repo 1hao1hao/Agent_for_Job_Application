@@ -1,0 +1,5 @@
+{
+  "retriever_name": "keyword",
+  "dataset_version": "evalrag_v0.3",
+  "top_k": 5
+}

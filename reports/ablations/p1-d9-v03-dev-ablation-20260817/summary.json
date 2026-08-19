@@ -1,0 +1,2394 @@
+{
+  "run_id": "p1-d9-v03-dev-ablation-20260817",
+  "created_at": "2026-08-17T09:45:54.332895+00:00",
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "case_count": 160,
+  "router": {
+    "metric_scope": "v0.3 has no expected_intent; source exact/precision/recall and unanswerable routing are reported instead of Router Intent Accuracy",
+    "model": "BAAI/bge-small-zh-v1.5",
+    "model_revision": "7999e1d3359715c523056ef9478215996d62a620",
+    "feedback_count": 3,
+    "strategies": {
+      "rule": {
+        "case_count": 160,
+        "source_exact_match": 0.4375,
+        "answerable_source_exact_match": 0.26666666666666666,
+        "source_precision": 0.490625,
+        "source_recall": 0.475,
+        "unanswerable_accuracy": 0.95,
+        "predicted_intents": {
+          "analyze_jd": 54,
+          "unknown": 100,
+          "application_plan": 2,
+          "project_explain": 2,
+          "match_resume": 1,
+          "interview_prepare": 1
+        },
+        "category_source_exact": {
+          "cross_source": 0.0,
+          "freshness_conflict": 1.0,
+          "hard_negative": 0.9,
+          "semantic_paraphrase": 0.05,
+          "single_source": 0.45,
+          "three_hop": 0.1,
+          "two_hop": 0.0,
+          "unanswerable": 1.0
+        },
+        "latency_ms": {
+          "p50": 0.006058253347873688,
+          "p95": 0.008806586265563965
+        }
+      },
+      "semantic": {
+        "case_count": 160,
+        "source_exact_match": 0.25,
+        "answerable_source_exact_match": 0.15,
+        "source_precision": 0.271875,
+        "source_recall": 0.278125,
+        "unanswerable_accuracy": 0.55,
+        "predicted_intents": {
+          "project_explain": 10,
+          "unknown": 112,
+          "analyze_jd": 20,
+          "match_resume": 18
+        },
+        "category_source_exact": {
+          "cross_source": 0.0,
+          "freshness_conflict": 0.7,
+          "hard_negative": 0.1,
+          "semantic_paraphrase": 0.05,
+          "single_source": 0.15,
+          "three_hop": 0.0,
+          "two_hop": 0.0,
+          "unanswerable": 1.0
+        },
+        "latency_ms": {
+          "p50": 96.68144676834345,
+          "p95": 500.65934658050537
+        }
+      },
+      "hybrid": {
+        "case_count": 160,
+        "source_exact_match": 0.4375,
+        "answerable_source_exact_match": 0.26666666666666666,
+        "source_precision": 0.490625,
+        "source_recall": 0.475,
+        "unanswerable_accuracy": 0.95,
+        "predicted_intents": {
+          "analyze_jd": 54,
+          "unknown": 100,
+          "application_plan": 2,
+          "project_explain": 2,
+          "match_resume": 1,
+          "interview_prepare": 1
+        },
+        "category_source_exact": {
+          "cross_source": 0.0,
+          "freshness_conflict": 1.0,
+          "hard_negative": 0.9,
+          "semantic_paraphrase": 0.05,
+          "single_source": 0.45,
+          "three_hop": 0.1,
+          "two_hop": 0.0,
+          "unanswerable": 1.0
+        },
+        "latency_ms": {
+          "p50": 97.66720607876778,
+          "p95": 396.6027032583952
+        }
+      },
+      "feedback_hybrid": {
+        "case_count": 160,
+        "source_exact_match": 0.4375,
+        "answerable_source_exact_match": 0.26666666666666666,
+        "source_precision": 0.490625,
+        "source_recall": 0.475,
+        "unanswerable_accuracy": 0.95,
+        "predicted_intents": {
+          "analyze_jd": 54,
+          "unknown": 100,
+          "application_plan": 2,
+          "project_explain": 2,
+          "match_resume": 1,
+          "interview_prepare": 1
+        },
+        "category_source_exact": {
+          "cross_source": 0.0,
+          "freshness_conflict": 1.0,
+          "hard_negative": 0.9,
+          "semantic_paraphrase": 0.05,
+          "single_source": 0.45,
+          "three_hop": 0.1,
+          "two_hop": 0.0,
+          "unanswerable": 1.0
+        },
+        "latency_ms": {
+          "p50": 98.74912165105343,
+          "p95": 496.28526624292135
+        }
+      }
+    },
+    "difference_cases": [
+      {
+        "case_id": "v03_single_source_001",
+        "category": "single_source",
+        "query": "根据《RAGFlow MCP Client Examples》说明这份资料的核心要求或结论。",
+        "expected_sources": [
+          "project_logs"
+        ],
+        "predictions": {
+          "rule": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          },
+          "semantic": {
+            "intent": "project_explain",
+            "sources": [
+              "project_logs",
+              "resume"
+            ],
+            "correct": false
+          },
+          "hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          },
+          "feedback_hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          }
+        }
+      },
+      {
+        "case_id": "v03_single_source_002",
+        "category": "single_source",
+        "query": "根据《v02_07_jd》说明这份资料的核心要求或结论。",
+        "expected_sources": [
+          "jd"
+        ],
+        "predictions": {
+          "rule": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": true
+          },
+          "semantic": {
+            "intent": "unknown",
+            "sources": [],
+            "correct": false
+          },
+          "hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": true
+          },
+          "feedback_hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": true
+          }
+        }
+      },
+      {
+        "case_id": "v03_single_source_004",
+        "category": "single_source",
+        "query": "根据《search_algorithm_intern》说明这份资料的核心要求或结论。",
+        "expected_sources": [
+          "jd"
+        ],
+        "predictions": {
+          "rule": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": true
+          },
+          "semantic": {
+            "intent": "unknown",
+            "sources": [],
+            "correct": false
+          },
+          "hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": true
+          },
+          "feedback_hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": true
+          }
+        }
+      },
+      {
+        "case_id": "v03_single_source_005",
+        "category": "single_source",
+        "query": "根据《通信系统（测控数传系统）设计(博士)-2025》说明这份资料的核心要求或结论。",
+        "expected_sources": [
+          "jd"
+        ],
+        "predictions": {
+          "rule": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": true
+          },
+          "semantic": {
+            "intent": "unknown",
+            "sources": [],
+            "correct": false
+          },
+          "hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": true
+          },
+          "feedback_hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": true
+          }
+        }
+      },
+      {
+        "case_id": "v03_single_source_007",
+        "category": "single_source",
+        "query": "根据《v02_07_interview》说明这份资料的核心要求或结论。",
+        "expected_sources": [
+          "interview"
+        ],
+        "predictions": {
+          "rule": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          },
+          "semantic": {
+            "intent": "unknown",
+            "sources": [],
+            "correct": false
+          },
+          "hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          },
+          "feedback_hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          }
+        }
+      },
+      {
+        "case_id": "v03_single_source_008",
+        "category": "single_source",
+        "query": "根据《行业咨询规划岗实习生(002090)》说明这份资料的核心要求或结论。",
+        "expected_sources": [
+          "jd"
+        ],
+        "predictions": {
+          "rule": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": true
+          },
+          "semantic": {
+            "intent": "unknown",
+            "sources": [],
+            "correct": false
+          },
+          "hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": true
+          },
+          "feedback_hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": true
+          }
+        }
+      },
+      {
+        "case_id": "v03_single_source_010",
+        "category": "single_source",
+        "query": "根据《02. Agent 长短期记忆如何分层?》说明这份资料的核心要求或结论。",
+        "expected_sources": [
+          "interview"
+        ],
+        "predictions": {
+          "rule": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          },
+          "semantic": {
+            "intent": "project_explain",
+            "sources": [
+              "project_logs",
+              "resume"
+            ],
+            "correct": false
+          },
+          "hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          },
+          "feedback_hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          }
+        }
+      },
+      {
+        "case_id": "v03_single_source_013",
+        "category": "single_source",
+        "query": "根据《*Deep*Doc》说明这份资料的核心要求或结论。",
+        "expected_sources": [
+          "project_logs"
+        ],
+        "predictions": {
+          "rule": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          },
+          "semantic": {
+            "intent": "unknown",
+            "sources": [],
+            "correct": false
+          },
+          "hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          },
+          "feedback_hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          }
+        }
+      },
+      {
+        "case_id": "v03_single_source_014",
+        "category": "single_source",
+        "query": "根据《Deploy Local Models》说明这份资料的核心要求或结论。",
+        "expected_sources": [
+          "project_logs"
+        ],
+        "predictions": {
+          "rule": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          },
+          "semantic": {
+            "intent": "unknown",
+            "sources": [],
+            "correct": false
+          },
+          "hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          },
+          "feedback_hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          }
+        }
+      },
+      {
+        "case_id": "v03_single_source_016",
+        "category": "single_source",
+        "query": "根据《Basic Component》说明这份资料的核心要求或结论。",
+        "expected_sources": [
+          "project_logs"
+        ],
+        "predictions": {
+          "rule": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          },
+          "semantic": {
+            "intent": "unknown",
+            "sources": [],
+            "correct": false
+          },
+          "hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          },
+          "feedback_hybrid": {
+            "intent": "analyze_jd",
+            "sources": [
+              "jd"
+            ],
+            "correct": false
+          }
+        }
+      }
+    ]
+  },
+  "retrieval": {
+    "metric_scope": "same evalrag_v0.3/dev, no Router source filter, top_k=5; metrics use 120 answerable cases",
+    "strategies": {
+      "keyword": {
+        "run_id": "p1-d9-v03-dev-ablation-20260817-retrieval-keyword",
+        "dataset_version": "evalrag_v0.3",
+        "graph_version": "job-skill-experience-v0.2",
+        "split": "dev",
+        "strategy": "retrieval-keyword",
+        "case_count": 160,
+        "answerable_case_count": 120,
+        "error_count": 0,
+        "metrics": {
+          "recall_at_3": 0.2625,
+          "recall_at_5": 0.275,
+          "mrr": 0.29305555555555557,
+          "ndcg_at_5": 0.26789444543089846,
+          "path_validity": null
+        },
+        "category_metrics": {
+          "cross_source": {
+            "case_count": 20,
+            "recall_at_5": 0.075,
+            "mrr": 0.15
+          },
+          "freshness_conflict": {
+            "case_count": 20,
+            "recall_at_5": 0.75,
+            "mrr": 0.7125
+          },
+          "hard_negative": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          },
+          "semantic_paraphrase": {
+            "case_count": 20,
+            "recall_at_5": 0.25,
+            "mrr": 0.25
+          },
+          "single_source": {
+            "case_count": 20,
+            "recall_at_5": 0.3,
+            "mrr": 0.3
+          },
+          "three_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.275,
+            "mrr": 0.3458333333333333
+          },
+          "two_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          },
+          "unanswerable": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          }
+        },
+        "latency_ms": {
+          "p50": 91.38580318540335,
+          "p95": 92.49560255557299
+        },
+        "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+      },
+      "bm25": {
+        "run_id": "p1-d9-v03-dev-ablation-20260817-retrieval-bm25",
+        "dataset_version": "evalrag_v0.3",
+        "graph_version": "job-skill-experience-v0.2",
+        "split": "dev",
+        "strategy": "retrieval-bm25",
+        "case_count": 160,
+        "answerable_case_count": 120,
+        "error_count": 0,
+        "metrics": {
+          "recall_at_3": 0.32083333333333336,
+          "recall_at_5": 0.37083333333333335,
+          "mrr": 0.30041666666666667,
+          "ndcg_at_5": 0.30465503187852677,
+          "path_validity": null
+        },
+        "category_metrics": {
+          "cross_source": {
+            "case_count": 20,
+            "recall_at_5": 0.15,
+            "mrr": 0.10166666666666667
+          },
+          "freshness_conflict": {
+            "case_count": 20,
+            "recall_at_5": 0.75,
+            "mrr": 0.725
+          },
+          "hard_negative": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          },
+          "semantic_paraphrase": {
+            "case_count": 20,
+            "recall_at_5": 0.35,
+            "mrr": 0.2625
+          },
+          "single_source": {
+            "case_count": 20,
+            "recall_at_5": 0.4,
+            "mrr": 0.2875
+          },
+          "three_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.325,
+            "mrr": 0.3325
+          },
+          "two_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.25,
+            "mrr": 0.09333333333333334
+          },
+          "unanswerable": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          }
+        },
+        "latency_ms": {
+          "p50": 11.665484867990017,
+          "p95": 14.59101028740406
+        },
+        "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+      },
+      "dense": {
+        "run_id": "p1-d9-v03-dev-ablation-20260817-retrieval-dense",
+        "dataset_version": "evalrag_v0.3",
+        "graph_version": "job-skill-experience-v0.2",
+        "split": "dev",
+        "strategy": "retrieval-dense",
+        "case_count": 160,
+        "answerable_case_count": 120,
+        "error_count": 0,
+        "metrics": {
+          "recall_at_3": 0.4041666666666667,
+          "recall_at_5": 0.4375,
+          "mrr": 0.4023611111111111,
+          "ndcg_at_5": 0.38835495211170223,
+          "path_validity": null
+        },
+        "category_metrics": {
+          "cross_source": {
+            "case_count": 20,
+            "recall_at_5": 0.625,
+            "mrr": 0.775
+          },
+          "freshness_conflict": {
+            "case_count": 20,
+            "recall_at_5": 0.85,
+            "mrr": 0.85
+          },
+          "hard_negative": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          },
+          "semantic_paraphrase": {
+            "case_count": 20,
+            "recall_at_5": 0.5,
+            "mrr": 0.30833333333333335
+          },
+          "single_source": {
+            "case_count": 20,
+            "recall_at_5": 0.45,
+            "mrr": 0.3458333333333333
+          },
+          "three_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.15,
+            "mrr": 0.1225
+          },
+          "two_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.05,
+            "mrr": 0.0125
+          },
+          "unanswerable": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          }
+        },
+        "latency_ms": {
+          "p50": 592.2637209296227,
+          "p95": 1422.1145883202553
+        },
+        "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+      },
+      "keyword_dense_rrf": {
+        "run_id": "p1-d9-v03-dev-ablation-20260817-retrieval-keyword_dense_rrf",
+        "dataset_version": "evalrag_v0.3",
+        "graph_version": "job-skill-experience-v0.2",
+        "split": "dev",
+        "strategy": "retrieval-keyword_dense_rrf",
+        "case_count": 160,
+        "answerable_case_count": 120,
+        "error_count": 0,
+        "metrics": {
+          "recall_at_3": 0.36666666666666664,
+          "recall_at_5": 0.4166666666666667,
+          "mrr": 0.3838888888888889,
+          "ndcg_at_5": 0.36672931000101433,
+          "path_validity": null
+        },
+        "category_metrics": {
+          "cross_source": {
+            "case_count": 20,
+            "recall_at_5": 0.525,
+            "mrr": 0.5391666666666667
+          },
+          "freshness_conflict": {
+            "case_count": 20,
+            "recall_at_5": 0.9,
+            "mrr": 0.7833333333333333
+          },
+          "hard_negative": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          },
+          "semantic_paraphrase": {
+            "case_count": 20,
+            "recall_at_5": 0.4,
+            "mrr": 0.2875
+          },
+          "single_source": {
+            "case_count": 20,
+            "recall_at_5": 0.4,
+            "mrr": 0.375
+          },
+          "three_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.275,
+            "mrr": 0.31833333333333336
+          },
+          "two_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          },
+          "unanswerable": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          }
+        },
+        "latency_ms": {
+          "p50": 609.2474246397614,
+          "p95": 1427.806450985372
+        },
+        "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+      },
+      "bm25_dense_rrf": {
+        "run_id": "p1-d9-v03-dev-ablation-20260817-retrieval-bm25_dense_rrf",
+        "dataset_version": "evalrag_v0.3",
+        "graph_version": "job-skill-experience-v0.2",
+        "split": "dev",
+        "strategy": "retrieval-bm25_dense_rrf",
+        "case_count": 160,
+        "answerable_case_count": 120,
+        "error_count": 0,
+        "metrics": {
+          "recall_at_3": 0.4166666666666667,
+          "recall_at_5": 0.5,
+          "mrr": 0.44027777777777777,
+          "ndcg_at_5": 0.43073345296978494,
+          "path_validity": null
+        },
+        "category_metrics": {
+          "cross_source": {
+            "case_count": 20,
+            "recall_at_5": 0.725,
+            "mrr": 0.6291666666666667
+          },
+          "freshness_conflict": {
+            "case_count": 20,
+            "recall_at_5": 0.9,
+            "mrr": 0.7866666666666666
+          },
+          "hard_negative": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          },
+          "semantic_paraphrase": {
+            "case_count": 20,
+            "recall_at_5": 0.5,
+            "mrr": 0.4
+          },
+          "single_source": {
+            "case_count": 20,
+            "recall_at_5": 0.4,
+            "mrr": 0.3416666666666667
+          },
+          "three_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.275,
+            "mrr": 0.36416666666666664
+          },
+          "two_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.2,
+            "mrr": 0.12
+          },
+          "unanswerable": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          }
+        },
+        "latency_ms": {
+          "p50": 399.95476324111223,
+          "p95": 1115.2617139741778
+        },
+        "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+      },
+      "graph_only": {
+        "run_id": "p1-d9-v03-dev-ablation-20260817-retrieval-graph_only",
+        "dataset_version": "evalrag_v0.3",
+        "graph_version": "job-skill-experience-v0.2",
+        "split": "dev",
+        "strategy": "retrieval-graph_only",
+        "case_count": 160,
+        "answerable_case_count": 120,
+        "error_count": 0,
+        "metrics": {
+          "recall_at_3": 0.29583333333333334,
+          "recall_at_5": 0.3541666666666667,
+          "mrr": 0.3729166666666667,
+          "ndcg_at_5": 0.32741271331115446,
+          "path_validity": 1.0
+        },
+        "category_metrics": {
+          "cross_source": {
+            "case_count": 20,
+            "recall_at_5": 0.4,
+            "mrr": 0.54
+          },
+          "freshness_conflict": {
+            "case_count": 20,
+            "recall_at_5": 0.05,
+            "mrr": 0.01
+          },
+          "hard_negative": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          },
+          "semantic_paraphrase": {
+            "case_count": 20,
+            "recall_at_5": 0.4,
+            "mrr": 0.4
+          },
+          "single_source": {
+            "case_count": 20,
+            "recall_at_5": 0.4,
+            "mrr": 0.4
+          },
+          "three_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.375,
+            "mrr": 0.5375
+          },
+          "two_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.5,
+            "mrr": 0.35
+          },
+          "unanswerable": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          }
+        },
+        "latency_ms": {
+          "p50": 9.531139396131039,
+          "p95": 14.055341482162476
+        },
+        "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+      },
+      "graph_vector_rrf": {
+        "run_id": "p1-d9-v03-dev-ablation-20260817-retrieval-graph_vector_rrf",
+        "dataset_version": "evalrag_v0.3",
+        "graph_version": "job-skill-experience-v0.2",
+        "split": "dev",
+        "strategy": "retrieval-graph_vector_rrf",
+        "case_count": 160,
+        "answerable_case_count": 120,
+        "error_count": 0,
+        "metrics": {
+          "recall_at_3": 0.5541666666666667,
+          "recall_at_5": 0.5833333333333334,
+          "mrr": 0.5209722222222222,
+          "ndcg_at_5": 0.5102533143376833,
+          "path_validity": 1.0
+        },
+        "category_metrics": {
+          "cross_source": {
+            "case_count": 20,
+            "recall_at_5": 0.6,
+            "mrr": 0.625
+          },
+          "freshness_conflict": {
+            "case_count": 20,
+            "recall_at_5": 0.85,
+            "mrr": 0.8
+          },
+          "hard_negative": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          },
+          "semantic_paraphrase": {
+            "case_count": 20,
+            "recall_at_5": 0.65,
+            "mrr": 0.5666666666666667
+          },
+          "single_source": {
+            "case_count": 20,
+            "recall_at_5": 0.45,
+            "mrr": 0.4125
+          },
+          "three_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.3,
+            "mrr": 0.32666666666666666
+          },
+          "two_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.65,
+            "mrr": 0.395
+          },
+          "unanswerable": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          }
+        },
+        "latency_ms": {
+          "p50": 314.74582105875015,
+          "p95": 1186.6492591798306
+        },
+        "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+      },
+      "adaptive_graph": {
+        "run_id": "p1-d9-v03-dev-ablation-20260817-retrieval-adaptive_graph",
+        "dataset_version": "evalrag_v0.3",
+        "graph_version": "job-skill-experience-v0.2",
+        "split": "dev",
+        "strategy": "retrieval-adaptive_graph",
+        "case_count": 160,
+        "answerable_case_count": 120,
+        "error_count": 0,
+        "metrics": {
+          "recall_at_3": 0.4375,
+          "recall_at_5": 0.48333333333333334,
+          "mrr": 0.4220833333333333,
+          "ndcg_at_5": 0.410303802363868,
+          "path_validity": 1.0
+        },
+        "category_metrics": {
+          "cross_source": {
+            "case_count": 20,
+            "recall_at_5": 0.5,
+            "mrr": 0.5575
+          },
+          "freshness_conflict": {
+            "case_count": 20,
+            "recall_at_5": 0.85,
+            "mrr": 0.7583333333333333
+          },
+          "hard_negative": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          },
+          "semantic_paraphrase": {
+            "case_count": 20,
+            "recall_at_5": 0.55,
+            "mrr": 0.3875
+          },
+          "single_source": {
+            "case_count": 20,
+            "recall_at_5": 0.35,
+            "mrr": 0.35
+          },
+          "three_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.25,
+            "mrr": 0.2916666666666667
+          },
+          "two_hop": {
+            "case_count": 20,
+            "recall_at_5": 0.4,
+            "mrr": 0.1875
+          },
+          "unanswerable": {
+            "case_count": 20,
+            "recall_at_5": 0.0,
+            "mrr": 0.0
+          }
+        },
+        "latency_ms": {
+          "p50": 606.6092839464545,
+          "p95": 1904.7378581017256
+        },
+        "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+      }
+    }
+  },
+  "rerank": {
+    "controlled_variables": {
+      "base_retriever": "BM25 + BGE Dense + RRF",
+      "reranker": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1@1427fd652930e4ba29e8149678df786c240d8825",
+      "candidate_k": 10,
+      "top_k": 5,
+      "policies": [
+        "never",
+        "always",
+        "low_confidence"
+      ]
+    },
+    "strategies": {
+      "never": {
+        "summary": {
+          "run_id": "p1-d9-v03-dev-ablation-20260817-rerank-never",
+          "dataset_version": "evalrag_v0.3",
+          "graph_version": "job-skill-experience-v0.2",
+          "split": "dev",
+          "strategy": "rerank-never",
+          "case_count": 160,
+          "answerable_case_count": 120,
+          "error_count": 0,
+          "metrics": {
+            "recall_at_3": 0.4375,
+            "recall_at_5": 0.5083333333333333,
+            "mrr": 0.44305555555555554,
+            "ndcg_at_5": 0.43665975732592194,
+            "path_validity": null
+          },
+          "category_metrics": {
+            "cross_source": {
+              "case_count": 20,
+              "recall_at_5": 0.75,
+              "mrr": 0.6266666666666667
+            },
+            "freshness_conflict": {
+              "case_count": 20,
+              "recall_at_5": 0.85,
+              "mrr": 0.7833333333333333
+            },
+            "hard_negative": {
+              "case_count": 20,
+              "recall_at_5": 0.0,
+              "mrr": 0.0
+            },
+            "semantic_paraphrase": {
+              "case_count": 20,
+              "recall_at_5": 0.55,
+              "mrr": 0.4225
+            },
+            "single_source": {
+              "case_count": 20,
+              "recall_at_5": 0.4,
+              "mrr": 0.3416666666666667
+            },
+            "three_hop": {
+              "case_count": 20,
+              "recall_at_5": 0.3,
+              "mrr": 0.36416666666666664
+            },
+            "two_hop": {
+              "case_count": 20,
+              "recall_at_5": 0.2,
+              "mrr": 0.12
+            },
+            "unanswerable": {
+              "case_count": 20,
+              "recall_at_5": 0.0,
+              "mrr": 0.0
+            }
+          },
+          "latency_ms": {
+            "p50": 595.6120481714606,
+            "p95": 1252.3335246369243
+          },
+          "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+        },
+        "invocation_count": 0,
+        "applied_count": 0,
+        "invocation_rate": 0.0
+      },
+      "always": {
+        "summary": {
+          "run_id": "p1-d9-v03-dev-ablation-20260817-rerank-always",
+          "dataset_version": "evalrag_v0.3",
+          "graph_version": "job-skill-experience-v0.2",
+          "split": "dev",
+          "strategy": "rerank-always",
+          "case_count": 160,
+          "answerable_case_count": 120,
+          "error_count": 0,
+          "metrics": {
+            "recall_at_3": 0.4708333333333333,
+            "recall_at_5": 0.5083333333333333,
+            "mrr": 0.4922222222222222,
+            "ndcg_at_5": 0.46947316489647084,
+            "path_validity": null
+          },
+          "category_metrics": {
+            "cross_source": {
+              "case_count": 20,
+              "recall_at_5": 0.775,
+              "mrr": 0.735
+            },
+            "freshness_conflict": {
+              "case_count": 20,
+              "recall_at_5": 0.85,
+              "mrr": 0.825
+            },
+            "hard_negative": {
+              "case_count": 20,
+              "recall_at_5": 0.0,
+              "mrr": 0.0
+            },
+            "semantic_paraphrase": {
+              "case_count": 20,
+              "recall_at_5": 0.55,
+              "mrr": 0.475
+            },
+            "single_source": {
+              "case_count": 20,
+              "recall_at_5": 0.4,
+              "mrr": 0.36666666666666664
+            },
+            "three_hop": {
+              "case_count": 20,
+              "recall_at_5": 0.325,
+              "mrr": 0.44166666666666665
+            },
+            "two_hop": {
+              "case_count": 20,
+              "recall_at_5": 0.15,
+              "mrr": 0.11
+            },
+            "unanswerable": {
+              "case_count": 20,
+              "recall_at_5": 0.0,
+              "mrr": 0.0
+            }
+          },
+          "latency_ms": {
+            "p50": 1702.821551822126,
+            "p95": 2799.0942262113094
+          },
+          "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+        },
+        "invocation_count": 160,
+        "applied_count": 157,
+        "invocation_rate": 1.0
+      },
+      "on_demand": {
+        "summary": {
+          "run_id": "p1-d9-v03-dev-ablation-20260817-rerank-on_demand",
+          "dataset_version": "evalrag_v0.3",
+          "graph_version": "job-skill-experience-v0.2",
+          "split": "dev",
+          "strategy": "rerank-on_demand",
+          "case_count": 160,
+          "answerable_case_count": 120,
+          "error_count": 0,
+          "metrics": {
+            "recall_at_3": 0.44583333333333336,
+            "recall_at_5": 0.5,
+            "mrr": 0.45180555555555557,
+            "ndcg_at_5": 0.43887633365363327,
+            "path_validity": null
+          },
+          "category_metrics": {
+            "cross_source": {
+              "case_count": 20,
+              "recall_at_5": 0.75,
+              "mrr": 0.6766666666666666
+            },
+            "freshness_conflict": {
+              "case_count": 20,
+              "recall_at_5": 0.85,
+              "mrr": 0.7833333333333333
+            },
+            "hard_negative": {
+              "case_count": 20,
+              "recall_at_5": 0.0,
+              "mrr": 0.0
+            },
+            "semantic_paraphrase": {
+              "case_count": 20,
+              "recall_at_5": 0.55,
+              "mrr": 0.435
+            },
+            "single_source": {
+              "case_count": 20,
+              "recall_at_5": 0.4,
+              "mrr": 0.3416666666666667
+            },
+            "three_hop": {
+              "case_count": 20,
+              "recall_at_5": 0.3,
+              "mrr": 0.36416666666666664
+            },
+            "two_hop": {
+              "case_count": 20,
+              "recall_at_5": 0.15,
+              "mrr": 0.11
+            },
+            "unanswerable": {
+              "case_count": 20,
+              "recall_at_5": 0.0,
+              "mrr": 0.0
+            }
+          },
+          "latency_ms": {
+            "p50": 614.7052580490708,
+            "p95": 2174.663556739688
+          },
+          "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+        },
+        "invocation_count": 29,
+        "applied_count": 29,
+        "invocation_rate": 0.18125
+      }
+    }
+  },
+  "context": {
+    "artifact": "reports/ablations/p1-d5-context-memory-v01-dev-20260816-bge/summary.json",
+    "dataset_version": "evalrag_context_v0.1",
+    "split": "dev",
+    "case_count": 60,
+    "turn_count": 300,
+    "strategies": {
+      "no_memory": {
+        "strategy": "no_memory",
+        "config": {
+          "token_budget": 220,
+          "recent_message_count": 4,
+          "evidence_char_budget": 4000,
+          "mode": "no_memory",
+          "evidence_strategy": "source_balanced",
+          "compress_evidence": false,
+          "reserved_token_count": 0
+        },
+        "follow_up_success": 0.36666666666666664,
+        "citation_validity": 1.0,
+        "semantic_key_point_coverage": 0.2830188679245283,
+        "grounding": 0.36666666666666664,
+        "mean_repeated_history_reads": 0.0,
+        "mean_prompt_tokens": 38.18333333333333,
+        "mean_compression_ratio": 0.31502118118655303,
+        "latency_ms": {
+          "p50": 0.06484892219305038,
+          "p95": 0.10130275040864944
+        }
+      },
+      "recent_window": {
+        "strategy": "recent_window",
+        "config": {
+          "token_budget": 220,
+          "recent_message_count": 2,
+          "evidence_char_budget": 4000,
+          "mode": "recent_window",
+          "evidence_strategy": "source_balanced",
+          "compress_evidence": false,
+          "reserved_token_count": 0
+        },
+        "follow_up_success": 0.36666666666666664,
+        "citation_validity": 1.0,
+        "semantic_key_point_coverage": 0.2830188679245283,
+        "grounding": 0.36666666666666664,
+        "mean_repeated_history_reads": 3.0,
+        "mean_prompt_tokens": 67.18333333333334,
+        "mean_compression_ratio": 0.0,
+        "latency_ms": {
+          "p50": 0.08808355778455734,
+          "p95": 0.13384968042373657
+        }
+      },
+      "summary_recent": {
+        "strategy": "summary_recent",
+        "config": {
+          "token_budget": 220,
+          "recent_message_count": 2,
+          "evidence_char_budget": 4000,
+          "mode": "summary_recent",
+          "evidence_strategy": "source_balanced",
+          "compress_evidence": false,
+          "reserved_token_count": 0
+        },
+        "follow_up_success": 1.0,
+        "citation_validity": 1.0,
+        "semantic_key_point_coverage": 1.0,
+        "grounding": 1.0,
+        "mean_repeated_history_reads": 3.0,
+        "mean_prompt_tokens": 76.61666666666666,
+        "mean_compression_ratio": 0.0,
+        "latency_ms": {
+          "p50": 0.09888317435979843,
+          "p95": 0.14451052993535995
+        }
+      },
+      "semantic_memory": {
+        "strategy": "semantic_memory",
+        "config": {
+          "token_budget": 220,
+          "recent_message_count": 4,
+          "evidence_char_budget": 4000,
+          "mode": "semantic_memory",
+          "evidence_strategy": "source_balanced",
+          "compress_evidence": false,
+          "reserved_token_count": 0
+        },
+        "follow_up_success": 1.0,
+        "citation_validity": 1.0,
+        "semantic_key_point_coverage": 1.0,
+        "grounding": 1.0,
+        "mean_repeated_history_reads": 0.0,
+        "mean_prompt_tokens": 66.21666666666667,
+        "mean_compression_ratio": 0.04182389937106919,
+        "latency_ms": {
+          "p50": 101.23661067336798,
+          "p95": 296.93296551704407
+        }
+      }
+    },
+    "metric_scope": "Context-level scenario benchmark; key-point uses scenario-grounded expected facts and does not equal free-form answer accuracy"
+  },
+  "difference_cases": {
+    "retrieval": [
+      {
+        "case_id": "v03_cross_source_002",
+        "category": "cross_source",
+        "query": "interview 与 project_logs 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+        "difference_score": 2.0,
+        "metrics": {
+          "keyword": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "dense": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.8772153153380493,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "keyword_dense_rrf": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.9197207891481876,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25_dense_rrf": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.6934264036172708,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "graph_only": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "graph_vector_rrf": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.9197207891481876,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "adaptive_graph": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_004",
+        "category": "cross_source",
+        "query": "interview 与 user_profile 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+        "difference_score": 2.0,
+        "metrics": {
+          "keyword": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "dense": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.38685280723454163,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "keyword_dense_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25_dense_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.6240505200038379,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "graph_only": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "graph_vector_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "adaptive_graph": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_005",
+        "category": "cross_source",
+        "query": "jd 与 project_logs 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+        "difference_score": 2.0,
+        "metrics": {
+          "keyword": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.25,
+            "ndcg_at_5": 0.2640681225725909,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "dense": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "keyword_dense_rrf": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.9197207891481876,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25_dense_rrf": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 1.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "graph_only": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.2,
+            "ndcg_at_5": 0.23719771276929622,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "graph_vector_rrf": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.6934264036172708,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "adaptive_graph": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.6509209298071326,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_007",
+        "category": "cross_source",
+        "query": "jd 与 user_profile 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+        "difference_score": 2.0,
+        "metrics": {
+          "keyword": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.25,
+            "ndcg_at_5": 0.2640681225725909,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "dense": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.9197207891481876,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "keyword_dense_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.38685280723454163,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25_dense_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.8772153153380493,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "graph_only": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.2,
+            "ndcg_at_5": 0.23719771276929622,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "graph_vector_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.38685280723454163,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "adaptive_graph": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.38685280723454163,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_011",
+        "category": "cross_source",
+        "query": "interview 与 jd 分别如何描述“证据门控”，它们能提供哪些互补证据？",
+        "difference_score": 2.0,
+        "metrics": {
+          "keyword": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "dense": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 1.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "keyword_dense_rrf": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 1.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25_dense_rrf": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 1.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "graph_only": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.8503449055347546,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "graph_vector_rrf": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 1.0,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "adaptive_graph": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.9197207891481876,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_013",
+        "category": "cross_source",
+        "query": "interview 与 resume 分别如何描述“证据门控”，它们能提供哪些互补证据？",
+        "difference_score": 2.0,
+        "metrics": {
+          "keyword": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "dense": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 1.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "keyword_dense_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25_dense_rrf": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.9197207891481876,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "graph_only": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "graph_vector_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "adaptive_graph": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_014",
+        "category": "cross_source",
+        "query": "interview 与 user_profile 分别如何描述“证据门控”，它们能提供哪些互补证据？",
+        "difference_score": 2.0,
+        "metrics": {
+          "keyword": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "dense": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 1.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "keyword_dense_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25_dense_rrf": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.9197207891481876,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "graph_only": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "graph_vector_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "adaptive_graph": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_016",
+        "category": "cross_source",
+        "query": "jd 与 resume 分别如何描述“证据门控”，它们能提供哪些互补证据？",
+        "difference_score": 2.0,
+        "metrics": {
+          "keyword": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "dense": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.8503449055347546,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "keyword_dense_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.38685280723454163,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25_dense_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.8503449055347546,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "graph_only": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.2,
+            "ndcg_at_5": 0.23719771276929622,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "graph_vector_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.38685280723454163,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "adaptive_graph": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.38685280723454163,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_017",
+        "category": "cross_source",
+        "query": "jd 与 user_profile 分别如何描述“证据门控”，它们能提供哪些互补证据？",
+        "difference_score": 2.0,
+        "metrics": {
+          "keyword": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "dense": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.9197207891481876,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "keyword_dense_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.38685280723454163,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25_dense_rrf": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.6934264036172708,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "graph_only": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.2,
+            "ndcg_at_5": 0.23719771276929622,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "graph_vector_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.38685280723454163,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "adaptive_graph": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.38685280723454163,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_019",
+        "category": "cross_source",
+        "query": "project_logs 与 user_profile 分别如何描述“证据门控”，它们能提供哪些互补证据？",
+        "difference_score": 2.0,
+        "metrics": {
+          "keyword": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "dense": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 1.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "keyword_dense_rrf": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.25,
+            "ndcg_at_5": 0.2640681225725909,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "bm25_dense_rrf": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.9197207891481876,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "graph_only": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "graph_vector_rrf": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.3333333333333333,
+            "ndcg_at_5": 0.3065735963827292,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          },
+          "adaptive_graph": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.2,
+            "ndcg_at_5": 0.23719771276929622,
+            "returned_for_unanswerable": null,
+            "path_validity": 1.0
+          }
+        }
+      }
+    ],
+    "rerank": [
+      {
+        "case_id": "v03_two_hop_020",
+        "category": "two_hop",
+        "query": "请沿知识关系说明“示例搜索公司”与“语义检索”之间的2跳联系（路径20）。",
+        "difference_score": 1.2,
+        "metrics": {
+          "never": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.2,
+            "ndcg_at_5": 0.38685280723454163,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "always": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "on_demand": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_010",
+        "category": "cross_source",
+        "query": "resume 与 user_profile 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+        "difference_score": 1.1666666666666667,
+        "metrics": {
+          "never": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.3333333333333333,
+            "ndcg_at_5": 0.3065735963827292,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "always": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.8503449055347546,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "on_demand": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.3333333333333333,
+            "ndcg_at_5": 0.3065735963827292,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          }
+        }
+      },
+      {
+        "case_id": "v03_three_hop_014",
+        "category": "three_hop",
+        "query": "请沿知识关系说明“示例平台公司”与“结果证据”之间的3跳联系（路径14）。",
+        "difference_score": 0.75,
+        "metrics": {
+          "never": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "always": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.25,
+            "ndcg_at_5": 0.2640681225725909,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "on_demand": {
+            "recall_at_3": 0.0,
+            "recall_at_5": 0.0,
+            "reciprocal_rank": 0.0,
+            "ndcg_at_5": 0.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          }
+        }
+      },
+      {
+        "case_id": "v03_freshness_conflict_001",
+        "category": "freshness_conflict",
+        "query": "《v02_07_jd》这条岗位资料的状态、发布时间或采集时间是什么？",
+        "difference_score": 0.6666666666666667,
+        "metrics": {
+          "never": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.3333333333333333,
+            "ndcg_at_5": 0.5,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "always": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 1.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "on_demand": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.3333333333333333,
+            "ndcg_at_5": 0.5,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_001",
+        "category": "cross_source",
+        "query": "interview 与 jd 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+        "difference_score": 0.5,
+        "metrics": {
+          "never": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.8772153153380493,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "always": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.6934264036172708,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "on_demand": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.8772153153380493,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_002",
+        "category": "cross_source",
+        "query": "interview 与 project_logs 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+        "difference_score": 0.5,
+        "metrics": {
+          "never": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.6934264036172708,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "always": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.9197207891481876,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "on_demand": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.6934264036172708,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_004",
+        "category": "cross_source",
+        "query": "interview 与 user_profile 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+        "difference_score": 0.5,
+        "metrics": {
+          "never": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.6240505200038379,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "always": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.8772153153380493,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "on_demand": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.6240505200038379,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_028",
+        "category": "cross_source",
+        "query": "interview 与 project_logs 分别如何描述“上下文工程”，它们能提供哪些互补证据？",
+        "difference_score": 0.5,
+        "metrics": {
+          "never": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.38685280723454163,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "always": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "on_demand": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          }
+        }
+      },
+      {
+        "case_id": "v03_cross_source_029",
+        "category": "cross_source",
+        "query": "interview 与 resume 分别如何描述“上下文工程”，它们能提供哪些互补证据？",
+        "difference_score": 0.5,
+        "metrics": {
+          "never": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.38685280723454163,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "always": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "on_demand": {
+            "recall_at_3": 0.5,
+            "recall_at_5": 0.5,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 0.6131471927654584,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          }
+        }
+      },
+      {
+        "case_id": "v03_semantic_paraphrase_010",
+        "category": "semantic_paraphrase",
+        "query": "不使用原文标题措辞，概括《02. Agent 长短期记忆如何分层?》主要解决的实际问题。",
+        "difference_score": 0.5,
+        "metrics": {
+          "never": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.6309297535714575,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "always": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 1.0,
+            "ndcg_at_5": 1.0,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          },
+          "on_demand": {
+            "recall_at_3": 1.0,
+            "recall_at_5": 1.0,
+            "reciprocal_rank": 0.5,
+            "ndcg_at_5": 0.6309297535714575,
+            "returned_for_unanswerable": null,
+            "path_validity": null
+          }
+        }
+      }
+    ]
+  },
+  "supplementary_ablations": {
+    "chunking": "reports/ablations/p1-chunking-v02-dev-20260812/",
+    "source_balanced_context": "reports/ablations/p1-context-builder-v02-dev-20260811/",
+    "model_gateway_faults": "reports/fault_injection/p1-d7-model-gateway-v01/"
+  },
+  "boundary": "dev-only ablation; v0.3 labels are corpus-grounded AI-assisted; Router reports source routing rather than intent accuracy; retrieval metrics do not equal answer correctness; frozen test was not rerun"
+}

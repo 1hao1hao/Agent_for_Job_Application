@@ -15,7 +15,7 @@ jobs:
       - name: Validate Compose
         run: docker compose -f compose.yaml config --quiet
 
-      - name: Start API, Worker, PostgreSQL and Redis
+      - name: Start API, Worker, PostgreSQL, Redis and Neo4j
         run: EVALRAG_GIT_COMMIT=${GITHUB_SHA} docker compose -f compose.yaml up -d --build
 
       - name: Wait for API health
@@ -75,6 +75,51 @@ jobs:
           else:
               raise TimeoutError('evaluation job did not finish')
           PY
+
+      - name: Validate pgvector HNSW and Neo4j persistence
+        run: |
+          docker compose -f compose.yaml exec -T api \
+            python scripts/validate_persistent_stores.py
+          docker compose -f compose.yaml restart postgres neo4j
+          for attempt in $(seq 1 60); do
+            postgres_status=$(docker inspect --format='{{.State.Health.Status}}' \
+              "$(docker compose -f compose.yaml ps -q postgres)")
+            neo4j_status=$(docker inspect --format='{{.State.Health.Status}}' \
+              "$(docker compose -f compose.yaml ps -q neo4j)")
+            if [ "$postgres_status" = healthy ] && [ "$neo4j_status" = healthy ]; then
+              docker compose -f compose.yaml exec -T api \
+                python scripts/validate_persistent_stores.py --verify-only
+              exit 0
+            fi
+            sleep 2
+          done
+          docker compose -f compose.yaml ps
+          exit 1
+
+      - name: Validate Context stores and PostgreSQL restart recovery
+        run: |
+          docker compose -f compose.yaml exec -T api \
+            python scripts/validate_context_stores.py
+          docker compose -f compose.yaml restart postgres
+          for attempt in $(seq 1 60); do
+            postgres_status=$(docker inspect --format='{{.State.Health.Status}}' \
+              "$(docker compose -f compose.yaml ps -q postgres)")
+            if [ "$postgres_status" = healthy ]; then
+              docker compose -f compose.yaml exec -T api \
+                python scripts/validate_context_stores.py --verify-only
+              break
+            fi
+            sleep 2
+          done
+          test "$postgres_status" = healthy
+
+      - name: Validate Redis unavailable fallback
+        run: |
+          docker compose -f compose.yaml stop redis
+          docker compose -f compose.yaml exec -T api \
+            python scripts/validate_context_stores.py \
+              --verify-only --expect-cache-fallback
+          docker compose -f compose.yaml start redis
 
       - name: Record container status
         run: docker compose -f compose.yaml ps

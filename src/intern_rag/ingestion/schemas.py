@@ -5,7 +5,7 @@ from typing import Literal, cast
 
 
 JobStatus = Literal["active", "expired", "unknown"]
-MetadataValue = str | int
+MetadataValue = str | int | bool
 
 
 DEFAULT_METADATA: dict[str, MetadataValue] = {
@@ -22,6 +22,19 @@ DEFAULT_METADATA: dict[str, MetadataValue] = {
     "version": 1,
     "source_priority": 0,
     "content_hash": "",
+    "document_id": "",
+    "canonical_source_type": "unknown",
+    "owner_scope": "public",
+    "source_method": "unknown",
+    "source_domain": "",
+    "collected_at": "",
+    "published_at": "",
+    "public_status": "unknown",
+    "license_status": "unknown",
+    "anonymized": False,
+    "review_status": "unreviewed",
+    "near_duplicate_group": "",
+    "schema_version": "v1",
 }
 
 
@@ -47,6 +60,19 @@ class DocumentMetadata:
     version: int = 1
     source_priority: int = 0
     content_hash: str = ""
+    document_id: str = ""
+    canonical_source_type: str = "unknown"
+    owner_scope: str = "public"
+    source_method: str = "unknown"
+    source_domain: str = ""
+    collected_at: str = ""
+    published_at: str = ""
+    public_status: str = "unknown"
+    license_status: str = "unknown"
+    anonymized: bool = False
+    review_status: str = "unreviewed"
+    near_duplicate_group: str = ""
+    schema_version: str = "v1"
 
     def to_dict(self) -> dict[str, MetadataValue]:
         """转换成普通 dict，便于直接放进 Chunk.metadata。"""
@@ -65,6 +91,19 @@ class DocumentMetadata:
             "version": self.version,
             "source_priority": self.source_priority,
             "content_hash": self.content_hash,
+            "document_id": self.document_id,
+            "canonical_source_type": self.canonical_source_type,
+            "owner_scope": self.owner_scope,
+            "source_method": self.source_method,
+            "source_domain": self.source_domain,
+            "collected_at": self.collected_at,
+            "published_at": self.published_at,
+            "public_status": self.public_status,
+            "license_status": self.license_status,
+            "anonymized": self.anonymized,
+            "review_status": self.review_status,
+            "near_duplicate_group": self.near_duplicate_group,
+            "schema_version": self.schema_version,
         }
 
 
@@ -127,6 +166,19 @@ def build_document_metadata(
         version=_to_int(values["version"], default=1),
         source_priority=_to_int(values["source_priority"], default=0),
         content_hash=str(values["content_hash"]),
+        document_id=str(values["document_id"]),
+        canonical_source_type=str(values["canonical_source_type"]),
+        owner_scope=str(values["owner_scope"]),
+        source_method=str(values["source_method"]),
+        source_domain=str(values["source_domain"]),
+        collected_at=str(values["collected_at"]),
+        published_at=str(values["published_at"]),
+        public_status=str(values["public_status"]),
+        license_status=str(values["license_status"]),
+        anonymized=_to_bool(values["anonymized"]),
+        review_status=str(values["review_status"]),
+        near_duplicate_group=str(values["near_duplicate_group"]),
+        schema_version=str(values["schema_version"]),
     )
 
 
@@ -137,3 +189,11 @@ def _to_int(value: MetadataValue, default: int) -> int:
         return int(value)
     except (TypeError, ValueError):
         return default
+
+
+def _to_bool(value: MetadataValue) -> bool:
+    """把 metadata 常见布尔表示归一化为 bool。"""
+
+    if isinstance(value, bool):
+        return value
+    return str(value).strip().lower() in {"1", "true", "yes"}

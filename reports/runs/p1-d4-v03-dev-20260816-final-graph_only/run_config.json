@@ -1,0 +1,18 @@
+{
+  "run_id": "p1-d4-v03-dev-20260816-final-graph_only",
+  "dataset_version": "evalrag_v0.3",
+  "graph_version": "job-skill-experience-v0.2",
+  "split": "dev",
+  "strategy": "graph_only",
+  "top_k": 5,
+  "command": "PYTHONPATH=src python scripts/run_v03_retrieval_ablation.py --run-id p1-d4-v03-dev-20260816-final",
+  "retriever_config": {
+    "retriever_name": "graph",
+    "dataset_version": "evalrag_v0.3",
+    "top_k": 5,
+    "graph_index_path": "data/processed/graphs/evalrag_v0.3/job-skill-experience-v0.2.json",
+    "graph_max_hops": 3,
+    "graph_max_nodes": 160,
+    "graph_timeout_ms": 100.0
+  }
+}

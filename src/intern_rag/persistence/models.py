@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
+from intern_rag.agent.context_engine import ConversationMessage, MemoryItem, UserProfile
+
 
 EvaluationJobStatus = Literal["queued", "running", "succeeded", "failed"]
 
@@ -37,3 +39,26 @@ class EvaluationRunRecord:
     config: dict[str, object]
     summary: dict[str, object]
     report_path: str
+
+
+@dataclass(frozen=True)
+class SessionRecord:
+    """归属于单一用户的会话索引。"""
+
+    session_id: str
+    user_id: str
+    title: str
+    created_at: str
+    updated_at: str
+
+
+@dataclass(frozen=True)
+class SessionContext:
+    """Context Engine 从持久化层读取的画像、历史、摘要和记忆集合。"""
+
+    session: SessionRecord
+    profile: UserProfile | None
+    messages: tuple[ConversationMessage, ...]
+    summary: str | None
+    memories: tuple[MemoryItem, ...]
+    history_source: Literal["redis", "postgres"] = "postgres"

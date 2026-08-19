@@ -15,7 +15,12 @@ from intern_rag.serving.schemas import (
     EvaluationJobRequestBody,
     RagRequestBody,
     RagResponseBody,
+    ProfileBody,
+    ProfileUpdateBody,
+    SessionBody,
+    SessionCreateBody,
 )
+from intern_rag.agent.context_engine import ProfileFact, UserProfile
 from intern_rag.serving.service import QueryService
 from intern_rag.worker import JobQueue
 
@@ -60,6 +65,9 @@ def create_app(services: AppServices) -> FastAPI:
         }
         if body.request_id is not None:
             request_kwargs["request_id"] = body.request_id
+        if body.user_id is not None:
+            request_kwargs["user_id"] = body.user_id
+            request_kwargs["session_id"] = body.session_id
         request = RagRequest(**request_kwargs)  # type: ignore[arg-type]
         try:
             response = await asyncio.wait_for(
@@ -69,6 +77,13 @@ def create_app(services: AppServices) -> FastAPI:
         except asyncio.TimeoutError:
             return _error_response(
                 504, "request_timeout", "query exceeded service timeout", request.request_id
+            )
+        except PermissionError:
+            return _error_response(
+                404,
+                "session_not_found",
+                "session does not exist",
+                request.request_id,
             )
         except Exception:
             return _error_response(
@@ -145,6 +160,43 @@ def create_app(services: AppServices) -> FastAPI:
             )
             return _error_response(503, "queue_unavailable", "evaluation queue is unavailable")
         return JSONResponse(EvaluationJobBody.from_domain(job).model_dump(), status_code=202)
+
+    @app.post("/v1/users/{user_id}/sessions", response_model=SessionBody, status_code=201)
+    def create_session(user_id: str, body: SessionCreateBody) -> Response:
+        session = services.repository.create_session(user_id, body.title)
+        return JSONResponse(SessionBody.from_domain(session).model_dump(), status_code=201)
+
+    @app.get("/v1/users/{user_id}/sessions/{session_id}", response_model=SessionBody)
+    def get_session(user_id: str, session_id: str) -> Response:
+        session = services.repository.get_session(user_id, session_id)
+        if session is None:
+            return _error_response(404, "session_not_found", "session does not exist")
+        return JSONResponse(SessionBody.from_domain(session).model_dump())
+
+    @app.get("/v1/users/{user_id}/profile", response_model=ProfileBody)
+    def get_profile(user_id: str) -> Response:
+        profile = services.repository.get_profile(user_id)
+        if profile is None:
+            return _error_response(404, "profile_not_found", "profile does not exist")
+        return JSONResponse(ProfileBody.from_domain(profile).model_dump())
+
+    @app.put("/v1/users/{user_id}/profile", response_model=ProfileBody)
+    def update_profile(user_id: str, body: ProfileUpdateBody) -> Response:
+        if any(not fact.confirmed for fact in body.facts):
+            return _error_response(422, "unconfirmed_profile", "profile facts must be confirmed")
+        try:
+            profile = services.repository.upsert_profile(
+                UserProfile(
+                    user_id=user_id,
+                    facts=tuple(ProfileFact(**fact.model_dump()) for fact in body.facts),
+                    version=body.expected_version or 0,
+                    updated_at="",
+                ),
+                body.expected_version,
+            )
+        except ValueError:
+            return _error_response(409, "profile_version_conflict", "profile version conflict")
+        return JSONResponse(ProfileBody.from_domain(profile).model_dump())
 
     return app
 

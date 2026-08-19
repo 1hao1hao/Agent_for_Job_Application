@@ -7,6 +7,11 @@ from intern_rag.routing.base import Router
 from intern_rag.routing.hybrid import HybridRouter, HybridRouterConfig
 from intern_rag.routing.intent_router import route_query
 from intern_rag.routing.semantic import SemanticRouter, SemanticRouterConfig
+from intern_rag.routing.feedback import (
+    FeedbackRouter,
+    JsonlRouterFeedbackStore,
+    RouterVersionRegistry,
+)
 
 
 def build_router_from_config(config: dict[str, object]) -> Router:
@@ -46,3 +51,28 @@ def build_router_from_config(config: dict[str, object]) -> Router:
             ),
         ),
     )
+
+
+def build_active_router_from_registry(registry_path: Path) -> Router:
+    """从版本 registry 构建 active Router，并应用审核后的离线反馈层。"""
+
+    state = RouterVersionRegistry(registry_path).load()
+    active = state.get("active_version")
+    if not active:
+        raise ValueError("router registry has no active version")
+    versions = {
+        str(item["version"]): item
+        for item in state.get("versions", [])
+    }
+    if active not in versions:
+        raise ValueError(f"active router version is missing: {active}")
+    config = dict(versions[str(active)]["config"])
+    router = build_router_from_config(config)
+    if config.get("feedback_strategy") == "confirmed_anchor_override":
+        feedback_path = Path(str(config.get("feedback_dataset", "")))
+        if not feedback_path.exists():
+            raise ValueError(f"router feedback dataset does not exist: {feedback_path}")
+        router = FeedbackRouter(
+            router, JsonlRouterFeedbackStore(feedback_path).read_all()
+        )
+    return router

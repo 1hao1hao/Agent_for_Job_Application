@@ -1,0 +1,31 @@
+{
+  "graph_version": "job-skill-experience-v0.1",
+  "dataset_version": "evalrag_v0.2",
+  "source_types": ["jd", "resume", "project_logs", "user_profile"],
+  "entities": [
+    {"name": "混合检索", "node_type": "skill", "aliases": ["RRF", "单路召回偏科", "词法与语义召回"]},
+    {"name": "引用校验", "node_type": "skill", "aliases": ["Citation Validator", "Citation Validity", "模型编造证据编号"]},
+    {"name": "请求追踪", "node_type": "skill", "aliases": ["Agent Trace", "Trace", "错误阶段无法定位"]},
+    {"name": "意图路由", "node_type": "skill", "aliases": ["Semantic Router", "Router Accuracy", "多意图规则冲突"]},
+    {"name": "上下文管理", "node_type": "skill", "aliases": ["上下文预算", "Context Builder", "关键证据被截断"]},
+    {"name": "失败回归", "node_type": "skill", "aliases": ["Regression Suite", "Regression Pass Rate", "旧失败重新出现"]},
+    {"name": "岗位时效性", "node_type": "skill", "aliases": ["freshness filter", "过期岗位污染回答"]},
+    {"name": "工具调用", "node_type": "skill", "aliases": ["tool validator", "Tool Success Rate", "参数错误产生副作用"]},
+    {"name": "模型适配", "node_type": "skill", "aliases": ["LlmClient Protocol", "供应商响应格式不同"]},
+    {"name": "证据门控", "node_type": "skill", "aliases": ["Evidence Gate", "Abstention Accuracy", "证据不足仍强行回答"]},
+    {"name": "数据导入", "node_type": "skill", "aliases": ["importer adapter", "平台字段不一致"]},
+    {"name": "查询改写", "node_type": "skill", "aliases": ["query rewrite", "改写偏离原意"]},
+    {"name": "重排策略", "node_type": "skill", "aliases": ["reranker", "相关证据排名靠后"]},
+    {"name": "答案覆盖", "node_type": "skill", "aliases": ["key-point checker", "Key-Point Coverage", "回答遗漏关键条件"]},
+    {"name": "Python", "node_type": "technology", "aliases": ["python"]},
+    {"name": "FastAPI", "node_type": "technology", "aliases": ["REST API", "HTTP 接口"]},
+    {"name": "Docker", "node_type": "technology", "aliases": ["Docker Compose", "容器"]},
+    {"name": "SQL", "node_type": "technology", "aliases": ["关系型数据库"]},
+    {"name": "BM25", "node_type": "technology", "aliases": ["bm25"]},
+    {"name": "Dense Retrieval", "node_type": "technology", "aliases": ["Dense", "向量检索", "embedding"]},
+    {"name": "RAG", "node_type": "technology", "aliases": ["检索增强生成", "知识库问答"]},
+    {"name": "Agent", "node_type": "technology", "aliases": ["智能体"]},
+    {"name": "Redis", "node_type": "technology", "aliases": ["缓存", "任务队列"]},
+    {"name": "PostgreSQL", "node_type": "technology", "aliases": ["Postgres"]}
+  ]
+}

@@ -15,3 +15,7 @@ uvicorn>=0.30,<1
 psycopg[binary]>=3.2,<4
 redis>=5,<7
 httpx>=0.27,<1
+# P1-D4 持久化 Graph adapter；pgvector 通过 PostgreSQL extension 和 psycopg 使用。
+neo4j>=5.26,<6
+# P1-D6 最小状态机 adapter 对照；核心 Runtime 不依赖 LangGraph。
+langgraph>=0.1.19,<0.2

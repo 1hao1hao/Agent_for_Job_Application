@@ -1,0 +1,86 @@
+{
+  "collection_version": "public_sources_v0.1",
+  "collected_at": "2026-08-14",
+  "candidate_only": true,
+  "counts": {
+    "configured": 9,
+    "collected": 6,
+    "failed": 3,
+    "jd": 3,
+    "interview": 2,
+    "project_logs": 1
+  },
+  "private_sources": {
+    "resume": "不从互联网猜测；继续使用项目作者明确提供并脱敏的本地简历。",
+    "user_profile": "不从互联网推断；继续使用项目作者明确提供的偏好与约束。",
+    "personal_project_experience": "仅采集项目作者公开 GitHub README，不推断未公开经历。"
+  },
+  "attempts": [
+    {
+      "source_id": "jd-baidu-j99230",
+      "source_type": "jd",
+      "source_url": "https://talent.baidu.com/jobs/detail/INTERN/f8a467f0-2a4a-4238-a21c-412408f85c2e",
+      "status": "collected",
+      "char_count": 552
+    },
+    {
+      "source_id": "jd-hikvision-rag-20260706",
+      "source_type": "jd",
+      "source_url": "https://talent.hikvision.com/home/socity/position?postId=062541642F1585B48071F76C89E1B801",
+      "status": "collected",
+      "char_count": 436
+    },
+    {
+      "source_id": "jd-haier-ai-app-10001515",
+      "source_type": "jd",
+      "source_url": "https://maker.haier.net/client/practicemobile/jobdetail/id/10001515",
+      "status": "collected",
+      "char_count": 365
+    },
+    {
+      "source_id": "jd-shlab-agent-7594310017110280494",
+      "source_type": "jd",
+      "source_url": "https://www.shlab.org.cn/joinus/detail/7594310017110280494?mode=campus",
+      "status": "failed",
+      "error_type": "ValueError",
+      "error_message": "start marker not found: 大模型算法实习生（Agent基础能力方向）"
+    },
+    {
+      "source_id": "jd-oppo-agent-1676",
+      "source_type": "jd",
+      "source_url": "https://careers.oppo.com/university/oppo/campus/post/1676?recruitType=Intern",
+      "status": "failed",
+      "error_type": "ValueError",
+      "error_message": "start marker not found: 高级AI研究员（AI多模态智能体）"
+    },
+    {
+      "source_id": "interview-ant-agent-20260609",
+      "source_type": "interview",
+      "source_url": "https://www.nowcoder.com/discuss/894720138258173952",
+      "status": "collected",
+      "char_count": 739
+    },
+    {
+      "source_id": "interview-sensetime-llm-application",
+      "source_type": "interview",
+      "source_url": "https://www.nowcoder.com/feed/main/detail/2762070c2c52472da06bf9ee59518d79",
+      "status": "failed",
+      "error_type": "ValueError",
+      "error_message": "start marker not found: 一面（偏基础和简历深挖）："
+    },
+    {
+      "source_id": "interview-tencent-baidu-agent-summary",
+      "source_type": "interview",
+      "source_url": "https://www.nowcoder.com/discuss/878600528970735616",
+      "status": "collected",
+      "char_count": 549
+    },
+    {
+      "source_id": "project-evalrag-readme",
+      "source_type": "project_logs",
+      "source_url": "https://raw.githubusercontent.com/1hao1hao/Agent_for_Job_Application/main/README.md",
+      "status": "collected",
+      "char_count": 4865
+    }
+  ]
+}

@@ -1,0 +1,261 @@
+{
+  "run_id": "p1-d5-context-memory-v01-dev-20260816-bge",
+  "dataset_version": "evalrag_context_v0.1",
+  "split": "dev",
+  "case_count": 60,
+  "turn_count": 300,
+  "strategies": {
+    "no_memory": {
+      "strategy": "no_memory",
+      "config": {
+        "token_budget": 220,
+        "recent_message_count": 4,
+        "evidence_char_budget": 4000,
+        "mode": "no_memory",
+        "evidence_strategy": "source_balanced",
+        "compress_evidence": false,
+        "reserved_token_count": 0
+      },
+      "follow_up_success": 0.36666666666666664,
+      "citation_validity": 1.0,
+      "semantic_key_point_coverage": 0.2830188679245283,
+      "grounding": 0.36666666666666664,
+      "mean_repeated_history_reads": 0.0,
+      "mean_prompt_tokens": 38.18333333333333,
+      "mean_compression_ratio": 0.31502118118655303,
+      "latency_ms": {
+        "p50": 0.06484892219305038,
+        "p95": 0.10130275040864944
+      }
+    },
+    "recent_window": {
+      "strategy": "recent_window",
+      "config": {
+        "token_budget": 220,
+        "recent_message_count": 2,
+        "evidence_char_budget": 4000,
+        "mode": "recent_window",
+        "evidence_strategy": "source_balanced",
+        "compress_evidence": false,
+        "reserved_token_count": 0
+      },
+      "follow_up_success": 0.36666666666666664,
+      "citation_validity": 1.0,
+      "semantic_key_point_coverage": 0.2830188679245283,
+      "grounding": 0.36666666666666664,
+      "mean_repeated_history_reads": 3.0,
+      "mean_prompt_tokens": 67.18333333333334,
+      "mean_compression_ratio": 0.0,
+      "latency_ms": {
+        "p50": 0.08808355778455734,
+        "p95": 0.13384968042373657
+      }
+    },
+    "summary_recent": {
+      "strategy": "summary_recent",
+      "config": {
+        "token_budget": 220,
+        "recent_message_count": 2,
+        "evidence_char_budget": 4000,
+        "mode": "summary_recent",
+        "evidence_strategy": "source_balanced",
+        "compress_evidence": false,
+        "reserved_token_count": 0
+      },
+      "follow_up_success": 1.0,
+      "citation_validity": 1.0,
+      "semantic_key_point_coverage": 1.0,
+      "grounding": 1.0,
+      "mean_repeated_history_reads": 3.0,
+      "mean_prompt_tokens": 76.61666666666666,
+      "mean_compression_ratio": 0.0,
+      "latency_ms": {
+        "p50": 0.09888317435979843,
+        "p95": 0.14451052993535995
+      }
+    },
+    "semantic_memory": {
+      "strategy": "semantic_memory",
+      "config": {
+        "token_budget": 220,
+        "recent_message_count": 4,
+        "evidence_char_budget": 4000,
+        "mode": "semantic_memory",
+        "evidence_strategy": "source_balanced",
+        "compress_evidence": false,
+        "reserved_token_count": 0
+      },
+      "follow_up_success": 1.0,
+      "citation_validity": 1.0,
+      "semantic_key_point_coverage": 1.0,
+      "grounding": 1.0,
+      "mean_repeated_history_reads": 0.0,
+      "mean_prompt_tokens": 66.21666666666667,
+      "mean_compression_ratio": 0.04182389937106919,
+      "latency_ms": {
+        "p50": 101.23661067336798,
+        "p95": 296.93296551704407
+      }
+    }
+  },
+  "differences": [
+    {
+      "case_id": "context-v01-001",
+      "category": "reference",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-002",
+      "category": "ellipsis",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-004",
+      "category": "cross_session",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-005",
+      "category": "memory_conflict",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-006",
+      "category": "topic_switch",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-009",
+      "category": "reference",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-010",
+      "category": "ellipsis",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-012",
+      "category": "cross_session",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-013",
+      "category": "memory_conflict",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-014",
+      "category": "topic_switch",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-017",
+      "category": "reference",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-018",
+      "category": "ellipsis",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-020",
+      "category": "cross_session",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-021",
+      "category": "memory_conflict",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    },
+    {
+      "case_id": "context-v01-022",
+      "category": "topic_switch",
+      "follow_up_success": {
+        "no_memory": false,
+        "recent_window": false,
+        "summary_recent": true,
+        "semantic_memory": true
+      }
+    }
+  ],
+  "metric_scope": "Context-level scenario benchmark; key-point uses scenario-grounded expected facts and does not equal free-form answer accuracy",
+  "llm_calls": 0,
+  "estimated_cost_usd": 0.0,
+  "semantic_grader": {
+    "model": "BAAI/bge-small-zh-v1.5",
+    "revision": "7999e1d3359715c523056ef9478215996d62a620",
+    "threshold": 0.8
+  }
+}

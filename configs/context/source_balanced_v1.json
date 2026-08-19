@@ -1,0 +1,9 @@
+{
+  "config_version": "source-balanced-v1-20260811",
+  "strategy": "source_balanced",
+  "default_max_chars": 4000,
+  "required_sources_from": "RouteDecision.routed_sources",
+  "selection_order": "one highest-ranked chunk per required source, then remaining rank order",
+  "oversized_chunk_policy": "skip_without_truncation",
+  "calibration_split": "evalrag_v0.2/dev"
+}

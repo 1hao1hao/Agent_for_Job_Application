@@ -1,0 +1,14 @@
+{
+  "run_id": "p1-d9-v03-dev-ablation-20260817-retrieval-keyword",
+  "dataset_version": "evalrag_v0.3",
+  "graph_version": "job-skill-experience-v0.2",
+  "split": "dev",
+  "strategy": "retrieval-keyword",
+  "top_k": 5,
+  "command": "PYTHONPATH=src python scripts/run_p1_v03_ablation_suite.py p1-d9-v03-dev-ablation-20260817",
+  "retriever_config": {
+    "retriever_name": "keyword",
+    "dataset_version": "evalrag_v0.3",
+    "top_k": 5
+  }
+}

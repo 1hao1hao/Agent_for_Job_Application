@@ -1,0 +1,19 @@
+{
+  "config_version": "context-engine-v0.1-20260816",
+  "token_budget": 1800,
+  "token_estimator": "mixed-lexical-token-v1",
+  "mode": "summary_recent",
+  "recent_message_count": 4,
+  "evidence_char_budget": 4000,
+  "evidence_strategy": "source_balanced",
+  "compress_evidence": false,
+  "profile_policy": "explicit_confirmed_only",
+  "memory_policy": {
+    "user_scoped": true,
+    "confirmed_only": true,
+    "deduplicate_exact_normalized_text": true,
+    "preserve_conflicts": true,
+    "ttl_enabled": true
+  },
+  "calibration_dataset": "evalrag_context_v0.1/dev"
+}

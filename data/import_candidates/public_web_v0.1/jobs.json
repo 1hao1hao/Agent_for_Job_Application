@@ -1,0 +1,58 @@
+{
+  "jobs": [
+    {
+      "job_id": "J99230",
+      "company": "百度",
+      "job_title": "大模型算法实习生（J99230）",
+      "city": "北京、深圳",
+      "source_platform": "official_careers",
+      "source_url": "https://talent.baidu.com/jobs/detail/INTERN/f8a467f0-2a4a-4238-a21c-412408f85c2e",
+      "description": "工作职责：\n—负责生成式大模型/多模态模型相关算法、技术与应用研发，协助改进产品，落地算法应用\n—负责基于文心一言的大模型的应用开发，包括大模型插件的开发和工具链的完善，以提升大模型的性能和用户体验\n—研究和探索大模型的前沿技术，根据业务需求进行模型的定制和优化，提高模型的准确性和效率\n—结合实际业务场景，将大模型技术应用于具体的产品或服务中，推动产品的智能化升级\n—紧跟工业/学术界相关领域前沿AI大模型（包括生成式大语言模型、跨模态大模型）算法、复现与效果调优\n—研究方向包括但不限于：高效的大模型架构、跨任务统一学习等、大模型各类精调微调策略",
+      "requirements": "职责要求：\n—熟悉并掌握至少一门编程语言，如Python，具备一定的工程能力\n—熟悉深度学习框架（PaddlePaddle、PyTorch、Tensorflow等），熟悉PaddlePaddle者优先，熟练HF Transformers库者优先，有大模型相关经验优先\n—学习能力强、自我驱动力强，紧跟深度学习前沿发展动态\n—具有良好的沟通能力，和良好的团队合作精神，有开源项目经历者优先\n—长期实习，四个月起，每周至少工作3~4天",
+      "first_seen_at": "2026-08-14",
+      "last_seen_at": "2026-08-14",
+      "status": "unknown",
+      "version": 1,
+      "content_hash": "cd0914e5513a89d0b45d8e8ba2b43e9360855142e2b26bddbf9afc5820087ea2",
+      "published_at": "2026-07-21",
+      "human_reviewed": false,
+      "candidate_only": true
+    },
+    {
+      "job_id": "062541642F1585B48071F76C89E1B801",
+      "company": "海康威视",
+      "job_title": "软件产品-大模型 RAG 算法实习生",
+      "city": "杭州",
+      "source_platform": "official_careers",
+      "source_url": "https://talent.hikvision.com/home/socity/position?postId=062541642F1585B48071F76C89E1B801",
+      "description": "岗位职责：\n1. 参与RAG系统基础功能开发，包括文档解析、知识检索、效果评测等，收集业内rag的技术演进情况\n2.协助完成技术方案设计、代码实现与测试验证",
+      "requirements": "职位要求：\n1,计算机软件或者数学相关专业，27年28年毕业生均可，本科研究生在读；\n2，熟悉Java/Python语言，具备良好的工程实现能力,\n3, 有RAG、搜索引擎、知识图谱或NLP相关项目经验\n4.了解向量数据库（如infnity、Milvus等）、检索系统或大语言模型（llm,emb,rerank）相关知识\n5，做事耐心、有责任感，有良好的沟通能力，具备团队合作精神，在日常工作中乐于进行分享；",
+      "first_seen_at": "2026-08-14",
+      "last_seen_at": "2026-08-14",
+      "status": "unknown",
+      "version": 1,
+      "content_hash": "e90c8c91fd4504ea409f6e9ba2468a24a3003692a25c9f7858bc18545261ec07",
+      "published_at": "2026-07-06",
+      "human_reviewed": false,
+      "candidate_only": true
+    },
+    {
+      "job_id": "10001515",
+      "company": "海尔",
+      "job_title": "AI 应用开发实习生",
+      "city": "青岛",
+      "source_platform": "official_careers",
+      "source_url": "https://maker.haier.net/client/practicemobile/jobdetail/id/10001515",
+      "description": "我们需要您\n1. 打通模型能力与业务场景，兼任大模型和传统开发的复合型任务开发。\n2. 提示词工程，代码节点编写，工作流搭建，智能体以及SaaS平台数据链接开发",
+      "requirements": "我们希望您\n1. 精通LangChain/LLamaIndex等AI框架开发\n2. 业务需求拆解与RAG/Agent场景化设计\n3. 可以进行包括提示词工程设计，代码节点编辑等全流程的AI Agent的工作流搭建任务\n4. 可以使用AI大模型编辑生成MD、HTML等文件的格式化内容输出",
+      "first_seen_at": "2026-08-14",
+      "last_seen_at": "2026-08-14",
+      "status": "expired",
+      "version": 1,
+      "content_hash": "065580071c255e454f7fec2e533839c997e6d3dda030fb456cd39fbdb5094acd",
+      "published_at": "2026-04-07",
+      "human_reviewed": false,
+      "candidate_only": true
+    }
+  ]
+}

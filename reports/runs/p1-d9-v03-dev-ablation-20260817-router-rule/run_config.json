@@ -1,0 +1,7 @@
+{
+  "run_id": "p1-d9-v03-dev-ablation-20260817-router-rule",
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "strategy": "rule",
+  "metric_scope": "source routing; expected_intent unavailable"
+}

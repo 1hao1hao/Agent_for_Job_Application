@@ -58,6 +58,7 @@ class EvaluationRunnerTests(unittest.TestCase):
         self.assertEqual(result.summary["metrics"]["router_accuracy"], 1.0)
         self.assertEqual(result.summary["metrics"]["recall_at_3"], 1.0)
         self.assertEqual(result.summary["metrics"]["mrr"], 1.0)
+        self.assertEqual(result.summary["metrics"]["ndcg_at_5"], 1.0)
         self.assertNotIn(
             "Candidate runs use labels pending human review and cannot be "
             "reported as formal evaluation.",

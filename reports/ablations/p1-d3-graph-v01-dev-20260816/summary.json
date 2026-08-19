@@ -1,0 +1,580 @@
+{
+  "ablation_id": "p1-d3-graph-v01-dev-20260816",
+  "dataset_version": "evalrag_graph_v0.1",
+  "graph_version": "job-skill-experience-v0.1",
+  "split": "dev",
+  "case_count": 30,
+  "run_dirs": {
+    "adaptive_vector": "reports/runs/p1-d3-graph-v01-dev-20260816-adaptive_vector",
+    "graph_only": "reports/runs/p1-d3-graph-v01-dev-20260816-graph_only",
+    "graph_vector": "reports/runs/p1-d3-graph-v01-dev-20260816-graph_vector"
+  },
+  "summaries": {
+    "adaptive_vector": {
+      "run_id": "p1-d3-graph-v01-dev-20260816-adaptive_vector",
+      "dataset_version": "evalrag_graph_v0.1",
+      "graph_version": "job-skill-experience-v0.1",
+      "split": "dev",
+      "case_count": 30,
+      "answerable_case_count": 22,
+      "metrics": {
+        "recall_at_5": 0.7121212121212122,
+        "mrr": 0.3098484848484848,
+        "ndcg_at_5": 0.41960836999045853,
+        "path_validity": null,
+        "selector_accuracy": 0.23333333333333334
+      },
+      "category_metrics": {
+        "cross_source_two_hop": {
+          "case_count": 8,
+          "recall_at_5": 0.4583333333333333,
+          "mrr": 0.24791666666666667,
+          "ndcg_at_5": 0.26911063227510995
+        },
+        "hard_negative": {
+          "case_count": 8,
+          "recall_at_5": 0.0,
+          "mrr": 0.0,
+          "ndcg_at_5": 0.0
+        },
+        "job_skill": {
+          "case_count": 7,
+          "recall_at_5": 0.8571428571428571,
+          "mrr": 0.40476190476190477,
+          "ndcg_at_5": 0.5220926811224696
+        },
+        "skill_project": {
+          "case_count": 7,
+          "recall_at_5": 0.8571428571428571,
+          "mrr": 0.2857142857142857,
+          "ndcg_at_5": 0.4891214733902744
+        }
+      },
+      "latency_ms": {
+        "p50": 297.94903192669153,
+        "p95": 2176.368495449424
+      },
+      "metric_scope": "Recall/MRR/NDCG use answerable cases; selector uses all cases; path validity uses returned graph paths.",
+      "boundary": "dev-only relationship retrieval evaluation; metrics do not measure final answer correctness"
+    },
+    "graph_only": {
+      "run_id": "p1-d3-graph-v01-dev-20260816-graph_only",
+      "dataset_version": "evalrag_graph_v0.1",
+      "graph_version": "job-skill-experience-v0.1",
+      "split": "dev",
+      "case_count": 30,
+      "answerable_case_count": 22,
+      "metrics": {
+        "recall_at_5": 0.5984848484848485,
+        "mrr": 0.45454545454545453,
+        "ndcg_at_5": 0.40586334207800345,
+        "path_validity": 1.0,
+        "selector_accuracy": 0.23333333333333334
+      },
+      "category_metrics": {
+        "cross_source_two_hop": {
+          "case_count": 8,
+          "recall_at_5": 0.3333333333333333,
+          "mrr": 0.4791666666666667,
+          "ndcg_at_5": 0.28840159247155434
+        },
+        "hard_negative": {
+          "case_count": 8,
+          "recall_at_5": 0.0,
+          "mrr": 0.0,
+          "ndcg_at_5": 0.0
+        },
+        "job_skill": {
+          "case_count": 7,
+          "recall_at_5": 1.0,
+          "mrr": 0.4523809523809524,
+          "ndcg_at_5": 0.593521252551041
+        },
+        "skill_project": {
+          "case_count": 7,
+          "recall_at_5": 0.5,
+          "mrr": 0.42857142857142855,
+          "ndcg_at_5": 0.35244743115519345
+        }
+      },
+      "latency_ms": {
+        "p50": 0.5170060321688652,
+        "p95": 0.7156478241086006
+      },
+      "metric_scope": "Recall/MRR/NDCG use answerable cases; selector uses all cases; path validity uses returned graph paths.",
+      "boundary": "dev-only relationship retrieval evaluation; metrics do not measure final answer correctness"
+    },
+    "graph_vector": {
+      "run_id": "p1-d3-graph-v01-dev-20260816-graph_vector",
+      "dataset_version": "evalrag_graph_v0.1",
+      "graph_version": "job-skill-experience-v0.1",
+      "split": "dev",
+      "case_count": 30,
+      "answerable_case_count": 22,
+      "metrics": {
+        "recall_at_5": 0.7272727272727273,
+        "mrr": 0.3787878787878788,
+        "ndcg_at_5": 0.4577057827449541,
+        "path_validity": 1.0,
+        "selector_accuracy": 0.8
+      },
+      "category_metrics": {
+        "cross_source_two_hop": {
+          "case_count": 8,
+          "recall_at_5": 0.5,
+          "mrr": 0.41666666666666663,
+          "ndcg_at_5": 0.36384361599349613
+        },
+        "hard_negative": {
+          "case_count": 8,
+          "recall_at_5": 0.0,
+          "mrr": 0.0,
+          "ndcg_at_5": 0.0
+        },
+        "job_skill": {
+          "case_count": 7,
+          "recall_at_5": 0.8571428571428571,
+          "mrr": 0.40476190476190477,
+          "ndcg_at_5": 0.5220926811224696
+        },
+        "skill_project": {
+          "case_count": 7,
+          "recall_at_5": 0.8571428571428571,
+          "mrr": 0.30952380952380953,
+          "ndcg_at_5": 0.5005899320833904
+        }
+      },
+      "latency_ms": {
+        "p50": 303.04714664816856,
+        "p95": 1099.5579715818167
+      },
+      "metric_scope": "Recall/MRR/NDCG use answerable cases; selector uses all cases; path validity uses returned graph paths.",
+      "boundary": "dev-only relationship retrieval evaluation; metrics do not measure final answer correctness"
+    }
+  },
+  "strategy_differences": [
+    {
+      "case_id": "graph_03_job_skill",
+      "category": "job_skill",
+      "query": "请求追踪岗位材料把哪种方案作为核心，并重点防范什么风险？",
+      "difference_score": 1.0,
+      "metrics": {
+        "adaptive_vector": {
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "ndcg_at_5": 0.0,
+          "path_validity": null,
+          "selector_correct": true
+        },
+        "graph_only": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5,
+          "path_validity": 1,
+          "selector_correct": true
+        },
+        "graph_vector": {
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "ndcg_at_5": 0.0,
+          "path_validity": null,
+          "selector_correct": true
+        }
+      },
+      "graph_trace": {
+        "strategy": "hybrid",
+        "confidence": 0.804554,
+        "rerank_invoked": false,
+        "rerank_applied": false,
+        "candidate_count": 20,
+        "reason": "exact term benefits from lexical recall with dense backup; confidence=0.805; skip rerank",
+        "reranker_name": null,
+        "reranker_version": null
+      }
+    },
+    {
+      "case_id": "graph_03_skill_project",
+      "category": "skill_project",
+      "query": "候选人的简历经历和项目记录如何共同体现处理“错误阶段无法定位”的能力？",
+      "difference_score": 0.6934264036172708,
+      "metrics": {
+        "adaptive_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5706417189553201,
+          "path_validity": null,
+          "selector_correct": false
+        },
+        "graph_only": {
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.3065735963827292,
+          "path_validity": 1,
+          "selector_correct": false
+        },
+        "graph_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5706417189553201,
+          "path_validity": null,
+          "selector_correct": false
+        }
+      },
+      "graph_trace": {
+        "strategy": "hybrid",
+        "confidence": 0.801486,
+        "rerank_invoked": false,
+        "rerank_applied": false,
+        "candidate_count": 20,
+        "reason": "multi-source query needs lexical and semantic recall; confidence=0.801; skip rerank",
+        "reranker_name": null,
+        "reranker_version": null
+      }
+    },
+    {
+      "case_id": "graph_04_skill_project",
+      "category": "skill_project",
+      "query": "候选人的简历经历和项目记录如何共同体现处理“多意图规则冲突”的能力？",
+      "difference_score": 0.6934264036172708,
+      "metrics": {
+        "adaptive_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5706417189553201,
+          "path_validity": null,
+          "selector_correct": false
+        },
+        "graph_only": {
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.3065735963827292,
+          "path_validity": 1,
+          "selector_correct": false
+        },
+        "graph_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5706417189553201,
+          "path_validity": null,
+          "selector_correct": false
+        }
+      },
+      "graph_trace": {
+        "strategy": "hybrid",
+        "confidence": 0.804578,
+        "rerank_invoked": false,
+        "rerank_applied": false,
+        "candidate_count": 20,
+        "reason": "multi-source query needs lexical and semantic recall; confidence=0.805; skip rerank",
+        "reranker_name": null,
+        "reranker_version": null
+      }
+    },
+    {
+      "case_id": "graph_09_skill_project",
+      "category": "skill_project",
+      "query": "候选人的简历经历和项目记录如何共同体现处理“供应商响应格式不同”的能力？",
+      "difference_score": 0.6934264036172708,
+      "metrics": {
+        "adaptive_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5706417189553201,
+          "path_validity": null,
+          "selector_correct": false
+        },
+        "graph_only": {
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.3065735963827292,
+          "path_validity": 1,
+          "selector_correct": false
+        },
+        "graph_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5706417189553201,
+          "path_validity": null,
+          "selector_correct": false
+        }
+      },
+      "graph_trace": {
+        "strategy": "hybrid",
+        "confidence": 0.804788,
+        "rerank_invoked": false,
+        "rerank_applied": false,
+        "candidate_count": 20,
+        "reason": "multi-source query needs lexical and semantic recall; confidence=0.805; skip rerank",
+        "reranker_name": null,
+        "reranker_version": null
+      }
+    },
+    {
+      "case_id": "graph_01_skill_project",
+      "category": "skill_project",
+      "query": "候选人的简历经历和项目记录如何共同体现处理“单路召回偏科”的能力？",
+      "difference_score": 0.6666666666666667,
+      "metrics": {
+        "adaptive_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5706417189553201,
+          "path_validity": null,
+          "selector_correct": false
+        },
+        "graph_only": {
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.5,
+          "ndcg_at_5": 0.38685280723454163,
+          "path_validity": 1,
+          "selector_correct": false
+        },
+        "graph_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5706417189553201,
+          "path_validity": null,
+          "selector_correct": false
+        }
+      },
+      "graph_trace": {
+        "strategy": "hybrid",
+        "confidence": 0.804726,
+        "rerank_invoked": false,
+        "rerank_applied": false,
+        "candidate_count": 20,
+        "reason": "multi-source query needs lexical and semantic recall; confidence=0.805; skip rerank",
+        "reranker_name": null,
+        "reranker_version": null
+      }
+    },
+    {
+      "case_id": "graph_07_skill_project",
+      "category": "skill_project",
+      "query": "候选人的简历经历和项目记录如何共同体现处理“过期岗位污染回答”的能力？",
+      "difference_score": 0.6666666666666667,
+      "metrics": {
+        "adaptive_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5706417189553201,
+          "path_validity": null,
+          "selector_correct": false
+        },
+        "graph_only": {
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.5,
+          "ndcg_at_5": 0.38685280723454163,
+          "path_validity": 1,
+          "selector_correct": false
+        },
+        "graph_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "ndcg_at_5": 0.6509209298071326,
+          "path_validity": 1,
+          "selector_correct": true
+        }
+      },
+      "graph_trace": {
+        "decomposition": {
+          "original_query": "候选人的简历经历和项目记录如何共同体现处理“过期岗位污染回答”的能力？",
+          "subgoals": [
+            "定位岗位要求的技能或技术",
+            "定位能证明能力的项目或经历",
+            "连接岗位要求与候选人证据"
+          ],
+          "entity_node_ids": [
+            "skill-02434636e57d"
+          ],
+          "entity_names": [
+            "岗位时效性"
+          ],
+          "relations": [
+            "requires",
+            "demonstrates",
+            "uses"
+          ],
+          "is_cross_document": true,
+          "reason": "matched 1 entities and 3 relations"
+        },
+        "linked_node_ids": [
+          "skill-02434636e57d"
+        ],
+        "visited_node_count": 32,
+        "path_count": 80,
+        "fallback_reason": null,
+        "graph_version": "job-skill-experience-v0.1",
+        "graph_invoked": true,
+        "vector_fallback": false,
+        "vector_candidate_count": 80,
+        "graph_candidate_count": 80,
+        "strategy": "graph_hybrid",
+        "confidence": 0.800151,
+        "rerank_invoked": false,
+        "rerank_applied": false,
+        "candidate_count": 20,
+        "reason": "cross-document relation query uses graph and vector evidence; confidence=0.800; skip rerank",
+        "reranker_name": null,
+        "reranker_version": null
+      }
+    },
+    {
+      "case_id": "graph_08_job_skill",
+      "category": "job_skill",
+      "query": "工具调用岗位材料把哪种方案作为核心，并重点防范什么风险？",
+      "difference_score": 0.6666666666666667,
+      "metrics": {
+        "adaptive_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5,
+          "path_validity": null,
+          "selector_correct": true
+        },
+        "graph_only": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5,
+          "path_validity": 1,
+          "selector_correct": true
+        },
+        "graph_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5,
+          "path_validity": null,
+          "selector_correct": true
+        }
+      },
+      "graph_trace": {
+        "strategy": "hybrid",
+        "confidence": 0.81075,
+        "rerank_invoked": false,
+        "rerank_applied": false,
+        "candidate_count": 20,
+        "reason": "ambiguous query keeps lexical and semantic recall paths; confidence=0.811; skip rerank",
+        "reranker_name": null,
+        "reranker_version": null
+      }
+    },
+    {
+      "case_id": "graph_08_skill_project",
+      "category": "skill_project",
+      "query": "候选人的简历经历和项目记录如何共同体现处理“参数错误产生副作用”的能力？",
+      "difference_score": 0.6666666666666667,
+      "metrics": {
+        "adaptive_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5706417189553201,
+          "path_validity": null,
+          "selector_correct": false
+        },
+        "graph_only": {
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.5,
+          "ndcg_at_5": 0.38685280723454163,
+          "path_validity": 1,
+          "selector_correct": false
+        },
+        "graph_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5706417189553201,
+          "path_validity": null,
+          "selector_correct": false
+        }
+      },
+      "graph_trace": {
+        "strategy": "hybrid",
+        "confidence": 0.804726,
+        "rerank_invoked": false,
+        "rerank_applied": false,
+        "candidate_count": 20,
+        "reason": "multi-source query needs lexical and semantic recall; confidence=0.805; skip rerank",
+        "reranker_name": null,
+        "reranker_version": null
+      }
+    },
+    {
+      "case_id": "graph_02_job_skill",
+      "category": "job_skill",
+      "query": "引用校验岗位材料把哪种方案作为核心，并重点防范什么风险？",
+      "difference_score": 0.5,
+      "metrics": {
+        "adaptive_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "ndcg_at_5": 0.6309297535714575,
+          "path_validity": null,
+          "selector_correct": true
+        },
+        "graph_only": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "ndcg_at_5": 0.6309297535714575,
+          "path_validity": 1,
+          "selector_correct": true
+        },
+        "graph_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "ndcg_at_5": 0.6309297535714575,
+          "path_validity": null,
+          "selector_correct": true
+        }
+      },
+      "graph_trace": {
+        "strategy": "hybrid",
+        "confidence": 0.804788,
+        "rerank_invoked": false,
+        "rerank_applied": false,
+        "candidate_count": 20,
+        "reason": "exact term benefits from lexical recall with dense backup; confidence=0.805; skip rerank",
+        "reranker_name": null,
+        "reranker_version": null
+      }
+    },
+    {
+      "case_id": "graph_04_job_skill",
+      "category": "job_skill",
+      "query": "意图路由岗位材料把哪种方案作为核心，并重点防范什么风险？",
+      "difference_score": 0.5,
+      "metrics": {
+        "adaptive_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "ndcg_at_5": 0.6309297535714575,
+          "path_validity": null,
+          "selector_correct": true
+        },
+        "graph_only": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "ndcg_at_5": 0.6309297535714575,
+          "path_validity": 1,
+          "selector_correct": true
+        },
+        "graph_vector": {
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "ndcg_at_5": 0.6309297535714575,
+          "path_validity": null,
+          "selector_correct": true
+        }
+      },
+      "graph_trace": {
+        "strategy": "hybrid",
+        "confidence": 0.804788,
+        "rerank_invoked": false,
+        "rerank_applied": false,
+        "candidate_count": 20,
+        "reason": "exact term benefits from lexical recall with dense backup; confidence=0.805; skip rerank",
+        "reranker_name": null,
+        "reranker_version": null
+      }
+    }
+  ],
+  "boundary": "dev-only relation retrieval ablation; frozen 10 cases were not run; retrieval metrics do not measure final answer correctness"
+}

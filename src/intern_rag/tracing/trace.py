@@ -173,6 +173,7 @@ def retrieval_result_to_trace(result: RetrievalResult) -> TraceDict:
         "title": result.chunk.title,
         "text": result.chunk.text,
         "metadata": result.chunk.metadata,
+        "details": result.details,
     }
 
 

@@ -5,6 +5,7 @@ from pathlib import Path
 
 from intern_rag.persistence import PostgresRepository
 from intern_rag.worker import EvaluationWorker, RedisJobQueue, SubprocessEvaluationExecutor
+from intern_rag.runtime import AgentRuntime, JsonlSpanSink
 
 
 def main() -> int:
@@ -22,6 +23,11 @@ def main() -> int:
         SubprocessEvaluationExecutor(
             project_root,
             timeout_seconds=int(os.environ.get("EVALUATION_TIMEOUT_SECONDS", "1800")),
+        ),
+        runtime=AgentRuntime(
+            span_sinks=(
+                JsonlSpanSink(project_root / "traces/service/runtime_spans.jsonl"),
+            )
         ),
     )
     worker.recover_interrupted()

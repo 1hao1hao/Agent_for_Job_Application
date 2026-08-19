@@ -207,6 +207,37 @@ P0-D5 因运行环境未完成 CrossEncoder 权重下载，正式 dev 对照使�
 token overlap scorer。该 candidate 的 Recall@3/5、MRR 均退化且 P95 增加，因此
 最终配置关闭 Reranker。这个负向结果保留在报告中，不能声称神经 Reranker 带来提升。
 
+P1 随后补跑固定 revision 的 `BAAI/bge-reranker-base`：对相同 Hybrid top-20 做
+CrossEncoder 重排后 Recall@3/5、MRR 仍退化，CPU P95 增至约 7.5 秒，因此默认继续
+关闭。该 Run 证明真实神经 Reranker 已被验证，但不支持“Reranker 提升效果”的表述。
+
+### Adaptive Graph + Vector Retrieval
+
+P1-D3 在统一 Retriever 契约内增加 `graph` 和 `graph_adaptive`。构建阶段从版本化
+Chunk 中确定性抽取 Job、Skill、Project、Experience、Technology、Company 六类节点，
+以及 `requires`、`demonstrates`、`uses`、`belongs_to`、`related_to` 五类关系；节点和
+边均保留 source chunk ids，图本身不能替代 Citation 证据。
+
+```text
+query
+  -> Query Analyzer / Query Decomposition
+  -> entity linking -> bounded 1-2 hop traversal
+  -> Graph RetrievalResult
+  + Adaptive Vector RetrievalResult
+  -> RRF fusion -> Context Builder
+```
+
+只有“岗位要求与哪些项目/经历对应”等跨文档关系 Query 才选择 `graph_hybrid`；普通
+问题继续使用 BM25、Dense 或 RRF。遍历受 hop、节点数和 timeout 限制，实体链接失败时
+保留原 Query 并回退到 Vector 结果。Graph + Vector 统一输出 `RetrievalResult`，details
+中保存 vector rank、graph rank、fused score、edge ids 和可读 path，Pipeline 无需增加
+Graph 专属分支。
+
+`evalrag_graph_v0.1/dev` 的 30 条关系型 Case 显示 Graph + Vector 相比 Adaptive Vector：
+Recall@5 `0.7121 -> 0.7727`、MRR `0.3098 -> 0.5227`、NDCG@5
+`0.4196 -> 0.5381`；Graph-only Recall@5 为 `0.5985`。这些是 dev 关系检索指标，
+不等于最终答案准确率，10 条 frozen test 保留到 P1 最终配置确定后运行。
+
 P0-D3 的索引保存在 `data/processed/indexes/<dataset_version>/`，记录 dataset、
 embedding name/version、dimensions 和 chunk count。查询阶段只编码 Query，不能
 重新拟合语料或重复编码全库。Retriever 由配置工厂注入 Pipeline 和 Evaluation，
@@ -235,8 +266,32 @@ P0-D1-T1 已实现 `ContextItem`、`BuiltContext` 和 `build_context()`。
 - 不生成新事实。
 - 不丢失 chunk id。
 - 预算不足时只在 chunk 边界截断，P0 不截断单个 chunk 中间。
-- 使用严格 rank 前缀；某个 chunk 放不下后，不跳过它去填充更低排名结果。
+- `rank_prefix` 保留严格 rank 前缀，作为可解释 baseline。
+- `source_balanced` 先为 Router 必需的每个来源保留最高排名证据，再按 rank 填充；
+  某条完整 Chunk 放不下时继续尝试后续候选，不截断原文。
+- P1 服务默认使用 `source_balanced`；紧预算 dev 消融同时报告相关证据召回、来源
+  覆盖和预算利用率，不把 Context 局部指标包装成答案准确率。
 - Context Builder 的选择必须写入 Trace。
+
+### P1 Context Engine 与分层记忆
+
+P1-D5 在 `BuiltContext` 上增加 `ManagedContext`，预算单位由字符扩展为可注入 token
+estimator。预算覆盖 Generator 外层 Prompt、system、当前 Query、确认 Profile、历史/摘要、
+长期 Memory 和 Evidence；system 与当前 Query 放不下时受控失败，不静默删除。
+
+```text
+RagRequest(user_id, session_id)
+  -> SessionMemoryService(Redis recent cache -> PostgreSQL fallback)
+  -> ContextInputs(profile, messages, summary, memories)
+  -> ContextEngine.build()
+  -> ManagedContext + BuiltContext-compatible evidence
+  -> Generator / Citation Validator / AgentTrace
+```
+
+Profile 只允许显式确认写入并使用版本检查；摘要不能覆盖 Profile。MemoryItem 包含 user scope、
+fact/preference/experience/decision 类型、来源、重要性、版本、TTL 和 active 状态；同内容去重，
+冲突内容保留独立来源，不进行静默覆盖。Trace 只记录 segment/memory id、预算和 reason，不复制
+敏感 Profile 原文。
 
 ### Structured LLM Generator
 
@@ -615,12 +670,57 @@ EvaluationJobRequest
 - idempotency key 防止同一评测配置重复入队。
 - Worker 重试次数受配置约束，失败必须保存 error type，不允许无限循环。
 
-### 为什么暂不使用 pgvector
+### Corpus v0.3 与持久化检索
 
-当前语料只有 310 个 Chunk，Dense Retriever 的精确扫描仍能直接工作。P1-D1 保持
-现有离线向量 index，把 PostgreSQL 用在真正需要事务和持久状态的服务数据上。
-只有 profiling 证明向量扫描成为主要延迟或内存瓶颈后，才引入 pgvector/ANN，并通过
-Recall、P95 和资源占用对照证明迁移价值。
+P1-D4 将语料扩展到去重后的 658 份文档和 4208 个 Chunk。Document/Chunk 增加
+`owner_scope`、`source_method`、`source_domain`、采集/发布时间、许可、脱敏、审核状态和
+近重复组等 provenance 字段；exact hash 与 SimHash 的拒绝结果单独保存，避免复制模板
+抬高知识库规模。
+
+Dense 仍保留版本化文件索引作为可复现对照，同时增加 `PgVectorIndexRepository`：文档向量
+离线写入 PostgreSQL/pgvector，查询时只编码 Query，可切换 exact 与 HNSW。知识图通过
+`Neo4jGraphRepository` 保存版本化节点、边、Chunk 引用和 provenance；内存图继续用于快速
+单元测试。两种 adapter 都返回既有 `RetrievalResult`/`KnowledgeGraph`，Pipeline 不依赖
+具体存储后端。
+
+```text
+versioned chunks -> BGE offline index -> file exact | pgvector exact/HNSW
+versioned graph  -> in-memory graph   | Neo4j repository
+query -> configured retriever -> unified RetrievalResult -> Evidence Gate
+```
+
+Compose 已包含 pgvector 与 Neo4j，并提供写入、查询、容器重启、再次读取的验证脚本。由于当前
+宿主机没有 Docker，本地只完成 adapter 单元测试；真实持久化验收必须在 Docker-enabled CI
+运行后才能标记通过，不能由文件索引结果替代。
+
+## Agent Runtime、Replay 与发布门禁
+
+P1-D6 用 `AgentRuntime` 统一 HTTP、CLI 和 Evaluation Worker 的执行上下文，但保留现有
+Router/Retriever/Pipeline 算法接口。一次请求只有一个 root run；routing、retrieval、evidence、
+context、generation、validation 和 bounded retry 是 child spans。Span 保存 ID 引用、阶段耗时、
+token 摘要、错误和版本指纹，不保存 API key、原始 Prompt 或未脱敏正文。
+
+```text
+RunContext(request/config/model/prompt/index/dataset versions)
+  -> AgentRuntime
+     -> one AgentTrace
+     -> stage/attempt SpanEvent
+     -> SpanSink（失败与业务结果隔离）
+     -> StageCheckpoint（完成阶段 + side-effect key + fingerprint）
+```
+
+- **Replay**：读取保存的 request/config/artifact refs，复现 Fake 全链或指定阶段；外部模型输出
+  不可确定复现时返回 `unavailable`，不伪装一致。
+- **Resume**：只恢复同一个 Run。fingerprint 一致且工件仍存在时跳过已完成阶段；配置、索引或
+  工件漂移时丢弃旧状态并安全重跑。side-effect key 防止恢复时重复模型调用或外部写入。
+- **Router Feedback**：在线只收集确认反馈，离线生成候选版本；候选经过完整 dev/reference
+  shadow gate 后才能发布，registry 保留 parent/report/feedback dataset 并支持回滚。
+- **CI Evaluation Gate**：执行 fixed regression，并比较 Router Accuracy、Recall@5、NDCG@5、
+  Grounding、E2E 和 P95 阈值；只使用 dev/reference，不消费 frozen test 调参。
+
+故障注入覆盖模型 timeout、非法生成、非法 citation、Span/Trace sink 故障、中断恢复和配置/工件
+漂移。三条脱敏 Trace 位于 `traces/sanitized_examples/p1-d6-*.json`，Runtime/故障矩阵位于
+`reports/runtime/p1-d6-runtime-v01/`。
 
 ## 运行工件目录
 
@@ -669,3 +769,26 @@ traces/
 - 更通用的数据 profile。
 
 不做多 Agent、MCP 或 Kubernetes 作为 P0 装饰。
+
+## Model Gateway 与 P1 冻结发布
+
+Generator、Semantic Grader 和后续 Summarizer 统一依赖 `LlmClient` 契约，生产配置可注入
+`ModelGateway`：
+
+```text
+Prompt -> ModelGateway
+  -> primary（最多 2 attempts）
+  -> transient failure: exponential backoff
+  -> circuit open / request or auth error: fallback provider
+  -> all unavailable: controlled ModelGatewayUnavailable
+```
+
+并发由固定 worker pool 限制为 4；单次 Provider timeout 为 60 秒；熔断阈值 3，30 秒后只允许
+一个 half-open probe。Trace 记录 provider、attempt、reason、latency、tokens、cost 和 circuit
+状态，不保存 Prompt、响应正文或 API key。底层 DeepSeek SDK 的自动重试关闭，避免 Gateway
+重试与 SDK 重试相乘。
+
+P1 发布配置由 `configs/final/p1_v0.3.json` 冻结，文件保存 dataset、chunks、Router、Context、
+Retriever 和 Gateway 配置的 SHA-256。冻结脚本拒绝覆盖已有 release 目录；test 失败只进入
+failure artifacts，不再用同一版本调参。`evalrag_context_v0.1` 没有 untouched test split，
+所以 Context/Memory 仍是 dev-only，不包装成 multi-turn frozen。

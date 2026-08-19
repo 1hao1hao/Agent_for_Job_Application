@@ -6,6 +6,7 @@ from intern_rag.evaluation import (
     RetrievalEvalCase,
     RouterEvalCase,
     calculate_average_recall_at_k,
+    calculate_ndcg_at_k,
     calculate_recall_at_k,
     calculate_router_accuracy,
     evaluate_cases,
@@ -42,6 +43,13 @@ class EvaluationTests(unittest.TestCase):
         ]
 
         self.assertEqual(calculate_average_recall_at_k(cases, k=2), 0.75)
+
+    def test_ndcg_rewards_relevant_evidence_near_the_front(self) -> None:
+        first = calculate_ndcg_at_k(["relevant", "noise"], ["relevant"], 2)
+        second = calculate_ndcg_at_k(["noise", "relevant"], ["relevant"], 2)
+
+        self.assertEqual(first, 1.0)
+        self.assertGreater(first, second)
 
     def test_calculate_router_accuracy_requires_intent_and_sources(self) -> None:
         cases = [

@@ -1,0 +1,109 @@
+name: P1 Full Persistent Retrieval Ablation
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Versioned run id
+        required: false
+        default: p1-d4-persistent-v03-actions
+
+jobs:
+  full-persistent-ablation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      DATABASE_URL: postgresql://evalrag:evalrag-local@localhost:5432/evalrag
+      NEO4J_URI: bolt://localhost:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: evalrag-local
+      HF_HOME: ${{ github.workspace }}/.cache/huggingface
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Cache fixed BGE model
+        uses: actions/cache@v4
+        with:
+          path: .cache/huggingface
+          key: hf-bge-small-zh-v1.5-7999e1d3359715c523056ef9478215996d62a620
+
+      - name: Install retrieval dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Start pgvector and Neo4j
+        run: docker compose -f compose.yaml up -d postgres neo4j
+
+      - name: Wait for persistent stores
+        run: |
+          for attempt in $(seq 1 90); do
+            postgres_status=$(docker inspect --format='{{.State.Health.Status}}' \
+              "$(docker compose -f compose.yaml ps -q postgres)")
+            neo4j_status=$(docker inspect --format='{{.State.Health.Status}}' \
+              "$(docker compose -f compose.yaml ps -q neo4j)")
+            if [ "$postgres_status" = healthy ] && [ "$neo4j_status" = healthy ]; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker compose -f compose.yaml ps
+          docker compose -f compose.yaml logs postgres neo4j
+          exit 1
+
+      - name: Build fixed-revision BGE index
+        run: |
+          PYTHONPATH=src python scripts/build_dense_index.py \
+            --dataset-version evalrag_v0.3 \
+            --output-dir data/processed/indexes/evalrag_v0.3/bge-small-zh-v1.5 \
+            --model-kind sentence_transformer \
+            --model-name BAAI/bge-small-zh-v1.5 \
+            --revision 7999e1d3359715c523056ef9478215996d62a620 \
+            --device cpu
+
+      - name: Load full v0.3 stores
+        run: PYTHONPATH=src python scripts/load_v03_stores.py
+
+      - name: Run file exact, pgvector exact and HNSW comparison
+        run: |
+          PYTHONPATH=src python scripts/run_persistent_retrieval_ablation.py \
+            --run-id "${{ inputs.run_id }}"
+
+      - name: Verify persistence after restart
+        run: |
+          PYTHONPATH=src python scripts/validate_persistent_stores.py
+          docker compose -f compose.yaml restart postgres neo4j
+          for attempt in $(seq 1 90); do
+            postgres_status=$(docker inspect --format='{{.State.Health.Status}}' \
+              "$(docker compose -f compose.yaml ps -q postgres)")
+            neo4j_status=$(docker inspect --format='{{.State.Health.Status}}' \
+              "$(docker compose -f compose.yaml ps -q neo4j)")
+            if [ "$postgres_status" = healthy ] && [ "$neo4j_status" = healthy ]; then
+              PYTHONPATH=src python scripts/validate_persistent_stores.py --verify-only
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+
+      - name: Upload versioned run artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.run_id }}
+          if-no-files-found: warn
+          path: |
+            reports/infrastructure/p1-d4-v03/
+            reports/ablations/${{ inputs.run_id }}/
+            reports/runs/${{ inputs.run_id }}-*/
+
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose -f compose.yaml logs postgres neo4j
+
+      - name: Stop stores
+        if: always()
+        run: docker compose -f compose.yaml down -v

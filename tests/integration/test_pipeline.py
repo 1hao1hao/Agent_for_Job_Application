@@ -4,11 +4,18 @@ import tempfile
 import unittest
 
 from intern_rag.agent import (
+    ContextEngine,
+    ContextInputs,
     EvidenceConfig,
     FakeLlmClient,
+    GatewayProvider,
+    ModelGateway,
+    ModelGatewayConfig,
     PipelineConfig,
     RagPipeline,
     RagRequest,
+    ProfileFact,
+    UserProfile,
 )
 from intern_rag.agent.generation import LlmTimeoutError
 from intern_rag.ingestion import Chunk
@@ -101,6 +108,8 @@ class PipelineIntegrationTests(unittest.TestCase):
         self.assertEqual(trace.routing["intent"], "analyze_jd")
         self.assertEqual(trace.retrieval["chunk_ids"], ["jd-1"])
         self.assertEqual(trace.context["used_chunk_ids"], ["jd-1"])
+        self.assertEqual(trace.context["selection_strategy"], "rank_prefix")
+        self.assertEqual(trace.context["covered_source_types"], ["jd"])
         self.assertEqual(trace.generation["status"], "parsed")
         self.assertTrue(trace.validation["is_valid"])
         self.assertEqual(
@@ -115,6 +124,110 @@ class PipelineIntegrationTests(unittest.TestCase):
                 "total",
             },
         )
+
+    def test_model_gateway_attempt_is_embedded_in_request_trace(self) -> None:
+        raw = _raw_generation(
+            answer="岗位要求熟悉 Python。",
+            cited_chunk_ids=["jd-1"],
+            sufficient=True,
+            reason="证据明确。",
+        )
+        gateway = ModelGateway(
+            [GatewayProvider("fake-primary", FakeLlmClient([raw]), "fake-model")],
+            ModelGatewayConfig(max_attempts_per_provider=1),
+        )
+        with tempfile.TemporaryDirectory() as temp_dir:
+            trace_path = Path(temp_dir) / "gateway.jsonl"
+            response = RagPipeline(
+                chunks=_chunks(),
+                llm_client=gateway,
+                config=PipelineConfig(model="gateway"),
+                trace_path=trace_path,
+            ).run(RagRequest(query="分析岗位要求"))
+            trace = read_traces_jsonl(trace_path)[0]
+
+        self.assertEqual(response.status, "answered")
+        gateway_trace = trace.attempts[-1]["model_gateway"]
+        self.assertEqual(gateway_trace["selected_provider"], "fake-primary")
+        self.assertEqual(gateway_trace["attempts"][0]["reason"], "provider_success")
+
+    def test_trace_sink_failure_does_not_replace_business_response(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            def failing_sink(trace) -> None:
+                raise OSError("trace store unavailable")
+
+            pipeline = RagPipeline(
+                chunks=_chunks(),
+                llm_client=FakeLlmClient([_raw_generation(
+                    answer="岗位要求熟悉 Python。",
+                    cited_chunk_ids=["jd-1"],
+                    sufficient=True,
+                    reason="证据明确。",
+                )]),
+                config=PipelineConfig(model="fake-model"),
+                trace_path=Path(temp_dir) / "trace.jsonl",
+                trace_sink=failing_sink,
+            )
+
+            response = pipeline.run(RagRequest("分析岗位 Python 要求"))
+
+            self.assertEqual(response.status, "answered")
+            self.assertIn("sink:OSError", pipeline.last_trace_persistence_errors[0])
+
+    def test_managed_context_records_budget_profile_and_memory_decisions(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            trace_path = Path(temp_dir) / "managed.jsonl"
+            pipeline = RagPipeline(
+                chunks=_chunks(),
+                llm_client=FakeLlmClient([
+                    _raw_generation(
+                        answer="岗位要求 Python。",
+                        cited_chunk_ids=["jd-1"],
+                        sufficient=True,
+                        reason="证据充分",
+                    )
+                ]),
+                config=PipelineConfig(
+                    model="fake-model",
+                    context_token_budget=600,
+                    context_mode="semantic_memory",
+                ),
+                trace_path=trace_path,
+                context_engine=ContextEngine(),
+                context_provider=lambda request: ContextInputs(
+                    profile=UserProfile(
+                        request.user_id or "u1",
+                        (ProfileFact("城市", "广州", "explicit"),),
+                        1,
+                        "2026-08-16T00:00:00+00:00",
+                    )
+                ),
+            )
+
+            response = pipeline.run(
+                RagRequest(
+                    query="分析岗位要求",
+                    user_id="u1",
+                    session_id="s1",
+                )
+            )
+            trace = read_traces_jsonl(trace_path)[0]
+
+        self.assertEqual(response.status, "answered")
+        self.assertEqual(trace.context["mode"], "semantic_memory")
+        self.assertLessEqual(
+            trace.context["actual_prompt_token_count"],
+            trace.context["token_budget"],
+        )
+        self.assertGreater(trace.context["reserved_token_count"], 0)
+        self.assertEqual(trace.context["memory_write_ids"], [])
+        self.assertEqual(
+            trace.context["memory_write_reason"],
+            "disabled_without_explicit_confirmation",
+        )
+        self.assertEqual(trace.context["token_budget"], 600)
+        self.assertIn("profile:1", trace.context["kept_segment_ids"])
+        self.assertNotIn("广州", json.dumps(trace.context, ensure_ascii=False))
 
     def test_request_can_select_configured_dense_retriever(self) -> None:
         def dense_retriever(query, chunks, top_k=5, source_types=None):
@@ -172,6 +285,47 @@ class PipelineIntegrationTests(unittest.TestCase):
 
         self.assertEqual(response.status, "answered")
         self.assertEqual(trace.retrieval["retriever"], "bm25_hybrid")
+
+    def test_adaptive_retrieval_decision_is_written_to_trace(self) -> None:
+        class FakeAdaptiveRetriever:
+            def __call__(self, query, chunks, top_k=5, source_types=None):
+                del query, top_k, source_types
+                chunk = chunks[0]
+                return [RetrievalResult(chunk.id, 0.9, 1, chunk)]
+
+            def get_last_trace(self):
+                return {
+                    "strategy": "hybrid",
+                    "confidence": 0.82,
+                    "rerank_invoked": False,
+                }
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            trace_path = Path(temp_dir) / "adaptive-trace.jsonl"
+            pipeline = RagPipeline(
+                chunks=_chunks(),
+                llm_client=FakeLlmClient([_raw_generation(
+                    answer="岗位要求 Python。",
+                    cited_chunk_ids=["jd-1"],
+                    sufficient=True,
+                    reason="证据充分",
+                )]),
+                config=PipelineConfig(model="fake-model"),
+                trace_path=trace_path,
+                retrievers={"adaptive": FakeAdaptiveRetriever()},
+            )
+
+            response = pipeline.run(RagRequest(
+                query="分析岗位要求", retriever="adaptive"
+            ))
+            trace = read_traces_jsonl(trace_path)[0]
+
+        self.assertEqual(response.status, "answered")
+        self.assertEqual(trace.retrieval["decision"]["strategy"], "hybrid")
+        self.assertFalse(trace.retrieval["decision"]["rerank_invoked"])
+        self.assertEqual(
+            trace.attempts[0]["retrieval_decision"]["confidence"], 0.82
+        )
 
     def test_insufficient_query_returns_controlled_abstention(self) -> None:
         response, traces = self._run_pipeline(

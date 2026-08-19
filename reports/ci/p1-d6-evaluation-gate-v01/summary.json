@@ -1,0 +1,196 @@
+{
+  "gate_version": "evaluation-gate-v0.1",
+  "dataset_versions": [
+    "evalrag_v0.2",
+    "evalrag_v0.3"
+  ],
+  "split": "dev/reference",
+  "frozen_test_used": false,
+  "reference": {
+    "router_accuracy": 0.9625,
+    "recall_at_5": 0.475,
+    "ndcg_at_5": 0.40493096351058866,
+    "grounding_support": 0.9696969696969697,
+    "end_to_end_success": 0.625,
+    "p95_ms": 389.73334804177284
+  },
+  "candidate": {
+    "router_accuracy": 1.0,
+    "recall_at_5": 0.475,
+    "ndcg_at_5": 0.40493096351058866,
+    "grounding_support": 0.9696969696969697,
+    "end_to_end_success": 0.625,
+    "p95_ms": 200.07142890244722
+  },
+  "unchanged_subsystems": [
+    "retrieval",
+    "grounding",
+    "end_to_end"
+  ],
+  "regression": {
+    "case_results": [
+      {
+        "case_id": "reg-router-company-list-v1",
+        "status": "fixed",
+        "failure_type": "router_wrong",
+        "passed": true,
+        "expected": {
+          "intent": "unknown",
+          "sources": []
+        },
+        "actual": {
+          "intent": "unknown",
+          "sources": []
+        },
+        "error": ""
+      },
+      {
+        "case_id": "reg-multi-intent-project-match-v1",
+        "status": "open",
+        "failure_type": "router_multi_intent",
+        "passed": null,
+        "note": "open regression is not included in pass rate"
+      },
+      {
+        "case_id": "reg-jd-freshness-v1",
+        "status": "open",
+        "failure_type": "freshness_missing",
+        "passed": null,
+        "note": "open regression is not included in pass rate"
+      },
+      {
+        "case_id": "reg-cross-source-citation-v1",
+        "status": "open",
+        "failure_type": "citation_support",
+        "passed": null,
+        "note": "open regression is not included in pass rate"
+      },
+      {
+        "case_id": "reg-uncited-context-claim-v1",
+        "status": "open",
+        "failure_type": "unsupported_answer",
+        "passed": null,
+        "note": "open regression is not included in pass rate"
+      },
+      {
+        "case_id": "reg-router-feedback-semantic-003",
+        "status": "fixed",
+        "failure_type": "router_wrong",
+        "passed": true,
+        "expected": {
+          "intent": "analyze_jd",
+          "sources": [
+            "jd"
+          ]
+        },
+        "actual": {
+          "intent": "analyze_jd",
+          "sources": [
+            "jd"
+          ]
+        },
+        "error": ""
+      },
+      {
+        "case_id": "reg-router-feedback-semantic-006",
+        "status": "fixed",
+        "failure_type": "router_wrong",
+        "passed": true,
+        "expected": {
+          "intent": "analyze_jd",
+          "sources": [
+            "jd"
+          ]
+        },
+        "actual": {
+          "intent": "analyze_jd",
+          "sources": [
+            "jd"
+          ]
+        },
+        "error": ""
+      },
+      {
+        "case_id": "reg-router-feedback-semantic-019",
+        "status": "fixed",
+        "failure_type": "router_wrong",
+        "passed": true,
+        "expected": {
+          "intent": "project_explain",
+          "sources": [
+            "project_logs",
+            "resume"
+          ]
+        },
+        "actual": {
+          "intent": "project_explain",
+          "sources": [
+            "project_logs",
+            "resume"
+          ]
+        },
+        "error": ""
+      }
+    ],
+    "fixed_count": 4,
+    "fixed_passed": 4,
+    "open_count": 4,
+    "fixed_pass_rate": 1.0
+  },
+  "gate": {
+    "passed": true,
+    "checks": [
+      {
+        "metric": "router_accuracy",
+        "reference": 0.9625,
+        "candidate": 1.0,
+        "passed": true,
+        "reason": ""
+      },
+      {
+        "metric": "recall_at_5",
+        "reference": 0.475,
+        "candidate": 0.475,
+        "passed": true,
+        "reason": ""
+      },
+      {
+        "metric": "ndcg_at_5",
+        "reference": 0.40493096351058866,
+        "candidate": 0.40493096351058866,
+        "passed": true,
+        "reason": ""
+      },
+      {
+        "metric": "grounding_support",
+        "reference": 0.9696969696969697,
+        "candidate": 0.9696969696969697,
+        "passed": true,
+        "reason": ""
+      },
+      {
+        "metric": "end_to_end_success",
+        "reference": 0.625,
+        "candidate": 0.625,
+        "passed": true,
+        "reason": ""
+      },
+      {
+        "metric": "p95_ms",
+        "reference": 389.73334804177284,
+        "candidate": 200.07142890244722,
+        "passed": true,
+        "reason": ""
+      },
+      {
+        "metric": "fixed_regression_pass_rate",
+        "reference": 1.0,
+        "candidate": 1.0,
+        "passed": true,
+        "reason": ""
+      }
+    ],
+    "failed_case_ids": [],
+    "reasons": []
+  }
+}

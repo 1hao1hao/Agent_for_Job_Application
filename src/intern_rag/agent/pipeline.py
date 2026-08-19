@@ -6,7 +6,14 @@ from time import perf_counter
 from typing import Callable, Mapping
 from uuid import uuid4
 
-from intern_rag.agent.context import build_context
+from intern_rag.agent.context import ContextStrategy, build_context
+from intern_rag.agent.context_engine import (
+    ContextBudgetError,
+    ContextEngine,
+    ContextEngineConfig,
+    ContextInputs,
+    ContextMode,
+)
 from intern_rag.agent.evidence import EvidenceConfig, check_evidence
 from intern_rag.agent.generation import (
     GenerationParseError,
@@ -14,9 +21,10 @@ from intern_rag.agent.generation import (
     LlmClient,
     LlmClientError,
     LlmTimeoutError,
+    build_generation_prompt,
     generate_answer,
 )
-from intern_rag.agent.schemas import RagRequest, RagResponse
+from intern_rag.agent.schemas import BuiltContext, RagRequest, RagResponse
 from intern_rag.agent.validation import ValidationResult, validate_generation
 from intern_rag.ingestion import Chunk
 from intern_rag.retrieval import RetrievalResult, Retriever, retrieve_top_k
@@ -42,10 +50,14 @@ class PipelineConfig:
     temperature: float = 0.0
     prompt_version: str = "p0-v1"
     context_max_chars: int = 4000
+    context_strategy: ContextStrategy = "rank_prefix"
     router_name: str = "rule"
     evidence: EvidenceConfig = field(default_factory=EvidenceConfig)
     max_source_retries: int = 1
     max_format_retries: int = 1
+    context_token_budget: int = 1800
+    context_mode: ContextMode = "recent_window"
+    system_prompt: str = "仅依据提供的证据回答；证据不足时明确拒答。"
 
     def __post_init__(self) -> None:
         """拒绝无法执行或无法复现的空配置。"""
@@ -58,6 +70,14 @@ class PipelineConfig:
             raise ValueError("prompt_version must not be empty")
         if self.context_max_chars <= 0:
             raise ValueError("context_max_chars must be greater than 0")
+        if self.context_strategy not in {"rank_prefix", "source_balanced"}:
+            raise ValueError("unknown context_strategy")
+        if self.context_token_budget <= 0:
+            raise ValueError("context_token_budget must be greater than 0")
+        if self.context_mode not in {
+            "no_memory", "full_history", "recent_window", "summary_recent", "semantic_memory"
+        }:
+            raise ValueError("unknown context_mode")
         if not self.router_name.strip():
             raise ValueError("router_name must not be empty")
         if self.max_source_retries not in {0, 1}:
@@ -85,6 +105,8 @@ class RagPipeline:
         retriever: Retriever = retrieve_top_k,
         retrievers: Mapping[str, Retriever] | None = None,
         trace_sink: Callable[[AgentTrace], None] | None = None,
+        context_engine: ContextEngine | None = None,
+        context_provider: Callable[[RagRequest], ContextInputs] | None = None,
     ) -> None:
         self.chunks = list(chunks)
         self.llm_client = llm_client
@@ -99,6 +121,10 @@ class RagPipeline:
         if retrievers is not None:
             self.retrievers.update(retrievers)
         self.trace_sink = trace_sink
+        self.context_engine = context_engine
+        self.context_provider = context_provider
+        self.last_trace: AgentTrace | None = None
+        self.last_trace_persistence_errors: list[str] = []
 
     def run(self, request: RagRequest) -> RagResponse:
         """执行门控与有限重试，并始终只追加一条请求级 Trace。"""
@@ -126,6 +152,7 @@ class RagPipeline:
         generation_trace: dict[str, object] = {}
         validation_trace: dict[str, object] = {}
         evidence_trace: dict[str, object] = {}
+        retrieval_decision_trace: dict[str, object] = {}
         attempts: list[dict[str, object]] = []
         citations: list[dict[str, object]] = []
         response = self._error_response(
@@ -171,6 +198,7 @@ class RagPipeline:
                     top_k=request.top_k,
                     source_types=source_types,
                 )
+                retrieval_decision_trace = _retriever_trace(selected_retriever)
                 retrieval_latency = _elapsed_ms(stage_started_at)
                 latency_ms["retrieval"] += retrieval_latency
 
@@ -198,6 +226,7 @@ class RagPipeline:
                     "retrieved_chunk_ids": [
                         result.chunk_id for result in retrieved_results
                     ],
+                    "retrieval_decision": retrieval_decision_trace,
                     "evidence": evidence_trace,
                     "latency_ms": {
                         "retrieval": retrieval_latency,
@@ -228,11 +257,63 @@ class RagPipeline:
                 # Context Builder 利用检索返回的结果构造模型上下文。
                 current_stage = "context"
                 stage_started_at = perf_counter()
-                built_context = build_context(
-                    request.query,
-                    retrieved_results,
-                    max_chars=self.config.context_max_chars,
-                )
+                managed_context = None
+                if self.context_engine is None:
+                    built_context = build_context(
+                        request.query,
+                        retrieved_results,
+                        max_chars=self.config.context_max_chars,
+                        strategy=self.config.context_strategy,
+                        required_source_types=route_decision.routed_sources,
+                    )
+                else:
+                    inputs = (
+                        self.context_provider(request)
+                        if self.context_provider is not None
+                        else ContextInputs()
+                    )
+                    # 先估算 Generator 外层指令、Query 与候选 citation id 的固定开销，
+                    # Context Engine 的 token_budget 因而覆盖最终完整 Prompt，而非仅证据正文。
+                    candidate_ids = [item.chunk_id for item in retrieved_results]
+                    empty_context = BuiltContext(
+                        query=request.query,
+                        text="",
+                        items=[],
+                        used_chunk_ids=candidate_ids,
+                        skipped_chunk_ids=[],
+                        char_count=0,
+                        max_chars=0,
+                    )
+                    reserved_tokens = self.context_engine.estimator.count(
+                        build_generation_prompt(
+                            request.query, empty_context, self.config.prompt_version
+                        )
+                    )
+                    managed_context = self.context_engine.build(
+                        query=request.query,
+                        system_prompt=self.config.system_prompt,
+                        retrieved_results=retrieved_results,
+                        config=ContextEngineConfig(
+                            token_budget=self.config.context_token_budget,
+                            evidence_char_budget=self.config.context_max_chars,
+                            mode=self.config.context_mode,
+                            evidence_strategy=self.config.context_strategy,
+                            reserved_token_count=reserved_tokens,
+                        ),
+                        required_source_types=route_decision.routed_sources,
+                        profile=inputs.profile,
+                        history=inputs.history,
+                        memories=inputs.memories,
+                        history_summary=inputs.history_summary,
+                    )
+                    built_context = managed_context.as_built_context()
+                    actual_prompt_tokens = self.context_engine.estimator.count(
+                        build_generation_prompt(
+                            request.query, built_context, self.config.prompt_version
+                        )
+                    )
+                    if actual_prompt_tokens > self.config.context_token_budget:
+                        raise ContextBudgetError("formatted generation prompt exceeds token budget")
                 latency_ms["context"] = _elapsed_ms(stage_started_at)
                 context_trace = {
                     "used_chunk_ids": built_context.used_chunk_ids,
@@ -240,7 +321,25 @@ class RagPipeline:
                     "char_count": built_context.char_count,
                     "max_chars": built_context.max_chars,
                     "is_truncated": built_context.is_truncated,
+                    "selection_strategy": built_context.selection_strategy,
+                    "covered_source_types": built_context.covered_source_types,
+                    "missing_source_types": built_context.missing_source_types,
                 }
+                if managed_context is not None:
+                    context_trace.update({
+                        "mode": managed_context.mode,
+                        "token_count": managed_context.token_count,
+                        "token_budget": managed_context.token_budget,
+                        "reserved_token_count": managed_context.reserved_token_count,
+                        "actual_prompt_token_count": actual_prompt_tokens,
+                        "token_estimator_version": managed_context.token_estimator_version,
+                        "kept_segment_ids": list(managed_context.kept_ids),
+                        "dropped": list(managed_context.dropped),
+                        "recalled_memory_ids": list(managed_context.recalled_memory_ids),
+                        "memory_write_ids": [],
+                        "memory_write_reason": "disabled_without_explicit_confirmation",
+                        "compression_fallbacks": list(managed_context.compression_fallbacks),
+                    })
 
                 while True:
                     current_stage = "generation"
@@ -257,6 +356,9 @@ class RagPipeline:
                         generation_latency = _elapsed_ms(stage_started_at)
                         latency_ms["generation"] += generation_latency
                         generation_trace = _generation_to_trace(generation_result)
+                        gateway_trace = _read_model_gateway_trace(self.llm_client)
+                        if gateway_trace:
+                            generation_trace["model_gateway"] = gateway_trace
                         call_token_usage = _read_token_usage(self.llm_client)
                         attempts.append({
                             "attempt": len(attempts) + 1,
@@ -268,6 +370,7 @@ class RagPipeline:
                             "status": "parsed",
                             "latency_ms": {"generation": generation_latency},
                             "token_usage": call_token_usage,
+                            "model_gateway": gateway_trace,
                         })
                         break
                     except GenerationParseError as error:
@@ -284,6 +387,7 @@ class RagPipeline:
                             "reason": error.error_type,
                             "latency_ms": {"generation": generation_latency},
                             "token_usage": _read_token_usage(self.llm_client),
+                            "model_gateway": _read_model_gateway_trace(self.llm_client),
                         })
                         if format_retry_count >= self.config.max_format_retries:
                             raise
@@ -364,6 +468,7 @@ class RagPipeline:
             generation_trace = {
                 "status": "error",
                 "error_message": str(error),
+                "model_gateway": _read_model_gateway_trace(self.llm_client),
             }
             attempts.append({
                 "attempt": len(attempts) + 1,
@@ -376,6 +481,7 @@ class RagPipeline:
                     "output_tokens": None,
                     "source": "not_reported_by_client_contract",
                 },
+                "model_gateway": _read_model_gateway_trace(self.llm_client),
             })
             response = self._error_response(
                 request=request,
@@ -432,6 +538,7 @@ class RagPipeline:
                 "top_k": request.top_k,
                 "result_count": len(retrieved_results),
                 "chunk_ids": [result.chunk_id for result in retrieved_results],
+                "decision": retrieval_decision_trace,
             },
             context=context_trace,
             evidence=evidence_trace,
@@ -441,6 +548,7 @@ class RagPipeline:
                 "model": self.config.model,
                 "temperature": self.config.temperature,
                 "context_max_chars": self.config.context_max_chars,
+                "context_strategy": self.config.context_strategy,
                 "router_name": self.config.router_name,
                 "max_source_retries": self.config.max_source_retries,
                 "max_format_retries": self.config.max_format_retries,
@@ -458,9 +566,21 @@ class RagPipeline:
                 "source": "client_reported_or_explicitly_unavailable",
             },
         )
-        write_trace_jsonl(trace, self.trace_path)
+        self.last_trace = trace
+        self.last_trace_persistence_errors = []
+        try:
+            write_trace_jsonl(trace, self.trace_path)
+        except Exception as error:
+            self.last_trace_persistence_errors.append(
+                f"jsonl:{type(error).__name__}: {error}"
+            )
         if self.trace_sink is not None:
-            self.trace_sink(trace)
+            try:
+                self.trace_sink(trace)
+            except Exception as error:
+                self.last_trace_persistence_errors.append(
+                    f"sink:{type(error).__name__}: {error}"
+                )
         return response
 
     @staticmethod
@@ -513,6 +633,16 @@ def _validation_to_trace(result: ValidationResult) -> dict[str, object]:
     }
 
 
+def _retriever_trace(retriever: Retriever) -> dict[str, object]:
+    """读取可观测 Retriever 的本次决策；普通 Retriever 返回空字典。"""
+
+    get_last_trace = getattr(retriever, "get_last_trace", None)
+    if not callable(get_last_trace):
+        return {}
+    trace = get_last_trace()
+    return dict(trace) if isinstance(trace, dict) else {}
+
+
 def _stage_error_type(stage: str) -> ErrorType:
     """把未预期异常归类到当前执行阶段。"""
 
@@ -536,3 +666,10 @@ def _read_token_usage(client: LlmClient) -> dict[str, object]:
         "output_tokens": None,
         "source": "not_reported_by_client",
     }
+
+
+def _read_model_gateway_trace(client: LlmClient) -> dict[str, object]:
+    """读取 Gateway 的脱敏 provider attempt，不要求普通 LLM client 实现。"""
+
+    trace = getattr(client, "last_gateway_trace", None)
+    return dict(trace) if isinstance(trace, dict) else {}

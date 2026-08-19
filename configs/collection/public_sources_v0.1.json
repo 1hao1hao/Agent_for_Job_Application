@@ -1,0 +1,116 @@
+{
+  "version": "public_sources_v0.1",
+  "sources": [
+    {
+      "source_id": "jd-baidu-j99230",
+      "source_type": "jd",
+      "url": "https://talent.baidu.com/jobs/detail/INTERN/f8a467f0-2a4a-4238-a21c-412408f85c2e",
+      "title": "大模型算法实习生（J99230）",
+      "company": "百度",
+      "city": "北京、深圳",
+      "job_id": "J99230",
+      "published_at": "2026-07-21",
+      "start_marker": "大模型算法实习生（J99230）",
+      "end_marker": "申请职位",
+      "description_start": "工作职责：",
+      "description_end": "职责要求：",
+      "requirements_start": "职责要求：",
+      "requirements_end": "申请职位"
+    },
+    {
+      "source_id": "jd-hikvision-rag-20260706",
+      "source_type": "jd",
+      "url": "https://talent.hikvision.com/home/socity/position?postId=062541642F1585B48071F76C89E1B801",
+      "title": "软件产品-大模型 RAG 算法实习生",
+      "company": "海康威视",
+      "city": "杭州",
+      "job_id": "062541642F1585B48071F76C89E1B801",
+      "published_at": "2026-07-06",
+      "start_marker": "软件产品-大模型rag算法实习生-杭州",
+      "end_marker": "申请岗位",
+      "description_start": "岗位职责：",
+      "description_end": "职位要求",
+      "requirements_start": "职位要求：",
+      "requirements_end": "申请岗位"
+    },
+    {
+      "source_id": "jd-haier-ai-app-10001515",
+      "source_type": "jd",
+      "url": "https://maker.haier.net/client/practicemobile/jobdetail/id/10001515",
+      "title": "AI 应用开发实习生",
+      "company": "海尔",
+      "city": "青岛",
+      "job_id": "10001515",
+      "published_at": "2026-04-07",
+      "start_marker": "AI应用开发实习生",
+      "end_marker": "投递简历",
+      "description_start": "我们需要您",
+      "description_end": "我们希望您",
+      "requirements_start": "我们希望您",
+      "requirements_end": "首页"
+    },
+    {
+      "source_id": "jd-shlab-agent-7594310017110280494",
+      "source_type": "jd",
+      "url": "https://www.shlab.org.cn/joinus/detail/7594310017110280494?mode=campus",
+      "title": "大模型算法实习生（Agent 基础能力方向）",
+      "company": "上海人工智能实验室",
+      "city": "上海、北京",
+      "job_id": "7594310017110280494",
+      "published_at": "2026-01-12",
+      "start_marker": "大模型算法实习生（Agent基础能力方向）",
+      "end_marker": "岗位要求"
+    },
+    {
+      "source_id": "jd-oppo-agent-1676",
+      "source_type": "jd",
+      "url": "https://careers.oppo.com/university/oppo/campus/post/1676?recruitType=Intern",
+      "title": "高级 AI 研究员（AI 多模态智能体）",
+      "company": "OPPO",
+      "city": "深圳",
+      "job_id": "1676",
+      "published_at": "2026-03-06",
+      "start_marker": "高级AI研究员（AI多模态智能体）",
+      "end_marker": "投递岗位"
+    },
+    {
+      "source_id": "interview-ant-agent-20260609",
+      "source_type": "interview",
+      "url": "https://www.nowcoder.com/discuss/894720138258173952",
+      "title": "智能体与大模型应用工程实习一面",
+      "source_platform": "nowcoder",
+      "start_marker": "❓面试问题：",
+      "end_marker": "提示",
+      "max_chars": 6000
+    },
+    {
+      "source_id": "interview-sensetime-llm-application",
+      "source_type": "interview",
+      "url": "https://www.nowcoder.com/feed/main/detail/2762070c2c52472da06bf9ee59518d79",
+      "title": "商汤大模型算法应用实习面经",
+      "source_platform": "nowcoder",
+      "start_marker": "一面（偏基础和简历深挖）：",
+      "end_marker": "#商汤",
+      "max_chars": 6000
+    },
+    {
+      "source_id": "interview-tencent-baidu-agent-summary",
+      "source_type": "interview",
+      "url": "https://www.nowcoder.com/discuss/878600528970735616",
+      "title": "腾讯与百度大模型 Agent 面经摘要",
+      "source_platform": "nowcoder",
+      "start_marker": "## 1. 腾讯｜AI应用开发后端实习生｜未知",
+      "end_marker": "## 2. 腾讯｜未知｜二面",
+      "max_chars": 4000
+    },
+    {
+      "source_id": "project-evalrag-readme",
+      "source_type": "project_logs",
+      "url": "https://raw.githubusercontent.com/1hao1hao/Agent_for_Job_Application/main/README.md",
+      "title": "EvalRAG 公开 README",
+      "source_platform": "github",
+      "content_type": "text",
+      "max_chars": 30000
+    }
+  ]
+}

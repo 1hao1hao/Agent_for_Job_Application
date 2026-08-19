@@ -1,0 +1,420 @@
+{
+  "dataset_version": "evalrag_v0.2",
+  "split": "dev",
+  "case_count": 80,
+  "single_variable": "BGE CrossEncoder reranking over Hybrid top-20",
+  "model": "BAAI/bge-reranker-base",
+  "revision": "2cfc18c9415c912f9d8155881c133215df768a70",
+  "baseline_run": "reports/runs/p0-d5-v02-dev-20260804-hybrid-baseline",
+  "rerank_run": "reports/runs/p1-cross-encoder-v02-dev-formal-20260811",
+  "baseline": {
+    "run_id": "p0-d5-v02-dev-20260804-hybrid-baseline",
+    "report_status": "formal",
+    "created_at": "2026-08-04T07:52:19.291588+00:00",
+    "dataset_version": "evalrag_v0.2",
+    "split": "dev",
+    "case_count": 80,
+    "answerable_case_count": 60,
+    "category_counts": {
+      "single_source": 20,
+      "semantic_paraphrase": 20,
+      "multi_source": 20,
+      "unanswerable": 20
+    },
+    "category_metrics": {
+      "multi_source": {
+        "case_count": 20,
+        "answerable_case_count": 20,
+        "recall_at_3": 0.625,
+        "recall_at_5": 0.7166666666666667,
+        "mrr": 0.925
+      },
+      "semantic_paraphrase": {
+        "case_count": 20,
+        "answerable_case_count": 20,
+        "recall_at_3": 0.8,
+        "recall_at_5": 0.85,
+        "mrr": 0.6541666666666667
+      },
+      "single_source": {
+        "case_count": 20,
+        "answerable_case_count": 20,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "mrr": 0.9166666666666666
+      },
+      "unanswerable": {
+        "case_count": 20,
+        "answerable_case_count": 0,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "mrr": 0.0
+      }
+    },
+    "failure_counts": {
+      "router_wrong": 7,
+      "retrieval_incomplete": 13
+    },
+    "metrics": {
+      "router_accuracy": 0.9125,
+      "recall_at_3": 0.8083333333333333,
+      "recall_at_5": 0.8555555555555555,
+      "mrr": 0.8319444444444445
+    },
+    "latency_ms": {
+      "retrieval": {
+        "count": 80,
+        "p50": 110.48604361712933,
+        "p95": 700.7130216807127
+      },
+      "routing": {
+        "count": 80,
+        "p50": 0.022375956177711487,
+        "p95": 0.04164595156908035
+      },
+      "total": {
+        "count": 80,
+        "p50": 110.59760581701994,
+        "p95": 700.7774291560054
+      }
+    },
+    "metric_scope": {
+      "router_accuracy": "all selected cases",
+      "recall_at_3": "answerable cases with relevant ids",
+      "recall_at_5": "answerable cases with relevant ids",
+      "mrr": "answerable cases with relevant ids"
+    },
+    "metric_formulas": {
+      "router_accuracy": "strict intent and source-set matches / all selected cases",
+      "recall_at_k": "|top-k retrieved ids intersect relevant ids| / |relevant ids|, macro average",
+      "mrr": "macro average of 1 / first relevant rank",
+      "latency_percentile": "nearest-rank percentile"
+    },
+    "runtime_environment": {
+      "python": "3.11.7",
+      "platform": "Linux-4.18.0-372.32.1.el8_6.x86_64-x86_64-with-glibc2.28",
+      "latency_mode": "single process; exported chunks preloaded"
+    },
+    "limitations": [
+      "Retrieval metrics do not measure final answer correctness."
+    ]
+  },
+  "rerank": {
+    "run_id": "p1-cross-encoder-v02-dev-formal-20260811",
+    "report_status": "formal",
+    "created_at": "2026-08-11T06:37:48.299325+00:00",
+    "dataset_version": "evalrag_v0.2",
+    "split": "dev",
+    "case_count": 80,
+    "answerable_case_count": 60,
+    "category_counts": {
+      "single_source": 20,
+      "semantic_paraphrase": 20,
+      "multi_source": 20,
+      "unanswerable": 20
+    },
+    "category_metrics": {
+      "multi_source": {
+        "case_count": 20,
+        "answerable_case_count": 20,
+        "recall_at_3": 0.5416666666666666,
+        "recall_at_5": 0.75,
+        "mrr": 0.65
+      },
+      "semantic_paraphrase": {
+        "case_count": 20,
+        "answerable_case_count": 20,
+        "recall_at_3": 0.45,
+        "recall_at_5": 0.6,
+        "mrr": 0.4325
+      },
+      "single_source": {
+        "case_count": 20,
+        "answerable_case_count": 20,
+        "recall_at_3": 0.9,
+        "recall_at_5": 0.95,
+        "mrr": 0.8125
+      },
+      "unanswerable": {
+        "case_count": 20,
+        "answerable_case_count": 0,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "mrr": 0.0
+      }
+    },
+    "failure_counts": {
+      "router_wrong": 7,
+      "retrieval_incomplete": 19
+    },
+    "metrics": {
+      "router_accuracy": 0.9125,
+      "recall_at_3": 0.6305555555555555,
+      "recall_at_5": 0.7666666666666666,
+      "mrr": 0.6316666666666667
+    },
+    "latency_ms": {
+      "retrieval": {
+        "count": 80,
+        "p50": 4899.119555018842,
+        "p95": 7511.436133645475
+      },
+      "routing": {
+        "count": 80,
+        "p50": 0.03321003168821335,
+        "p95": 0.05504302680492401
+      },
+      "total": {
+        "count": 80,
+        "p50": 4899.225926026702,
+        "p95": 7511.519016698003
+      }
+    },
+    "metric_scope": {
+      "router_accuracy": "all selected cases",
+      "recall_at_3": "answerable cases with relevant ids",
+      "recall_at_5": "answerable cases with relevant ids",
+      "mrr": "answerable cases with relevant ids"
+    },
+    "metric_formulas": {
+      "router_accuracy": "strict intent and source-set matches / all selected cases",
+      "recall_at_k": "|top-k retrieved ids intersect relevant ids| / |relevant ids|, macro average",
+      "mrr": "macro average of 1 / first relevant rank",
+      "latency_percentile": "nearest-rank percentile"
+    },
+    "runtime_environment": {
+      "python": "3.11.7",
+      "platform": "Linux-4.18.0-372.32.1.el8_6.x86_64-x86_64-with-glibc2.28",
+      "latency_mode": "single process; exported chunks preloaded"
+    },
+    "limitations": [
+      "Retrieval metrics do not measure final answer correctness."
+    ]
+  },
+  "differences": [
+    {
+      "case_id": "v02_semantic_009",
+      "category": "semantic_paraphrase",
+      "query": "简历优势：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+      "delta_mrr": -1.0,
+      "delta_recall_at_5": -1.0,
+      "baseline_top5": [
+        "resume-v02_09_resume-0-7b30133a899a",
+        "resume-v02_09_resume-1-7a6b96b0087b",
+        "resume-v02_09_resume-2-e12214f13cc6",
+        "resume-v02_09_resume-3-60508e76d385",
+        "jd-v02_09_jd-0-b9e604c36260"
+      ],
+      "rerank_top5": [
+        "resume-v02_09_resume-1-7a6b96b0087b",
+        "resume-v02_09_resume-2-e12214f13cc6",
+        "resume-v02_09_resume-3-60508e76d385",
+        "jd-v02_09_jd-1-8cba26403502",
+        "jd-v02_09_jd-2-9e7bf8271eaf"
+      ],
+      "outcome": "regressed"
+    },
+    {
+      "case_id": "v02_semantic_014",
+      "category": "semantic_paraphrase",
+      "query": "面试怎么回答：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+      "delta_mrr": -1.0,
+      "delta_recall_at_5": -1.0,
+      "baseline_top5": [
+        "interview-v02_08_interview-0-6bd1f913f88f",
+        "interview-v02_08_interview-3-9957f71c47e4",
+        "interview-v02_08_interview-1-8c832a5a88f9",
+        "jd-v02_08_jd-1-d3091a25b576",
+        "interview-v02_08_interview-2-4141f1e4bea2"
+      ],
+      "rerank_top5": [
+        "jd-v02_08_jd-0-265911b39429",
+        "jd-v02_08_jd-1-d3091a25b576",
+        "interview-v02_08_interview-3-9957f71c47e4",
+        "resume-v02_08_resume-0-112b1c9fd7af",
+        "resume-v02_08_resume-1-e9a36c63ec5d"
+      ],
+      "outcome": "regressed"
+    },
+    {
+      "case_id": "v02_semantic_015",
+      "category": "semantic_paraphrase",
+      "query": "面试怎么回答：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+      "delta_mrr": -1.0,
+      "delta_recall_at_5": -1.0,
+      "baseline_top5": [
+        "interview-v02_09_interview-0-5e6d94211590",
+        "interview-v02_09_interview-3-eb1dba88417f",
+        "interview-v02_09_interview-2-e4d912069b5a",
+        "interview-v02_09_interview-1-3545fa77cb7d",
+        "jd-v02_09_jd-0-b9e604c36260"
+      ],
+      "rerank_top5": [
+        "interview-v02_09_interview-3-eb1dba88417f",
+        "interview-v02_09_interview-1-3545fa77cb7d",
+        "interview-v02_09_interview-2-e4d912069b5a",
+        "jd-v02_09_jd-1-8cba26403502",
+        "jd-v02_09_jd-3-8a5f455fc397"
+      ],
+      "outcome": "regressed"
+    },
+    {
+      "case_id": "v02_semantic_018",
+      "category": "semantic_paraphrase",
+      "query": "面试怎么回答：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+      "delta_mrr": -1.0,
+      "delta_recall_at_5": -1.0,
+      "baseline_top5": [
+        "interview-v02_12_interview-0-f4a9d81fdfc5",
+        "interview-v02_12_interview-1-48146f518d59",
+        "interview-v02_12_interview-3-0db05aaeba5c",
+        "interview-v02_12_interview-2-45f1b185799f",
+        "jd-v02_12_jd-1-2c4fa19e259e"
+      ],
+      "rerank_top5": [
+        "interview-v02_12_interview-3-0db05aaeba5c",
+        "interview-v02_12_interview-1-48146f518d59",
+        "jd-v02_12_jd-3-fdaa967f2dce",
+        "resume-v02_12_resume-3-5da125a60d1c",
+        "interview-v02_12_interview-2-45f1b185799f"
+      ],
+      "outcome": "regressed"
+    },
+    {
+      "case_id": "v02_semantic_017",
+      "category": "semantic_paraphrase",
+      "query": "面试怎么回答：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+      "delta_mrr": -0.5,
+      "delta_recall_at_5": -1.0,
+      "baseline_top5": [
+        "interview-v02_11_interview-3-bcc3d1220cbd",
+        "interview-v02_11_interview-0-5028a5a6c8fe",
+        "interview-v02_11_interview-2-6f7e8015cd96",
+        "interview-v02_11_interview-1-46e864fd1f4c",
+        "jd-v02_11_jd-2-cf15bfdbef98"
+      ],
+      "rerank_top5": [
+        "interview-v02_11_interview-3-bcc3d1220cbd",
+        "jd-v02_11_jd-1-04a993d0393c",
+        "jd-v02_11_jd-2-cf15bfdbef98",
+        "interview-v02_11_interview-1-46e864fd1f4c",
+        "jd-v02_11_jd-3-159a1e5c3014"
+      ],
+      "outcome": "regressed"
+    },
+    {
+      "case_id": "v02_single_019",
+      "category": "single_source",
+      "query": "这个项目的混合检索模块是怎么实现和复盘的？",
+      "delta_mrr": -0.5,
+      "delta_recall_at_5": -1.0,
+      "baseline_top5": [
+        "project_logs-v02_01_project_logs-2-e2cf971f6923",
+        "project_logs-v02_01_project_logs-0-9c613c709996",
+        "project_logs-v02_09_project_logs-2-eb1a90adce0d",
+        "project_logs-v02_02_project_logs-2-54d825e6485f",
+        "project_logs-v02_01_project_logs-1-ef1fab915dcf"
+      ],
+      "rerank_top5": [
+        "project_logs-v02_01_project_logs-2-e2cf971f6923",
+        "project_logs-v02_06_project_logs-2-b5bacffd0a11",
+        "project_logs-v02_01_project_logs-1-ef1fab915dcf",
+        "project_logs-v02_01_project_logs-3-265067d2de8e",
+        "project_logs-day1_log-0-871483366c37"
+      ],
+      "outcome": "regressed"
+    },
+    {
+      "case_id": "v02_semantic_012",
+      "category": "semantic_paraphrase",
+      "query": "简历优势：怎样把口语问题改成可检索表达，并避免改写偏离原意？",
+      "delta_mrr": -0.8,
+      "delta_recall_at_5": 0.0,
+      "baseline_top5": [
+        "resume-v02_12_resume-0-a554d8176643",
+        "resume-v02_12_resume-1-a37cc0704fb5",
+        "resume-v02_12_resume-2-e169d3565e11",
+        "resume-v02_12_resume-3-5da125a60d1c",
+        "jd-v02_12_jd-0-31781b893695"
+      ],
+      "rerank_top5": [
+        "resume-v02_12_resume-1-a37cc0704fb5",
+        "resume-v02_12_resume-2-e169d3565e11",
+        "jd-v02_12_jd-1-2c4fa19e259e",
+        "jd-v02_12_jd-2-8e1e2cdde167",
+        "resume-v02_12_resume-0-a554d8176643"
+      ],
+      "outcome": "regressed"
+    },
+    {
+      "case_id": "v02_multi_009",
+      "category": "multi_source",
+      "query": "结合用户画像、岗位和简历制定引用校验投递计划",
+      "delta_mrr": -0.75,
+      "delta_recall_at_5": 0.0,
+      "baseline_top5": [
+        "user_profile-v02_02_user_profile-0-ad79fcdcad46",
+        "user_profile-v02_02_user_profile-3-1c5c1c71d66b",
+        "user_profile-profile-0-70751fced17f",
+        "user_profile-v02_02_user_profile-1-e39cb66466fb",
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ],
+      "rerank_top5": [
+        "user_profile-v02_02_user_profile-3-1c5c1c71d66b",
+        "user_profile-v02_02_user_profile-1-e39cb66466fb",
+        "resume-rag_project_experience-0-45abba9c3117",
+        "user_profile-v02_02_user_profile-0-ad79fcdcad46",
+        "user_profile-v02_02_user_profile-2-5a0300033bcb"
+      ],
+      "outcome": "regressed"
+    },
+    {
+      "case_id": "v02_semantic_003",
+      "category": "semantic_paraphrase",
+      "query": "岗位分析：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+      "delta_mrr": -0.75,
+      "delta_recall_at_5": 0.0,
+      "baseline_top5": [
+        "jd-v02_09_jd-0-b9e604c36260",
+        "jd-v02_09_jd-1-8cba26403502",
+        "jd-v02_09_jd-2-9e7bf8271eaf",
+        "jd-v02_09_jd-3-8a5f455fc397",
+        "jd-v02_11_jd-2-cf15bfdbef98"
+      ],
+      "rerank_top5": [
+        "jd-v02_09_jd-1-8cba26403502",
+        "jd-v02_09_jd-3-8a5f455fc397",
+        "jd-v02_09_jd-2-9e7bf8271eaf",
+        "jd-v02_09_jd-0-b9e604c36260",
+        "jd-v02_11_jd-1-04a993d0393c"
+      ],
+      "outcome": "regressed"
+    },
+    {
+      "case_id": "v02_semantic_010",
+      "category": "semantic_paraphrase",
+      "query": "简历优势：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+      "delta_mrr": 0.75,
+      "delta_recall_at_5": 0.0,
+      "baseline_top5": [
+        "resume-v02_10_resume-2-6b5573f02404",
+        "resume-v02_10_resume-1-1a6f37293848",
+        "resume-v02_10_resume-3-40ea6a97bdb6",
+        "resume-v02_10_resume-0-bdf42818d7b7",
+        "jd-v02_10_jd-1-779d13170104"
+      ],
+      "rerank_top5": [
+        "resume-v02_10_resume-0-bdf42818d7b7",
+        "resume-v02_10_resume-1-1a6f37293848",
+        "resume-v02_10_resume-2-6b5573f02404",
+        "resume-v02_10_resume-3-40ea6a97bdb6",
+        "jd-v02_10_jd-1-779d13170104"
+      ],
+      "outcome": "improved"
+    }
+  ],
+  "decision": {
+    "reranker_enabled": false,
+    "reason": "Recall@3, Recall@5 and MRR regressed while CPU P95 increased."
+  }
+}

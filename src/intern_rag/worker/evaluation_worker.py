@@ -14,6 +14,7 @@ from intern_rag.persistence import (
     PersistenceRepository,
 )
 from intern_rag.worker.queue import JobQueue
+from intern_rag.runtime import AgentRuntime, RunContext
 
 
 @dataclass(frozen=True)
@@ -154,10 +155,12 @@ class EvaluationWorker:
         repository: PersistenceRepository,
         queue: JobQueue,
         executor: EvaluationExecutor,
+        runtime: AgentRuntime | None = None,
     ) -> None:
         self.repository = repository
         self.queue = queue
         self.executor = executor
+        self.runtime = runtime
 
     def recover_interrupted(self) -> list[str]:
         job_ids = self.repository.recover_interrupted_jobs()
@@ -174,7 +177,20 @@ class EvaluationWorker:
         except ValueError:
             return False
         try:
-            result = self.executor.execute(job)
+            if self.runtime is None:
+                result = self.executor.execute(job)
+            else:
+                result = self.runtime.execute_operation(
+                    RunContext(
+                        run_id=f"evaluation-job-{job.job_id}",
+                        request_id=job.job_id,
+                        entrypoint="worker",
+                        config=job.run_config,
+                        dataset_version=job.dataset_version,
+                    ),
+                    "evaluation.worker",
+                    lambda: self.executor.execute(job),
+                )
             self.repository.save_run(
                 EvaluationRunRecord(
                     run_id=result.run_id,

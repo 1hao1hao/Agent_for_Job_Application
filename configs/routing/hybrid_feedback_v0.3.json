@@ -1,0 +1,18 @@
+{
+  "router_name": "hybrid",
+  "router_version": "hybrid-feedback-v0.3",
+  "parent_version": "hybrid-v0.2",
+  "dataset_version": "evalrag_v0.2",
+  "feedback_dataset": "data/evaluation/router_feedback_v0.1.jsonl",
+  "embedding_index_dir": "data/processed/indexes/evalrag_v0.2/bge-small-zh-v1.5",
+  "embedding_name": "BAAI/bge-small-zh-v1.5",
+  "embedding_revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "semantic_min_score": 0.45,
+  "semantic_min_margin": 0.02,
+  "semantic_override_score": 0.55,
+  "semantic_override_margin": 0.04,
+  "max_weak_rule_keywords": 2,
+  "calibration_split": "dev",
+  "online_self_learning": false,
+  "feedback_strategy": "confirmed_anchor_override"
+}

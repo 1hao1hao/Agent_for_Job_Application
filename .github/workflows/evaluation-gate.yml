@@ -1,0 +1,35 @@
+name: Evaluation Gate
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  deterministic-evaluation-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install gate dependency
+        run: pip install "langgraph>=0.1.19,<0.2"
+      - name: Run runtime, feedback and gate tests
+        env:
+          PYTHONPATH: src
+        run: |
+          python -m unittest \
+            tests.unit.test_agent_runtime \
+            tests.unit.test_router_feedback \
+            tests.unit.test_ci_evaluation_gate \
+            tests.regression.test_regression_suite -v
+      - name: Run versioned evaluation gate
+        env:
+          PYTHONPATH: src
+        run: python scripts/run_ci_evaluation_gate.py
+      - name: Upload gate artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-gate-artifacts
+          path: reports/ci/p1-d6-evaluation-gate-v01/

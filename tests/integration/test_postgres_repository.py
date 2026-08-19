@@ -3,7 +3,15 @@ from pathlib import Path
 import unittest
 from uuid import uuid4
 
-from intern_rag.agent import Citation, RagRequest, RagResponse
+from intern_rag.agent import (
+    Citation,
+    ConversationMessage,
+    MemoryItem,
+    ProfileFact,
+    RagRequest,
+    RagResponse,
+    UserProfile,
+)
 from intern_rag.persistence import EvaluationRunRecord, PostgresRepository
 from intern_rag.routing import RouteDecision
 from intern_rag.tracing import build_agent_trace
@@ -77,6 +85,35 @@ class PostgresRepositoryIntegrationTests(unittest.TestCase):
             os.environ["TEST_DATABASE_URL"], Path("migrations")
         )
         self.assertEqual(restarted_repository.get_job(job.job_id).status, "succeeded")
+
+    def test_session_profile_memory_survive_repository_restart(self) -> None:
+        suffix = str(uuid4())
+        user_id = f"postgres-user-{suffix}"
+        session = self.repository.create_session(user_id, "求职准备")
+        self.repository.append_message(
+            ConversationMessage(
+                f"message-{suffix}", session.session_id, user_id, "user",
+                "优先广州岗位", "2026-08-16T00:00:00+00:00",
+            )
+        )
+        self.repository.save_summary(user_id, session.session_id, "用户优先广州岗位", 1)
+        profile = self.repository.upsert_profile(
+            UserProfile(user_id, (ProfileFact("城市", "广州", "explicit"),), 0, ""), 0
+        )
+        self.repository.save_memory(
+            MemoryItem(
+                f"memory-{suffix}", user_id, "preference", "优先广州岗位",
+                "confirmed_chat", 1.0, "2026-08-16T00:00:00+00:00",
+            )
+        )
+
+        restarted = PostgresRepository(os.environ["TEST_DATABASE_URL"], Path("migrations"))
+        self.assertEqual(restarted.get_session(user_id, session.session_id).user_id, user_id)
+        self.assertEqual(restarted.list_messages(user_id, session.session_id)[0].content, "优先广州岗位")
+        self.assertEqual(restarted.get_summary(user_id, session.session_id), "用户优先广州岗位")
+        self.assertEqual(restarted.get_profile(user_id).version, profile.version)
+        self.assertEqual(restarted.list_memories(user_id)[0].content, "优先广州岗位")
+        self.assertIsNone(restarted.get_session("other-user", session.session_id))
 
 
 if __name__ == "__main__":

@@ -10,7 +10,7 @@ from statistics import mean
 from time import perf_counter
 
 from intern_rag.evaluation.dataset import EvaluationCase
-from intern_rag.evaluation.metrics import calculate_recall_at_k
+from intern_rag.evaluation.metrics import calculate_ndcg_at_k, calculate_recall_at_k
 from intern_rag.ingestion import Chunk
 from intern_rag.retrieval import Retriever, retrieve_top_k
 from intern_rag.routing import Router, route_query
@@ -38,11 +38,11 @@ class EvaluationRunConfig:
 
         if self.retriever_name not in {
             "keyword", "bm25", "dense", "hybrid", "bm25_hybrid",
-            "hybrid_rerank"
+            "hybrid_rerank", "adaptive", "graph", "graph_adaptive"
         }:
             raise ValueError(
                 "retriever_name must be keyword, bm25, dense, hybrid, "
-                "bm25_hybrid or hybrid_rerank"
+                "bm25_hybrid, hybrid_rerank, adaptive, graph or graph_adaptive"
             )
         if self.split not in {"dev", "test"}:
             raise ValueError("split must be dev or test")
@@ -143,6 +143,7 @@ def _run_case(
         top_k=top_k,
         source_types=set(route.routed_sources),
     )
+    retrieval_decision = _retriever_trace(retriever)
     retrieval_latency_ms = _elapsed_ms(retrieval_started_at)
     retrieved_ids = [result.chunk_id for result in retrieved_results]
 
@@ -158,6 +159,11 @@ def _run_case(
     )
     reciprocal_rank = (
         _reciprocal_rank(retrieved_ids, case.relevant_chunk_ids)
+        if case.answerable
+        else None
+    )
+    ndcg_at_5 = (
+        calculate_ndcg_at_k(retrieved_ids, case.relevant_chunk_ids, 5)
         if case.answerable
         else None
     )
@@ -186,6 +192,7 @@ def _run_case(
             "confidence": route.confidence,
             "reason": route.reason,
             "details": route.details,
+            "retrieval_decision": retrieval_decision,
             "retrieved": [
                 {
                     "chunk_id": result.chunk_id,
@@ -202,6 +209,7 @@ def _run_case(
             "recall_at_3": recall_at_3,
             "recall_at_5": recall_at_5,
             "reciprocal_rank": reciprocal_rank,
+            "ndcg_at_5": ndcg_at_5,
         },
         "latency_ms": {
             "routing": routing_latency_ms,
@@ -269,6 +277,10 @@ def _build_summary(
         float(dict(result["metrics"])["reciprocal_rank"])  # type: ignore[arg-type]
         for result in answerable_results
     ]
+    ndcg_5_values = [
+        float(dict(result["metrics"])["ndcg_at_5"])  # type: ignore[arg-type]
+        for result in answerable_results
+    ]
     latencies: dict[str, list[float]] = defaultdict(list)
     for result in case_results:
         for stage, value in dict(result["latency_ms"]).items():  # type: ignore[arg-type]
@@ -313,6 +325,7 @@ def _build_summary(
             "recall_at_3": mean(recall_3_values) if recall_3_values else 0.0,
             "recall_at_5": mean(recall_5_values) if recall_5_values else 0.0,
             "mrr": mean(reciprocal_ranks) if reciprocal_ranks else 0.0,
+            "ndcg_at_5": mean(ndcg_5_values) if ndcg_5_values else 0.0,
         },
         "latency_ms": {
             stage: {
@@ -327,6 +340,7 @@ def _build_summary(
             "recall_at_3": "answerable cases with relevant ids",
             "recall_at_5": "answerable cases with relevant ids",
             "mrr": "answerable cases with relevant ids",
+            "ndcg_at_5": "answerable cases with relevant ids",
         },
         "metric_formulas": {
             "router_accuracy": (
@@ -337,6 +351,7 @@ def _build_summary(
                 "|relevant ids|, macro average"
             ),
             "mrr": "macro average of 1 / first relevant rank",
+            "ndcg_at_5": "binary relevance DCG@5 / ideal DCG@5, macro average",
             "latency_percentile": "nearest-rank percentile",
         },
         "runtime_environment": {
@@ -366,6 +381,7 @@ def _build_category_metrics(
             "recall_at_3": _mean_metric(answerable, "recall_at_3"),
             "recall_at_5": _mean_metric(answerable, "recall_at_5"),
             "mrr": _mean_metric(answerable, "reciprocal_rank"),
+            "ndcg_at_5": _mean_metric(answerable, "ndcg_at_5"),
         }
     return category_metrics
 
@@ -407,6 +423,16 @@ def _elapsed_ms(started_at: float) -> float:
     """计算毫秒耗时。"""
 
     return (perf_counter() - started_at) * 1000
+
+
+def _retriever_trace(retriever: Retriever) -> dict[str, object]:
+    """读取 Adaptive Retriever 的 Query 级决策，普通实现返回空字典。"""
+
+    get_last_trace = getattr(retriever, "get_last_trace", None)
+    if not callable(get_last_trace):
+        return {}
+    trace = get_last_trace()
+    return dict(trace) if isinstance(trace, dict) else {}
 
 
 def _write_json(path: Path, data: dict[str, object]) -> None:

@@ -1,0 +1,26 @@
+{
+  "errors": [],
+  "warnings": [
+    "labels are corpus-grounded and AI-assisted, not fully human reviewed"
+  ],
+  "case_count": 240,
+  "split_counts": {
+    "dev": 160,
+    "test": 80
+  },
+  "category_counts": {
+    "single_source": 30,
+    "cross_source": 30,
+    "semantic_paraphrase": 30,
+    "hard_negative": 30,
+    "unanswerable": 30,
+    "freshness_conflict": 30,
+    "two_hop": 30,
+    "three_hop": 30
+  },
+  "review_method_counts": {
+    "corpus_grounded_ai_assisted": 240
+  },
+  "human_reviewed_count": 0,
+  "is_valid": true
+}

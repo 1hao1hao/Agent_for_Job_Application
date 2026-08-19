@@ -1,0 +1,30 @@
+{
+  "case_count": 160,
+  "source_exact_match": 0.4375,
+  "answerable_source_exact_match": 0.26666666666666666,
+  "source_precision": 0.490625,
+  "source_recall": 0.475,
+  "unanswerable_accuracy": 0.95,
+  "predicted_intents": {
+    "analyze_jd": 54,
+    "unknown": 100,
+    "application_plan": 2,
+    "project_explain": 2,
+    "match_resume": 1,
+    "interview_prepare": 1
+  },
+  "category_source_exact": {
+    "cross_source": 0.0,
+    "freshness_conflict": 1.0,
+    "hard_negative": 0.9,
+    "semantic_paraphrase": 0.05,
+    "single_source": 0.45,
+    "three_hop": 0.1,
+    "two_hop": 0.0,
+    "unanswerable": 1.0
+  },
+  "latency_ms": {
+    "p50": 0.006058253347873688,
+    "p95": 0.008806586265563965
+  }
+}

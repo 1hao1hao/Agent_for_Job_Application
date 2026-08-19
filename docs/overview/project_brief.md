@@ -46,7 +46,7 @@ Harness 指围绕模型和 RAG 核心能力提供运行控制与质量保障的�
 - 一次请求一条 JSONL Agent Trace，记录多次 attempt、阶段延迟与 token。
 - Router、Retrieval、Citation、Abstention、Semantic Key-Point、Claim-Level
   Grounding 和 Regression 评测。
-- 真实 DeepSeek dev/test Run、frozen retrieval 对照和 142 个自动化测试。
+- 真实 DeepSeek dev/test Run、frozen retrieval 对照和 144 个自动化测试。
 - 单来源、多来源、拒答固定 Demo，以及 README、架构和最终实验报告。
 - 标准 BM25、FastAPI HTTP 契约、PostgreSQL 状态持久化、Redis Evaluation Worker
   和通过 GitHub Actions 验证的四服务 Docker Compose 部署。

@@ -6,9 +6,23 @@ from intern_rag.agent.answer import (
     compose_answer,
 )
 from intern_rag.agent.context import (
+    ContextStrategy,
     build_context,
     context_item_from_result,
     format_context_item,
+)
+from intern_rag.agent.context_engine import (
+    ContextBudgetError,
+    ContextEngine,
+    ContextEngineConfig,
+    ContextInputs,
+    ContextSegment,
+    ConversationMessage,
+    ManagedContext,
+    MemoryItem,
+    MixedTokenEstimator,
+    ProfileFact,
+    UserProfile,
 )
 from intern_rag.agent.evidence import (
     EvidenceConfig,
@@ -27,6 +41,13 @@ from intern_rag.agent.generation import (
     build_generation_prompt,
     generate_answer,
     parse_generation_result,
+)
+from intern_rag.agent.model_gateway import (
+    build_model_gateway_from_config,
+    GatewayProvider,
+    ModelGateway,
+    ModelGatewayConfig,
+    ModelGatewayUnavailable,
 )
 from intern_rag.agent.pipeline import PipelineConfig, RagPipeline
 from intern_rag.agent.schemas import (
@@ -49,6 +70,18 @@ __all__ = [
     "BuiltContext",
     "Citation",
     "ContextItem",
+    "ContextStrategy",
+    "ContextBudgetError",
+    "ContextEngine",
+    "ContextEngineConfig",
+    "ContextInputs",
+    "ContextSegment",
+    "ConversationMessage",
+    "ManagedContext",
+    "MemoryItem",
+    "MixedTokenEstimator",
+    "ProfileFact",
+    "UserProfile",
     "EvidenceConfig",
     "EvidenceDecision",
     "DeepSeekChatClient",
@@ -58,6 +91,11 @@ __all__ = [
     "LlmClient",
     "LlmClientError",
     "LlmTimeoutError",
+    "GatewayProvider",
+    "build_model_gateway_from_config",
+    "ModelGateway",
+    "ModelGatewayConfig",
+    "ModelGatewayUnavailable",
     "OpenAIResponsesClient",
     "PipelineConfig",
     "RagRequest",

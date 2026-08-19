@@ -8,7 +8,9 @@ from intern_rag.agent.answer import Citation
 
 
 RagStatus = Literal["answered", "insufficient_evidence", "error"]
-RetrieverName = Literal["keyword", "bm25", "dense", "hybrid", "bm25_hybrid"]
+RetrieverName = Literal[
+    "keyword", "bm25", "dense", "hybrid", "bm25_hybrid", "adaptive"
+]
 RouterName = Literal["rule", "semantic", "hybrid"]
 
 
@@ -26,6 +28,8 @@ class RagRequest:
     request_id: str = field(default_factory=lambda: str(uuid4()))
     top_k: int = 5
     retriever: RetrieverName = "keyword"
+    user_id: str | None = None
+    session_id: str | None = None
 
     def __post_init__(self) -> None:
         """拒绝无法进入后续流程的空 query 和非正数 top_k。"""
@@ -34,6 +38,8 @@ class RagRequest:
             raise ValueError("query must not be empty")
         if self.top_k <= 0:
             raise ValueError("top_k must be greater than 0")
+        if (self.user_id is None) != (self.session_id is None):
+            raise ValueError("user_id and session_id must be provided together")
 
 
 @dataclass(frozen=True)
@@ -88,6 +94,9 @@ class BuiltContext:
     skipped_chunk_ids: list[str]
     char_count: int
     max_chars: int
+    selection_strategy: str = "rank_prefix"
+    covered_source_types: list[str] = field(default_factory=list)
+    missing_source_types: list[str] = field(default_factory=list)
 
     @property
     def is_truncated(self) -> bool:

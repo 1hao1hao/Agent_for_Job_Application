@@ -1,0 +1,22 @@
+{
+  "retriever_name": "adaptive",
+  "dataset_version": "evalrag_v0.3",
+  "top_k": 5,
+  "bm25_index_path": "data/processed/indexes/evalrag_v0.3/bm25-v1/index.json",
+  "k1": 1.5,
+  "b": 0.75,
+  "index_dir": "data/processed/indexes/evalrag_v0.3/bge-small-zh-v1.5",
+  "rrf_k": 60,
+  "candidate_multiplier": 4,
+  "adaptive_confidence_threshold": 0.65,
+  "reranker_kind": "cross_encoder",
+  "reranker_model": "BAAI/bge-reranker-base",
+  "reranker_revision": "2cfc18c9415c912f9d8155881c133215df768a70",
+  "reranker_device": "cpu",
+  "reranker_batch_size": 16,
+  "reranker_candidate_k": 10,
+  "adaptive_rerank_rrf_k": 60,
+  "adaptive_original_rank_weight": 2.0,
+  "adaptive_rerank_rank_weight": 1.0,
+  "local_files_only": true
+}

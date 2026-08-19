@@ -1,0 +1,20 @@
+{
+  "config": "configs/model_gateway/gateway_v0.1.json",
+  "available_provider_credentials": [
+    "DEEPSEEK_API_KEY"
+  ],
+  "real_primary_executed": true,
+  "real_fallback_executed": false,
+  "status": "succeeded",
+  "selected_provider": "deepseek-primary",
+  "fallback_used": false,
+  "attempt_count": 1,
+  "latency_ms": 7809.642782434821,
+  "tokens": {
+    "input_tokens": 54,
+    "output_tokens": 5,
+    "total_tokens": 59,
+    "prompt_cache_hit_tokens": 0,
+    "prompt_cache_miss_tokens": 54
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "dataset_version": "evalrag_v0.3",
+  "collected_at": "2026-08-16",
+  "config_path": "/share/home/202520143645/bjh/Agent_for_Job_Application/configs/collection/corpus_v0.3.json",
+  "configured_revisions": {
+    "huggingface": "da1d0e3b2dc4ccd5b6315468f830a14f04b3e382",
+    "github": {
+      "MisterBooo/llm-interview-questions": "320048c20288c2d3afb695f97a55e91315c60fdf",
+      "infiniflow/ragflow": "c6ba54bc7236dcbf463a9e94072103cb8d64f7d8",
+      "QwenLM/Qwen-Agent": "31a4d36d123688581a9e9744427272b33ce940e0"
+    }
+  },
+  "attempt_count": 201,
+  "failed_attempts": [
+    {
+      "url": "https://datasets-server.huggingface.co/rows?dataset=wangzihaogithub/job-educational-parser-dataset-08-0-0805&config=default&split=train&offset=3000&length=100",
+      "status": "failed",
+      "error_type": "HTTPError",
+      "error": "HTTP Error 429: Too Many Requests"
+    }
+  ],
+  "input_record_count": 669,
+  "quality": {
+    "dataset_version": "evalrag_v0.3",
+    "input_documents": 669,
+    "retained_documents": 658,
+    "rejected_documents": 11,
+    "exact_duplicates": 6,
+    "near_duplicates": 5,
+    "empty_documents": 0,
+    "source_counts": {
+      "project_logs": 159,
+      "jd": 339,
+      "interview": 120,
+      "user_profile": 20,
+      "resume": 20
+    },
+    "canonical_source_counts": {
+      "project_documentation": 159,
+      "job_posting": 339,
+      "interview_knowledge": 120,
+      "candidate_profile": 20,
+      "candidate_experience": 20
+    },
+    "method_counts": {
+      "repository_import": 239,
+      "user_owned": 100,
+      "dataset_import": 319
+    },
+    "owner_scope_counts": {
+      "public": 558,
+      "private": 100
+    },
+    "domain_counts": {
+      "github.com": 239,
+      "local-private": 100,
+      "huggingface.co": 319
+    },
+    "review_counts": {
+      "ai_assisted": 558,
+      "user_owned": 100
+    },
+    "document_length_min": 88,
+    "document_length_mean": 1845.5121580547113,
+    "document_length_p50": 341,
+    "document_length_p95": 6300,
+    "document_length_max": 200073,
+    "template_line_ratio": 0.0305569601964892,
+    "chunk_count": 4208,
+    "chunk_length_p50": 283,
+    "chunk_length_p95": 420
+  },
+  "validation_errors": []
+}

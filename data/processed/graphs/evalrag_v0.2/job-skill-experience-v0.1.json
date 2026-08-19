@@ -1,0 +1,4827 @@
+{
+  "version": "job-skill-experience-v0.1",
+  "dataset_version": "evalrag_v0.2",
+  "config_hash": "c06b035ab09fd143ce755e8639833526ea0caf8fe3678d5670290e50690b642e",
+  "nodes": [
+    {
+      "node_id": "company-2ebe24cb6da8",
+      "node_type": "company",
+      "name": "示例平台公司",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411"
+      ]
+    },
+    {
+      "node_id": "company-316e6d6abb3f",
+      "node_type": "company",
+      "name": "示例搜索公司",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-search_algorithm_intern-0-3717dbcae501"
+      ]
+    },
+    {
+      "node_id": "company-6cae90a10749",
+      "node_type": "company",
+      "name": "示例软件公司",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-python_backend_intern-0-599054e56ed8"
+      ]
+    },
+    {
+      "node_id": "company-9997b1086a92",
+      "node_type": "company",
+      "name": "示例公司",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca"
+      ]
+    },
+    {
+      "node_id": "company-bc83b5484792",
+      "node_type": "company",
+      "name": "示例智能公司",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-llm_evaluation_intern-0-4d8bd07a36b0"
+      ]
+    },
+    {
+      "node_id": "company-f91141be3a3f",
+      "node_type": "company",
+      "name": "示例数据公司",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-data_engineer_intern-0-5c51b85be1d3"
+      ]
+    },
+    {
+      "node_id": "experience-04d3c6690e28",
+      "node_type": "experience",
+      "name": "简历经历：失败回归",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_06_resume-0-a5d2b355f77c"
+      ]
+    },
+    {
+      "node_id": "experience-0b675d9ceaf0",
+      "node_type": "experience",
+      "name": "当前短板",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_01_user_profile-2-e71f141757e3",
+        "user_profile-v02_02_user_profile-2-5a0300033bcb",
+        "user_profile-v02_03_user_profile-2-95a7823c53b9",
+        "user_profile-v02_04_user_profile-2-4bb11d06add5",
+        "user_profile-v02_05_user_profile-2-af4db8769908",
+        "user_profile-v02_06_user_profile-2-819c23846421",
+        "user_profile-v02_07_user_profile-2-93b2643bfea8",
+        "user_profile-v02_08_user_profile-2-8ee2b8400048",
+        "user_profile-v02_09_user_profile-2-bc89caccb34d",
+        "user_profile-v02_10_user_profile-2-c9a5610ba576",
+        "user_profile-v02_11_user_profile-2-c086a5662503",
+        "user_profile-v02_12_user_profile-2-81fbf8584168",
+        "user_profile-v02_13_user_profile-2-8d924aead1bd",
+        "user_profile-v02_14_user_profile-2-3a8c398194cc"
+      ]
+    },
+    {
+      "node_id": "experience-130d562cf7af",
+      "node_type": "experience",
+      "name": "岗位优先级候选记录",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-role_priority-0-5aee6997af02"
+      ]
+    },
+    {
+      "node_id": "experience-251b68b852f5",
+      "node_type": "experience",
+      "name": "用户画像：工具调用",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_08_user_profile-0-7ceaf287a8bb"
+      ]
+    },
+    {
+      "node_id": "experience-2a15ecb395bd",
+      "node_type": "experience",
+      "name": "教育与实习时间候选记录",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-education_availability-0-156d4c635945"
+      ]
+    },
+    {
+      "node_id": "experience-35660c366f1e",
+      "node_type": "experience",
+      "name": "用户画像：失败回归",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_06_user_profile-0-f369d9ec4fe8"
+      ]
+    },
+    {
+      "node_id": "experience-3d38d3ecff3e",
+      "node_type": "experience",
+      "name": "用户画像：上下文预算",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_05_user_profile-0-b142f9e3c6cd"
+      ]
+    },
+    {
+      "node_id": "experience-42d91bed7472",
+      "node_type": "experience",
+      "name": "用户画像：证据门控",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_10_user_profile-0-34a6830e5875"
+      ]
+    },
+    {
+      "node_id": "experience-440b6ebe5a6b",
+      "node_type": "experience",
+      "name": "简历经历：工具调用",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_08_resume-0-112b1c9fd7af"
+      ]
+    },
+    {
+      "node_id": "experience-4d0bb36bcab5",
+      "node_type": "experience",
+      "name": "用户画像：查询改写",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_12_user_profile-0-ec3dec4cdcc9"
+      ]
+    },
+    {
+      "node_id": "experience-4d932b4a2c62",
+      "node_type": "experience",
+      "name": "简历经历：请求追踪",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_03_resume-0-3c1472e83ae1"
+      ]
+    },
+    {
+      "node_id": "experience-53ae4a188d4b",
+      "node_type": "experience",
+      "name": "简历经历：模型适配",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_09_resume-0-7b30133a899a"
+      ]
+    },
+    {
+      "node_id": "experience-64ba84b95a24",
+      "node_type": "experience",
+      "name": "能力缺口与学习记录",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-gaps_and_learning-0-0e45949ca76b"
+      ]
+    },
+    {
+      "node_id": "experience-707b0b0090c1",
+      "node_type": "experience",
+      "name": "用户画像：答案覆盖",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_14_user_profile-0-14c62c1c84fe"
+      ]
+    },
+    {
+      "node_id": "experience-74912d0c53b4",
+      "node_type": "experience",
+      "name": "技能矩阵候选记录",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "node_id": "experience-77244ac04047",
+      "node_type": "experience",
+      "name": "行动计划",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_01_user_profile-3-4cdb3dfbb88f",
+        "user_profile-v02_02_user_profile-3-1c5c1c71d66b",
+        "user_profile-v02_03_user_profile-3-89d186f00d6f",
+        "user_profile-v02_04_user_profile-3-935989511103",
+        "user_profile-v02_05_user_profile-3-90804fa7d091",
+        "user_profile-v02_06_user_profile-3-f7c9e03bc934",
+        "user_profile-v02_07_user_profile-3-41fd69fac780",
+        "user_profile-v02_08_user_profile-3-eb42c265eced",
+        "user_profile-v02_09_user_profile-3-10c1fca62633",
+        "user_profile-v02_10_user_profile-3-133970120ee4",
+        "user_profile-v02_11_user_profile-3-1c32b6c146ed",
+        "user_profile-v02_12_user_profile-3-2f8a325a6b36",
+        "user_profile-v02_13_user_profile-3-62622bbfb945",
+        "user_profile-v02_14_user_profile-3-733af45bcb29"
+      ]
+    },
+    {
+      "node_id": "experience-78e377eecac4",
+      "node_type": "experience",
+      "name": "面试准备偏好候选记录",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-interview_preferences-0-a7f982ab0547"
+      ]
+    },
+    {
+      "node_id": "experience-7a2d3eae502e",
+      "node_type": "experience",
+      "name": "能力边界",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_01_resume-3-33f9ea12e178",
+        "resume-v02_02_resume-3-4ca2f02bcb7e",
+        "resume-v02_03_resume-3-bb04ffd9cdd0",
+        "resume-v02_04_resume-3-bb0f871e46ca",
+        "resume-v02_05_resume-3-403e23fba9c9",
+        "resume-v02_06_resume-3-384a679f062a",
+        "resume-v02_07_resume-3-5016a0129d84",
+        "resume-v02_08_resume-3-8971b2428275",
+        "resume-v02_09_resume-3-60508e76d385",
+        "resume-v02_10_resume-3-40ea6a97bdb6",
+        "resume-v02_11_resume-3-523716fde5d8",
+        "resume-v02_12_resume-3-5da125a60d1c",
+        "resume-v02_13_resume-3-e6af4f06908a",
+        "resume-v02_14_resume-3-19bbcea7f6ca"
+      ]
+    },
+    {
+      "node_id": "experience-7f4f7ca57416",
+      "node_type": "experience",
+      "name": "用户画像：请求追踪",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_03_user_profile-0-76a73c266c3e"
+      ]
+    },
+    {
+      "node_id": "experience-822dcdf5ff3c",
+      "node_type": "experience",
+      "name": "用户画像",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-profile-0-70751fced17f"
+      ]
+    },
+    {
+      "node_id": "experience-8438b417d16d",
+      "node_type": "experience",
+      "name": "示例简历",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "node_id": "experience-881533f6f794",
+      "node_type": "experience",
+      "name": "简历经历：重排策略",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_13_resume-0-a12dd28a8441"
+      ]
+    },
+    {
+      "node_id": "experience-897af956f2c0",
+      "node_type": "experience",
+      "name": "后端项目经历候选记录",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-backend_project_experience-0-c5a7f826a487"
+      ]
+    },
+    {
+      "node_id": "experience-8c6bcdec4622",
+      "node_type": "experience",
+      "name": "已有基础",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_01_user_profile-1-d3d0ac2a879b",
+        "user_profile-v02_02_user_profile-1-e39cb66466fb",
+        "user_profile-v02_03_user_profile-1-f70363580f29",
+        "user_profile-v02_04_user_profile-1-42bbf4592e2f",
+        "user_profile-v02_05_user_profile-1-b53b31661cbe",
+        "user_profile-v02_06_user_profile-1-9187f5578a26",
+        "user_profile-v02_07_user_profile-1-516968e9a908",
+        "user_profile-v02_08_user_profile-1-33070b82d27e",
+        "user_profile-v02_09_user_profile-1-de1ee9afedd0",
+        "user_profile-v02_10_user_profile-1-5de02bd83217",
+        "user_profile-v02_11_user_profile-1-d90e1a71c3f0",
+        "user_profile-v02_12_user_profile-1-f6bcc6701711",
+        "user_profile-v02_13_user_profile-1-ce84d2839c87",
+        "user_profile-v02_14_user_profile-1-4dda5681084c"
+      ]
+    },
+    {
+      "node_id": "experience-8e2578606641",
+      "node_type": "experience",
+      "name": "用户画像：混合检索",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_01_user_profile-0-0ef6940a7be3"
+      ]
+    },
+    {
+      "node_id": "experience-8f73481b024e",
+      "node_type": "experience",
+      "name": "投递约束候选记录",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-application_constraints-0-fcc750e3e522"
+      ]
+    },
+    {
+      "node_id": "experience-9a3d5112457b",
+      "node_type": "experience",
+      "name": "RAG 项目经历候选记录",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-rag_project_experience-0-45abba9c3117"
+      ]
+    },
+    {
+      "node_id": "experience-9ab915ad979a",
+      "node_type": "experience",
+      "name": "简历经历：上下文预算",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_05_resume-0-07dabb2d70ba"
+      ]
+    },
+    {
+      "node_id": "experience-9baf494bf5b5",
+      "node_type": "experience",
+      "name": "简历经历：岗位时效性",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_07_resume-0-eff4aa3cb6a2"
+      ]
+    },
+    {
+      "node_id": "experience-9eadd027870d",
+      "node_type": "experience",
+      "name": "地点与时间偏好候选记录",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-location_and_schedule-0-b3b142fb2c46"
+      ]
+    },
+    {
+      "node_id": "experience-a2a237c2fb74",
+      "node_type": "experience",
+      "name": "简历经历：数据导入",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_11_resume-0-6c0f0911c2d3"
+      ]
+    },
+    {
+      "node_id": "experience-a98ae8dd5300",
+      "node_type": "experience",
+      "name": "简历经历：意图路由",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_04_resume-0-d746bc710a36"
+      ]
+    },
+    {
+      "node_id": "experience-b4acab8bbc1f",
+      "node_type": "experience",
+      "name": "简历经历：证据门控",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_10_resume-0-bdf42818d7b7"
+      ]
+    },
+    {
+      "node_id": "experience-b85670da51f3",
+      "node_type": "experience",
+      "name": "个人工作",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_01_resume-1-d367a4d11847",
+        "resume-v02_02_resume-1-e88e5ff56067",
+        "resume-v02_03_resume-1-759d4f855042",
+        "resume-v02_04_resume-1-09868fa78308",
+        "resume-v02_05_resume-1-2123738a748b",
+        "resume-v02_06_resume-1-77950ef18ae9",
+        "resume-v02_07_resume-1-d424f3202ddc",
+        "resume-v02_08_resume-1-e9a36c63ec5d",
+        "resume-v02_09_resume-1-7a6b96b0087b",
+        "resume-v02_10_resume-1-1a6f37293848",
+        "resume-v02_11_resume-1-3e5b480c0084",
+        "resume-v02_12_resume-1-a37cc0704fb5",
+        "resume-v02_13_resume-1-61aa5b6fdc67",
+        "resume-v02_14_resume-1-289c45a343fa"
+      ]
+    },
+    {
+      "node_id": "experience-b8c767824548",
+      "node_type": "experience",
+      "name": "简历经历：查询改写",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_12_resume-0-a554d8176643"
+      ]
+    },
+    {
+      "node_id": "experience-bde2a8222bf0",
+      "node_type": "experience",
+      "name": "简历经历：引用校验",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_02_resume-0-fafd04bdc7a8"
+      ]
+    },
+    {
+      "node_id": "experience-c3979f95820b",
+      "node_type": "experience",
+      "name": "用户画像：数据导入",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_11_user_profile-0-d2304af1df7e"
+      ]
+    },
+    {
+      "node_id": "experience-c49f6f8b000b",
+      "node_type": "experience",
+      "name": "简历经历：混合检索",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_01_resume-0-9acdbaec4702"
+      ]
+    },
+    {
+      "node_id": "experience-d5933dc26e8c",
+      "node_type": "experience",
+      "name": "学习计划候选记录",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-learning_plan-0-1410e644f4d2"
+      ]
+    },
+    {
+      "node_id": "experience-d6e79967608e",
+      "node_type": "experience",
+      "name": "用户画像：模型适配",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_09_user_profile-0-913ed59d8980"
+      ]
+    },
+    {
+      "node_id": "experience-ed613691c13a",
+      "node_type": "experience",
+      "name": "简历经历：答案覆盖",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_14_resume-0-3fb4dc08574e"
+      ]
+    },
+    {
+      "node_id": "experience-ef4b6bc2d01f",
+      "node_type": "experience",
+      "name": "用户画像：引用校验",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_02_user_profile-0-ad79fcdcad46"
+      ]
+    },
+    {
+      "node_id": "experience-f73fa2af8d58",
+      "node_type": "experience",
+      "name": "结果证据",
+      "aliases": [],
+      "chunk_ids": [
+        "resume-v02_01_resume-2-0b89c684b873",
+        "resume-v02_02_resume-2-22e4b3160d23",
+        "resume-v02_03_resume-2-bc61af744241",
+        "resume-v02_04_resume-2-039f5150f99b",
+        "resume-v02_05_resume-2-856cdad100bb",
+        "resume-v02_06_resume-2-c8ebcad6b7aa",
+        "resume-v02_07_resume-2-dccecd3a50a9",
+        "resume-v02_08_resume-2-7e6960a00e5d",
+        "resume-v02_09_resume-2-e12214f13cc6",
+        "resume-v02_10_resume-2-6b5573f02404",
+        "resume-v02_11_resume-2-7ba706a784d0",
+        "resume-v02_12_resume-2-e169d3565e11",
+        "resume-v02_13_resume-2-c93cbe672417",
+        "resume-v02_14_resume-2-2f71203ee774"
+      ]
+    },
+    {
+      "node_id": "experience-f7f340aa875b",
+      "node_type": "experience",
+      "name": "用户画像：意图路由",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_04_user_profile-0-fd82ee821180"
+      ]
+    },
+    {
+      "node_id": "experience-fb3b97fdaebc",
+      "node_type": "experience",
+      "name": "用户画像：重排策略",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_13_user_profile-0-102483a218fc"
+      ]
+    },
+    {
+      "node_id": "experience-fe26f877b327",
+      "node_type": "experience",
+      "name": "用户画像：岗位时效性",
+      "aliases": [],
+      "chunk_ids": [
+        "user_profile-v02_07_user_profile-0-d546cac654fe"
+      ]
+    },
+    {
+      "node_id": "job-0203c44432f7",
+      "node_type": "job",
+      "name": "Python 后端研发实习生",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-python_backend_intern-0-599054e56ed8"
+      ]
+    },
+    {
+      "node_id": "job-271fe13eeb98",
+      "node_type": "job",
+      "name": "AI 平台研发实习生",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411"
+      ]
+    },
+    {
+      "node_id": "job-6b472564be7a",
+      "node_type": "job",
+      "name": "边界条件",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_01_jd-3-f96a0383c59a",
+        "jd-v02_02_jd-3-b2a875e3f75d",
+        "jd-v02_03_jd-3-bd56ee27eafe",
+        "jd-v02_04_jd-3-cebba6d2a906",
+        "jd-v02_05_jd-3-d30065b3575f",
+        "jd-v02_06_jd-3-e3aaed6346ca",
+        "jd-v02_07_jd-3-51e100c14b23",
+        "jd-v02_08_jd-3-d6b5d09408e2",
+        "jd-v02_09_jd-3-8a5f455fc397",
+        "jd-v02_10_jd-3-3c5dd0af69f8",
+        "jd-v02_11_jd-3-159a1e5c3014",
+        "jd-v02_12_jd-3-fdaa967f2dce",
+        "jd-v02_13_jd-3-bcd1c6cdcb97",
+        "jd-v02_14_jd-3-00464ce4009e"
+      ]
+    },
+    {
+      "node_id": "job-700c2c05d7d0",
+      "node_type": "job",
+      "name": "岗位资料：工具调用",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_08_jd-0-265911b39429"
+      ]
+    },
+    {
+      "node_id": "job-732876ffe9a5",
+      "node_type": "job",
+      "name": "搜索算法实习生",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-search_algorithm_intern-0-3717dbcae501"
+      ]
+    },
+    {
+      "node_id": "job-75dba5299cd1",
+      "node_type": "job",
+      "name": "岗位资料：模型适配",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_09_jd-0-b9e604c36260"
+      ]
+    },
+    {
+      "node_id": "job-79d531ebe3c0",
+      "node_type": "job",
+      "name": "岗位资料：证据门控",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_10_jd-0-bf2b65c523d3"
+      ]
+    },
+    {
+      "node_id": "job-877168b609dc",
+      "node_type": "job",
+      "name": "大模型应用研发实习生",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca"
+      ]
+    },
+    {
+      "node_id": "job-88fea4f614c1",
+      "node_type": "job",
+      "name": "岗位资料：数据导入",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_11_jd-0-2f1e6093a191"
+      ]
+    },
+    {
+      "node_id": "job-90d20be22de8",
+      "node_type": "job",
+      "name": "岗位资料：失败回归",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_06_jd-0-da24eed18137"
+      ]
+    },
+    {
+      "node_id": "job-9446b963704a",
+      "node_type": "job",
+      "name": "能力要求",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_01_jd-1-3f4f1a424286",
+        "jd-v02_02_jd-1-5e0a3227f758",
+        "jd-v02_03_jd-1-fdfda89fb205",
+        "jd-v02_04_jd-1-5d673f5531f0",
+        "jd-v02_05_jd-1-1cbe61b382fd",
+        "jd-v02_06_jd-1-f2cd4ba2b2e1",
+        "jd-v02_07_jd-1-057e1c3759f9",
+        "jd-v02_08_jd-1-d3091a25b576",
+        "jd-v02_09_jd-1-8cba26403502",
+        "jd-v02_10_jd-1-779d13170104",
+        "jd-v02_11_jd-1-04a993d0393c",
+        "jd-v02_12_jd-1-2c4fa19e259e",
+        "jd-v02_13_jd-1-56aa21313a57",
+        "jd-v02_14_jd-1-bfd9c8dccf8b"
+      ]
+    },
+    {
+      "node_id": "job-9d4353bf6e5a",
+      "node_type": "job",
+      "name": "大模型评测实习生",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-llm_evaluation_intern-0-4d8bd07a36b0"
+      ]
+    },
+    {
+      "node_id": "job-bfe272d75bde",
+      "node_type": "job",
+      "name": "岗位资料：请求追踪",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_03_jd-0-2b620372e327"
+      ]
+    },
+    {
+      "node_id": "job-c3fbdad4f4ee",
+      "node_type": "job",
+      "name": "岗位资料：重排策略",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_13_jd-0-f1cdb3e14ee6"
+      ]
+    },
+    {
+      "node_id": "job-cd131681de7c",
+      "node_type": "job",
+      "name": "岗位资料：查询改写",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_12_jd-0-31781b893695"
+      ]
+    },
+    {
+      "node_id": "job-df60a49bec6a",
+      "node_type": "job",
+      "name": "岗位资料：意图路由",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_04_jd-0-4a1efd74ccdf"
+      ]
+    },
+    {
+      "node_id": "job-e692f0a7d2b8",
+      "node_type": "job",
+      "name": "数据工程实习生",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-data_engineer_intern-0-5c51b85be1d3"
+      ]
+    },
+    {
+      "node_id": "job-e97500cdb412",
+      "node_type": "job",
+      "name": "岗位资料：岗位时效性",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_07_jd-0-b5b7137fd3f5"
+      ]
+    },
+    {
+      "node_id": "job-ef1fb921779c",
+      "node_type": "job",
+      "name": "岗位资料：引用校验",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_02_jd-0-8629190192da"
+      ]
+    },
+    {
+      "node_id": "job-f0f62dde6c0f",
+      "node_type": "job",
+      "name": "评估方式",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_01_jd-2-920269f8f001",
+        "jd-v02_02_jd-2-4c72dce87b98",
+        "jd-v02_03_jd-2-a8955ec68394",
+        "jd-v02_04_jd-2-c72b535eb6a2",
+        "jd-v02_05_jd-2-81d1c60d818d",
+        "jd-v02_06_jd-2-f9bf91bccd78",
+        "jd-v02_07_jd-2-a43bf30e3f38",
+        "jd-v02_08_jd-2-d5ccc534564f",
+        "jd-v02_09_jd-2-9e7bf8271eaf",
+        "jd-v02_10_jd-2-be8d80b37587",
+        "jd-v02_11_jd-2-cf15bfdbef98",
+        "jd-v02_12_jd-2-8e1e2cdde167",
+        "jd-v02_13_jd-2-ddcb7f746a29",
+        "jd-v02_14_jd-2-a8a8f4bf4b67"
+      ]
+    },
+    {
+      "node_id": "job-f2345d85824d",
+      "node_type": "job",
+      "name": "岗位资料：上下文预算",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_05_jd-0-1a50b94fc239"
+      ]
+    },
+    {
+      "node_id": "job-f2672e859988",
+      "node_type": "job",
+      "name": "岗位资料：混合检索",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_01_jd-0-d5b93648b57f"
+      ]
+    },
+    {
+      "node_id": "job-f89d8ac474e1",
+      "node_type": "job",
+      "name": "岗位资料：答案覆盖",
+      "aliases": [],
+      "chunk_ids": [
+        "jd-v02_14_jd-0-03226f034bd5"
+      ]
+    },
+    {
+      "node_id": "project-0304008a195b",
+      "node_type": "project",
+      "name": "失败复盘",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_01_project_logs-2-e2cf971f6923",
+        "project_logs-v02_02_project_logs-2-54d825e6485f",
+        "project_logs-v02_03_project_logs-2-8ab0e5c5253d",
+        "project_logs-v02_04_project_logs-2-3ffa5ae7120a",
+        "project_logs-v02_05_project_logs-2-69710499cbfe",
+        "project_logs-v02_06_project_logs-2-b5bacffd0a11",
+        "project_logs-v02_07_project_logs-2-67b0164d77d4",
+        "project_logs-v02_08_project_logs-2-6d2193209a63",
+        "project_logs-v02_09_project_logs-2-eb1a90adce0d",
+        "project_logs-v02_10_project_logs-2-47aff6a68cf0",
+        "project_logs-v02_11_project_logs-2-d9e1e26d97b7",
+        "project_logs-v02_12_project_logs-2-f80237d2e2e0",
+        "project_logs-v02_13_project_logs-2-c64c3d43f59a",
+        "project_logs-v02_14_project_logs-2-49dcbefbe29e"
+      ]
+    },
+    {
+      "node_id": "project-0b7aa1c7c58f",
+      "node_type": "project",
+      "name": "Keyword Retrieval Baseline 日志",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-retrieval_baseline-0-25f85eee4c6e"
+      ]
+    },
+    {
+      "node_id": "project-34dcf7fcb3d7",
+      "node_type": "project",
+      "name": "项目日志：意图路由",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_04_project_logs-0-7b9e19c08d99"
+      ]
+    },
+    {
+      "node_id": "project-4fc8ece15966",
+      "node_type": "project",
+      "name": "实现记录",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_01_project_logs-1-ef1fab915dcf",
+        "project_logs-v02_02_project_logs-1-5708497a374a",
+        "project_logs-v02_03_project_logs-1-2109cc9c365f",
+        "project_logs-v02_04_project_logs-1-a235637cddf5",
+        "project_logs-v02_05_project_logs-1-0b21c4164952",
+        "project_logs-v02_06_project_logs-1-0e18b70fd633",
+        "project_logs-v02_07_project_logs-1-c82e111c3e84",
+        "project_logs-v02_08_project_logs-1-c18ba8882395",
+        "project_logs-v02_09_project_logs-1-785391087259",
+        "project_logs-v02_10_project_logs-1-2f70d7366bc1",
+        "project_logs-v02_11_project_logs-1-0223ee120a62",
+        "project_logs-v02_12_project_logs-1-773c9bca6b80",
+        "project_logs-v02_13_project_logs-1-33c7c9650993",
+        "project_logs-v02_14_project_logs-1-56d28cb8a175"
+      ]
+    },
+    {
+      "node_id": "project-5094416856d9",
+      "node_type": "project",
+      "name": "项目日志：引用校验",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_02_project_logs-0-fac6d8dba8ad"
+      ]
+    },
+    {
+      "node_id": "project-7417407af155",
+      "node_type": "project",
+      "name": "项目日志：失败回归",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_06_project_logs-0-29fe28dcc576"
+      ]
+    },
+    {
+      "node_id": "project-7419d84c2b67",
+      "node_type": "project",
+      "name": "Ingestion 模块迭代日志",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-ingestion_iteration-0-b7d9b7f28891"
+      ]
+    },
+    {
+      "node_id": "project-7d2abffaa654",
+      "node_type": "project",
+      "name": "项目日志：模型适配",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_09_project_logs-0-759a9a1afbc5"
+      ]
+    },
+    {
+      "node_id": "project-86b3dd4b55fc",
+      "node_type": "project",
+      "name": "项目日志：答案覆盖",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_14_project_logs-0-ecd26f1bce30"
+      ]
+    },
+    {
+      "node_id": "project-86ceb50ce391",
+      "node_type": "project",
+      "name": "项目日志 Day 1",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-day1_log-0-871483366c37"
+      ]
+    },
+    {
+      "node_id": "project-9298893d34be",
+      "node_type": "project",
+      "name": "项目日志：查询改写",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_12_project_logs-0-d1ef302d9ae3"
+      ]
+    },
+    {
+      "node_id": "project-9472591697a8",
+      "node_type": "project",
+      "name": "项目日志：岗位时效性",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_07_project_logs-0-78a7f357b286"
+      ]
+    },
+    {
+      "node_id": "project-ad73756a7062",
+      "node_type": "project",
+      "name": "项目日志：混合检索",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_01_project_logs-0-9c613c709996"
+      ]
+    },
+    {
+      "node_id": "project-afa1dc765761",
+      "node_type": "project",
+      "name": "项目日志：数据导入",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_11_project_logs-0-9f1c9f29c890"
+      ]
+    },
+    {
+      "node_id": "project-b46e17411d95",
+      "node_type": "project",
+      "name": "Router 与 Trace 迭代日志",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-router_trace_iteration-0-f6409aa97d4e"
+      ]
+    },
+    {
+      "node_id": "project-c29fc0735df1",
+      "node_type": "project",
+      "name": "项目日志：工具调用",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_08_project_logs-0-5680c9e6e533"
+      ]
+    },
+    {
+      "node_id": "project-c72521f79a7f",
+      "node_type": "project",
+      "name": "Evaluation 计划日志",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-evaluation_plan-0-4dffe51bc130"
+      ]
+    },
+    {
+      "node_id": "project-d9d4cf4c5a8c",
+      "node_type": "project",
+      "name": "项目日志：请求追踪",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_03_project_logs-0-fbf495179cd5"
+      ]
+    },
+    {
+      "node_id": "project-ea904dcb36af",
+      "node_type": "project",
+      "name": "项目日志：重排策略",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_13_project_logs-0-3fa8d805763a"
+      ]
+    },
+    {
+      "node_id": "project-ec65eb442fce",
+      "node_type": "project",
+      "name": "项目日志：证据门控",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_10_project_logs-0-c4e381b0710d"
+      ]
+    },
+    {
+      "node_id": "project-ee620874e9bd",
+      "node_type": "project",
+      "name": "Generation 与 Validation 迭代日志",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-generation_validation_iteration-0-9b9bcb2dede3"
+      ]
+    },
+    {
+      "node_id": "project-f72b5999c7ba",
+      "node_type": "project",
+      "name": "项目日志：上下文预算",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_05_project_logs-0-d25ec41e755a"
+      ]
+    },
+    {
+      "node_id": "project-f8bc72b6a77b",
+      "node_type": "project",
+      "name": "下一实验",
+      "aliases": [],
+      "chunk_ids": [
+        "project_logs-v02_01_project_logs-3-265067d2de8e",
+        "project_logs-v02_02_project_logs-3-65b5174d1661",
+        "project_logs-v02_03_project_logs-3-6de0d28633ee",
+        "project_logs-v02_04_project_logs-3-7a704a35e6de",
+        "project_logs-v02_05_project_logs-3-c3a2c5771d31",
+        "project_logs-v02_06_project_logs-3-ef34c4218f79",
+        "project_logs-v02_07_project_logs-3-4b553dfcd050",
+        "project_logs-v02_08_project_logs-3-e9b3123cd30d",
+        "project_logs-v02_09_project_logs-3-811d5c76272f",
+        "project_logs-v02_10_project_logs-3-b862cd1ffd44",
+        "project_logs-v02_11_project_logs-3-b93c80ff0b08",
+        "project_logs-v02_12_project_logs-3-48602ece499a",
+        "project_logs-v02_13_project_logs-3-b386d238a9b3",
+        "project_logs-v02_14_project_logs-3-730550992b29"
+      ]
+    },
+    {
+      "node_id": "skill-02434636e57d",
+      "node_type": "skill",
+      "name": "岗位时效性",
+      "aliases": [
+        "freshness filter",
+        "过期岗位污染回答"
+      ],
+      "chunk_ids": [
+        "jd-v02_07_jd-0-b5b7137fd3f5",
+        "jd-v02_07_jd-1-057e1c3759f9",
+        "jd-v02_07_jd-2-a43bf30e3f38",
+        "jd-v02_07_jd-3-51e100c14b23",
+        "project_logs-v02_07_project_logs-0-78a7f357b286",
+        "project_logs-v02_07_project_logs-1-c82e111c3e84",
+        "project_logs-v02_07_project_logs-2-67b0164d77d4",
+        "project_logs-v02_07_project_logs-3-4b553dfcd050",
+        "resume-v02_07_resume-0-eff4aa3cb6a2",
+        "resume-v02_07_resume-1-d424f3202ddc",
+        "resume-v02_07_resume-2-dccecd3a50a9",
+        "resume-v02_07_resume-3-5016a0129d84",
+        "user_profile-v02_07_user_profile-0-d546cac654fe",
+        "user_profile-v02_07_user_profile-1-516968e9a908",
+        "user_profile-v02_07_user_profile-2-93b2643bfea8",
+        "user_profile-v02_07_user_profile-3-41fd69fac780"
+      ]
+    },
+    {
+      "node_id": "skill-04279d9a98bc",
+      "node_type": "skill",
+      "name": "证据门控",
+      "aliases": [
+        "Abstention Accuracy",
+        "Evidence Gate",
+        "证据不足仍强行回答"
+      ],
+      "chunk_ids": [
+        "jd-v02_10_jd-0-bf2b65c523d3",
+        "jd-v02_10_jd-1-779d13170104",
+        "jd-v02_10_jd-2-be8d80b37587",
+        "jd-v02_10_jd-3-3c5dd0af69f8",
+        "project_logs-v02_10_project_logs-0-c4e381b0710d",
+        "project_logs-v02_10_project_logs-1-2f70d7366bc1",
+        "project_logs-v02_10_project_logs-2-47aff6a68cf0",
+        "project_logs-v02_10_project_logs-3-b862cd1ffd44",
+        "resume-v02_10_resume-0-bdf42818d7b7",
+        "resume-v02_10_resume-1-1a6f37293848",
+        "resume-v02_10_resume-2-6b5573f02404",
+        "resume-v02_10_resume-3-40ea6a97bdb6",
+        "user_profile-learning_plan-0-1410e644f4d2",
+        "user_profile-v02_10_user_profile-0-34a6830e5875",
+        "user_profile-v02_10_user_profile-1-5de02bd83217",
+        "user_profile-v02_10_user_profile-2-c9a5610ba576",
+        "user_profile-v02_10_user_profile-3-133970120ee4"
+      ]
+    },
+    {
+      "node_id": "skill-06cfe867e592",
+      "node_type": "skill",
+      "name": "重排策略",
+      "aliases": [
+        "reranker",
+        "相关证据排名靠后"
+      ],
+      "chunk_ids": [
+        "jd-v02_13_jd-0-f1cdb3e14ee6",
+        "jd-v02_13_jd-1-56aa21313a57",
+        "jd-v02_13_jd-2-ddcb7f746a29",
+        "jd-v02_13_jd-3-bcd1c6cdcb97",
+        "project_logs-v02_13_project_logs-0-3fa8d805763a",
+        "project_logs-v02_13_project_logs-1-33c7c9650993",
+        "project_logs-v02_13_project_logs-2-c64c3d43f59a",
+        "project_logs-v02_13_project_logs-3-b386d238a9b3",
+        "resume-v02_13_resume-0-a12dd28a8441",
+        "resume-v02_13_resume-1-61aa5b6fdc67",
+        "resume-v02_13_resume-2-c93cbe672417",
+        "resume-v02_13_resume-3-e6af4f06908a",
+        "user_profile-v02_13_user_profile-0-102483a218fc",
+        "user_profile-v02_13_user_profile-1-ce84d2839c87",
+        "user_profile-v02_13_user_profile-2-8d924aead1bd",
+        "user_profile-v02_13_user_profile-3-62622bbfb945"
+      ]
+    },
+    {
+      "node_id": "skill-07f1f2196156",
+      "node_type": "skill",
+      "name": "查询改写",
+      "aliases": [
+        "query rewrite",
+        "改写偏离原意"
+      ],
+      "chunk_ids": [
+        "jd-v02_12_jd-0-31781b893695",
+        "jd-v02_12_jd-1-2c4fa19e259e",
+        "jd-v02_12_jd-2-8e1e2cdde167",
+        "jd-v02_12_jd-3-fdaa967f2dce",
+        "project_logs-v02_12_project_logs-0-d1ef302d9ae3",
+        "project_logs-v02_12_project_logs-1-773c9bca6b80",
+        "project_logs-v02_12_project_logs-2-f80237d2e2e0",
+        "project_logs-v02_12_project_logs-3-48602ece499a",
+        "resume-v02_12_resume-0-a554d8176643",
+        "resume-v02_12_resume-1-a37cc0704fb5",
+        "resume-v02_12_resume-2-e169d3565e11",
+        "resume-v02_12_resume-3-5da125a60d1c",
+        "user_profile-v02_12_user_profile-0-ec3dec4cdcc9",
+        "user_profile-v02_12_user_profile-1-f6bcc6701711",
+        "user_profile-v02_12_user_profile-2-81fbf8584168",
+        "user_profile-v02_12_user_profile-3-2f8a325a6b36"
+      ]
+    },
+    {
+      "node_id": "skill-3d4d1075e7f1",
+      "node_type": "skill",
+      "name": "工具调用",
+      "aliases": [
+        "Tool Success Rate",
+        "tool validator",
+        "参数错误产生副作用"
+      ],
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca",
+        "jd-v02_08_jd-0-265911b39429",
+        "jd-v02_08_jd-1-d3091a25b576",
+        "jd-v02_08_jd-2-d5ccc534564f",
+        "jd-v02_08_jd-3-d6b5d09408e2",
+        "project_logs-v02_08_project_logs-0-5680c9e6e533",
+        "project_logs-v02_08_project_logs-1-c18ba8882395",
+        "project_logs-v02_08_project_logs-2-6d2193209a63",
+        "project_logs-v02_08_project_logs-3-e9b3123cd30d",
+        "resume-sample_resume-0-6fcdc7dba4d7",
+        "resume-v02_08_resume-0-112b1c9fd7af",
+        "resume-v02_08_resume-1-e9a36c63ec5d",
+        "resume-v02_08_resume-2-7e6960a00e5d",
+        "resume-v02_08_resume-3-8971b2428275",
+        "user_profile-v02_08_user_profile-0-7ceaf287a8bb",
+        "user_profile-v02_08_user_profile-1-33070b82d27e",
+        "user_profile-v02_08_user_profile-2-8ee2b8400048",
+        "user_profile-v02_08_user_profile-3-eb42c265eced"
+      ]
+    },
+    {
+      "node_id": "skill-447ebe7e3db9",
+      "node_type": "skill",
+      "name": "失败回归",
+      "aliases": [
+        "Regression Pass Rate",
+        "Regression Suite",
+        "旧失败重新出现"
+      ],
+      "chunk_ids": [
+        "jd-v02_06_jd-0-da24eed18137",
+        "jd-v02_06_jd-1-f2cd4ba2b2e1",
+        "jd-v02_06_jd-2-f9bf91bccd78",
+        "jd-v02_06_jd-3-e3aaed6346ca",
+        "project_logs-v02_06_project_logs-0-29fe28dcc576",
+        "project_logs-v02_06_project_logs-1-0e18b70fd633",
+        "project_logs-v02_06_project_logs-2-b5bacffd0a11",
+        "project_logs-v02_06_project_logs-3-ef34c4218f79",
+        "resume-v02_06_resume-0-a5d2b355f77c",
+        "resume-v02_06_resume-1-77950ef18ae9",
+        "resume-v02_06_resume-2-c8ebcad6b7aa",
+        "resume-v02_06_resume-3-384a679f062a",
+        "user_profile-v02_06_user_profile-0-f369d9ec4fe8",
+        "user_profile-v02_06_user_profile-1-9187f5578a26",
+        "user_profile-v02_06_user_profile-2-819c23846421",
+        "user_profile-v02_06_user_profile-3-f7c9e03bc934"
+      ]
+    },
+    {
+      "node_id": "skill-50adb05742cd",
+      "node_type": "skill",
+      "name": "混合检索",
+      "aliases": [
+        "RRF",
+        "单路召回偏科",
+        "词法与语义召回"
+      ],
+      "chunk_ids": [
+        "jd-v02_01_jd-0-d5b93648b57f",
+        "jd-v02_01_jd-1-3f4f1a424286",
+        "jd-v02_01_jd-2-920269f8f001",
+        "jd-v02_01_jd-3-f96a0383c59a",
+        "project_logs-v02_01_project_logs-0-9c613c709996",
+        "project_logs-v02_01_project_logs-1-ef1fab915dcf",
+        "project_logs-v02_01_project_logs-2-e2cf971f6923",
+        "project_logs-v02_01_project_logs-3-265067d2de8e",
+        "resume-v02_01_resume-0-9acdbaec4702",
+        "resume-v02_01_resume-1-d367a4d11847",
+        "resume-v02_01_resume-2-0b89c684b873",
+        "resume-v02_01_resume-3-33f9ea12e178",
+        "user_profile-v02_01_user_profile-0-0ef6940a7be3",
+        "user_profile-v02_01_user_profile-1-d3d0ac2a879b",
+        "user_profile-v02_01_user_profile-2-e71f141757e3",
+        "user_profile-v02_01_user_profile-3-4cdb3dfbb88f"
+      ]
+    },
+    {
+      "node_id": "skill-5277a3b4a7de",
+      "node_type": "skill",
+      "name": "答案覆盖",
+      "aliases": [
+        "Key-Point Coverage",
+        "key-point checker",
+        "回答遗漏关键条件"
+      ],
+      "chunk_ids": [
+        "jd-v02_14_jd-0-03226f034bd5",
+        "jd-v02_14_jd-1-bfd9c8dccf8b",
+        "jd-v02_14_jd-2-a8a8f4bf4b67",
+        "jd-v02_14_jd-3-00464ce4009e",
+        "project_logs-v02_14_project_logs-0-ecd26f1bce30",
+        "project_logs-v02_14_project_logs-1-56d28cb8a175",
+        "project_logs-v02_14_project_logs-2-49dcbefbe29e",
+        "project_logs-v02_14_project_logs-3-730550992b29",
+        "resume-v02_14_resume-0-3fb4dc08574e",
+        "resume-v02_14_resume-1-289c45a343fa",
+        "resume-v02_14_resume-2-2f71203ee774",
+        "resume-v02_14_resume-3-19bbcea7f6ca",
+        "user_profile-v02_14_user_profile-0-14c62c1c84fe",
+        "user_profile-v02_14_user_profile-1-4dda5681084c",
+        "user_profile-v02_14_user_profile-2-3a8c398194cc",
+        "user_profile-v02_14_user_profile-3-733af45bcb29"
+      ]
+    },
+    {
+      "node_id": "skill-5d0afe63f298",
+      "node_type": "skill",
+      "name": "上下文管理",
+      "aliases": [
+        "Context Builder",
+        "上下文预算",
+        "关键证据被截断"
+      ],
+      "chunk_ids": [
+        "jd-v02_05_jd-0-1a50b94fc239",
+        "jd-v02_05_jd-1-1cbe61b382fd",
+        "jd-v02_05_jd-2-81d1c60d818d",
+        "jd-v02_05_jd-3-d30065b3575f",
+        "project_logs-v02_05_project_logs-0-d25ec41e755a",
+        "project_logs-v02_05_project_logs-1-0b21c4164952",
+        "project_logs-v02_05_project_logs-2-69710499cbfe",
+        "project_logs-v02_05_project_logs-3-c3a2c5771d31",
+        "resume-rag_project_experience-0-45abba9c3117",
+        "resume-v02_05_resume-0-07dabb2d70ba",
+        "resume-v02_05_resume-1-2123738a748b",
+        "resume-v02_05_resume-2-856cdad100bb",
+        "resume-v02_05_resume-3-403e23fba9c9",
+        "user_profile-v02_05_user_profile-0-b142f9e3c6cd",
+        "user_profile-v02_05_user_profile-1-b53b31661cbe",
+        "user_profile-v02_05_user_profile-2-af4db8769908",
+        "user_profile-v02_05_user_profile-3-90804fa7d091"
+      ]
+    },
+    {
+      "node_id": "skill-85f7ca52f27d",
+      "node_type": "skill",
+      "name": "意图路由",
+      "aliases": [
+        "Router Accuracy",
+        "Semantic Router",
+        "多意图规则冲突"
+      ],
+      "chunk_ids": [
+        "jd-v02_04_jd-0-4a1efd74ccdf",
+        "jd-v02_04_jd-1-5d673f5531f0",
+        "jd-v02_04_jd-2-c72b535eb6a2",
+        "jd-v02_04_jd-3-cebba6d2a906",
+        "project_logs-evaluation_plan-0-4dffe51bc130",
+        "project_logs-v02_04_project_logs-0-7b9e19c08d99",
+        "project_logs-v02_04_project_logs-1-a235637cddf5",
+        "project_logs-v02_04_project_logs-2-3ffa5ae7120a",
+        "project_logs-v02_04_project_logs-3-7a704a35e6de",
+        "resume-sample_resume-0-6fcdc7dba4d7",
+        "resume-v02_04_resume-0-d746bc710a36",
+        "resume-v02_04_resume-1-09868fa78308",
+        "resume-v02_04_resume-2-039f5150f99b",
+        "resume-v02_04_resume-3-bb0f871e46ca",
+        "user_profile-v02_04_user_profile-0-fd82ee821180",
+        "user_profile-v02_04_user_profile-1-42bbf4592e2f",
+        "user_profile-v02_04_user_profile-2-4bb11d06add5",
+        "user_profile-v02_04_user_profile-3-935989511103"
+      ]
+    },
+    {
+      "node_id": "skill-9c8e467ecdd6",
+      "node_type": "skill",
+      "name": "请求追踪",
+      "aliases": [
+        "Agent Trace",
+        "Trace",
+        "错误阶段无法定位"
+      ],
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411",
+        "jd-v02_03_jd-0-2b620372e327",
+        "jd-v02_03_jd-1-fdfda89fb205",
+        "jd-v02_03_jd-2-a8955ec68394",
+        "jd-v02_03_jd-3-bd56ee27eafe",
+        "project_logs-router_trace_iteration-0-f6409aa97d4e",
+        "project_logs-v02_03_project_logs-0-fbf495179cd5",
+        "project_logs-v02_03_project_logs-1-2109cc9c365f",
+        "project_logs-v02_03_project_logs-2-8ab0e5c5253d",
+        "project_logs-v02_03_project_logs-3-6de0d28633ee",
+        "resume-rag_project_experience-0-45abba9c3117",
+        "resume-skill_matrix-0-8faeca0c9be2",
+        "resume-v02_03_resume-0-3c1472e83ae1",
+        "resume-v02_03_resume-1-759d4f855042",
+        "resume-v02_03_resume-2-bc61af744241",
+        "resume-v02_03_resume-3-bb04ffd9cdd0",
+        "user_profile-interview_preferences-0-a7f982ab0547",
+        "user_profile-v02_03_user_profile-0-76a73c266c3e",
+        "user_profile-v02_03_user_profile-1-f70363580f29",
+        "user_profile-v02_03_user_profile-2-95a7823c53b9",
+        "user_profile-v02_03_user_profile-3-89d186f00d6f"
+      ]
+    },
+    {
+      "node_id": "skill-a36681a08812",
+      "node_type": "skill",
+      "name": "模型适配",
+      "aliases": [
+        "LlmClient Protocol",
+        "供应商响应格式不同"
+      ],
+      "chunk_ids": [
+        "jd-v02_09_jd-0-b9e604c36260",
+        "jd-v02_09_jd-1-8cba26403502",
+        "jd-v02_09_jd-2-9e7bf8271eaf",
+        "jd-v02_09_jd-3-8a5f455fc397",
+        "project_logs-generation_validation_iteration-0-9b9bcb2dede3",
+        "project_logs-v02_09_project_logs-0-759a9a1afbc5",
+        "project_logs-v02_09_project_logs-1-785391087259",
+        "project_logs-v02_09_project_logs-2-eb1a90adce0d",
+        "project_logs-v02_09_project_logs-3-811d5c76272f",
+        "resume-v02_09_resume-0-7b30133a899a",
+        "resume-v02_09_resume-1-7a6b96b0087b",
+        "resume-v02_09_resume-2-e12214f13cc6",
+        "resume-v02_09_resume-3-60508e76d385",
+        "user_profile-v02_09_user_profile-0-913ed59d8980",
+        "user_profile-v02_09_user_profile-1-de1ee9afedd0",
+        "user_profile-v02_09_user_profile-2-bc89caccb34d",
+        "user_profile-v02_09_user_profile-3-10c1fca62633"
+      ]
+    },
+    {
+      "node_id": "skill-ad9b5739bcff",
+      "node_type": "skill",
+      "name": "数据导入",
+      "aliases": [
+        "importer adapter",
+        "平台字段不一致"
+      ],
+      "chunk_ids": [
+        "jd-v02_11_jd-0-2f1e6093a191",
+        "jd-v02_11_jd-1-04a993d0393c",
+        "jd-v02_11_jd-2-cf15bfdbef98",
+        "jd-v02_11_jd-3-159a1e5c3014",
+        "project_logs-v02_11_project_logs-0-9f1c9f29c890",
+        "project_logs-v02_11_project_logs-1-0223ee120a62",
+        "project_logs-v02_11_project_logs-2-d9e1e26d97b7",
+        "project_logs-v02_11_project_logs-3-b93c80ff0b08",
+        "resume-v02_11_resume-0-6c0f0911c2d3",
+        "resume-v02_11_resume-1-3e5b480c0084",
+        "resume-v02_11_resume-2-7ba706a784d0",
+        "resume-v02_11_resume-3-523716fde5d8",
+        "user_profile-v02_11_user_profile-0-d2304af1df7e",
+        "user_profile-v02_11_user_profile-1-d90e1a71c3f0",
+        "user_profile-v02_11_user_profile-2-c086a5662503",
+        "user_profile-v02_11_user_profile-3-1c32b6c146ed"
+      ]
+    },
+    {
+      "node_id": "skill-f423c90e24a1",
+      "node_type": "skill",
+      "name": "引用校验",
+      "aliases": [
+        "Citation Validator",
+        "Citation Validity",
+        "模型编造证据编号"
+      ],
+      "chunk_ids": [
+        "jd-v02_02_jd-0-8629190192da",
+        "jd-v02_02_jd-1-5e0a3227f758",
+        "jd-v02_02_jd-2-4c72dce87b98",
+        "jd-v02_02_jd-3-b2a875e3f75d",
+        "project_logs-generation_validation_iteration-0-9b9bcb2dede3",
+        "project_logs-v02_02_project_logs-0-fac6d8dba8ad",
+        "project_logs-v02_02_project_logs-1-5708497a374a",
+        "project_logs-v02_02_project_logs-2-54d825e6485f",
+        "project_logs-v02_02_project_logs-3-65b5174d1661",
+        "resume-rag_project_experience-0-45abba9c3117",
+        "resume-v02_02_resume-0-fafd04bdc7a8",
+        "resume-v02_02_resume-1-e88e5ff56067",
+        "resume-v02_02_resume-2-22e4b3160d23",
+        "resume-v02_02_resume-3-4ca2f02bcb7e",
+        "user_profile-interview_preferences-0-a7f982ab0547",
+        "user_profile-v02_02_user_profile-0-ad79fcdcad46",
+        "user_profile-v02_02_user_profile-1-e39cb66466fb",
+        "user_profile-v02_02_user_profile-2-5a0300033bcb",
+        "user_profile-v02_02_user_profile-3-1c5c1c71d66b"
+      ]
+    },
+    {
+      "node_id": "technology-0608c4054662",
+      "node_type": "technology",
+      "name": "Agent",
+      "aliases": [
+        "智能体"
+      ],
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca",
+        "jd-v02_03_jd-0-2b620372e327",
+        "jd-v02_03_jd-1-fdfda89fb205",
+        "jd-v02_03_jd-2-a8955ec68394",
+        "jd-v02_03_jd-3-bd56ee27eafe",
+        "jd-v02_08_jd-0-265911b39429",
+        "jd-v02_08_jd-1-d3091a25b576",
+        "jd-v02_08_jd-2-d5ccc534564f",
+        "jd-v02_08_jd-3-d6b5d09408e2",
+        "project_logs-v02_03_project_logs-0-fbf495179cd5",
+        "project_logs-v02_03_project_logs-1-2109cc9c365f",
+        "project_logs-v02_03_project_logs-2-8ab0e5c5253d",
+        "project_logs-v02_03_project_logs-3-6de0d28633ee",
+        "project_logs-v02_08_project_logs-0-5680c9e6e533",
+        "project_logs-v02_08_project_logs-1-c18ba8882395",
+        "project_logs-v02_08_project_logs-2-6d2193209a63",
+        "project_logs-v02_08_project_logs-3-e9b3123cd30d",
+        "resume-sample_resume-0-6fcdc7dba4d7",
+        "resume-skill_matrix-0-8faeca0c9be2",
+        "resume-v02_03_resume-0-3c1472e83ae1",
+        "resume-v02_03_resume-1-759d4f855042",
+        "resume-v02_03_resume-2-bc61af744241",
+        "resume-v02_03_resume-3-bb04ffd9cdd0",
+        "resume-v02_08_resume-0-112b1c9fd7af",
+        "resume-v02_08_resume-1-e9a36c63ec5d",
+        "resume-v02_08_resume-2-7e6960a00e5d",
+        "resume-v02_08_resume-3-8971b2428275",
+        "user_profile-profile-0-70751fced17f",
+        "user_profile-v02_03_user_profile-0-76a73c266c3e",
+        "user_profile-v02_03_user_profile-1-f70363580f29",
+        "user_profile-v02_03_user_profile-2-95a7823c53b9",
+        "user_profile-v02_03_user_profile-3-89d186f00d6f",
+        "user_profile-v02_08_user_profile-0-7ceaf287a8bb",
+        "user_profile-v02_08_user_profile-1-33070b82d27e",
+        "user_profile-v02_08_user_profile-2-8ee2b8400048",
+        "user_profile-v02_08_user_profile-3-eb42c265eced"
+      ]
+    },
+    {
+      "node_id": "technology-41a1373cef2a",
+      "node_type": "technology",
+      "name": "FastAPI",
+      "aliases": [
+        "HTTP 接口",
+        "REST API"
+      ],
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411",
+        "jd-backend_intern-0-a1da3e9ac6ca",
+        "jd-python_backend_intern-0-599054e56ed8",
+        "resume-gaps_and_learning-0-0e45949ca76b",
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "node_id": "technology-4235227b5143",
+      "node_type": "technology",
+      "name": "Python",
+      "aliases": [
+        "python"
+      ],
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411",
+        "jd-backend_intern-0-a1da3e9ac6ca",
+        "jd-data_engineer_intern-0-5c51b85be1d3",
+        "jd-llm_evaluation_intern-0-4d8bd07a36b0",
+        "jd-python_backend_intern-0-599054e56ed8",
+        "jd-search_algorithm_intern-0-3717dbcae501",
+        "project_logs-day1_log-0-871483366c37",
+        "resume-gaps_and_learning-0-0e45949ca76b",
+        "resume-sample_resume-0-6fcdc7dba4d7",
+        "resume-skill_matrix-0-8faeca0c9be2",
+        "user_profile-role_priority-0-5aee6997af02"
+      ]
+    },
+    {
+      "node_id": "technology-69a537093ff9",
+      "node_type": "technology",
+      "name": "RAG",
+      "aliases": [
+        "检索增强生成",
+        "知识库问答"
+      ],
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca",
+        "jd-llm_evaluation_intern-0-4d8bd07a36b0",
+        "jd-v02_14_jd-0-03226f034bd5",
+        "jd-v02_14_jd-1-bfd9c8dccf8b",
+        "jd-v02_14_jd-2-a8a8f4bf4b67",
+        "jd-v02_14_jd-3-00464ce4009e",
+        "project_logs-day1_log-0-871483366c37",
+        "project_logs-v02_14_project_logs-0-ecd26f1bce30",
+        "project_logs-v02_14_project_logs-1-56d28cb8a175",
+        "project_logs-v02_14_project_logs-2-49dcbefbe29e",
+        "project_logs-v02_14_project_logs-3-730550992b29",
+        "resume-rag_project_experience-0-45abba9c3117",
+        "resume-sample_resume-0-6fcdc7dba4d7",
+        "resume-skill_matrix-0-8faeca0c9be2",
+        "resume-v02_14_resume-0-3fb4dc08574e",
+        "resume-v02_14_resume-1-289c45a343fa",
+        "resume-v02_14_resume-2-2f71203ee774",
+        "resume-v02_14_resume-3-19bbcea7f6ca",
+        "user_profile-interview_preferences-0-a7f982ab0547",
+        "user_profile-profile-0-70751fced17f",
+        "user_profile-role_priority-0-5aee6997af02",
+        "user_profile-v02_14_user_profile-0-14c62c1c84fe",
+        "user_profile-v02_14_user_profile-1-4dda5681084c",
+        "user_profile-v02_14_user_profile-2-3a8c398194cc",
+        "user_profile-v02_14_user_profile-3-733af45bcb29"
+      ]
+    },
+    {
+      "node_id": "technology-794c422cb58d",
+      "node_type": "technology",
+      "name": "Dense Retrieval",
+      "aliases": [
+        "Dense",
+        "embedding",
+        "向量检索"
+      ],
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca",
+        "jd-search_algorithm_intern-0-3717dbcae501",
+        "resume-gaps_and_learning-0-0e45949ca76b",
+        "resume-sample_resume-0-6fcdc7dba4d7",
+        "resume-skill_matrix-0-8faeca0c9be2",
+        "user_profile-learning_plan-0-1410e644f4d2"
+      ]
+    },
+    {
+      "node_id": "technology-b840fc02d524",
+      "node_type": "technology",
+      "name": "Redis",
+      "aliases": [
+        "任务队列",
+        "缓存"
+      ],
+      "chunk_ids": [
+        "resume-backend_project_experience-0-c5a7f826a487"
+      ]
+    },
+    {
+      "node_id": "technology-d96d7fcf37da",
+      "node_type": "technology",
+      "name": "BM25",
+      "aliases": [
+        "bm25"
+      ],
+      "chunk_ids": [
+        "jd-search_algorithm_intern-0-3717dbcae501"
+      ]
+    },
+    {
+      "node_id": "technology-db1dfd45b163",
+      "node_type": "technology",
+      "name": "SQL",
+      "aliases": [
+        "关系型数据库"
+      ],
+      "chunk_ids": [
+        "jd-data_engineer_intern-0-5c51b85be1d3",
+        "jd-python_backend_intern-0-599054e56ed8",
+        "resume-backend_project_experience-0-c5a7f826a487",
+        "resume-gaps_and_learning-0-0e45949ca76b",
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "node_id": "technology-e982f17bcbe0",
+      "node_type": "technology",
+      "name": "Docker",
+      "aliases": [
+        "Docker Compose",
+        "容器"
+      ],
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411",
+        "resume-gaps_and_learning-0-0e45949ca76b",
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "edge-015fa901486a",
+      "edge_type": "requires",
+      "source_node_id": "job-bfe272d75bde",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "jd-v02_03_jd-0-2b620372e327"
+      ]
+    },
+    {
+      "edge_id": "edge-01b36f9d994d",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-440b6ebe5a6b",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "resume-v02_08_resume-0-112b1c9fd7af"
+      ]
+    },
+    {
+      "edge_id": "edge-0206acd1f29d",
+      "edge_type": "related_to",
+      "source_node_id": "skill-9c8e467ecdd6",
+      "target_node_id": "technology-e982f17bcbe0",
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411",
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "edge_id": "edge-0353f0848c16",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "jd-v02_10_jd-2-be8d80b37587"
+      ]
+    },
+    {
+      "edge_id": "edge-0380346367c4",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-9a3d5112457b",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "resume-rag_project_experience-0-45abba9c3117"
+      ]
+    },
+    {
+      "edge_id": "edge-05666c730a50",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-251b68b852f5",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "user_profile-v02_08_user_profile-0-7ceaf287a8bb"
+      ]
+    },
+    {
+      "edge_id": "edge-060b170f430f",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "user_profile-v02_14_user_profile-3-733af45bcb29"
+      ]
+    },
+    {
+      "edge_id": "edge-077db1153677",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "resume-v02_12_resume-3-5da125a60d1c"
+      ]
+    },
+    {
+      "edge_id": "edge-08e46069973c",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "resume-v02_03_resume-3-bb04ffd9cdd0",
+        "resume-v02_08_resume-3-8971b2428275"
+      ]
+    },
+    {
+      "edge_id": "edge-09f991405433",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "project_logs-v02_12_project_logs-2-f80237d2e2e0"
+      ]
+    },
+    {
+      "edge_id": "edge-0a6b284e6ffd",
+      "edge_type": "related_to",
+      "source_node_id": "skill-5d0afe63f298",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "resume-rag_project_experience-0-45abba9c3117"
+      ]
+    },
+    {
+      "edge_id": "edge-0acdce04b516",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-74912d0c53b4",
+      "target_node_id": "technology-794c422cb58d",
+      "chunk_ids": [
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "edge_id": "edge-0b197ea0b152",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-ed613691c13a",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "resume-v02_14_resume-0-3fb4dc08574e"
+      ]
+    },
+    {
+      "edge_id": "edge-0b47f8db5384",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "jd-v02_06_jd-2-f9bf91bccd78"
+      ]
+    },
+    {
+      "edge_id": "edge-0e2a556756e6",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-d5933dc26e8c",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "user_profile-learning_plan-0-1410e644f4d2"
+      ]
+    },
+    {
+      "edge_id": "edge-0e3405feeff0",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "resume-v02_13_resume-2-c93cbe672417"
+      ]
+    },
+    {
+      "edge_id": "edge-0f0ed3692adf",
+      "edge_type": "related_to",
+      "source_node_id": "skill-9c8e467ecdd6",
+      "target_node_id": "technology-db1dfd45b163",
+      "chunk_ids": [
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "edge_id": "edge-0fa6212cf7a8",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "resume-v02_09_resume-3-60508e76d385"
+      ]
+    },
+    {
+      "edge_id": "edge-10cfaf34f5e8",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "jd-v02_12_jd-2-8e1e2cdde167"
+      ]
+    },
+    {
+      "edge_id": "edge-10e4a06b1391",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "resume-v02_03_resume-1-759d4f855042",
+        "resume-v02_08_resume-1-e9a36c63ec5d"
+      ]
+    },
+    {
+      "edge_id": "edge-114b2a52fc5b",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "project_logs-v02_08_project_logs-1-c18ba8882395"
+      ]
+    },
+    {
+      "edge_id": "edge-116f6ed3b1e9",
+      "edge_type": "related_to",
+      "source_node_id": "skill-9c8e467ecdd6",
+      "target_node_id": "technology-41a1373cef2a",
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411",
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "edge_id": "edge-118a3f1d3fef",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "jd-v02_12_jd-1-2c4fa19e259e"
+      ]
+    },
+    {
+      "edge_id": "edge-11e58c183529",
+      "edge_type": "requires",
+      "source_node_id": "job-90d20be22de8",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "jd-v02_06_jd-0-da24eed18137"
+      ]
+    },
+    {
+      "edge_id": "edge-121e89377390",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "jd-v02_09_jd-2-9e7bf8271eaf"
+      ]
+    },
+    {
+      "edge_id": "edge-12ba3a7dd611",
+      "edge_type": "requires",
+      "source_node_id": "job-732876ffe9a5",
+      "target_node_id": "technology-d96d7fcf37da",
+      "chunk_ids": [
+        "jd-search_algorithm_intern-0-3717dbcae501"
+      ]
+    },
+    {
+      "edge_id": "edge-12ca9e8a2458",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "jd-v02_01_jd-1-3f4f1a424286"
+      ]
+    },
+    {
+      "edge_id": "edge-14af24552f8e",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "jd-v02_06_jd-1-f2cd4ba2b2e1"
+      ]
+    },
+    {
+      "edge_id": "edge-14ceab0fb76e",
+      "edge_type": "requires",
+      "source_node_id": "job-732876ffe9a5",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "jd-search_algorithm_intern-0-3717dbcae501"
+      ]
+    },
+    {
+      "edge_id": "edge-15dcc0450bca",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "resume-v02_10_resume-2-6b5573f02404"
+      ]
+    },
+    {
+      "edge_id": "edge-1679d0153f89",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-ef4b6bc2d01f",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "user_profile-v02_02_user_profile-0-ad79fcdcad46"
+      ]
+    },
+    {
+      "edge_id": "edge-16fcc73c3dc8",
+      "edge_type": "belongs_to",
+      "source_node_id": "job-271fe13eeb98",
+      "target_node_id": "company-2ebe24cb6da8",
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411"
+      ]
+    },
+    {
+      "edge_id": "edge-17aa5dae7f62",
+      "edge_type": "related_to",
+      "source_node_id": "skill-9c8e467ecdd6",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "jd-v02_03_jd-0-2b620372e327",
+        "jd-v02_03_jd-1-fdfda89fb205",
+        "jd-v02_03_jd-2-a8955ec68394",
+        "jd-v02_03_jd-3-bd56ee27eafe",
+        "project_logs-v02_03_project_logs-0-fbf495179cd5",
+        "project_logs-v02_03_project_logs-1-2109cc9c365f",
+        "project_logs-v02_03_project_logs-2-8ab0e5c5253d",
+        "project_logs-v02_03_project_logs-3-6de0d28633ee",
+        "resume-skill_matrix-0-8faeca0c9be2",
+        "resume-v02_03_resume-0-3c1472e83ae1",
+        "resume-v02_03_resume-1-759d4f855042",
+        "resume-v02_03_resume-2-bc61af744241",
+        "resume-v02_03_resume-3-bb04ffd9cdd0",
+        "user_profile-v02_03_user_profile-0-76a73c266c3e",
+        "user_profile-v02_03_user_profile-1-f70363580f29",
+        "user_profile-v02_03_user_profile-2-95a7823c53b9",
+        "user_profile-v02_03_user_profile-3-89d186f00d6f"
+      ]
+    },
+    {
+      "edge_id": "edge-18fe387db807",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "project_logs-v02_13_project_logs-3-b386d238a9b3"
+      ]
+    },
+    {
+      "edge_id": "edge-19256987e617",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "project_logs-v02_07_project_logs-1-c82e111c3e84"
+      ]
+    },
+    {
+      "edge_id": "edge-197bb90344b3",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-9472591697a8",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "project_logs-v02_07_project_logs-0-78a7f357b286"
+      ]
+    },
+    {
+      "edge_id": "edge-1ab0f0d9a887",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "project_logs-v02_10_project_logs-1-2f70d7366bc1"
+      ]
+    },
+    {
+      "edge_id": "edge-1addf2ffac41",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "jd-v02_07_jd-1-057e1c3759f9"
+      ]
+    },
+    {
+      "edge_id": "edge-1d673e067914",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-9a3d5112457b",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "resume-rag_project_experience-0-45abba9c3117"
+      ]
+    },
+    {
+      "edge_id": "edge-1f14158c3d68",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "resume-v02_02_resume-2-22e4b3160d23"
+      ]
+    },
+    {
+      "edge_id": "edge-1f264c875d13",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-130d562cf7af",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "user_profile-role_priority-0-5aee6997af02"
+      ]
+    },
+    {
+      "edge_id": "edge-1f462d2cc7e8",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-34dcf7fcb3d7",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "project_logs-v02_04_project_logs-0-7b9e19c08d99"
+      ]
+    },
+    {
+      "edge_id": "edge-201dc8fdfb13",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "user_profile-v02_13_user_profile-1-ce84d2839c87"
+      ]
+    },
+    {
+      "edge_id": "edge-2091949b0566",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "jd-v02_12_jd-3-fdaa967f2dce"
+      ]
+    },
+    {
+      "edge_id": "edge-21954944c22f",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "resume-v02_09_resume-2-e12214f13cc6"
+      ]
+    },
+    {
+      "edge_id": "edge-21e11d5f00cb",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "jd-v02_14_jd-1-bfd9c8dccf8b"
+      ]
+    },
+    {
+      "edge_id": "edge-22bd0b9f9e66",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-64ba84b95a24",
+      "target_node_id": "technology-794c422cb58d",
+      "chunk_ids": [
+        "resume-gaps_and_learning-0-0e45949ca76b"
+      ]
+    },
+    {
+      "edge_id": "edge-2341fbbafb3b",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-7d2abffaa654",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "project_logs-v02_09_project_logs-0-759a9a1afbc5"
+      ]
+    },
+    {
+      "edge_id": "edge-2428f5e829d5",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "jd-v02_03_jd-3-bd56ee27eafe",
+        "jd-v02_08_jd-3-d6b5d09408e2"
+      ]
+    },
+    {
+      "edge_id": "edge-2438952395ae",
+      "edge_type": "requires",
+      "source_node_id": "job-700c2c05d7d0",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "jd-v02_08_jd-0-265911b39429"
+      ]
+    },
+    {
+      "edge_id": "edge-243c65729757",
+      "edge_type": "requires",
+      "source_node_id": "job-271fe13eeb98",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411"
+      ]
+    },
+    {
+      "edge_id": "edge-261ce2a054d9",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "resume-v02_10_resume-3-40ea6a97bdb6"
+      ]
+    },
+    {
+      "edge_id": "edge-26e158b96438",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-64ba84b95a24",
+      "target_node_id": "technology-db1dfd45b163",
+      "chunk_ids": [
+        "resume-gaps_and_learning-0-0e45949ca76b"
+      ]
+    },
+    {
+      "edge_id": "edge-28301d624878",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-ec65eb442fce",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "project_logs-v02_10_project_logs-0-c4e381b0710d"
+      ]
+    },
+    {
+      "edge_id": "edge-2a8343d77cee",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "resume-v02_06_resume-3-384a679f062a"
+      ]
+    },
+    {
+      "edge_id": "edge-2b99583a3a42",
+      "edge_type": "uses",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "project_logs-v02_03_project_logs-2-8ab0e5c5253d",
+        "project_logs-v02_08_project_logs-2-6d2193209a63"
+      ]
+    },
+    {
+      "edge_id": "edge-2c13e1f51606",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-78e377eecac4",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "user_profile-interview_preferences-0-a7f982ab0547"
+      ]
+    },
+    {
+      "edge_id": "edge-2c843f1801f5",
+      "edge_type": "related_to",
+      "source_node_id": "skill-9c8e467ecdd6",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411",
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "edge_id": "edge-2ca89e69265f",
+      "edge_type": "related_to",
+      "source_node_id": "skill-9c8e467ecdd6",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "resume-rag_project_experience-0-45abba9c3117",
+        "resume-skill_matrix-0-8faeca0c9be2",
+        "user_profile-interview_preferences-0-a7f982ab0547"
+      ]
+    },
+    {
+      "edge_id": "edge-2cddec43142a",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "resume-v02_14_resume-1-289c45a343fa"
+      ]
+    },
+    {
+      "edge_id": "edge-2ce769114966",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-440b6ebe5a6b",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "resume-v02_08_resume-0-112b1c9fd7af"
+      ]
+    },
+    {
+      "edge_id": "edge-2d891db60607",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "jd-v02_03_jd-2-a8955ec68394"
+      ]
+    },
+    {
+      "edge_id": "edge-2d89fd706b0c",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "user_profile-v02_02_user_profile-1-e39cb66466fb"
+      ]
+    },
+    {
+      "edge_id": "edge-2e98ac5f958e",
+      "edge_type": "requires",
+      "source_node_id": "job-75dba5299cd1",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "jd-v02_09_jd-0-b9e604c36260"
+      ]
+    },
+    {
+      "edge_id": "edge-2ff4fbce5e31",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-fe26f877b327",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "user_profile-v02_07_user_profile-0-d546cac654fe"
+      ]
+    },
+    {
+      "edge_id": "edge-3027766aa02f",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "project_logs-v02_01_project_logs-1-ef1fab915dcf"
+      ]
+    },
+    {
+      "edge_id": "edge-312822cdbbd5",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "jd-v02_08_jd-1-d3091a25b576"
+      ]
+    },
+    {
+      "edge_id": "edge-328808a13bd7",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "resume-v02_11_resume-1-3e5b480c0084"
+      ]
+    },
+    {
+      "edge_id": "edge-3295d388a794",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "user_profile-v02_07_user_profile-1-516968e9a908"
+      ]
+    },
+    {
+      "edge_id": "edge-33091e7ce983",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "user_profile-v02_14_user_profile-2-3a8c398194cc"
+      ]
+    },
+    {
+      "edge_id": "edge-345cb67c9ba3",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-822dcdf5ff3c",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "user_profile-profile-0-70751fced17f"
+      ]
+    },
+    {
+      "edge_id": "edge-3478a4b8614c",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "user_profile-v02_14_user_profile-1-4dda5681084c"
+      ]
+    },
+    {
+      "edge_id": "edge-350da05044e4",
+      "edge_type": "belongs_to",
+      "source_node_id": "job-877168b609dc",
+      "target_node_id": "company-9997b1086a92",
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca"
+      ]
+    },
+    {
+      "edge_id": "edge-3544b24a85ff",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "user_profile-v02_06_user_profile-1-9187f5578a26"
+      ]
+    },
+    {
+      "edge_id": "edge-366ac92e6cbe",
+      "edge_type": "uses",
+      "source_node_id": "project-d9d4cf4c5a8c",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "project_logs-v02_03_project_logs-0-fbf495179cd5"
+      ]
+    },
+    {
+      "edge_id": "edge-373e87eafb76",
+      "edge_type": "requires",
+      "source_node_id": "job-0203c44432f7",
+      "target_node_id": "technology-41a1373cef2a",
+      "chunk_ids": [
+        "jd-python_backend_intern-0-599054e56ed8"
+      ]
+    },
+    {
+      "edge_id": "edge-38671d04fd2f",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "user_profile-v02_14_user_profile-1-4dda5681084c"
+      ]
+    },
+    {
+      "edge_id": "edge-3a0a4b470c19",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-78e377eecac4",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "user_profile-interview_preferences-0-a7f982ab0547"
+      ]
+    },
+    {
+      "edge_id": "edge-3b5a651c3b1e",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "user_profile-v02_14_user_profile-2-3a8c398194cc"
+      ]
+    },
+    {
+      "edge_id": "edge-3cb7dde726ae",
+      "edge_type": "uses",
+      "source_node_id": "project-86ceb50ce391",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "project_logs-day1_log-0-871483366c37"
+      ]
+    },
+    {
+      "edge_id": "edge-3d3c60acf50e",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f7f340aa875b",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "user_profile-v02_04_user_profile-0-fd82ee821180"
+      ]
+    },
+    {
+      "edge_id": "edge-3e99826f1e5c",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "user_profile-v02_10_user_profile-3-133970120ee4"
+      ]
+    },
+    {
+      "edge_id": "edge-3ee75c6ebd88",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8e2578606641",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "user_profile-v02_01_user_profile-0-0ef6940a7be3"
+      ]
+    },
+    {
+      "edge_id": "edge-3f0a5569b19a",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "user_profile-v02_03_user_profile-1-f70363580f29",
+        "user_profile-v02_08_user_profile-1-33070b82d27e"
+      ]
+    },
+    {
+      "edge_id": "edge-406b02e5e827",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "project_logs-v02_04_project_logs-2-3ffa5ae7120a"
+      ]
+    },
+    {
+      "edge_id": "edge-417c331637c7",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "resume-v02_12_resume-2-e169d3565e11"
+      ]
+    },
+    {
+      "edge_id": "edge-41e0b31c3d6b",
+      "edge_type": "uses",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "project_logs-v02_03_project_logs-1-2109cc9c365f",
+        "project_logs-v02_08_project_logs-1-c18ba8882395"
+      ]
+    },
+    {
+      "edge_id": "edge-43f79ed90caa",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-4d932b4a2c62",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "resume-v02_03_resume-0-3c1472e83ae1"
+      ]
+    },
+    {
+      "edge_id": "edge-45c1003acf2c",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "user_profile-v02_03_user_profile-3-89d186f00d6f",
+        "user_profile-v02_08_user_profile-3-eb42c265eced"
+      ]
+    },
+    {
+      "edge_id": "edge-45eaf0d0d8ab",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "project_logs-v02_13_project_logs-2-c64c3d43f59a"
+      ]
+    },
+    {
+      "edge_id": "edge-46c72789dc66",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "jd-v02_02_jd-2-4c72dce87b98"
+      ]
+    },
+    {
+      "edge_id": "edge-4947ef0359d4",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "project_logs-v02_13_project_logs-1-33c7c9650993"
+      ]
+    },
+    {
+      "edge_id": "edge-49566377d4f4",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "resume-v02_04_resume-2-039f5150f99b"
+      ]
+    },
+    {
+      "edge_id": "edge-496760272a25",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "user_profile-v02_05_user_profile-1-b53b31661cbe"
+      ]
+    },
+    {
+      "edge_id": "edge-4aa4b7d56208",
+      "edge_type": "related_to",
+      "source_node_id": "skill-04279d9a98bc",
+      "target_node_id": "technology-794c422cb58d",
+      "chunk_ids": [
+        "user_profile-learning_plan-0-1410e644f4d2"
+      ]
+    },
+    {
+      "edge_id": "edge-4b57a99829ee",
+      "edge_type": "related_to",
+      "source_node_id": "skill-5277a3b4a7de",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "jd-v02_14_jd-0-03226f034bd5",
+        "jd-v02_14_jd-1-bfd9c8dccf8b",
+        "jd-v02_14_jd-2-a8a8f4bf4b67",
+        "jd-v02_14_jd-3-00464ce4009e",
+        "project_logs-v02_14_project_logs-0-ecd26f1bce30",
+        "project_logs-v02_14_project_logs-1-56d28cb8a175",
+        "project_logs-v02_14_project_logs-2-49dcbefbe29e",
+        "project_logs-v02_14_project_logs-3-730550992b29",
+        "resume-v02_14_resume-0-3fb4dc08574e",
+        "resume-v02_14_resume-1-289c45a343fa",
+        "resume-v02_14_resume-2-2f71203ee774",
+        "resume-v02_14_resume-3-19bbcea7f6ca",
+        "user_profile-v02_14_user_profile-0-14c62c1c84fe",
+        "user_profile-v02_14_user_profile-1-4dda5681084c",
+        "user_profile-v02_14_user_profile-2-3a8c398194cc",
+        "user_profile-v02_14_user_profile-3-733af45bcb29"
+      ]
+    },
+    {
+      "edge_id": "edge-4c042ec8cf5c",
+      "edge_type": "related_to",
+      "source_node_id": "skill-85f7ca52f27d",
+      "target_node_id": "technology-794c422cb58d",
+      "chunk_ids": [
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "edge_id": "edge-4e15504ac5bc",
+      "edge_type": "requires",
+      "source_node_id": "job-877168b609dc",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca"
+      ]
+    },
+    {
+      "edge_id": "edge-4ecd019dd26e",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "user_profile-v02_11_user_profile-2-c086a5662503"
+      ]
+    },
+    {
+      "edge_id": "edge-501d6d1b3df4",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "user_profile-v02_09_user_profile-1-de1ee9afedd0"
+      ]
+    },
+    {
+      "edge_id": "edge-50f1d9b175f2",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "jd-v02_02_jd-1-5e0a3227f758"
+      ]
+    },
+    {
+      "edge_id": "edge-50f58acd7831",
+      "edge_type": "requires",
+      "source_node_id": "job-877168b609dc",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca"
+      ]
+    },
+    {
+      "edge_id": "edge-51cc4ef69b9d",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "project_logs-v02_03_project_logs-3-6de0d28633ee"
+      ]
+    },
+    {
+      "edge_id": "edge-523121165f02",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-86b3dd4b55fc",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "project_logs-v02_14_project_logs-0-ecd26f1bce30"
+      ]
+    },
+    {
+      "edge_id": "edge-54070d7a95f0",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "jd-v02_05_jd-3-d30065b3575f"
+      ]
+    },
+    {
+      "edge_id": "edge-5438d998691f",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "user_profile-v02_07_user_profile-3-41fd69fac780"
+      ]
+    },
+    {
+      "edge_id": "edge-551af2ed285d",
+      "edge_type": "requires",
+      "source_node_id": "job-0203c44432f7",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "jd-python_backend_intern-0-599054e56ed8"
+      ]
+    },
+    {
+      "edge_id": "edge-55969598a72e",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "resume-v02_06_resume-2-c8ebcad6b7aa"
+      ]
+    },
+    {
+      "edge_id": "edge-55b1f9d3bc5d",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-bde2a8222bf0",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "resume-v02_02_resume-0-fafd04bdc7a8"
+      ]
+    },
+    {
+      "edge_id": "edge-56dc144c5878",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "jd-v02_04_jd-1-5d673f5531f0"
+      ]
+    },
+    {
+      "edge_id": "edge-56dcc729c6c8",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-ed613691c13a",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "resume-v02_14_resume-0-3fb4dc08574e"
+      ]
+    },
+    {
+      "edge_id": "edge-56e9a26cb4a9",
+      "edge_type": "requires",
+      "source_node_id": "job-f89d8ac474e1",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "jd-v02_14_jd-0-03226f034bd5"
+      ]
+    },
+    {
+      "edge_id": "edge-57357291102b",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "resume-v02_02_resume-1-e88e5ff56067"
+      ]
+    },
+    {
+      "edge_id": "edge-5763b85dbef7",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "jd-v02_02_jd-3-b2a875e3f75d"
+      ]
+    },
+    {
+      "edge_id": "edge-587d7bb55be4",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "project_logs-v02_06_project_logs-1-0e18b70fd633"
+      ]
+    },
+    {
+      "edge_id": "edge-588d28db01c3",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "resume-v02_11_resume-2-7ba706a784d0"
+      ]
+    },
+    {
+      "edge_id": "edge-5a6f0804e3ee",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-64ba84b95a24",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "resume-gaps_and_learning-0-0e45949ca76b"
+      ]
+    },
+    {
+      "edge_id": "edge-5aa6e339e257",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "project_logs-v02_11_project_logs-1-0223ee120a62"
+      ]
+    },
+    {
+      "edge_id": "edge-5bf5a56b2896",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "project_logs-v02_07_project_logs-2-67b0164d77d4"
+      ]
+    },
+    {
+      "edge_id": "edge-5d7fabc1383e",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "user_profile-v02_03_user_profile-3-89d186f00d6f"
+      ]
+    },
+    {
+      "edge_id": "edge-5dce45ff6ccb",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "resume-v02_14_resume-2-2f71203ee774"
+      ]
+    },
+    {
+      "edge_id": "edge-5f4d20bbf228",
+      "edge_type": "requires",
+      "source_node_id": "job-79d531ebe3c0",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "jd-v02_10_jd-0-bf2b65c523d3"
+      ]
+    },
+    {
+      "edge_id": "edge-5fa1d56b237b",
+      "edge_type": "belongs_to",
+      "source_node_id": "job-e692f0a7d2b8",
+      "target_node_id": "company-f91141be3a3f",
+      "chunk_ids": [
+        "jd-data_engineer_intern-0-5c51b85be1d3"
+      ]
+    },
+    {
+      "edge_id": "edge-5fefa868e413",
+      "edge_type": "related_to",
+      "source_node_id": "skill-3d4d1075e7f1",
+      "target_node_id": "technology-794c422cb58d",
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca",
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "edge_id": "edge-5ff0c9635658",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-897af956f2c0",
+      "target_node_id": "technology-db1dfd45b163",
+      "chunk_ids": [
+        "resume-backend_project_experience-0-c5a7f826a487"
+      ]
+    },
+    {
+      "edge_id": "edge-60d6187c8da2",
+      "edge_type": "uses",
+      "source_node_id": "project-86b3dd4b55fc",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "project_logs-v02_14_project_logs-0-ecd26f1bce30"
+      ]
+    },
+    {
+      "edge_id": "edge-6210320f3af8",
+      "edge_type": "uses",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "project_logs-v02_14_project_logs-1-56d28cb8a175"
+      ]
+    },
+    {
+      "edge_id": "edge-62dbdd567675",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "user_profile-v02_11_user_profile-1-d90e1a71c3f0"
+      ]
+    },
+    {
+      "edge_id": "edge-62f041df1f50",
+      "edge_type": "requires",
+      "source_node_id": "job-f2345d85824d",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "jd-v02_05_jd-0-1a50b94fc239"
+      ]
+    },
+    {
+      "edge_id": "edge-64a700587e00",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "resume-v02_03_resume-2-bc61af744241",
+        "resume-v02_08_resume-2-7e6960a00e5d"
+      ]
+    },
+    {
+      "edge_id": "edge-64f7367a4ec4",
+      "edge_type": "requires",
+      "source_node_id": "job-877168b609dc",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca"
+      ]
+    },
+    {
+      "edge_id": "edge-68a1c1f15dee",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "resume-v02_03_resume-2-bc61af744241"
+      ]
+    },
+    {
+      "edge_id": "edge-68d84b2c8f14",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "project_logs-v02_11_project_logs-3-b93c80ff0b08"
+      ]
+    },
+    {
+      "edge_id": "edge-68e547dfcd98",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "user_profile-v02_10_user_profile-1-5de02bd83217"
+      ]
+    },
+    {
+      "edge_id": "edge-6985b7ec3436",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-74912d0c53b4",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "edge_id": "edge-69adeb8cac23",
+      "edge_type": "uses",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "project_logs-v02_03_project_logs-3-6de0d28633ee",
+        "project_logs-v02_08_project_logs-3-e9b3123cd30d"
+      ]
+    },
+    {
+      "edge_id": "edge-69f97a30f1bb",
+      "edge_type": "uses",
+      "source_node_id": "project-c29fc0735df1",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "project_logs-v02_08_project_logs-0-5680c9e6e533"
+      ]
+    },
+    {
+      "edge_id": "edge-6bbfe76cfcf5",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "jd-v02_01_jd-2-920269f8f001"
+      ]
+    },
+    {
+      "edge_id": "edge-6c3f18e2fc2b",
+      "edge_type": "requires",
+      "source_node_id": "job-88fea4f614c1",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "jd-v02_11_jd-0-2f1e6093a191"
+      ]
+    },
+    {
+      "edge_id": "edge-6c7e2781b866",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "user_profile-v02_08_user_profile-3-eb42c265eced"
+      ]
+    },
+    {
+      "edge_id": "edge-6ce5e5b88d5e",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "user_profile-v02_02_user_profile-3-1c5c1c71d66b"
+      ]
+    },
+    {
+      "edge_id": "edge-6d281263a1e5",
+      "edge_type": "requires",
+      "source_node_id": "job-271fe13eeb98",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411"
+      ]
+    },
+    {
+      "edge_id": "edge-6e500f846f90",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "resume-v02_08_resume-2-7e6960a00e5d"
+      ]
+    },
+    {
+      "edge_id": "edge-6e8e3b34afbc",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "project_logs-v02_05_project_logs-3-c3a2c5771d31"
+      ]
+    },
+    {
+      "edge_id": "edge-6ed4df762be5",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-53ae4a188d4b",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "resume-v02_09_resume-0-7b30133a899a"
+      ]
+    },
+    {
+      "edge_id": "edge-6f7a66528644",
+      "edge_type": "requires",
+      "source_node_id": "job-877168b609dc",
+      "target_node_id": "technology-41a1373cef2a",
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca"
+      ]
+    },
+    {
+      "edge_id": "edge-715f40db66f6",
+      "edge_type": "requires",
+      "source_node_id": "job-877168b609dc",
+      "target_node_id": "technology-794c422cb58d",
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca"
+      ]
+    },
+    {
+      "edge_id": "edge-725d69bf0ccf",
+      "edge_type": "requires",
+      "source_node_id": "job-e692f0a7d2b8",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "jd-data_engineer_intern-0-5c51b85be1d3"
+      ]
+    },
+    {
+      "edge_id": "edge-72f26f5cf452",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "jd-v02_05_jd-1-1cbe61b382fd"
+      ]
+    },
+    {
+      "edge_id": "edge-73336301362b",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8438b417d16d",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "edge_id": "edge-741fc55cec9f",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-d9d4cf4c5a8c",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "project_logs-v02_03_project_logs-0-fbf495179cd5"
+      ]
+    },
+    {
+      "edge_id": "edge-74202f690cf2",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "jd-v02_08_jd-3-d6b5d09408e2"
+      ]
+    },
+    {
+      "edge_id": "edge-7433b9554b52",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "resume-v02_05_resume-3-403e23fba9c9"
+      ]
+    },
+    {
+      "edge_id": "edge-7437925ba377",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "resume-v02_04_resume-3-bb0f871e46ca"
+      ]
+    },
+    {
+      "edge_id": "edge-74d836359c9c",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "project_logs-v02_11_project_logs-2-d9e1e26d97b7"
+      ]
+    },
+    {
+      "edge_id": "edge-7551d048a691",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-64ba84b95a24",
+      "target_node_id": "technology-41a1373cef2a",
+      "chunk_ids": [
+        "resume-gaps_and_learning-0-0e45949ca76b"
+      ]
+    },
+    {
+      "edge_id": "edge-755a23a68f7d",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b8c767824548",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "resume-v02_12_resume-0-a554d8176643"
+      ]
+    },
+    {
+      "edge_id": "edge-75a9e577f405",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "resume-v02_10_resume-1-1a6f37293848"
+      ]
+    },
+    {
+      "edge_id": "edge-75c9ba485524",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "resume-v02_06_resume-1-77950ef18ae9"
+      ]
+    },
+    {
+      "edge_id": "edge-76fecfd2940e",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "project_logs-v02_09_project_logs-1-785391087259"
+      ]
+    },
+    {
+      "edge_id": "edge-77fb6ce429a4",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-c29fc0735df1",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "project_logs-v02_08_project_logs-0-5680c9e6e533"
+      ]
+    },
+    {
+      "edge_id": "edge-78187c30fcea",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "jd-v02_11_jd-3-159a1e5c3014"
+      ]
+    },
+    {
+      "edge_id": "edge-783c541d0d1d",
+      "edge_type": "requires",
+      "source_node_id": "job-700c2c05d7d0",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "jd-v02_08_jd-0-265911b39429"
+      ]
+    },
+    {
+      "edge_id": "edge-784a84219623",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "resume-v02_03_resume-3-bb04ffd9cdd0"
+      ]
+    },
+    {
+      "edge_id": "edge-7897ad6243ad",
+      "edge_type": "uses",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "project_logs-v02_14_project_logs-3-730550992b29"
+      ]
+    },
+    {
+      "edge_id": "edge-78fba9db0a56",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-c3979f95820b",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "user_profile-v02_11_user_profile-0-d2304af1df7e"
+      ]
+    },
+    {
+      "edge_id": "edge-798bbd3c5188",
+      "edge_type": "requires",
+      "source_node_id": "job-732876ffe9a5",
+      "target_node_id": "technology-794c422cb58d",
+      "chunk_ids": [
+        "jd-search_algorithm_intern-0-3717dbcae501"
+      ]
+    },
+    {
+      "edge_id": "edge-79ee0c8d99d1",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-822dcdf5ff3c",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "user_profile-profile-0-70751fced17f"
+      ]
+    },
+    {
+      "edge_id": "edge-7a1314911578",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "resume-v02_14_resume-2-2f71203ee774"
+      ]
+    },
+    {
+      "edge_id": "edge-7ca470929ba8",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "project_logs-v02_06_project_logs-3-ef34c4218f79"
+      ]
+    },
+    {
+      "edge_id": "edge-7cab6d06ce99",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "jd-v02_13_jd-2-ddcb7f746a29"
+      ]
+    },
+    {
+      "edge_id": "edge-7d1114c5bd54",
+      "edge_type": "requires",
+      "source_node_id": "job-e692f0a7d2b8",
+      "target_node_id": "technology-db1dfd45b163",
+      "chunk_ids": [
+        "jd-data_engineer_intern-0-5c51b85be1d3"
+      ]
+    },
+    {
+      "edge_id": "edge-806d1257ca4a",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-64ba84b95a24",
+      "target_node_id": "technology-e982f17bcbe0",
+      "chunk_ids": [
+        "resume-gaps_and_learning-0-0e45949ca76b"
+      ]
+    },
+    {
+      "edge_id": "edge-81acf0a82558",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "user_profile-v02_14_user_profile-3-733af45bcb29"
+      ]
+    },
+    {
+      "edge_id": "edge-8279306ca2f6",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "project_logs-v02_03_project_logs-1-2109cc9c365f"
+      ]
+    },
+    {
+      "edge_id": "edge-8348d6f26b16",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "jd-v02_09_jd-3-8a5f455fc397"
+      ]
+    },
+    {
+      "edge_id": "edge-83cdff8b45ef",
+      "edge_type": "related_to",
+      "source_node_id": "skill-9c8e467ecdd6",
+      "target_node_id": "technology-794c422cb58d",
+      "chunk_ids": [
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "edge_id": "edge-85b81cd0fdec",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "resume-v02_11_resume-3-523716fde5d8"
+      ]
+    },
+    {
+      "edge_id": "edge-85d8fc96364e",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8438b417d16d",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "edge_id": "edge-8607345793b8",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "resume-v02_07_resume-2-dccecd3a50a9"
+      ]
+    },
+    {
+      "edge_id": "edge-86b97e438a0c",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "jd-v02_13_jd-1-56aa21313a57"
+      ]
+    },
+    {
+      "edge_id": "edge-8749b49d5af0",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "user_profile-v02_11_user_profile-3-1c32b6c146ed"
+      ]
+    },
+    {
+      "edge_id": "edge-881d90e1d997",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "jd-v02_09_jd-1-8cba26403502"
+      ]
+    },
+    {
+      "edge_id": "edge-88226c129b91",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b4acab8bbc1f",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "resume-v02_10_resume-0-bdf42818d7b7"
+      ]
+    },
+    {
+      "edge_id": "edge-888d2d9fdf42",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "jd-v02_14_jd-2-a8a8f4bf4b67"
+      ]
+    },
+    {
+      "edge_id": "edge-8962707c1a96",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "resume-v02_04_resume-1-09868fa78308"
+      ]
+    },
+    {
+      "edge_id": "edge-89677a27fe46",
+      "edge_type": "related_to",
+      "source_node_id": "skill-3d4d1075e7f1",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca",
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "edge_id": "edge-8b101e4f1bc1",
+      "edge_type": "related_to",
+      "source_node_id": "skill-f423c90e24a1",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "resume-rag_project_experience-0-45abba9c3117",
+        "user_profile-interview_preferences-0-a7f982ab0547"
+      ]
+    },
+    {
+      "edge_id": "edge-8b361da06619",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-74912d0c53b4",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "edge_id": "edge-8b72f1442434",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8438b417d16d",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "edge_id": "edge-8c0482078d0c",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "jd-v02_05_jd-2-81d1c60d818d"
+      ]
+    },
+    {
+      "edge_id": "edge-8cd3937eca02",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "resume-v02_01_resume-3-33f9ea12e178"
+      ]
+    },
+    {
+      "edge_id": "edge-8df16ec7724c",
+      "edge_type": "requires",
+      "source_node_id": "job-cd131681de7c",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "jd-v02_12_jd-0-31781b893695"
+      ]
+    },
+    {
+      "edge_id": "edge-8df8dcde2e27",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "project_logs-v02_04_project_logs-1-a235637cddf5"
+      ]
+    },
+    {
+      "edge_id": "edge-8e54298185e4",
+      "edge_type": "related_to",
+      "source_node_id": "skill-85f7ca52f27d",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "edge_id": "edge-8f9452acac99",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-ea904dcb36af",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "project_logs-v02_13_project_logs-0-3fa8d805763a"
+      ]
+    },
+    {
+      "edge_id": "edge-944b5afec3a3",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "user_profile-v02_13_user_profile-2-8d924aead1bd"
+      ]
+    },
+    {
+      "edge_id": "edge-94fff1daa502",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-ee620874e9bd",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "project_logs-generation_validation_iteration-0-9b9bcb2dede3"
+      ]
+    },
+    {
+      "edge_id": "edge-95511083290a",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-74912d0c53b4",
+      "target_node_id": "technology-41a1373cef2a",
+      "chunk_ids": [
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "edge_id": "edge-95597ca34a3e",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "user_profile-v02_06_user_profile-3-f7c9e03bc934"
+      ]
+    },
+    {
+      "edge_id": "edge-95e8f5dc2bd5",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-4d932b4a2c62",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "resume-v02_03_resume-0-3c1472e83ae1"
+      ]
+    },
+    {
+      "edge_id": "edge-96938168060b",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "project_logs-v02_14_project_logs-3-730550992b29"
+      ]
+    },
+    {
+      "edge_id": "edge-96b1eaf00427",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "user_profile-v02_03_user_profile-1-f70363580f29"
+      ]
+    },
+    {
+      "edge_id": "edge-97e880ce2ef5",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7f4f7ca57416",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "user_profile-v02_03_user_profile-0-76a73c266c3e"
+      ]
+    },
+    {
+      "edge_id": "edge-981592ad835f",
+      "edge_type": "uses",
+      "source_node_id": "project-86ceb50ce391",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "project_logs-day1_log-0-871483366c37"
+      ]
+    },
+    {
+      "edge_id": "edge-988c2a0ab5a6",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-d5933dc26e8c",
+      "target_node_id": "technology-794c422cb58d",
+      "chunk_ids": [
+        "user_profile-learning_plan-0-1410e644f4d2"
+      ]
+    },
+    {
+      "edge_id": "edge-98d32d4538df",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-74912d0c53b4",
+      "target_node_id": "technology-e982f17bcbe0",
+      "chunk_ids": [
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "edge_id": "edge-99f665e4be8b",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "user_profile-v02_08_user_profile-2-8ee2b8400048"
+      ]
+    },
+    {
+      "edge_id": "edge-9a20f636873a",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-42d91bed7472",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "user_profile-v02_10_user_profile-0-34a6830e5875"
+      ]
+    },
+    {
+      "edge_id": "edge-9b7d2af94c63",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "jd-v02_14_jd-3-00464ce4009e"
+      ]
+    },
+    {
+      "edge_id": "edge-9badc240cf10",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "user_profile-v02_03_user_profile-2-95a7823c53b9"
+      ]
+    },
+    {
+      "edge_id": "edge-9be364afbb07",
+      "edge_type": "related_to",
+      "source_node_id": "skill-3d4d1075e7f1",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca",
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "edge_id": "edge-9c768249ade3",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-7417407af155",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "project_logs-v02_06_project_logs-0-29fe28dcc576"
+      ]
+    },
+    {
+      "edge_id": "edge-9d079617385e",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-251b68b852f5",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "user_profile-v02_08_user_profile-0-7ceaf287a8bb"
+      ]
+    },
+    {
+      "edge_id": "edge-9d6412db54b3",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "project_logs-v02_08_project_logs-2-6d2193209a63"
+      ]
+    },
+    {
+      "edge_id": "edge-9d6a35dcc7aa",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "project_logs-v02_12_project_logs-1-773c9bca6b80"
+      ]
+    },
+    {
+      "edge_id": "edge-9ddb15931a56",
+      "edge_type": "related_to",
+      "source_node_id": "skill-85f7ca52f27d",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "edge_id": "edge-9ec7fe1f4ecd",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "project_logs-v02_05_project_logs-1-0b21c4164952"
+      ]
+    },
+    {
+      "edge_id": "edge-9fb8dc096606",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-707b0b0090c1",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "user_profile-v02_14_user_profile-0-14c62c1c84fe"
+      ]
+    },
+    {
+      "edge_id": "edge-a0527d736b20",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-9298893d34be",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "project_logs-v02_12_project_logs-0-d1ef302d9ae3"
+      ]
+    },
+    {
+      "edge_id": "edge-a097be39bd99",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "user_profile-v02_12_user_profile-3-2f8a325a6b36"
+      ]
+    },
+    {
+      "edge_id": "edge-a14c48ff3d9c",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "jd-v02_14_jd-1-bfd9c8dccf8b"
+      ]
+    },
+    {
+      "edge_id": "edge-a17bfc5887f7",
+      "edge_type": "requires",
+      "source_node_id": "job-9d4353bf6e5a",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "jd-llm_evaluation_intern-0-4d8bd07a36b0"
+      ]
+    },
+    {
+      "edge_id": "edge-a1bb41252b5b",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-d6e79967608e",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "user_profile-v02_09_user_profile-0-913ed59d8980"
+      ]
+    },
+    {
+      "edge_id": "edge-a222749997ef",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "jd-v02_08_jd-2-d5ccc534564f"
+      ]
+    },
+    {
+      "edge_id": "edge-a2631a177178",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-fb3b97fdaebc",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "user_profile-v02_13_user_profile-0-102483a218fc"
+      ]
+    },
+    {
+      "edge_id": "edge-a33704cead31",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8438b417d16d",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "edge_id": "edge-a4bdf9414e6f",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "resume-v02_09_resume-1-7a6b96b0087b"
+      ]
+    },
+    {
+      "edge_id": "edge-a4e68ec907b9",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "project_logs-v02_05_project_logs-2-69710499cbfe"
+      ]
+    },
+    {
+      "edge_id": "edge-a65e00c0963e",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "user_profile-v02_03_user_profile-2-95a7823c53b9",
+        "user_profile-v02_08_user_profile-2-8ee2b8400048"
+      ]
+    },
+    {
+      "edge_id": "edge-a69935590257",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "user_profile-v02_04_user_profile-3-935989511103"
+      ]
+    },
+    {
+      "edge_id": "edge-a75735b5e8f7",
+      "edge_type": "requires",
+      "source_node_id": "job-bfe272d75bde",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "jd-v02_03_jd-0-2b620372e327"
+      ]
+    },
+    {
+      "edge_id": "edge-a7b6b45ae70d",
+      "edge_type": "related_to",
+      "source_node_id": "skill-85f7ca52f27d",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "edge_id": "edge-a80d9a7319cc",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "project_logs-v02_10_project_logs-2-47aff6a68cf0"
+      ]
+    },
+    {
+      "edge_id": "edge-a88911b0bca5",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "user_profile-v02_04_user_profile-1-42bbf4592e2f"
+      ]
+    },
+    {
+      "edge_id": "edge-aa1883688753",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-35660c366f1e",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "user_profile-v02_06_user_profile-0-f369d9ec4fe8"
+      ]
+    },
+    {
+      "edge_id": "edge-aa4898a0d5cb",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "resume-v02_03_resume-1-759d4f855042"
+      ]
+    },
+    {
+      "edge_id": "edge-aaa600c6d4e6",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "jd-v02_03_jd-3-bd56ee27eafe"
+      ]
+    },
+    {
+      "edge_id": "edge-ac412605757b",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-afa1dc765761",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "project_logs-v02_11_project_logs-0-9f1c9f29c890"
+      ]
+    },
+    {
+      "edge_id": "edge-aca6224c6e1c",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "user_profile-v02_09_user_profile-3-10c1fca62633"
+      ]
+    },
+    {
+      "edge_id": "edge-acd99062f150",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "resume-v02_14_resume-3-19bbcea7f6ca"
+      ]
+    },
+    {
+      "edge_id": "edge-add1b023295e",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-c72521f79a7f",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "project_logs-evaluation_plan-0-4dffe51bc130"
+      ]
+    },
+    {
+      "edge_id": "edge-afa5cfec9f35",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-a2a237c2fb74",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "resume-v02_11_resume-0-6c0f0911c2d3"
+      ]
+    },
+    {
+      "edge_id": "edge-b0bcce830134",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8438b417d16d",
+      "target_node_id": "technology-794c422cb58d",
+      "chunk_ids": [
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "edge_id": "edge-b1d74ca70947",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "jd-v02_04_jd-2-c72b535eb6a2"
+      ]
+    },
+    {
+      "edge_id": "edge-b26473fb198d",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "jd-v02_11_jd-1-04a993d0393c"
+      ]
+    },
+    {
+      "edge_id": "edge-b2f0a7757c03",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "jd-v02_07_jd-2-a43bf30e3f38"
+      ]
+    },
+    {
+      "edge_id": "edge-b34489b7836d",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "project_logs-v02_04_project_logs-3-7a704a35e6de"
+      ]
+    },
+    {
+      "edge_id": "edge-b49b2c65d7ac",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "resume-v02_13_resume-1-61aa5b6fdc67"
+      ]
+    },
+    {
+      "edge_id": "edge-b4ca2a269f7c",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "project_logs-v02_14_project_logs-2-49dcbefbe29e"
+      ]
+    },
+    {
+      "edge_id": "edge-b4d5fceeb2dd",
+      "edge_type": "belongs_to",
+      "source_node_id": "job-0203c44432f7",
+      "target_node_id": "company-6cae90a10749",
+      "chunk_ids": [
+        "jd-python_backend_intern-0-599054e56ed8"
+      ]
+    },
+    {
+      "edge_id": "edge-b5736391e224",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "resume-v02_07_resume-3-5016a0129d84"
+      ]
+    },
+    {
+      "edge_id": "edge-b6eb9d1d8971",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "jd-v02_14_jd-3-00464ce4009e"
+      ]
+    },
+    {
+      "edge_id": "edge-b71a407111ef",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "project_logs-v02_09_project_logs-2-eb1a90adce0d"
+      ]
+    },
+    {
+      "edge_id": "edge-b859731b516c",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-9ab915ad979a",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "resume-v02_05_resume-0-07dabb2d70ba"
+      ]
+    },
+    {
+      "edge_id": "edge-b87c2562817c",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "user_profile-v02_05_user_profile-3-90804fa7d091"
+      ]
+    },
+    {
+      "edge_id": "edge-b87f11a62487",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "jd-v02_06_jd-3-e3aaed6346ca"
+      ]
+    },
+    {
+      "edge_id": "edge-bc1a34cbd2e4",
+      "edge_type": "requires",
+      "source_node_id": "job-f2672e859988",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "jd-v02_01_jd-0-d5b93648b57f"
+      ]
+    },
+    {
+      "edge_id": "edge-bc28034192f4",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "resume-v02_13_resume-3-e6af4f06908a"
+      ]
+    },
+    {
+      "edge_id": "edge-bd6e787c4404",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "jd-v02_03_jd-1-fdfda89fb205",
+        "jd-v02_08_jd-1-d3091a25b576"
+      ]
+    },
+    {
+      "edge_id": "edge-bda0b0a75a88",
+      "edge_type": "requires",
+      "source_node_id": "job-9d4353bf6e5a",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "jd-llm_evaluation_intern-0-4d8bd07a36b0"
+      ]
+    },
+    {
+      "edge_id": "edge-bdd80ea8f8c7",
+      "edge_type": "belongs_to",
+      "source_node_id": "job-732876ffe9a5",
+      "target_node_id": "company-316e6d6abb3f",
+      "chunk_ids": [
+        "jd-search_algorithm_intern-0-3717dbcae501"
+      ]
+    },
+    {
+      "edge_id": "edge-c0552905d43e",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-9a3d5112457b",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "resume-rag_project_experience-0-45abba9c3117"
+      ]
+    },
+    {
+      "edge_id": "edge-c2e041b25156",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-ee620874e9bd",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "project_logs-generation_validation_iteration-0-9b9bcb2dede3"
+      ]
+    },
+    {
+      "edge_id": "edge-c508ec8a963f",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-04d3c6690e28",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "resume-v02_06_resume-0-a5d2b355f77c"
+      ]
+    },
+    {
+      "edge_id": "edge-c52e3f36b46b",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "user_profile-v02_01_user_profile-1-d3d0ac2a879b"
+      ]
+    },
+    {
+      "edge_id": "edge-c5a69e648082",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "user_profile-v02_04_user_profile-2-4bb11d06add5"
+      ]
+    },
+    {
+      "edge_id": "edge-c5d1ee425e6b",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-b46e17411d95",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "project_logs-router_trace_iteration-0-f6409aa97d4e"
+      ]
+    },
+    {
+      "edge_id": "edge-c60c0c07822b",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8438b417d16d",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "resume-sample_resume-0-6fcdc7dba4d7"
+      ]
+    },
+    {
+      "edge_id": "edge-c7935a706ddf",
+      "edge_type": "related_to",
+      "source_node_id": "skill-3d4d1075e7f1",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca",
+        "jd-v02_08_jd-0-265911b39429",
+        "jd-v02_08_jd-1-d3091a25b576",
+        "jd-v02_08_jd-2-d5ccc534564f",
+        "jd-v02_08_jd-3-d6b5d09408e2",
+        "project_logs-v02_08_project_logs-0-5680c9e6e533",
+        "project_logs-v02_08_project_logs-1-c18ba8882395",
+        "project_logs-v02_08_project_logs-2-6d2193209a63",
+        "project_logs-v02_08_project_logs-3-e9b3123cd30d",
+        "resume-sample_resume-0-6fcdc7dba4d7",
+        "resume-v02_08_resume-0-112b1c9fd7af",
+        "resume-v02_08_resume-1-e9a36c63ec5d",
+        "resume-v02_08_resume-2-7e6960a00e5d",
+        "resume-v02_08_resume-3-8971b2428275",
+        "user_profile-v02_08_user_profile-0-7ceaf287a8bb",
+        "user_profile-v02_08_user_profile-1-33070b82d27e",
+        "user_profile-v02_08_user_profile-2-8ee2b8400048",
+        "user_profile-v02_08_user_profile-3-eb42c265eced"
+      ]
+    },
+    {
+      "edge_id": "edge-c7cc3dcbec57",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "resume-v02_01_resume-2-0b89c684b873"
+      ]
+    },
+    {
+      "edge_id": "edge-c883e8b6ba28",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-5094416856d9",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "project_logs-v02_02_project_logs-0-fac6d8dba8ad"
+      ]
+    },
+    {
+      "edge_id": "edge-c9e5902f844f",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "user_profile-v02_01_user_profile-3-4cdb3dfbb88f"
+      ]
+    },
+    {
+      "edge_id": "edge-ca0f9a244846",
+      "edge_type": "requires",
+      "source_node_id": "job-f89d8ac474e1",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "jd-v02_14_jd-0-03226f034bd5"
+      ]
+    },
+    {
+      "edge_id": "edge-caea2a6c72d2",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "jd-v02_10_jd-1-779d13170104"
+      ]
+    },
+    {
+      "edge_id": "edge-cb5480f346b8",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "project_logs-v02_08_project_logs-3-e9b3123cd30d"
+      ]
+    },
+    {
+      "edge_id": "edge-cc8e51b37ae0",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-78e377eecac4",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "user_profile-interview_preferences-0-a7f982ab0547"
+      ]
+    },
+    {
+      "edge_id": "edge-cc9d274d6717",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-9baf494bf5b5",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "resume-v02_07_resume-0-eff4aa3cb6a2"
+      ]
+    },
+    {
+      "edge_id": "edge-cf7054f85074",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "user_profile-v02_10_user_profile-2-c9a5610ba576"
+      ]
+    },
+    {
+      "edge_id": "edge-cf91bd57df0d",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "user_profile-v02_05_user_profile-2-af4db8769908"
+      ]
+    },
+    {
+      "edge_id": "edge-cfaf6c51f75e",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-897af956f2c0",
+      "target_node_id": "technology-b840fc02d524",
+      "chunk_ids": [
+        "resume-backend_project_experience-0-c5a7f826a487"
+      ]
+    },
+    {
+      "edge_id": "edge-cff6586ef97f",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "project_logs-v02_06_project_logs-2-b5bacffd0a11"
+      ]
+    },
+    {
+      "edge_id": "edge-d0512d0e9062",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-ad73756a7062",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "project_logs-v02_01_project_logs-0-9c613c709996"
+      ]
+    },
+    {
+      "edge_id": "edge-d07d14257ec6",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "project_logs-v02_01_project_logs-3-265067d2de8e"
+      ]
+    },
+    {
+      "edge_id": "edge-d0b8d52d1551",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-9a3d5112457b",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "resume-rag_project_experience-0-45abba9c3117"
+      ]
+    },
+    {
+      "edge_id": "edge-d0f22a65e1b3",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "resume-v02_08_resume-3-8971b2428275"
+      ]
+    },
+    {
+      "edge_id": "edge-d10892d291e9",
+      "edge_type": "requires",
+      "source_node_id": "job-877168b609dc",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca"
+      ]
+    },
+    {
+      "edge_id": "edge-d1f8d8a6059d",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "resume-v02_01_resume-1-d367a4d11847"
+      ]
+    },
+    {
+      "edge_id": "edge-d3097954a933",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-881533f6f794",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "resume-v02_13_resume-0-a12dd28a8441"
+      ]
+    },
+    {
+      "edge_id": "edge-d3a3a1986b69",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-74912d0c53b4",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "edge_id": "edge-d5d00af42cbc",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "project_logs-v02_02_project_logs-1-5708497a374a"
+      ]
+    },
+    {
+      "edge_id": "edge-d6b55270fda0",
+      "edge_type": "requires",
+      "source_node_id": "job-e97500cdb412",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "jd-v02_07_jd-0-b5b7137fd3f5"
+      ]
+    },
+    {
+      "edge_id": "edge-d6e18ee91027",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-447ebe7e3db9",
+      "chunk_ids": [
+        "user_profile-v02_06_user_profile-2-819c23846421"
+      ]
+    },
+    {
+      "edge_id": "edge-d956bef31f7a",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-4d0bb36bcab5",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "user_profile-v02_12_user_profile-0-ec3dec4cdcc9"
+      ]
+    },
+    {
+      "edge_id": "edge-d9841c5c7c66",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "resume-v02_12_resume-1-a37cc0704fb5"
+      ]
+    },
+    {
+      "edge_id": "edge-da89bd86a1f8",
+      "edge_type": "requires",
+      "source_node_id": "job-271fe13eeb98",
+      "target_node_id": "technology-41a1373cef2a",
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411"
+      ]
+    },
+    {
+      "edge_id": "edge-db1930400ed2",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "user_profile-v02_09_user_profile-2-bc89caccb34d"
+      ]
+    },
+    {
+      "edge_id": "edge-db493f2aa5c7",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-c49f6f8b000b",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "resume-v02_01_resume-0-9acdbaec4702"
+      ]
+    },
+    {
+      "edge_id": "edge-dbce4321eecf",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-74912d0c53b4",
+      "target_node_id": "technology-db1dfd45b163",
+      "chunk_ids": [
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "edge_id": "edge-dc7ba20e233f",
+      "edge_type": "requires",
+      "source_node_id": "job-0203c44432f7",
+      "target_node_id": "technology-db1dfd45b163",
+      "chunk_ids": [
+        "jd-python_backend_intern-0-599054e56ed8"
+      ]
+    },
+    {
+      "edge_id": "edge-de882897c3e3",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-77244ac04047",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "user_profile-v02_13_user_profile-3-62622bbfb945"
+      ]
+    },
+    {
+      "edge_id": "edge-e030441a3f92",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-f73fa2af8d58",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "resume-v02_05_resume-2-856cdad100bb"
+      ]
+    },
+    {
+      "edge_id": "edge-e0a929f670df",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "jd-v02_04_jd-3-cebba6d2a906"
+      ]
+    },
+    {
+      "edge_id": "edge-e128bbb0a343",
+      "edge_type": "requires",
+      "source_node_id": "job-df60a49bec6a",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "jd-v02_04_jd-0-4a1efd74ccdf"
+      ]
+    },
+    {
+      "edge_id": "edge-e15f7230027d",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "jd-v02_14_jd-2-a8a8f4bf4b67"
+      ]
+    },
+    {
+      "edge_id": "edge-e17d8efba452",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "jd-v02_01_jd-3-f96a0383c59a"
+      ]
+    },
+    {
+      "edge_id": "edge-e45b4b742250",
+      "edge_type": "requires",
+      "source_node_id": "job-c3fbdad4f4ee",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "jd-v02_13_jd-0-f1cdb3e14ee6"
+      ]
+    },
+    {
+      "edge_id": "edge-e4c09f4aac8c",
+      "edge_type": "belongs_to",
+      "source_node_id": "job-9d4353bf6e5a",
+      "target_node_id": "company-bc83b5484792",
+      "chunk_ids": [
+        "jd-llm_evaluation_intern-0-4d8bd07a36b0"
+      ]
+    },
+    {
+      "edge_id": "edge-e4ce72ab4161",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-4fc8ece15966",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "project_logs-v02_14_project_logs-1-56d28cb8a175"
+      ]
+    },
+    {
+      "edge_id": "edge-e7003c232292",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "technology-0608c4054662",
+      "chunk_ids": [
+        "jd-v02_03_jd-2-a8955ec68394",
+        "jd-v02_08_jd-2-d5ccc534564f"
+      ]
+    },
+    {
+      "edge_id": "edge-e87ee4ef8d9d",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "jd-v02_07_jd-3-51e100c14b23"
+      ]
+    },
+    {
+      "edge_id": "edge-e91517d4bb7e",
+      "edge_type": "requires",
+      "source_node_id": "job-f0f62dde6c0f",
+      "target_node_id": "skill-ad9b5739bcff",
+      "chunk_ids": [
+        "jd-v02_11_jd-2-cf15bfdbef98"
+      ]
+    },
+    {
+      "edge_id": "edge-ea07d64d48e5",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "resume-v02_08_resume-1-e9a36c63ec5d"
+      ]
+    },
+    {
+      "edge_id": "edge-eab262931b5a",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "user_profile-v02_12_user_profile-1-f6bcc6701711"
+      ]
+    },
+    {
+      "edge_id": "edge-eac434af8ec9",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "resume-v02_07_resume-1-d424f3202ddc"
+      ]
+    },
+    {
+      "edge_id": "edge-eac6d107039d",
+      "edge_type": "requires",
+      "source_node_id": "job-9446b963704a",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "jd-v02_03_jd-1-fdfda89fb205"
+      ]
+    },
+    {
+      "edge_id": "edge-eac8e6854879",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "jd-v02_10_jd-3-3c5dd0af69f8"
+      ]
+    },
+    {
+      "edge_id": "edge-ead70da56c3e",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "project_logs-v02_02_project_logs-3-65b5174d1661"
+      ]
+    },
+    {
+      "edge_id": "edge-eae5bf82bad3",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7f4f7ca57416",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "user_profile-v02_03_user_profile-0-76a73c266c3e"
+      ]
+    },
+    {
+      "edge_id": "edge-ebd0c1ff5875",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-a98ae8dd5300",
+      "target_node_id": "skill-85f7ca52f27d",
+      "chunk_ids": [
+        "resume-v02_04_resume-0-d746bc710a36"
+      ]
+    },
+    {
+      "edge_id": "edge-ec1702ec155e",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "resume-v02_05_resume-1-2123738a748b"
+      ]
+    },
+    {
+      "edge_id": "edge-ec3b764719a8",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "user_profile-v02_02_user_profile-2-5a0300033bcb"
+      ]
+    },
+    {
+      "edge_id": "edge-ed19c73095cf",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-707b0b0090c1",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "user_profile-v02_14_user_profile-0-14c62c1c84fe"
+      ]
+    },
+    {
+      "edge_id": "edge-ed449374d402",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "project_logs-v02_01_project_logs-2-e2cf971f6923"
+      ]
+    },
+    {
+      "edge_id": "edge-eec7a33e9ed7",
+      "edge_type": "requires",
+      "source_node_id": "job-6b472564be7a",
+      "target_node_id": "skill-06cfe867e592",
+      "chunk_ids": [
+        "jd-v02_13_jd-3-bcd1c6cdcb97"
+      ]
+    },
+    {
+      "edge_id": "edge-ef176e6a3d4c",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "project_logs-v02_12_project_logs-3-48602ece499a"
+      ]
+    },
+    {
+      "edge_id": "edge-ef1e1f8fdc89",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-9c8e467ecdd6",
+      "chunk_ids": [
+        "project_logs-v02_03_project_logs-2-8ab0e5c5253d"
+      ]
+    },
+    {
+      "edge_id": "edge-f111f912753f",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-50adb05742cd",
+      "chunk_ids": [
+        "user_profile-v02_01_user_profile-2-e71f141757e3"
+      ]
+    },
+    {
+      "edge_id": "edge-f23d3ab15bd0",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-74912d0c53b4",
+      "target_node_id": "technology-4235227b5143",
+      "chunk_ids": [
+        "resume-skill_matrix-0-8faeca0c9be2"
+      ]
+    },
+    {
+      "edge_id": "edge-f2908c4a5551",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "user_profile-v02_07_user_profile-2-93b2643bfea8"
+      ]
+    },
+    {
+      "edge_id": "edge-f29b2ce528e8",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-02434636e57d",
+      "chunk_ids": [
+        "project_logs-v02_07_project_logs-3-4b553dfcd050"
+      ]
+    },
+    {
+      "edge_id": "edge-f2b5284e7f1d",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-a36681a08812",
+      "chunk_ids": [
+        "project_logs-v02_09_project_logs-3-811d5c76272f"
+      ]
+    },
+    {
+      "edge_id": "edge-f312c7ec70ac",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f8bc72b6a77b",
+      "target_node_id": "skill-04279d9a98bc",
+      "chunk_ids": [
+        "project_logs-v02_10_project_logs-3-b862cd1ffd44"
+      ]
+    },
+    {
+      "edge_id": "edge-f347baf51b22",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-b85670da51f3",
+      "target_node_id": "skill-5277a3b4a7de",
+      "chunk_ids": [
+        "resume-v02_14_resume-1-289c45a343fa"
+      ]
+    },
+    {
+      "edge_id": "edge-f797ba8340d4",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-3d38d3ecff3e",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "user_profile-v02_05_user_profile-0-b142f9e3c6cd"
+      ]
+    },
+    {
+      "edge_id": "edge-f7e4ef50e03d",
+      "edge_type": "uses",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "project_logs-v02_14_project_logs-2-49dcbefbe29e"
+      ]
+    },
+    {
+      "edge_id": "edge-f8bb7cb63084",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-130d562cf7af",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "user_profile-role_priority-0-5aee6997af02"
+      ]
+    },
+    {
+      "edge_id": "edge-f95475c8f461",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-0304008a195b",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "project_logs-v02_02_project_logs-2-54d825e6485f"
+      ]
+    },
+    {
+      "edge_id": "edge-fa528a5c50c1",
+      "edge_type": "related_to",
+      "source_node_id": "skill-3d4d1075e7f1",
+      "target_node_id": "technology-41a1373cef2a",
+      "chunk_ids": [
+        "jd-backend_intern-0-a1da3e9ac6ca"
+      ]
+    },
+    {
+      "edge_id": "edge-faa221f2714c",
+      "edge_type": "requires",
+      "source_node_id": "job-ef1fb921779c",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "jd-v02_02_jd-0-8629190192da"
+      ]
+    },
+    {
+      "edge_id": "edge-fcb2ddb86964",
+      "edge_type": "requires",
+      "source_node_id": "job-271fe13eeb98",
+      "target_node_id": "technology-e982f17bcbe0",
+      "chunk_ids": [
+        "jd-ai_platform_intern-0-a2cb7a9f6411"
+      ]
+    },
+    {
+      "edge_id": "edge-fd0d8d4a8d46",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "skill-f423c90e24a1",
+      "chunk_ids": [
+        "resume-v02_02_resume-3-4ca2f02bcb7e"
+      ]
+    },
+    {
+      "edge_id": "edge-fe305acf7229",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-0b675d9ceaf0",
+      "target_node_id": "skill-07f1f2196156",
+      "chunk_ids": [
+        "user_profile-v02_12_user_profile-2-81fbf8584168"
+      ]
+    },
+    {
+      "edge_id": "edge-fe386244691f",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-7a2d3eae502e",
+      "target_node_id": "technology-69a537093ff9",
+      "chunk_ids": [
+        "resume-v02_14_resume-3-19bbcea7f6ca"
+      ]
+    },
+    {
+      "edge_id": "edge-fe41f9e86b20",
+      "edge_type": "demonstrates",
+      "source_node_id": "experience-8c6bcdec4622",
+      "target_node_id": "skill-3d4d1075e7f1",
+      "chunk_ids": [
+        "user_profile-v02_08_user_profile-1-33070b82d27e"
+      ]
+    },
+    {
+      "edge_id": "edge-fe7217c6b91a",
+      "edge_type": "demonstrates",
+      "source_node_id": "project-f72b5999c7ba",
+      "target_node_id": "skill-5d0afe63f298",
+      "chunk_ids": [
+        "project_logs-v02_05_project_logs-0-d25ec41e755a"
+      ]
+    }
+  ],
+  "stats": {
+    "node_count": 121,
+    "edge_count": 346,
+    "source_chunk_count": 248,
+    "evidence_chunk_count": 248
+  }
+}

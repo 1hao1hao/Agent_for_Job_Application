@@ -1,0 +1,50 @@
+{
+  "dataset_version": "evalrag_v0.3",
+  "schema_version": "v0.3",
+  "chunk_max_chars": 420,
+  "minimum_documents": 500,
+  "minimum_chunks": 1500,
+  "near_duplicate_distance": 3,
+  "huggingface_jobs": {
+    "dataset": "wangzihaogithub/job-educational-parser-dataset-08-0-0805",
+    "revision": "da1d0e3b2dc4ccd5b6315468f830a14f04b3e382",
+    "config": "default",
+    "split": "train",
+    "license_status": "Apache-2.0",
+    "quota": 330,
+    "page_size": 100,
+    "maximum_pages": 50
+  },
+  "github_sources": [
+    {
+      "repository": "MisterBooo/llm-interview-questions",
+      "revision": "320048c20288c2d3afb695f97a55e91315c60fdf",
+      "license_status": "CC-BY-SA-4.0",
+      "canonical_source_type": "interview_knowledge",
+      "quota": 150,
+      "include_prefixes": ["modules/"],
+      "exclude_fragments": [],
+      "split_headings": true
+    },
+    {
+      "repository": "infiniflow/ragflow",
+      "revision": "c6ba54bc7236dcbf463a9e94072103cb8d64f7d8",
+      "license_status": "Apache-2.0",
+      "canonical_source_type": "project_documentation",
+      "quota": 220,
+      "include_prefixes": ["docs/", "deepdoc/", "agent/", "README_zh.md"],
+      "exclude_fragments": ["node_modules", "tests/", "README_tr.md"],
+      "split_headings": false
+    },
+    {
+      "repository": "QwenLM/Qwen-Agent",
+      "revision": "31a4d36d123688581a9e9744427272b33ce940e0",
+      "license_status": "Apache-2.0",
+      "canonical_source_type": "project_documentation",
+      "quota": 24,
+      "include_prefixes": ["qwen-agent-docs/", "README_CN.md", "browser_qwen_cn.md"],
+      "exclude_fragments": [],
+      "split_headings": false
+    }
+  ]
+}

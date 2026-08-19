@@ -1,0 +1,351 @@
+{
+  "ablation_id": "p1-d7-reranker-closure-v03-dev-20260816",
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "case_count": 160,
+  "variants": {
+    "bge_base_k20": {
+      "config": "configs/retrieval/adaptive_v0.3.json",
+      "model": "BAAI/bge-reranker-base",
+      "revision": "2cfc18c9415c912f9d8155881c133215df768a70",
+      "candidate_k": 20,
+      "metrics": {
+        "recall_at_3": 0.4083333333333333,
+        "recall_at_5": 0.44583333333333336,
+        "mrr": 0.4026388888888889,
+        "ndcg_at_5": 0.39136832772865776,
+        "path_validity": null
+      },
+      "latency_ms": {
+        "p50": 500.01866836100817,
+        "p95": 5566.7068008333445
+      },
+      "reranker_invocation_rate": 0.13125,
+      "reranked_case_count": 21
+    },
+    "bge_base_k10": {
+      "config": "configs/retrieval/adaptive_reranker_base_k10_v0.3.json",
+      "model": "BAAI/bge-reranker-base",
+      "revision": "2cfc18c9415c912f9d8155881c133215df768a70",
+      "candidate_k": 10,
+      "metrics": {
+        "recall_at_3": 0.3958333333333333,
+        "recall_at_5": 0.4375,
+        "mrr": 0.3958333333333333,
+        "ndcg_at_5": 0.3833506495654521,
+        "path_validity": null
+      },
+      "latency_ms": {
+        "p50": 694.0423874184489,
+        "p95": 3157.577348873019
+      },
+      "reranker_invocation_rate": 0.2125,
+      "reranked_case_count": 34
+    },
+    "minilm_k10": {
+      "config": "configs/retrieval/adaptive_reranker_minilm_k10_v0.3.json",
+      "model": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
+      "revision": "1427fd652930e4ba29e8149678df786c240d8825",
+      "candidate_k": 10,
+      "metrics": {
+        "recall_at_3": 0.4041666666666667,
+        "recall_at_5": 0.4375,
+        "mrr": 0.40208333333333335,
+        "ndcg_at_5": 0.38690521274069367,
+        "path_validity": null
+      },
+      "latency_ms": {
+        "p50": 515.6896226108074,
+        "p95": 2100.939203053713
+      },
+      "reranker_invocation_rate": 0.2125,
+      "reranked_case_count": 34
+    }
+  },
+  "differences": [
+    {
+      "case_id": "v03_three_hop_020",
+      "query": "请沿知识关系说明“示例平台公司”与“技能矩阵候选记录”之间的3跳联系（路径20）。",
+      "metrics": {
+        "bge_base_k20": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "ndcg_at_5": 0.0,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "bge_base_k10": {
+          "recall_at_3": 0.5,
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.5,
+          "ndcg_at_5": 0.38685280723454163,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "minilm_k10": {
+          "recall_at_3": 0.5,
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 1.0,
+          "ndcg_at_5": 0.6131471927654584,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        }
+      },
+      "difference": 1.6131471927654584
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_025",
+      "query": "不使用原文标题措辞，概括《generation_validation_iteration》主要解决的实际问题。",
+      "metrics": {
+        "bge_base_k20": {
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 1.0,
+          "ndcg_at_5": 1.0,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "bge_base_k10": {
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "minilm_k10": {
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        }
+      },
+      "difference": 1.1666666666666667
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_026",
+      "query": "不使用原文标题措辞，概括《Qwen-Agent Overview》主要解决的实际问题。",
+      "metrics": {
+        "bge_base_k20": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "ndcg_at_5": 0.0,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "bge_base_k10": {
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "minilm_k10": {
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.5,
+          "ndcg_at_5": 0.6309297535714575,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        }
+      },
+      "difference": 1.1309297535714575
+    },
+    {
+      "case_id": "v03_three_hop_022",
+      "query": "请沿知识关系说明“示例平台公司”与“已有基础”之间的3跳联系（路径22）。",
+      "metrics": {
+        "bge_base_k20": {
+          "recall_at_3": 0.5,
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.3065735963827292,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "bge_base_k10": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "ndcg_at_5": 0.0,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "minilm_k10": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "ndcg_at_5": 0.0,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        }
+      },
+      "difference": 0.6399069297160624
+    },
+    {
+      "case_id": "v03_two_hop_013",
+      "query": "请沿知识关系说明“示例搜索公司”与“Python”之间的2跳联系（路径13）。",
+      "metrics": {
+        "bge_base_k20": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.2,
+          "ndcg_at_5": 0.38685280723454163,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "bge_base_k10": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "ndcg_at_5": 0.0,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "minilm_k10": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "ndcg_at_5": 0.0,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        }
+      },
+      "difference": 0.5868528072345416
+    },
+    {
+      "case_id": "v03_three_hop_019",
+      "query": "请沿知识关系说明“示例平台公司”与“实现记录”之间的3跳联系（路径19）。",
+      "metrics": {
+        "bge_base_k20": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.2,
+          "ndcg_at_5": 0.23719771276929622,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "bge_base_k10": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "ndcg_at_5": 0.0,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "minilm_k10": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "reciprocal_rank": 0.0,
+          "ndcg_at_5": 0.0,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        }
+      },
+      "difference": 0.4371977127692962
+    },
+    {
+      "case_id": "v03_cross_source_029",
+      "query": "interview 与 resume 分别如何描述“上下文工程”，它们能提供哪些互补证据？",
+      "metrics": {
+        "bge_base_k20": {
+          "recall_at_3": 0.5,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5437713091520254,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "bge_base_k10": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.25,
+          "ndcg_at_5": 0.2640681225725909,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "minilm_k10": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.5,
+          "reciprocal_rank": 0.25,
+          "ndcg_at_5": 0.2640681225725909,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        }
+      },
+      "difference": 0.3630365199127679
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_001",
+      "query": "不使用原文标题措辞，概括《RAGFlow MCP Client Examples》主要解决的实际问题。",
+      "metrics": {
+        "bge_base_k20": {
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "bge_base_k10": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.25,
+          "ndcg_at_5": 0.43067655807339306,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "minilm_k10": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.25,
+          "ndcg_at_5": 0.43067655807339306,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        }
+      },
+      "difference": 0.1526567752599402
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_014",
+      "query": "不使用原文标题措辞，概括《Deploy Local Models》主要解决的实际问题。",
+      "metrics": {
+        "bge_base_k20": {
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "bge_base_k10": {
+          "recall_at_3": 0.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.25,
+          "ndcg_at_5": 0.43067655807339306,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        },
+        "minilm_k10": {
+          "recall_at_3": 1.0,
+          "recall_at_5": 1.0,
+          "reciprocal_rank": 0.3333333333333333,
+          "ndcg_at_5": 0.5,
+          "returned_for_unanswerable": null,
+          "path_validity": null
+        }
+      },
+      "difference": 0.1526567752599402
+    }
+  ],
+  "decision": {
+    "mode": "on_demand_minilm_k10",
+    "reason": "P95 明显下降，MRR 基本持平且 Recall@5 退化不超过 1 个百分点"
+  },
+  "boundary": "dev-only closure; frozen test was not read or run"
+}

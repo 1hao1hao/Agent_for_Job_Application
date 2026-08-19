@@ -1,0 +1,12 @@
+{
+  "dataset": "evalrag_context_v0.1",
+  "split": "dev",
+  "strategy": "summary_recent",
+  "token_budget": 220,
+  "recent_message_count": 2,
+  "evidence_char_budget": 4000,
+  "mode": "summary_recent",
+  "evidence_strategy": "source_balanced",
+  "compress_evidence": false,
+  "reserved_token_count": 0
+}

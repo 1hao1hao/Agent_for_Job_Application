@@ -1,0 +1,18 @@
+{
+  "retriever_name": "graph_vector",
+  "dataset_version": "evalrag_v0.3",
+  "top_k": 5,
+  "bm25_index_path": "data/processed/indexes/evalrag_v0.3/bm25-v1/index.json",
+  "k1": 1.5,
+  "b": 0.75,
+  "index_dir": "data/processed/indexes/evalrag_v0.3/bge-small-zh-v1.5",
+  "rrf_k": 60,
+  "candidate_multiplier": 4,
+  "adaptive_lexical": "bm25",
+  "graph_index_path": "data/processed/graphs/evalrag_v0.3/job-skill-experience-v0.2.json",
+  "graph_max_hops": 3,
+  "graph_max_nodes": 160,
+  "graph_timeout_ms": 100.0,
+  "graph_rrf_k": 60,
+  "graph_candidate_multiplier": 4
+}

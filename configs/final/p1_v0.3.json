@@ -1,0 +1,27 @@
+{
+  "release_id": "p1-d7-v03-frozen-20260816",
+  "frozen_at": "2026-08-16T22:30:00+08:00",
+  "dataset_version": "evalrag_v0.3",
+  "frozen_inputs": {
+    "data/evaluation/evalrag_v0.3.jsonl": "151ef8b56a84c3c0ffdb62026c705053f68e44002b7c8bde922f0a0154d4acd7",
+    "data/processed/chunks/evalrag_v0.3.jsonl": "40ca3b5bfac78922ae0fcce97836981b096c39260a4eb4295958a3d8720968d6",
+    "data/evaluation/evalrag_graph_v0.1.jsonl": "69f357d42e496dafe4b3d1634155bb164a2bed1e2bc717e522773ad9cba19d9f",
+    "data/processed/chunks/evalrag_v0.2.jsonl": "d4bc5124492aa25b89e487a46b76d29d06b1bee5a87fc40434d67150117645b1",
+    "configs/retrieval/graph_adaptive_final_v0.3.json": "cb9c44690016861eac774e9415f88251b12318c68d5b9adc41386e98e55e99ad",
+    "configs/retrieval/graph_adaptive_v0.2.json": "ff8932a0690fb2ec7e7fb428d796a27b923b14a05d44c5c3419e7f7203e04090",
+    "configs/context/context_engine_v0.1.json": "f6572e8f7066c5e2f5f5ca26bcc93b970bc7d5541edd0355b3eff85245249676",
+    "configs/routing/router_registry_v0.1.json": "236173aefbc7fb557af641aef55bdf87f91c0c1a1b3613d0635677de3546d369",
+    "configs/model_gateway/gateway_v0.1.json": "c5f5a7749fb9a146bdc57b45d374119ba77bc0b413ed4926921aa309501aa3a4"
+  },
+  "components": {
+    "adaptive_retrieval": "graph_adaptive_final_v0.3",
+    "reranker": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1@1427fd652930e4ba29e8149678df786c240d8825; on-demand; candidate_k=10",
+    "persistent_vector": "pgvector HNSW config frozen; real Docker restart verification pending GitHub Actions/manual workflow",
+    "persistent_graph": "Neo4j Graph+Vector config frozen; real Docker restart verification pending GitHub Actions/manual workflow",
+    "context_memory": "context_engine_v0.1; dev benchmark only because no untouched test split",
+    "router": "router_registry_v0.1 active=hybrid_feedback_v0.3",
+    "runtime": "agent-runtime-v0.1 with checkpoint/replay",
+    "model_gateway": "model-gateway-v0.1"
+  },
+  "freeze_policy": "After this manifest is used, test predictions are immutable and evalrag_v0.3/test is not used for tuning."
+}

@@ -1,0 +1,47 @@
+{
+  "run_id": "p1-d3-graph-v01-dev-20260816-fixed-graph_vector",
+  "dataset_version": "evalrag_graph_v0.1",
+  "graph_version": "job-skill-experience-v0.1",
+  "split": "dev",
+  "case_count": 30,
+  "answerable_case_count": 22,
+  "metrics": {
+    "recall_at_5": 0.7727272727272727,
+    "mrr": 0.5227272727272727,
+    "ndcg_at_5": 0.5381482225688119,
+    "path_validity": 1.0,
+    "selector_accuracy": 1.0
+  },
+  "category_metrics": {
+    "cross_source_two_hop": {
+      "case_count": 8,
+      "recall_at_5": 0.5,
+      "mrr": 0.41666666666666663,
+      "ndcg_at_5": 0.36384361599349613
+    },
+    "hard_negative": {
+      "case_count": 8,
+      "recall_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_5": 0.0
+    },
+    "job_skill": {
+      "case_count": 7,
+      "recall_at_5": 0.8571428571428571,
+      "mrr": 0.40476190476190477,
+      "ndcg_at_5": 0.5220926811224696
+    },
+    "skill_project": {
+      "case_count": 7,
+      "recall_at_5": 1.0,
+      "mrr": 0.7619047619047619,
+      "ndcg_at_5": 0.7534090286726577
+    }
+  },
+  "latency_ms": {
+    "p50": 397.7744420990348,
+    "p95": 1190.2547916397452
+  },
+  "metric_scope": "Recall/MRR/NDCG use answerable cases; selector uses all cases; path validity uses returned graph paths.",
+  "boundary": "dev-only relationship retrieval evaluation; metrics do not measure final answer correctness"
+}

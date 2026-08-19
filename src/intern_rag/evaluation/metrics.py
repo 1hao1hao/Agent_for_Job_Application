@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 import json
+import math
 from pathlib import Path
 from statistics import mean
 from typing import Any
@@ -89,6 +90,29 @@ def calculate_average_recall_at_k(
         for case in cases
     )
     return total_recall / len(cases)
+
+
+def calculate_ndcg_at_k(
+    retrieved_chunk_ids: list[str],
+    relevant_chunk_ids: list[str],
+    k: int,
+) -> float:
+    """计算二值相关标签下的 NDCG@k，衡量正确证据是否排在前面。"""
+
+    if k <= 0 or not relevant_chunk_ids:
+        return 0.0
+    relevant_ids = set(relevant_chunk_ids)
+    dcg = sum(
+        1.0 / math.log2(rank + 1)
+        for rank, chunk_id in enumerate(retrieved_chunk_ids[:k], start=1)
+        if chunk_id in relevant_ids
+    )
+    ideal_count = min(k, len(relevant_ids))
+    ideal_dcg = sum(
+        1.0 / math.log2(rank + 1)
+        for rank in range(1, ideal_count + 1)
+    )
+    return dcg / ideal_dcg if ideal_dcg else 0.0
 
 
 def calculate_router_accuracy(cases: list[RouterEvalCase]) -> float:

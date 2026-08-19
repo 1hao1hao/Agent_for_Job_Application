@@ -1,0 +1,64 @@
+{
+  "run_id": "p1-d9-v03-dev-ablation-20260817-rerank-always",
+  "dataset_version": "evalrag_v0.3",
+  "graph_version": "job-skill-experience-v0.2",
+  "split": "dev",
+  "strategy": "rerank-always",
+  "case_count": 160,
+  "answerable_case_count": 120,
+  "error_count": 0,
+  "metrics": {
+    "recall_at_3": 0.4708333333333333,
+    "recall_at_5": 0.5083333333333333,
+    "mrr": 0.4922222222222222,
+    "ndcg_at_5": 0.46947316489647084,
+    "path_validity": null
+  },
+  "category_metrics": {
+    "cross_source": {
+      "case_count": 20,
+      "recall_at_5": 0.775,
+      "mrr": 0.735
+    },
+    "freshness_conflict": {
+      "case_count": 20,
+      "recall_at_5": 0.85,
+      "mrr": 0.825
+    },
+    "hard_negative": {
+      "case_count": 20,
+      "recall_at_5": 0.0,
+      "mrr": 0.0
+    },
+    "semantic_paraphrase": {
+      "case_count": 20,
+      "recall_at_5": 0.55,
+      "mrr": 0.475
+    },
+    "single_source": {
+      "case_count": 20,
+      "recall_at_5": 0.4,
+      "mrr": 0.36666666666666664
+    },
+    "three_hop": {
+      "case_count": 20,
+      "recall_at_5": 0.325,
+      "mrr": 0.44166666666666665
+    },
+    "two_hop": {
+      "case_count": 20,
+      "recall_at_5": 0.15,
+      "mrr": 0.11
+    },
+    "unanswerable": {
+      "case_count": 20,
+      "recall_at_5": 0.0,
+      "mrr": 0.0
+    }
+  },
+  "latency_ms": {
+    "p50": 1702.821551822126,
+    "p95": 2799.0942262113094
+  },
+  "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+}

@@ -1,0 +1,22 @@
+{
+  "strategy": "no_memory",
+  "config": {
+    "token_budget": 220,
+    "recent_message_count": 4,
+    "evidence_char_budget": 4000,
+    "mode": "no_memory",
+    "evidence_strategy": "source_balanced",
+    "compress_evidence": false
+  },
+  "follow_up_success": 0.36666666666666664,
+  "citation_validity": 1.0,
+  "semantic_key_point_coverage": 0.2830188679245283,
+  "grounding": 0.36666666666666664,
+  "mean_repeated_history_reads": 0.0,
+  "mean_prompt_tokens": 37.25,
+  "mean_compression_ratio": 0.31502118118655303,
+  "latency_ms": {
+    "p50": 0.06228592246770859,
+    "p95": 0.08911918848752975
+  }
+}

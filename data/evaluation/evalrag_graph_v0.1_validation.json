@@ -1,0 +1,16 @@
+{
+  "errors": [],
+  "case_count": 40,
+  "split_counts": {
+    "test": 10,
+    "dev": 30
+  },
+  "category_counts": {
+    "job_skill": 10,
+    "skill_project": 10,
+    "cross_source_two_hop": 10,
+    "hard_negative": 10
+  },
+  "reviewed_count": 40,
+  "is_valid": true
+}

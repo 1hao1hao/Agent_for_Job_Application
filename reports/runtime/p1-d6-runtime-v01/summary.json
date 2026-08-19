@@ -1,0 +1,59 @@
+{
+  "runtime_version": "agent-runtime-v0.1",
+  "fault_matrix": [
+    {
+      "fault": "llm_timeout",
+      "expected": "controlled llm_timeout + failed generation span",
+      "test": "tests.integration.test_pipeline.PipelineIntegrationTests.test_timeout_is_recorded",
+      "covered": true
+    },
+    {
+      "fault": "invalid_generation_json",
+      "expected": "one format retry then controlled error",
+      "test": "tests.integration.test_pipeline",
+      "covered": true
+    },
+    {
+      "fault": "invalid_citation",
+      "expected": "validator rejects citation",
+      "test": "tests.integration.test_pipeline",
+      "covered": true
+    },
+    {
+      "fault": "span_sink_failure",
+      "expected": "business response preserved",
+      "test": "test_trace_sink_failure_does_not_replace_business_response",
+      "covered": true
+    },
+    {
+      "fault": "checkpoint_interruption",
+      "expected": "resume skips completed side effect",
+      "test": "test_checkpoint_resume_skips_completed_side_effect",
+      "covered": true
+    },
+    {
+      "fault": "config_or_artifact_drift",
+      "expected": "discard stale checkpoint and rerun",
+      "test": "test_config_or_artifact_drift_restarts_workflow",
+      "covered": true
+    }
+  ],
+  "langgraph_comparison": {
+    "case_count": 100,
+    "state_equal": true,
+    "native_runtime_latency_ms": {
+      "p50": 0.0010980293154716492,
+      "p95": 0.0015087425708770752
+    },
+    "langgraph_latency_ms": {
+      "p50": 1.2753810733556747,
+      "p95": 1.601669006049633
+    },
+    "decision": "keep native runtime as default; LangGraph adapter adds dependency and overhead without changing this fixed one-node state"
+  },
+  "sanitized_traces": [
+    "traces/sanitized_examples/p1-d6-answered.json",
+    "traces/sanitized_examples/p1-d6-error.json",
+    "traces/sanitized_examples/p1-d6-retry.json"
+  ]
+}

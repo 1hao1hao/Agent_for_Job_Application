@@ -35,6 +35,12 @@ class FakeQueryService:
         )
 
 
+class MissingSessionQueryService:
+    def execute(self, request: RagRequest) -> RagResponse:
+        del request
+        raise PermissionError("private repository detail must not leak")
+
+
 class ServingApiTests(unittest.TestCase):
     def setUp(self) -> None:
         self.repository = InMemoryPersistenceRepository()
@@ -148,6 +154,52 @@ class ServingApiTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 503)
         self.assertEqual(next(iter(self.repository.jobs.values())).status, "failed")
+
+    def test_session_profile_contract_and_cross_user_scope(self) -> None:
+        created = self.client.post("/v1/users/u1/sessions", json={"title": "求职准备"})
+        self.assertEqual(created.status_code, 201)
+        session_id = created.json()["session_id"]
+        self.assertEqual(
+            self.client.get(f"/v1/users/u1/sessions/{session_id}").status_code, 200
+        )
+        self.assertEqual(
+            self.client.get(f"/v1/users/u2/sessions/{session_id}").status_code, 404
+        )
+
+        profile = self.client.put(
+            "/v1/users/u1/profile",
+            json={
+                "expected_version": 0,
+                "facts": [{"key": "城市", "value": "广州", "source": "explicit"}],
+            },
+        )
+        self.assertEqual(profile.status_code, 200)
+        self.assertEqual(profile.json()["version"], 1)
+        self.assertEqual(self.client.get("/v1/users/u1/profile").status_code, 200)
+        conflict = self.client.put(
+            "/v1/users/u1/profile",
+            json={
+                "expected_version": 0,
+                "facts": [{"key": "城市", "value": "深圳", "source": "explicit"}],
+            },
+        )
+        self.assertEqual(conflict.status_code, 409)
+
+        missing_session_client = TestClient(
+            create_app(
+                AppServices(MissingSessionQueryService(), self.repository, self.queue)
+            )
+        )
+        missing = missing_session_client.post(
+            "/v1/query",
+            json={
+                "query": "读取其他用户会话",
+                "user_id": "u2",
+                "session_id": session_id,
+            },
+        )
+        self.assertEqual(missing.status_code, 404)
+        self.assertNotIn("private repository", missing.text)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,18 @@
+{
+  "run_id": "p1-d4-v03-dev-20260816-dense",
+  "dataset_version": "evalrag_v0.3",
+  "graph_version": "job-skill-experience-v0.2",
+  "split": "dev",
+  "strategy": "dense",
+  "top_k": 5,
+  "command": "PYTHONPATH=src python scripts/run_v03_retrieval_ablation.py --run-id p1-d4-v03-dev-20260816",
+  "retriever_config": {
+    "retriever_name": "dense",
+    "dataset_version": "evalrag_v0.3",
+    "top_k": 5,
+    "index_dir": "data/processed/indexes/evalrag_v0.3/bge-small-zh-v1.5",
+    "embedding_name": "BAAI/bge-small-zh-v1.5",
+    "embedding_revision": "7999e1d3359715c523056ef9478215996d62a620",
+    "dimensions": 512
+  }
+}

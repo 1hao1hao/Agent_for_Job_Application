@@ -1,0 +1,50 @@
+{
+  "dataset_version": "evalrag_v0.3",
+  "input_documents": 669,
+  "retained_documents": 658,
+  "rejected_documents": 11,
+  "exact_duplicates": 6,
+  "near_duplicates": 5,
+  "empty_documents": 0,
+  "source_counts": {
+    "project_logs": 159,
+    "jd": 339,
+    "interview": 120,
+    "user_profile": 20,
+    "resume": 20
+  },
+  "canonical_source_counts": {
+    "project_documentation": 159,
+    "job_posting": 339,
+    "interview_knowledge": 120,
+    "candidate_profile": 20,
+    "candidate_experience": 20
+  },
+  "method_counts": {
+    "repository_import": 239,
+    "user_owned": 100,
+    "dataset_import": 319
+  },
+  "owner_scope_counts": {
+    "public": 558,
+    "private": 100
+  },
+  "domain_counts": {
+    "github.com": 239,
+    "local-private": 100,
+    "huggingface.co": 319
+  },
+  "review_counts": {
+    "ai_assisted": 558,
+    "user_owned": 100
+  },
+  "document_length_min": 88,
+  "document_length_mean": 1845.5121580547113,
+  "document_length_p50": 341,
+  "document_length_p95": 6300,
+  "document_length_max": 200073,
+  "template_line_ratio": 0.0305569601964892,
+  "chunk_count": 4208,
+  "chunk_length_p50": 283,
+  "chunk_length_p95": 420
+}

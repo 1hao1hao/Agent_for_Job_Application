@@ -157,11 +157,62 @@ class AgentContextTests(unittest.TestCase):
         self.assertLessEqual(context.char_count, context.max_chars)
         self.assertTrue(context.is_truncated)
 
+    def test_source_balanced_keeps_one_chunk_per_required_source(self) -> None:
+        jd_first = _retrieval_result("jd-1", "岗位证据一。", rank=1)
+        jd_second = _retrieval_result("jd-2", "岗位证据二。", rank=2)
+        resume = _retrieval_result(
+            "resume-1", "简历证据。", rank=3, source_type="resume"
+        )
+        budget = (
+            len(format_context_item(context_item_from_result(jd_first)))
+            + len("\n\n")
+            + len(format_context_item(context_item_from_result(resume)))
+        )
+
+        context = build_context(
+            "分析岗位匹配度",
+            [jd_first, jd_second, resume],
+            max_chars=budget,
+            strategy="source_balanced",
+            required_source_types=["jd", "resume"],
+        )
+
+        self.assertEqual(context.used_chunk_ids, ["jd-1", "resume-1"])
+        self.assertEqual(context.skipped_chunk_ids, ["jd-2"])
+        self.assertEqual(context.covered_source_types, ["jd", "resume"])
+        self.assertEqual(context.missing_source_types, [])
+        self.assertEqual(context.selection_strategy, "source_balanced")
+
+    def test_source_balanced_skips_oversized_chunk_and_keeps_shorter_one(self) -> None:
+        oversized = _retrieval_result(
+            "jd-long", "很长的岗位证据" * 30, rank=1
+        )
+        shorter = _retrieval_result(
+            "resume-short", "简历证据。", rank=2, source_type="resume"
+        )
+        budget = len(format_context_item(context_item_from_result(shorter)))
+
+        context = build_context(
+            "分析匹配度",
+            [oversized, shorter],
+            max_chars=budget,
+            strategy="source_balanced",
+            required_source_types=["jd", "resume"],
+        )
+
+        self.assertEqual(context.used_chunk_ids, ["resume-short"])
+        self.assertEqual(context.skipped_chunk_ids, ["jd-long"])
+        self.assertEqual(context.missing_source_types, ["jd"])
+
     def test_build_context_rejects_invalid_input(self) -> None:
         with self.assertRaises(ValueError):
             build_context("", [], max_chars=100)
         with self.assertRaises(ValueError):
             build_context("岗位要求", [], max_chars=0)
+        with self.assertRaises(ValueError):
+            build_context(
+                "岗位要求", [], max_chars=100, strategy="unsupported"
+            )
 
 
 if __name__ == "__main__":

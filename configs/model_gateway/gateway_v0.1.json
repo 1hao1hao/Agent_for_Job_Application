@@ -1,0 +1,34 @@
+{
+  "version": "model-gateway-v0.1",
+  "gateway": {
+    "max_attempts_per_provider": 2,
+    "timeout_seconds": 60.0,
+    "backoff_base_seconds": 0.25,
+    "backoff_max_seconds": 2.0,
+    "concurrency_limit": 4,
+    "circuit_failure_threshold": 3,
+    "circuit_recovery_seconds": 30.0
+  },
+  "providers": [
+    {
+      "name": "deepseek-primary",
+      "adapter": "deepseek_chat",
+      "model": "deepseek-v4-flash",
+      "api_key_env": "DEEPSEEK_API_KEY",
+      "base_url": "https://api.deepseek.com",
+      "max_tokens": 1200,
+      "input_usd_per_million": 0.0,
+      "output_usd_per_million": 0.0,
+      "pricing_note": "未在本任务中固化官方价格，成本字段仅在配置价格后计算"
+    },
+    {
+      "name": "openai-compatible-backup",
+      "adapter": "openai_responses",
+      "model": "gpt-4.1-mini",
+      "api_key_env": "OPENAI_API_KEY",
+      "input_usd_per_million": 0.0,
+      "output_usd_per_million": 0.0,
+      "pricing_note": "备用 adapter 已接入；真实验证依赖 OPENAI_API_KEY"
+    }
+  ]
+}

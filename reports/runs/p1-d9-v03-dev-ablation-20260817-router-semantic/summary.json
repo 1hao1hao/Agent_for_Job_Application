@@ -1,0 +1,28 @@
+{
+  "case_count": 160,
+  "source_exact_match": 0.25,
+  "answerable_source_exact_match": 0.15,
+  "source_precision": 0.271875,
+  "source_recall": 0.278125,
+  "unanswerable_accuracy": 0.55,
+  "predicted_intents": {
+    "project_explain": 10,
+    "unknown": 112,
+    "analyze_jd": 20,
+    "match_resume": 18
+  },
+  "category_source_exact": {
+    "cross_source": 0.0,
+    "freshness_conflict": 0.7,
+    "hard_negative": 0.1,
+    "semantic_paraphrase": 0.05,
+    "single_source": 0.15,
+    "three_hop": 0.0,
+    "two_hop": 0.0,
+    "unanswerable": 1.0
+  },
+  "latency_ms": {
+    "p50": 96.68144676834345,
+    "p95": 500.65934658050537
+  }
+}

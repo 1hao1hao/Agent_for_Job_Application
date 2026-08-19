@@ -1,0 +1,22 @@
+{
+  "strategy": "semantic_memory",
+  "config": {
+    "token_budget": 220,
+    "recent_message_count": 4,
+    "evidence_char_budget": 4000,
+    "mode": "semantic_memory",
+    "evidence_strategy": "source_balanced",
+    "compress_evidence": false
+  },
+  "follow_up_success": 1.0,
+  "citation_validity": 1.0,
+  "semantic_key_point_coverage": 1.0,
+  "grounding": 1.0,
+  "mean_repeated_history_reads": 0.0,
+  "mean_prompt_tokens": 47.85,
+  "mean_compression_ratio": 0.15081332232941555,
+  "latency_ms": {
+    "p50": 0.07759872823953629,
+    "p95": 0.1012217253446579
+  }
+}

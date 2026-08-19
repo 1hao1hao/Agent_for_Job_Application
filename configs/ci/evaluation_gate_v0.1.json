@@ -1,0 +1,24 @@
+{
+  "gate_version": "evaluation-gate-v0.1",
+  "dataset_versions": ["evalrag_v0.2", "evalrag_v0.3"],
+  "split": "dev/reference",
+  "frozen_test_used": false,
+  "reference_artifacts": {
+    "router": "reports/ablations/p1-d6-router-feedback-v01-dev-20260816/summary.json",
+    "retrieval": "reports/runs/p1-d4-v03-dev-20260816-final-graph_vector/summary.json",
+    "grounding": "reports/runs/p0-d6-v02-dev-20260804-deepseek-v4-flash/summary.json",
+    "end_to_end": "reports/runs/p0-d5-v02-dev-20260804-deepseek-v4-flash/summary.json"
+  },
+  "fixed_regression_files": [
+    "tests/regression/cases_v0.2.jsonl",
+    "tests/regression/router_feedback_v0.1.jsonl"
+  ],
+  "thresholds": {
+    "router_accuracy_max_drop": 0.0,
+    "recall_at_5_max_drop": 0.01,
+    "ndcg_at_5_max_drop": 0.01,
+    "grounding_support_max_drop": 0.02,
+    "end_to_end_success_max_drop": 0.02,
+    "p95_max_increase_ratio": 1.25
+  }
+}

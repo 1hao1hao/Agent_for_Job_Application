@@ -6,6 +6,7 @@ from intern_rag.worker.evaluation_worker import (
     WorkerExecutionError,
 )
 from tests.support import InMemoryJobQueue, InMemoryPersistenceRepository
+from intern_rag.runtime import AgentRuntime
 
 
 class FakeExecutor:
@@ -50,6 +51,26 @@ class EvaluationWorkerTests(unittest.TestCase):
         self.assertEqual(completed.status, "succeeded")
         self.assertEqual(completed.attempt_count, 1)
         self.assertIn(f"run-{job.job_id}", self.repository.runs)
+
+    def test_worker_uses_shared_runtime_span(self) -> None:
+        class CollectingSink:
+            def __init__(self) -> None:
+                self.events = []
+
+            def write(self, event) -> None:
+                self.events.append(event)
+
+        sink = CollectingSink()
+        job = _create_job(self.repository, self.queue)
+        worker = EvaluationWorker(
+            self.repository, self.queue, FakeExecutor(),
+            runtime=AgentRuntime(span_sinks=[sink]),
+        )
+
+        self.assertTrue(worker.run_once(timeout_seconds=0))
+        self.assertEqual(self.repository.get_job(job.job_id).status, "succeeded")
+        self.assertEqual(sink.events[0].name, "evaluation.worker")
+        self.assertEqual(sink.events[0].attributes["entrypoint"], "worker")
 
     def test_timeout_failure_and_retry_budget(self) -> None:
         job = _create_job(self.repository, self.queue, max_retries=1)

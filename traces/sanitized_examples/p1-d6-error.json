@@ -1,0 +1,199 @@
+{
+  "run_context": {
+    "run_id": "p1-d6-error",
+    "entrypoint": "cli",
+    "config_fingerprint": "52c7286ad74e9d3d484250786385f8a4d11c7688242fac19a529b0c4422651bb",
+    "dataset_version": "sanitized-fixture-v0.1",
+    "model_version": "fake-v1"
+  },
+  "response": {
+    "status": "error",
+    "citation_ids": [],
+    "error_type": "llm_format_error"
+  },
+  "spans": [
+    {
+      "span_id": "3cbb5047-fc28-42f6-a572-5242b65ba9c6",
+      "run_id": "p1-d6-error",
+      "name": "agent.run",
+      "status": "failed",
+      "started_at": "2026-08-16T10:59:13.687915+00:00",
+      "ended_at": "2026-08-16T10:59:13.687915+00:00",
+      "latency_ms": 0.008225440979003906,
+      "parent_span_id": null,
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-error"
+      },
+      "output_refs": {
+        "trace_id": "trace-error"
+      },
+      "attributes": {
+        "entrypoint": "cli",
+        "config_fingerprint": "52c7286ad74e9d3d484250786385f8a4d11c7688242fac19a529b0c4422651bb",
+        "dataset_version": "sanitized-fixture-v0.1",
+        "model_version": "fake-v1",
+        "prompt_version": "runtime-v1",
+        "index_version": "fixture-v1",
+        "response_status": "error"
+      },
+      "error_type": "llm_format_error",
+      "error_message": "controlled format error"
+    },
+    {
+      "span_id": "fe4cfa13-ac0b-4076-afad-954f678a77e4",
+      "run_id": "p1-d6-error",
+      "name": "routing",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.687915+00:00",
+      "ended_at": "2026-08-16T10:59:13.687915+00:00",
+      "latency_ms": 0.1,
+      "parent_span_id": "3cbb5047-fc28-42f6-a572-5242b65ba9c6",
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-error"
+      },
+      "output_refs": {},
+      "attributes": {},
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "c08e15ea-410e-4f37-b1a6-9681c158a6c8",
+      "run_id": "p1-d6-error",
+      "name": "retrieval",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.687915+00:00",
+      "ended_at": "2026-08-16T10:59:13.687915+00:00",
+      "latency_ms": 1.0,
+      "parent_span_id": "3cbb5047-fc28-42f6-a572-5242b65ba9c6",
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-error"
+      },
+      "output_refs": {},
+      "attributes": {},
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "b01bcd23-35c9-41e0-a27e-a1e99e507871",
+      "run_id": "p1-d6-error",
+      "name": "evidence",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.687915+00:00",
+      "ended_at": "2026-08-16T10:59:13.687915+00:00",
+      "latency_ms": 0.1,
+      "parent_span_id": "3cbb5047-fc28-42f6-a572-5242b65ba9c6",
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-error"
+      },
+      "output_refs": {},
+      "attributes": {},
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "518e5679-4f78-48f4-8f15-ae356a2f9b24",
+      "run_id": "p1-d6-error",
+      "name": "context",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.687915+00:00",
+      "ended_at": "2026-08-16T10:59:13.687915+00:00",
+      "latency_ms": 0.1,
+      "parent_span_id": "3cbb5047-fc28-42f6-a572-5242b65ba9c6",
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-error"
+      },
+      "output_refs": {},
+      "attributes": {},
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "8f26734d-83db-4383-a1a4-2b9139db0eb3",
+      "run_id": "p1-d6-error",
+      "name": "generation",
+      "status": "failed",
+      "started_at": "2026-08-16T10:59:13.687915+00:00",
+      "ended_at": "2026-08-16T10:59:13.687915+00:00",
+      "latency_ms": 2.0,
+      "parent_span_id": "3cbb5047-fc28-42f6-a572-5242b65ba9c6",
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-error"
+      },
+      "output_refs": {},
+      "attributes": {
+        "token_usage": {
+          "input_tokens": 20,
+          "output_tokens": 8
+        }
+      },
+      "error_type": "llm_format_error",
+      "error_message": "controlled format error"
+    },
+    {
+      "span_id": "7952233f-6312-419b-9c0b-dcb27624c381",
+      "run_id": "p1-d6-error",
+      "name": "validation",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.687915+00:00",
+      "ended_at": "2026-08-16T10:59:13.687915+00:00",
+      "latency_ms": 0.1,
+      "parent_span_id": "3cbb5047-fc28-42f6-a572-5242b65ba9c6",
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-error"
+      },
+      "output_refs": {},
+      "attributes": {},
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "dc9faaa6-51e4-4420-a5fd-6bbb2151710b",
+      "run_id": "p1-d6-error",
+      "name": "attempt.generation",
+      "status": "failed",
+      "started_at": "2026-08-16T10:59:13.687915+00:00",
+      "ended_at": "2026-08-16T10:59:13.687915+00:00",
+      "latency_ms": 0,
+      "parent_span_id": "3cbb5047-fc28-42f6-a572-5242b65ba9c6",
+      "attempt": 1,
+      "input_refs": {},
+      "output_refs": {},
+      "attributes": {
+        "attempt": 1,
+        "type": "generation",
+        "status": "error",
+        "reason": "llm_format_error"
+      },
+      "error_type": "llm_format_error",
+      "error_message": ""
+    },
+    {
+      "span_id": "d18bae31-36d6-4c83-aa7b-e5e59a786963",
+      "run_id": "p1-d6-error",
+      "name": "attempt.format_retry",
+      "status": "failed",
+      "started_at": "2026-08-16T10:59:13.687915+00:00",
+      "ended_at": "2026-08-16T10:59:13.687915+00:00",
+      "latency_ms": 0,
+      "parent_span_id": "3cbb5047-fc28-42f6-a572-5242b65ba9c6",
+      "attempt": 2,
+      "input_refs": {},
+      "output_refs": {},
+      "attributes": {
+        "attempt": 2,
+        "type": "format_retry",
+        "status": "error",
+        "reason": "llm_format_error"
+      },
+      "error_type": "llm_format_error",
+      "error_message": ""
+    }
+  ]
+}

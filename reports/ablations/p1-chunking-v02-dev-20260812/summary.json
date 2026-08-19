@@ -1,0 +1,418 @@
+{
+  "ablation_id": "p1-chunking-v02-dev-20260812",
+  "dataset_version": "evalrag_v0.2",
+  "split": "dev",
+  "case_count": 80,
+  "max_chars": 220,
+  "min_chunk_ratio": 0.5,
+  "label_status": "derived_candidate_not_frozen_ground_truth",
+  "controlled_variables": {
+    "raw_corpus": "data/raw",
+    "queries": "evalrag_v0.2 dev",
+    "router": "rule",
+    "retriever": "Keyword + BGE Dense + RRF",
+    "top_k": 5,
+    "embedding_name": "BAAI/bge-small-zh-v1.5",
+    "embedding_revision": "7999e1d3359715c523056ef9478215996d62a620"
+  },
+  "run_dirs": {
+    "paragraph_fixed": "reports/runs/p1-chunking-v02-dev-20260812-paragraph_fixed",
+    "sentence_boundary": "reports/runs/p1-chunking-v02-dev-20260812-sentence_boundary"
+  },
+  "chunk_quality": {
+    "paragraph_fixed": {
+      "chunk_count": 666,
+      "length_min": 11,
+      "length_mean": 117.602,
+      "length_max": 220,
+      "short_chunk_count": 352,
+      "short_chunk_rate": 0.5285285285285285,
+      "non_final_chunk_count": 566,
+      "suspected_mid_sentence_cut_count": 355,
+      "suspected_mid_sentence_cut_rate": 0.627208480565371,
+      "offline_index_seconds": 16.472694587893784,
+      "label_mapping": {
+        "case_count": 120,
+        "relevant_id_count": 246,
+        "text_overlap_fallbacks": 0
+      }
+    },
+    "sentence_boundary": {
+      "chunk_count": 666,
+      "length_min": 11,
+      "length_mean": 117.602,
+      "length_max": 212,
+      "short_chunk_count": 72,
+      "short_chunk_rate": 0.10810810810810811,
+      "non_final_chunk_count": 566,
+      "suspected_mid_sentence_cut_count": 115,
+      "suspected_mid_sentence_cut_rate": 0.20318021201413428,
+      "offline_index_seconds": 15.183151783421636,
+      "label_mapping": {
+        "case_count": 120,
+        "relevant_id_count": 246,
+        "text_overlap_fallbacks": 0
+      }
+    }
+  },
+  "summaries": {
+    "paragraph_fixed": {
+      "run_id": "p1-chunking-v02-dev-20260812-paragraph_fixed",
+      "report_status": "candidate_not_human_verified",
+      "created_at": "2026-08-12T07:40:51.802308+00:00",
+      "dataset_version": "evalrag_v0.2-dev-derived-labels",
+      "split": "dev",
+      "case_count": 80,
+      "answerable_case_count": 60,
+      "category_counts": {
+        "single_source": 20,
+        "semantic_paraphrase": 20,
+        "multi_source": 20,
+        "unanswerable": 20
+      },
+      "category_metrics": {
+        "multi_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.1875,
+          "recall_at_5": 0.3208333333333333,
+          "mrr": 0.4725
+        },
+        "semantic_paraphrase": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.425,
+          "recall_at_5": 0.425,
+          "mrr": 0.7416666666666667
+        },
+        "single_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.8,
+          "recall_at_5": 0.85,
+          "mrr": 0.7041666666666667
+        },
+        "unanswerable": {
+          "case_count": 20,
+          "answerable_case_count": 0,
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        }
+      },
+      "failure_counts": {
+        "router_wrong": 7,
+        "retrieval_incomplete": 43
+      },
+      "metrics": {
+        "router_accuracy": 0.9125,
+        "recall_at_3": 0.4708333333333333,
+        "recall_at_5": 0.5319444444444444,
+        "mrr": 0.6394444444444445
+      },
+      "latency_ms": {
+        "retrieval": {
+          "count": 80,
+          "p50": 108.20009745657444,
+          "p95": 402.1738041192293
+        },
+        "routing": {
+          "count": 80,
+          "p50": 0.0273166224360466,
+          "p95": 0.04517752677202225
+        },
+        "total": {
+          "count": 80,
+          "p50": 108.2480838522315,
+          "p95": 488.8741187751293
+        }
+      },
+      "metric_scope": {
+        "router_accuracy": "all selected cases",
+        "recall_at_3": "answerable cases with relevant ids",
+        "recall_at_5": "answerable cases with relevant ids",
+        "mrr": "answerable cases with relevant ids"
+      },
+      "metric_formulas": {
+        "router_accuracy": "strict intent and source-set matches / all selected cases",
+        "recall_at_k": "|top-k retrieved ids intersect relevant ids| / |relevant ids|, macro average",
+        "mrr": "macro average of 1 / first relevant rank",
+        "latency_percentile": "nearest-rank percentile"
+      },
+      "runtime_environment": {
+        "python": "3.11.7",
+        "platform": "Linux-4.18.0-372.32.1.el8_6.x86_64-x86_64-with-glibc2.28",
+        "latency_mode": "single process; exported chunks preloaded"
+      },
+      "limitations": [
+        "Retrieval metrics do not measure final answer correctness.",
+        "Candidate runs use labels pending human review and cannot be reported as formal evaluation."
+      ]
+    },
+    "sentence_boundary": {
+      "run_id": "p1-chunking-v02-dev-20260812-sentence_boundary",
+      "report_status": "candidate_not_human_verified",
+      "created_at": "2026-08-12T07:41:24.601769+00:00",
+      "dataset_version": "evalrag_v0.2-dev-derived-labels",
+      "split": "dev",
+      "case_count": 80,
+      "answerable_case_count": 60,
+      "category_counts": {
+        "single_source": 20,
+        "semantic_paraphrase": 20,
+        "multi_source": 20,
+        "unanswerable": 20
+      },
+      "category_metrics": {
+        "multi_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.125,
+          "recall_at_5": 0.225,
+          "mrr": 0.31666666666666665
+        },
+        "semantic_paraphrase": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.375,
+          "recall_at_5": 0.425,
+          "mrr": 0.6416666666666667
+        },
+        "single_source": {
+          "case_count": 20,
+          "answerable_case_count": 20,
+          "recall_at_3": 0.85,
+          "recall_at_5": 0.9,
+          "mrr": 0.7541666666666667
+        },
+        "unanswerable": {
+          "case_count": 20,
+          "answerable_case_count": 0,
+          "recall_at_3": 0.0,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        }
+      },
+      "failure_counts": {
+        "router_wrong": 7,
+        "retrieval_incomplete": 42
+      },
+      "metrics": {
+        "router_accuracy": 0.9125,
+        "recall_at_3": 0.45,
+        "recall_at_5": 0.5166666666666667,
+        "mrr": 0.5708333333333333
+      },
+      "latency_ms": {
+        "retrieval": {
+          "count": 80,
+          "p50": 192.6685580983758,
+          "p95": 693.3141127228737
+        },
+        "routing": {
+          "count": 80,
+          "p50": 0.02772640436887741,
+          "p95": 0.03726314753293991
+        },
+        "total": {
+          "count": 80,
+          "p50": 193.99601873010397,
+          "p95": 693.3620572090149
+        }
+      },
+      "metric_scope": {
+        "router_accuracy": "all selected cases",
+        "recall_at_3": "answerable cases with relevant ids",
+        "recall_at_5": "answerable cases with relevant ids",
+        "mrr": "answerable cases with relevant ids"
+      },
+      "metric_formulas": {
+        "router_accuracy": "strict intent and source-set matches / all selected cases",
+        "recall_at_k": "|top-k retrieved ids intersect relevant ids| / |relevant ids|, macro average",
+        "mrr": "macro average of 1 / first relevant rank",
+        "latency_percentile": "nearest-rank percentile"
+      },
+      "runtime_environment": {
+        "python": "3.11.7",
+        "platform": "Linux-4.18.0-372.32.1.el8_6.x86_64-x86_64-with-glibc2.28",
+        "latency_mode": "single process; exported chunks preloaded"
+      },
+      "limitations": [
+        "Retrieval metrics do not measure final answer correctness.",
+        "Candidate runs use labels pending human review and cannot be reported as formal evaluation."
+      ]
+    }
+  },
+  "case_differences": [
+    {
+      "case_id": "v02_single_009",
+      "category": "single_source",
+      "query": "简历匹配时，我在请求追踪方面有哪些项目经历？",
+      "paragraph_fixed": {
+        "router_correct": true,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "reciprocal_rank": 0.0
+      },
+      "sentence_boundary": {
+        "router_correct": true,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "case_id": "v02_semantic_009",
+      "category": "semantic_paraphrase",
+      "query": "简历优势：怎样用统一接口切换推理后端，并避免供应商响应格式不同？",
+      "paragraph_fixed": {
+        "router_correct": true,
+        "recall_at_3": 0.5,
+        "recall_at_5": 0.5,
+        "reciprocal_rank": 1.0
+      },
+      "sentence_boundary": {
+        "router_correct": true,
+        "recall_at_3": 0.5,
+        "recall_at_5": 0.5,
+        "reciprocal_rank": 0.5
+      }
+    },
+    {
+      "case_id": "v02_semantic_010",
+      "category": "semantic_paraphrase",
+      "query": "简历优势：怎样生成前判断材料是否足够，并避免证据不足仍强行回答？",
+      "paragraph_fixed": {
+        "router_correct": true,
+        "recall_at_3": 0.5,
+        "recall_at_5": 0.5,
+        "reciprocal_rank": 0.3333333333333333
+      },
+      "sentence_boundary": {
+        "router_correct": true,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.5,
+        "reciprocal_rank": 0.25
+      }
+    },
+    {
+      "case_id": "v02_semantic_017",
+      "category": "semantic_paraphrase",
+      "query": "面试怎么回答：怎样统一接收手工、CSV 和 JSON 岗位，并避免平台字段不一致？",
+      "paragraph_fixed": {
+        "router_correct": true,
+        "recall_at_3": 0.5,
+        "recall_at_5": 0.5,
+        "reciprocal_rank": 1.0
+      },
+      "sentence_boundary": {
+        "router_correct": true,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.5,
+        "reciprocal_rank": 0.25
+      }
+    },
+    {
+      "case_id": "v02_semantic_020",
+      "category": "semantic_paraphrase",
+      "query": "项目怎么讲：怎样让智能体可靠执行外部操作，并避免参数错误产生副作用？",
+      "paragraph_fixed": {
+        "router_correct": true,
+        "recall_at_3": 0.5,
+        "recall_at_5": 0.5,
+        "reciprocal_rank": 1.0
+      },
+      "sentence_boundary": {
+        "router_correct": true,
+        "recall_at_3": 0.5,
+        "recall_at_5": 0.5,
+        "reciprocal_rank": 0.3333333333333333
+      }
+    },
+    {
+      "case_id": "v02_multi_001",
+      "category": "multi_source",
+      "query": "结合岗位和简历分析混合检索匹配度",
+      "paragraph_fixed": {
+        "router_correct": true,
+        "recall_at_3": 0.25,
+        "recall_at_5": 0.5,
+        "reciprocal_rank": 0.3333333333333333
+      },
+      "sentence_boundary": {
+        "router_correct": true,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "reciprocal_rank": 0.0
+      }
+    },
+    {
+      "case_id": "v02_multi_002",
+      "category": "multi_source",
+      "query": "结合岗位、简历和面试资料准备混合检索追问",
+      "paragraph_fixed": {
+        "router_correct": true,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.3333333333333333,
+        "reciprocal_rank": 0.25
+      },
+      "sentence_boundary": {
+        "router_correct": true,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "reciprocal_rank": 0.0
+      }
+    },
+    {
+      "case_id": "v02_multi_003",
+      "category": "multi_source",
+      "query": "结合项目日志和简历说明混合检索亮点",
+      "paragraph_fixed": {
+        "router_correct": true,
+        "recall_at_3": 0.25,
+        "recall_at_5": 0.5,
+        "reciprocal_rank": 0.5
+      },
+      "sentence_boundary": {
+        "router_correct": true,
+        "recall_at_3": 0.25,
+        "recall_at_5": 0.5,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "case_id": "v02_multi_004",
+      "category": "multi_source",
+      "query": "结合用户画像、岗位和简历制定混合检索投递计划",
+      "paragraph_fixed": {
+        "router_correct": true,
+        "recall_at_3": 0.16666666666666666,
+        "recall_at_5": 0.16666666666666666,
+        "reciprocal_rank": 0.3333333333333333
+      },
+      "sentence_boundary": {
+        "router_correct": true,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.16666666666666666,
+        "reciprocal_rank": 0.25
+      }
+    },
+    {
+      "case_id": "v02_multi_005",
+      "category": "multi_source",
+      "query": "面试时如何结合岗位和个人经历回答混合检索问题",
+      "paragraph_fixed": {
+        "router_correct": false,
+        "recall_at_3": 0.3333333333333333,
+        "recall_at_5": 0.3333333333333333,
+        "reciprocal_rank": 1.0
+      },
+      "sentence_boundary": {
+        "router_correct": false,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "reciprocal_rank": 0.0
+      }
+    }
+  ]
+}

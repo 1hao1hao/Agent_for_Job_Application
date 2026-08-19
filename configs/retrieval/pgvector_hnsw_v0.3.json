@@ -1,0 +1,7 @@
+{
+  "retriever_name": "pgvector_dense",
+  "dataset_version": "evalrag_v0.3",
+  "top_k": 5,
+  "index_dir": "data/processed/indexes/evalrag_v0.3/bge-small-zh-v1.5",
+  "pgvector_table": "rag_chunk_embeddings"
+}

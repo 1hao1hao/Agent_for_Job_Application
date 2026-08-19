@@ -1,6 +1,7 @@
 """Data ingestion helpers for turning local files into chunks."""
 
 from intern_rag.ingestion.chunking import (
+    ChunkingStrategy,
     build_document_from_file,
     build_chunks_from_file,
     infer_source_type,
@@ -26,6 +27,7 @@ from intern_rag.ingestion.job_importer import (
 
 __all__ = [
     "Chunk",
+    "ChunkingStrategy",
     "Document",
     "DocumentMetadata",
     "JobPosting",

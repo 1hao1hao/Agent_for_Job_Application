@@ -5,10 +5,10 @@ import os
 from pathlib import Path
 import re
 
-from intern_rag.agent import PipelineConfig, RagPipeline
+from intern_rag.agent import ContextEngine, ContextInputs, PipelineConfig, RagPipeline
 from intern_rag.agent.generation import DeepSeekChatClient
 from intern_rag.evaluation import load_chunks_jsonl
-from intern_rag.persistence import PostgresRepository
+from intern_rag.persistence import PostgresRepository, RedisRecentHistoryCache, SessionMemoryService
 from intern_rag.retrieval import (
     build_bm25_index,
     build_retriever_from_config,
@@ -19,6 +19,7 @@ from intern_rag.routing import route_query
 from intern_rag.serving.api import AppServices, create_app
 from intern_rag.serving.service import PipelineQueryService
 from intern_rag.worker import RedisJobQueue
+from intern_rag.runtime import AgentRuntime, JsonlSpanSink, PipelineRuntimeExecutor
 
 
 class DeterministicDemoLlmClient:
@@ -56,6 +57,24 @@ def create_runtime_app():
     repository = PostgresRepository(database_url, project_root / "migrations")
     repository.initialize()
     queue = RedisJobQueue(redis_url)
+    memory_service = SessionMemoryService(
+        repository,
+        RedisRecentHistoryCache(redis_url),
+    )
+
+    def context_provider(request):
+        """按 RagRequest 的 user/session scope 获取 Context；无会话时返回空输入。"""
+
+        if request.user_id is None or request.session_id is None:
+            return ContextInputs()
+        value = memory_service.load_context(request.user_id, request.session_id)
+        return ContextInputs(
+            profile=value.profile,
+            history=value.messages,
+            memories=value.memories,
+            history_summary=value.summary,
+            history_source=value.history_source,
+        )
 
     dataset_version = os.environ.get("EVALRAG_DATASET_VERSION", "evalrag_v0.2")
     chunks = load_chunks_jsonl(
@@ -91,15 +110,28 @@ def create_runtime_app():
         PipelineConfig(
             model=os.environ.get("EVALRAG_MODEL", "deterministic-demo"),
             router_name="rule",
+            context_strategy=os.environ.get(
+                "EVALRAG_CONTEXT_STRATEGY", "source_balanced"
+            ),
+            context_token_budget=int(os.environ.get("EVALRAG_CONTEXT_TOKEN_BUDGET", "1800")),
+            context_mode=os.environ.get("EVALRAG_CONTEXT_MODE", "recent_window"),  # type: ignore[arg-type]
         ),
         trace_path=trace_path,
         router=route_query,
         retriever=retrieve_top_k,
         retrievers={"keyword": retrieve_top_k, "bm25": bm25},
         trace_sink=repository.save_trace,
+        context_engine=ContextEngine(),
+        context_provider=context_provider,
+    )
+    agent_runtime = AgentRuntime(
+        PipelineRuntimeExecutor(pipeline),
+        span_sinks=(JsonlSpanSink(Path("traces/service/runtime_spans.jsonl")),),
     )
     services = AppServices(
-        query_service=PipelineQueryService(pipeline, repository),
+        query_service=PipelineQueryService(
+            pipeline, repository, memory_service, runtime=agent_runtime
+        ),
         repository=repository,
         queue=queue,
         query_timeout_seconds=float(os.environ.get("QUERY_TIMEOUT_SECONDS", "90")),

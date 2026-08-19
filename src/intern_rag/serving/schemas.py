@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from intern_rag.agent.schemas import RagResponse
-from intern_rag.persistence import EvaluationJob
+from intern_rag.agent.context_engine import ProfileFact, UserProfile
+from intern_rag.persistence import EvaluationJob, SessionRecord
 
 
 class RagRequestBody(BaseModel):
@@ -19,6 +20,8 @@ class RagRequestBody(BaseModel):
     retriever: Literal[
         "keyword", "bm25", "dense", "hybrid", "bm25_hybrid"
     ] = "bm25"
+    user_id: str | None = Field(default=None, min_length=1, max_length=100)
+    session_id: str | None = Field(default=None, min_length=1, max_length=100)
 
     @field_validator("query")
     @classmethod
@@ -29,6 +32,12 @@ class RagRequestBody(BaseModel):
         if not normalized:
             raise ValueError("query must not be empty")
         return normalized
+
+    @model_validator(mode="after")
+    def validate_session_pair(self):
+        if (self.user_id is None) != (self.session_id is None):
+            raise ValueError("user_id and session_id must be provided together")
+        return self
 
 
 class CitationBody(BaseModel):
@@ -104,3 +113,58 @@ class ErrorBody(BaseModel):
     message: str
     request_id: str | None = None
     trace_id: str | None = None
+
+
+class SessionCreateBody(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    title: str = Field(default="", max_length=200)
+
+
+class SessionBody(BaseModel):
+    session_id: str
+    user_id: str
+    title: str
+    created_at: str
+    updated_at: str
+
+    @classmethod
+    def from_domain(cls, session: SessionRecord) -> "SessionBody":
+        return cls(**session.__dict__)
+
+
+class ProfileFactBody(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    key: str = Field(min_length=1, max_length=100)
+    value: str = Field(min_length=1, max_length=2000)
+    source: str = Field(min_length=1, max_length=200)
+    confirmed: bool = True
+
+
+class ProfileUpdateBody(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    facts: list[ProfileFactBody]
+    expected_version: int | None = Field(default=None, ge=0)
+
+
+class ProfileBody(BaseModel):
+    user_id: str
+    facts: list[ProfileFactBody]
+    version: int
+    updated_at: str
+
+    @classmethod
+    def from_domain(cls, profile: UserProfile) -> "ProfileBody":
+        return cls(
+            user_id=profile.user_id,
+            facts=[ProfileFactBody(**fact.__dict__) for fact in profile.facts],
+            version=profile.version,
+            updated_at=profile.updated_at,
+        )
+
+    def to_domain(self) -> UserProfile:
+        return UserProfile(
+            user_id=self.user_id,
+            facts=tuple(ProfileFact(**fact.model_dump()) for fact in self.facts),
+            version=self.version,
+            updated_at=self.updated_at,
+        )

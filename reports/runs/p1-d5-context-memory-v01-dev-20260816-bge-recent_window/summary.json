@@ -1,0 +1,23 @@
+{
+  "strategy": "recent_window",
+  "config": {
+    "token_budget": 220,
+    "recent_message_count": 2,
+    "evidence_char_budget": 4000,
+    "mode": "recent_window",
+    "evidence_strategy": "source_balanced",
+    "compress_evidence": false,
+    "reserved_token_count": 0
+  },
+  "follow_up_success": 0.36666666666666664,
+  "citation_validity": 1.0,
+  "semantic_key_point_coverage": 0.2830188679245283,
+  "grounding": 0.36666666666666664,
+  "mean_repeated_history_reads": 3.0,
+  "mean_prompt_tokens": 67.18333333333334,
+  "mean_compression_ratio": 0.0,
+  "latency_ms": {
+    "p50": 0.08808355778455734,
+    "p95": 0.13384968042373657
+  }
+}

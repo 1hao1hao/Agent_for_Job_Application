@@ -1,0 +1,13 @@
+{
+  "benchmark": "p1-d7-model-gateway-fault-matrix-v0.1",
+  "provider_type": "deterministic fake; no network",
+  "case_count": 6,
+  "success_rate": 0.8333333333333334,
+  "fallback_rate": 0.5,
+  "latency_ms": {
+    "p50": 2.394009381532669,
+    "p95": 3.5300562158226967
+  },
+  "estimated_cost_usd": 0.0011250000000000001,
+  "boundary": "固定故障注入结果，不代表真实 Provider 可用率或线上 SLO。"
+}

@@ -1,0 +1,11 @@
+{
+  "retriever_name": "bm25_hybrid",
+  "dataset_version": "evalrag_v0.3",
+  "top_k": 5,
+  "bm25_index_path": "data/processed/indexes/evalrag_v0.3/bm25-v1/index.json",
+  "k1": 1.5,
+  "b": 0.75,
+  "index_dir": "data/processed/indexes/evalrag_v0.3/bge-small-zh-v1.5",
+  "rrf_k": 60,
+  "candidate_multiplier": 4
+}

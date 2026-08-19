@@ -150,6 +150,41 @@ class IngestionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             split_text("hello", max_chars=0)
 
+    def test_sentence_boundary_merges_short_sentences_before_cutting(self) -> None:
+        text = "第一句很短。第二句也不长。第三句提供完整的检索与评测说明。最后一句收尾。"
+
+        chunks = split_text(
+            text,
+            max_chars=24,
+            strategy="sentence_boundary",
+            min_chunk_ratio=0.5,
+        )
+
+        self.assertGreater(len(chunks), 1)
+        self.assertTrue(all(len(chunk) <= 24 for chunk in chunks))
+        self.assertEqual("".join(chunks), text)
+        self.assertGreater(len(chunks[0]), len("第一句很短。"))
+        self.assertTrue(chunks[0].endswith("。"))
+
+    def test_sentence_boundary_uses_fixed_fallback_without_punctuation(self) -> None:
+        text = "没有任何句末标点的连续文本" * 5
+
+        chunks = split_text(
+            text,
+            max_chars=20,
+            strategy="sentence_boundary",
+            min_chunk_ratio=0.5,
+        )
+
+        self.assertTrue(all(10 <= len(chunk) <= 20 for chunk in chunks))
+        self.assertEqual("".join(chunks), text)
+
+    def test_split_text_rejects_invalid_strategy_and_ratio(self) -> None:
+        with self.assertRaises(ValueError):
+            split_text("hello", strategy="unknown")  # type: ignore[arg-type]
+        with self.assertRaises(ValueError):
+            split_text("hello", min_chunk_ratio=0)
+
 
 if __name__ == "__main__":
     unittest.main()

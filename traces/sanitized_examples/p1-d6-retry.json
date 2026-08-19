@@ -1,0 +1,221 @@
+{
+  "run_context": {
+    "run_id": "p1-d6-retry",
+    "entrypoint": "cli",
+    "config_fingerprint": "df4800df3856b16ca16ca6eb4a4775edb897a4b6334ba977939164a4a471ab34",
+    "dataset_version": "sanitized-fixture-v0.1",
+    "model_version": "fake-v1"
+  },
+  "response": {
+    "status": "answered",
+    "citation_ids": [
+      "chunk-demo"
+    ],
+    "error_type": null
+  },
+  "spans": [
+    {
+      "span_id": "d8ce8fa8-0f22-49a2-a968-8b9873afcdbc",
+      "run_id": "p1-d6-retry",
+      "name": "agent.run",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.686427+00:00",
+      "ended_at": "2026-08-16T10:59:13.686427+00:00",
+      "latency_ms": 0.020007602870464325,
+      "parent_span_id": null,
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-retry"
+      },
+      "output_refs": {
+        "trace_id": "trace-retry"
+      },
+      "attributes": {
+        "entrypoint": "cli",
+        "config_fingerprint": "df4800df3856b16ca16ca6eb4a4775edb897a4b6334ba977939164a4a471ab34",
+        "dataset_version": "sanitized-fixture-v0.1",
+        "model_version": "fake-v1",
+        "prompt_version": "runtime-v1",
+        "index_version": "fixture-v1",
+        "response_status": "answered"
+      },
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "307fea48-41d1-49cd-a94f-96a3a09fc268",
+      "run_id": "p1-d6-retry",
+      "name": "routing",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.686427+00:00",
+      "ended_at": "2026-08-16T10:59:13.686427+00:00",
+      "latency_ms": 0.1,
+      "parent_span_id": "d8ce8fa8-0f22-49a2-a968-8b9873afcdbc",
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-retry"
+      },
+      "output_refs": {},
+      "attributes": {},
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "d91a7fdd-80bb-4cac-a2fd-5f4c358e088d",
+      "run_id": "p1-d6-retry",
+      "name": "retrieval",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.686427+00:00",
+      "ended_at": "2026-08-16T10:59:13.686427+00:00",
+      "latency_ms": 1.0,
+      "parent_span_id": "d8ce8fa8-0f22-49a2-a968-8b9873afcdbc",
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-retry"
+      },
+      "output_refs": {},
+      "attributes": {},
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "9b494673-e866-4510-ba87-afd91571c854",
+      "run_id": "p1-d6-retry",
+      "name": "evidence",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.686427+00:00",
+      "ended_at": "2026-08-16T10:59:13.686427+00:00",
+      "latency_ms": 0.1,
+      "parent_span_id": "d8ce8fa8-0f22-49a2-a968-8b9873afcdbc",
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-retry"
+      },
+      "output_refs": {},
+      "attributes": {},
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "3b252a49-65e6-4c9f-83f8-ec84ad037009",
+      "run_id": "p1-d6-retry",
+      "name": "context",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.686427+00:00",
+      "ended_at": "2026-08-16T10:59:13.686427+00:00",
+      "latency_ms": 0.1,
+      "parent_span_id": "d8ce8fa8-0f22-49a2-a968-8b9873afcdbc",
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-retry"
+      },
+      "output_refs": {},
+      "attributes": {},
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "20a6b796-ccf3-465e-bbec-301a4f9f60a5",
+      "run_id": "p1-d6-retry",
+      "name": "generation",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.686427+00:00",
+      "ended_at": "2026-08-16T10:59:13.686427+00:00",
+      "latency_ms": 2.0,
+      "parent_span_id": "d8ce8fa8-0f22-49a2-a968-8b9873afcdbc",
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-retry"
+      },
+      "output_refs": {},
+      "attributes": {
+        "token_usage": {
+          "input_tokens": 20,
+          "output_tokens": 8
+        }
+      },
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "90358202-8f48-40e2-b9ad-314c85c05256",
+      "run_id": "p1-d6-retry",
+      "name": "validation",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.686427+00:00",
+      "ended_at": "2026-08-16T10:59:13.686427+00:00",
+      "latency_ms": 0.1,
+      "parent_span_id": "d8ce8fa8-0f22-49a2-a968-8b9873afcdbc",
+      "attempt": 1,
+      "input_refs": {
+        "request_id": "request-retry"
+      },
+      "output_refs": {},
+      "attributes": {},
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "a8e92126-9759-4b7f-b2cb-5471cf8a3cbc",
+      "run_id": "p1-d6-retry",
+      "name": "attempt.retrieval",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.686427+00:00",
+      "ended_at": "2026-08-16T10:59:13.686427+00:00",
+      "latency_ms": 0,
+      "parent_span_id": "d8ce8fa8-0f22-49a2-a968-8b9873afcdbc",
+      "attempt": 1,
+      "input_refs": {},
+      "output_refs": {},
+      "attributes": {
+        "attempt": 1,
+        "type": "retrieval",
+        "status": "retry",
+        "reason": "missing_required_sources"
+      },
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "088c602b-1cf7-4c44-aa6a-9ce4174a9e66",
+      "run_id": "p1-d6-retry",
+      "name": "attempt.source_retry",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.686427+00:00",
+      "ended_at": "2026-08-16T10:59:13.686427+00:00",
+      "latency_ms": 0,
+      "parent_span_id": "d8ce8fa8-0f22-49a2-a968-8b9873afcdbc",
+      "attempt": 2,
+      "input_refs": {},
+      "output_refs": {},
+      "attributes": {
+        "attempt": 2,
+        "type": "source_retry",
+        "status": "succeeded",
+        "reason": "broaden_sources"
+      },
+      "error_type": null,
+      "error_message": ""
+    },
+    {
+      "span_id": "60fbc6ce-7f57-48b5-acc9-8c363bad8c81",
+      "run_id": "p1-d6-retry",
+      "name": "attempt.generation",
+      "status": "succeeded",
+      "started_at": "2026-08-16T10:59:13.686427+00:00",
+      "ended_at": "2026-08-16T10:59:13.686427+00:00",
+      "latency_ms": 0,
+      "parent_span_id": "d8ce8fa8-0f22-49a2-a968-8b9873afcdbc",
+      "attempt": 3,
+      "input_refs": {},
+      "output_refs": {},
+      "attributes": {
+        "attempt": 3,
+        "type": "generation",
+        "status": "succeeded"
+      },
+      "error_type": null,
+      "error_message": ""
+    }
+  ]
+}

@@ -1,6 +1,13 @@
 """统一检索接口及 Keyword、Dense、Hybrid 实现。"""
 
 from intern_rag.retrieval.base import RetrievalResult, Retriever
+from intern_rag.retrieval.adaptive import (
+    AdaptiveRetriever,
+    AdaptiveRetrieverConfig,
+    QueryAnalyzer,
+    QueryFeatures,
+    RetrievalDecision,
+)
 from intern_rag.retrieval.bm25 import (
     BM25Index,
     BM25Retriever,
@@ -22,12 +29,22 @@ from intern_rag.retrieval.dense import (
     save_dense_index,
 )
 from intern_rag.retrieval.hybrid import HybridRetriever
+from intern_rag.retrieval.graph import (
+    GraphRetriever,
+    GraphRetrievalTrace,
+    GraphVectorRetriever,
+)
 from intern_rag.retrieval.rerank import (
     CrossEncoderRerankScorer,
     ChineseTokenOverlapScorer,
     FakeRerankScorer,
     RerankRetriever,
     RerankScorer,
+)
+from intern_rag.retrieval.pgvector import (
+    PgVectorIndexConfig,
+    PgVectorIndexRepository,
+    PgVectorRetriever,
 )
 from intern_rag.retrieval.factory import build_retriever_from_config
 
@@ -40,6 +57,11 @@ from intern_rag.retrieval.keyword import (
 __all__ = [
     "RetrievalResult",
     "Retriever",
+    "AdaptiveRetriever",
+    "AdaptiveRetrieverConfig",
+    "QueryAnalyzer",
+    "QueryFeatures",
+    "RetrievalDecision",
     "BM25Index",
     "BM25Retriever",
     "build_bm25_index",
@@ -53,11 +75,17 @@ __all__ = [
     "SklearnLsaEmbedder",
     "SentenceTransformerEmbedder",
     "HybridRetriever",
+    "GraphRetriever",
+    "GraphRetrievalTrace",
+    "GraphVectorRetriever",
     "CrossEncoderRerankScorer",
     "ChineseTokenOverlapScorer",
     "FakeRerankScorer",
     "RerankRetriever",
     "RerankScorer",
+    "PgVectorIndexConfig",
+    "PgVectorIndexRepository",
+    "PgVectorRetriever",
     "build_dense_index",
     "build_pretrained_dense_index",
     "load_dense_index",

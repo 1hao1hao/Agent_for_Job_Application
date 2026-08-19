@@ -1,0 +1,32 @@
+{
+  "run_id": "p1-d7-v03-frozen-20260816-live-e2e",
+  "dataset_version": "evalrag_v0.3",
+  "split": "test",
+  "case_count": 80,
+  "answered_count": 8,
+  "insufficient_count": 69,
+  "error_count": 3,
+  "citation_validity": 0.9625,
+  "lexical_key_point_coverage": 0.18333333333333332,
+  "abstention_accuracy": 1.0,
+  "answerable_success_without_grounding": 0.08333333333333333,
+  "overall_success_without_grounding": 0.3125,
+  "latency_ms": {
+    "p50": 500.15256088227034,
+    "p95": 3739.644519984722
+  },
+  "model_gateway": {
+    "call_count": 26,
+    "fallback_count": 0,
+    "tokens": {
+      "input_tokens": 35636,
+      "output_tokens": 3984,
+      "total_tokens": 39620
+    }
+  },
+  "limitations": [
+    "Key-Point Coverage is lexical in this frozen E2E run.",
+    "Claim-Level Grounding was not run, so Unsupported Answer Rate and full grounded E2E success are unavailable.",
+    "The same test predictions will not be regenerated for tuning."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "failure_id": "p1-d6-router-prototype-pollution",
+  "dataset_version": "evalrag_v0.2",
+  "split": "dev",
+  "case_count": 80,
+  "hypothesis": "把已确认误路由的完整 Query 追加到正确 intent prototype，可以修复三条失败。",
+  "single_changed_variable": "semantic prototypes derived from feedback",
+  "baseline_accuracy": 0.9625,
+  "failed_candidate_accuracy": 0.8875,
+  "improved_case_ids": ["v02_semantic_003", "v02_semantic_006", "v02_semantic_019"],
+  "regressed_case_ids": [
+    "v02_semantic_001",
+    "v02_semantic_007",
+    "v02_semantic_009",
+    "v02_semantic_011",
+    "v02_semantic_012",
+    "v02_semantic_013",
+    "v02_semantic_015",
+    "v02_semantic_017",
+    "v02_semantic_018"
+  ],
+  "root_cause": "不同意图 Query 复用了相同长主题正文，完整 Query prototype 把主题词错误绑定到单一 intent。",
+  "gate_result": "rejected; active version remained hybrid-v0.2",
+  "follow_up": "从审核反馈提取冒号前的短意图锚点，未命中锚点的 Query 委托原 Hybrid，并重跑完整 dev gate。"
+}

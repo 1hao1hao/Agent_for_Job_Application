@@ -3,7 +3,8 @@ from __future__ import annotations
 from typing import Protocol
 
 from intern_rag.agent.schemas import RagRequest, RagResponse
-from intern_rag.persistence.models import EvaluationJob, EvaluationRunRecord
+from intern_rag.agent.context_engine import ConversationMessage, MemoryItem, UserProfile
+from intern_rag.persistence.models import EvaluationJob, EvaluationRunRecord, SessionRecord
 from intern_rag.tracing import AgentTrace
 
 
@@ -58,3 +59,39 @@ class PersistenceRepository(Protocol):
 
     def save_run(self, run: EvaluationRunRecord) -> None:
         """保存 Run 配置、摘要和工件索引。"""
+
+    def create_session(self, user_id: str, title: str) -> SessionRecord:
+        """创建绑定用户的会话。"""
+
+    def get_session(self, user_id: str, session_id: str) -> SessionRecord | None:
+        """按用户作用域查询会话，禁止跨用户读取。"""
+
+    def append_message(self, message: ConversationMessage) -> None:
+        """保存一条会话消息。"""
+
+    def list_messages(self, user_id: str, session_id: str, limit: int = 50) -> list[ConversationMessage]:
+        """按时间顺序读取会话消息。"""
+
+    def save_summary(self, user_id: str, session_id: str, summary: str, version: int) -> None:
+        """保存历史摘要，不能修改 Profile。"""
+
+    def get_summary(self, user_id: str, session_id: str) -> str | None:
+        """读取最新摘要。"""
+
+    def upsert_profile(self, profile: UserProfile, expected_version: int | None) -> UserProfile:
+        """显式写入画像并执行乐观锁校验。"""
+
+    def get_profile(self, user_id: str) -> UserProfile | None:
+        """读取用户画像。"""
+
+    def save_memory(self, item: MemoryItem, embedding: list[float] | None = None) -> None:
+        """保存已确认长期记忆及可选向量。"""
+
+    def list_memories(self, user_id: str, limit: int = 20) -> list[MemoryItem]:
+        """只读取指定用户有效记忆。"""
+
+    def search_memories(self, user_id: str, query_embedding: list[float], top_k: int = 5) -> list[MemoryItem]:
+        """在用户作用域内执行 pgvector 语义记忆检索。"""
+
+    def delete_memory(self, user_id: str, memory_id: str) -> bool:
+        """软删除指定用户的记忆。"""

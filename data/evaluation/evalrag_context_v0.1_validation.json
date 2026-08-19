@@ -1,0 +1,23 @@
+{
+  "case_count": 60,
+  "turn_count": 300,
+  "split_counts": {
+    "dev": 60
+  },
+  "category_counts": {
+    "reference": 8,
+    "ellipsis": 8,
+    "history_constraint": 8,
+    "cross_session": 8,
+    "memory_conflict": 7,
+    "topic_switch": 7,
+    "multi_source": 7,
+    "unanswerable": 7
+  },
+  "review_method_counts": {
+    "scenario_authored_ai_assisted": 60
+  },
+  "human_reviewed_count": 0,
+  "errors": [],
+  "is_valid": true
+}

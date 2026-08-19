@@ -1,0 +1,86 @@
+{
+  "source_run": "reports/runs/p0-d5-v02-dev-20260804-hybrid-baseline/case_results.jsonl",
+  "scope": "answerable dev cases with correct Router prediction",
+  "comparisons": [
+    {
+      "strategy": "rank_prefix",
+      "budget": 800,
+      "case_count": 53,
+      "macro_relevant_recall": 0.6698113207547169,
+      "macro_source_coverage": 0.5691823899371069,
+      "full_source_coverage_rate": 0.24528301886792453,
+      "mean_used_chunks": 1.2830188679245282,
+      "mean_budget_utilization": 0.6583254716981132
+    },
+    {
+      "strategy": "source_balanced",
+      "budget": 800,
+      "case_count": 53,
+      "macro_relevant_recall": 0.6855345911949685,
+      "macro_source_coverage": 0.610062893081761,
+      "full_source_coverage_rate": 0.3018867924528302,
+      "mean_used_chunks": 1.3962264150943395,
+      "mean_budget_utilization": 0.7125
+    },
+    {
+      "strategy": "rank_prefix",
+      "budget": 1200,
+      "case_count": 53,
+      "macro_relevant_recall": 0.8018867924528302,
+      "macro_source_coverage": 0.6132075471698113,
+      "full_source_coverage_rate": 0.3018867924528302,
+      "mean_used_chunks": 2.30188679245283,
+      "mean_budget_utilization": 0.7889308176100629
+    },
+    {
+      "strategy": "source_balanced",
+      "budget": 1200,
+      "case_count": 53,
+      "macro_relevant_recall": 0.7924528301886793,
+      "macro_source_coverage": 0.7893081761006289,
+      "full_source_coverage_rate": 0.5471698113207547,
+      "mean_used_chunks": 2.358490566037736,
+      "mean_budget_utilization": 0.7999528301886792
+    },
+    {
+      "strategy": "rank_prefix",
+      "budget": 2000,
+      "case_count": 53,
+      "macro_relevant_recall": 0.9308176100628931,
+      "macro_source_coverage": 0.7075471698113207,
+      "full_source_coverage_rate": 0.4716981132075472,
+      "mean_used_chunks": 4.320754716981132,
+      "mean_budget_utilization": 0.8873962264150943
+    },
+    {
+      "strategy": "source_balanced",
+      "budget": 2000,
+      "case_count": 53,
+      "macro_relevant_recall": 0.9245283018867925,
+      "macro_source_coverage": 0.8081761006289309,
+      "full_source_coverage_rate": 0.6037735849056604,
+      "mean_used_chunks": 4.320754716981132,
+      "mean_budget_utilization": 0.885188679245283
+    },
+    {
+      "strategy": "rank_prefix",
+      "budget": 4000,
+      "case_count": 53,
+      "macro_relevant_recall": 0.9433962264150944,
+      "macro_source_coverage": 0.8081761006289309,
+      "full_source_coverage_rate": 0.6037735849056604,
+      "mean_used_chunks": 5.0,
+      "mean_budget_utilization": 0.5147877358490566
+    },
+    {
+      "strategy": "source_balanced",
+      "budget": 4000,
+      "case_count": 53,
+      "macro_relevant_recall": 0.9433962264150944,
+      "macro_source_coverage": 0.8081761006289309,
+      "full_source_coverage_rate": 0.6037735849056604,
+      "mean_used_chunks": 5.0,
+      "mean_budget_utilization": 0.5147877358490566
+    }
+  ]
+}

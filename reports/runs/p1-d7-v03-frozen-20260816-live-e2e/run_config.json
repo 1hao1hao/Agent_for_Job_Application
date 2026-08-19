@@ -1,0 +1,6 @@
+{
+  "release": "configs/final/p1_v0.3.json",
+  "retriever": "configs/retrieval/graph_adaptive_final_v0.3.json",
+  "router": "configs/routing/router_registry_v0.1.json",
+  "gateway": "configs/model_gateway/gateway_v0.1.json"
+}
