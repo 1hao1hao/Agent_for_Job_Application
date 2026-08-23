@@ -5,13 +5,25 @@ import os
 from pathlib import Path
 import re
 
-from intern_rag.agent import ContextEngine, ContextInputs, PipelineConfig, RagPipeline
+from intern_rag.agent import (
+    ContextEngine,
+    ContextInputs,
+    ContextSignalExtractor,
+    PipelineConfig,
+    RagPipeline,
+)
 from intern_rag.agent.generation import DeepSeekChatClient
 from intern_rag.evaluation import load_chunks_jsonl
-from intern_rag.persistence import PostgresRepository, RedisRecentHistoryCache, SessionMemoryService
+from intern_rag.persistence import (
+    DenseMemoryEmbeddingProvider,
+    PostgresRepository,
+    RedisRecentHistoryCache,
+    SessionMemoryService,
+)
 from intern_rag.retrieval import (
     build_bm25_index,
     build_retriever_from_config,
+    load_dense_index,
     retrieve_top_k,
     save_bm25_index,
 )
@@ -57,17 +69,35 @@ def create_runtime_app():
     repository = PostgresRepository(database_url, project_root / "migrations")
     repository.initialize()
     queue = RedisJobQueue(redis_url)
+    memory_embedding_model = None
+    memory_index_dir = Path(
+        os.environ.get(
+            "EVALRAG_MEMORY_INDEX_DIR",
+            str(
+                project_root
+                / "data/processed/indexes/evalrag_v0.3/bge-small-zh-v1.5"
+            ),
+        )
+    )
+    if memory_index_dir.exists():
+        _, memory_embedding_model = load_dense_index(memory_index_dir)
     memory_service = SessionMemoryService(
         repository,
         RedisRecentHistoryCache(redis_url),
+        DenseMemoryEmbeddingProvider(memory_embedding_model)
+        if memory_embedding_model is not None
+        else None,
     )
+    context_signal_extractor = ContextSignalExtractor(memory_embedding_model)
 
     def context_provider(request):
         """按 RagRequest 的 user/session scope 获取 Context；无会话时返回空输入。"""
 
         if request.user_id is None or request.session_id is None:
             return ContextInputs()
-        value = memory_service.load_context(request.user_id, request.session_id)
+        value = memory_service.load_context_for_query(
+            request.user_id, request.session_id, request.query
+        )
         return ContextInputs(
             profile=value.profile,
             history=value.messages,
@@ -114,15 +144,18 @@ def create_runtime_app():
                 "EVALRAG_CONTEXT_STRATEGY", "source_balanced"
             ),
             context_token_budget=int(os.environ.get("EVALRAG_CONTEXT_TOKEN_BUDGET", "1800")),
-            context_mode=os.environ.get("EVALRAG_CONTEXT_MODE", "recent_window"),  # type: ignore[arg-type]
+            context_mode=os.environ.get("EVALRAG_CONTEXT_MODE", "adaptive"),  # type: ignore[arg-type]
         ),
         trace_path=trace_path,
         router=route_query,
         retriever=retrieve_top_k,
         retrievers={"keyword": retrieve_top_k, "bm25": bm25},
         trace_sink=repository.save_trace,
-        context_engine=ContextEngine(),
+        context_engine=ContextEngine(
+            semantic_similarity=context_signal_extractor.similarities
+        ),
         context_provider=context_provider,
+        context_signal_extractor=context_signal_extractor,
     )
     agent_runtime = AgentRuntime(
         PipelineRuntimeExecutor(pipeline),

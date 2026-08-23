@@ -7,6 +7,8 @@ from intern_rag.agent import (
     ContextBudgetError,
     ContextEngine,
     ContextEngineConfig,
+    ContextPlan,
+    ContextSignals,
     ConversationMessage,
     MemoryItem,
     ProfileFact,
@@ -175,6 +177,32 @@ class ContextEngineTests(unittest.TestCase):
         self.assertIn("chunk_id: c1", context.text)
         self.assertIn("source_type: jd", context.text)
         self.assertIn("需要 Python", context.text)
+
+    def test_adaptive_plan_controls_layers_and_deduplicates_memory(self) -> None:
+        memory = MemoryItem(
+            "mem1", "u1", "preference", "候选人优先广州岗位", "chat", 0.9,
+            self.now.isoformat(), similarity=0.95,
+        )
+        context = ContextEngine().build(
+            query="这个城市的岗位呢？",
+            system_prompt="仅依据上下文回答。",
+            retrieved_results=[],
+            config=ContextEngineConfig(token_budget=120, mode="adaptive"),
+            history=self.history[-2:],
+            memories=(memory,),
+            history_summary="候选人优先广州岗位",
+            plan=ContextPlan(
+                use_summary=True, recent_history_count=2, memory_top_k=1
+            ),
+            signals=ContextSignals(0.3, 0.9, 0.8),
+        )
+
+        self.assertEqual(context.recalled_memory_ids, ("mem1",))
+        self.assertNotIn("history-summary", context.kept_ids)
+        self.assertTrue(any(
+            item["reason"] == "cross_layer_duplicate:mem1" for item in context.dropped
+        ))
+        self.assertEqual(context.context_plan.memory_top_k, 1)
 
 
 if __name__ == "__main__":

@@ -476,13 +476,14 @@ class PostgresRepository:
             rows = connection.execute(
                 """
                 SELECT memory_id,user_id,memory_type,content,source,importance,created_at,
-                       version,session_id,expires_at,confirmed,active
+                       version,session_id,expires_at,confirmed,active,
+                       1 - (embedding <=> %s::vector) AS similarity
                 FROM memory_items
                 WHERE user_id=%s AND active=true AND confirmed=true
                   AND embedding IS NOT NULL AND (expires_at IS NULL OR expires_at > now())
                 ORDER BY embedding <=> %s::vector, importance DESC, memory_id LIMIT %s
                 """,
-                (user_id, vector, top_k),
+                (vector, user_id, vector, top_k),
             ).fetchall()
         return [_memory_from_row(row) for row in rows]
 
@@ -549,4 +550,5 @@ def _memory_from_row(row: Any) -> MemoryItem:
         session_id=str(row[8]) if row[8] is not None else None,
         expires_at=row[9].isoformat() if row[9] is not None else None,
         confirmed=bool(row[10]), active=bool(row[11]),
+        similarity=max(0.0, min(float(row[12]), 1.0)) if len(row) > 12 else None,
     )

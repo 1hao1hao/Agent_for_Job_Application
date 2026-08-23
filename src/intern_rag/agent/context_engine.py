@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 import re
-from typing import Literal, Protocol, Sequence
+from typing import TYPE_CHECKING, Callable, Literal, Protocol, Sequence
 
 from intern_rag.agent.context import build_context
 from intern_rag.agent.schemas import BuiltContext
@@ -11,9 +11,13 @@ from intern_rag.retrieval import RetrievalResult
 
 
 ContextMode = Literal[
-    "no_memory", "full_history", "recent_window", "summary_recent", "semantic_memory"
+    "no_memory", "full_history", "recent_window", "summary_recent", "semantic_memory",
+    "adaptive",
 ]
 SegmentKind = Literal["system", "query", "profile", "history", "summary", "memory", "evidence"]
+
+if TYPE_CHECKING:
+    from intern_rag.agent.context_policy import ContextPlan, ContextSignals
 
 
 class TokenEstimator(Protocol):
@@ -102,6 +106,7 @@ class MemoryItem:
     expires_at: str | None = None
     confirmed: bool = True
     active: bool = True
+    similarity: float | None = None
 
     def __post_init__(self) -> None:
         if not self.memory_id.strip() or not self.user_id.strip() or not self.content.strip():
@@ -110,6 +115,8 @@ class MemoryItem:
             raise ValueError("memory importance must be between 0 and 1")
         if self.version <= 0:
             raise ValueError("memory version must be greater than 0")
+        if self.similarity is not None and not 0.0 <= self.similarity <= 1.0:
+            raise ValueError("memory similarity must be between 0 and 1")
 
     @property
     def is_available(self) -> bool:
@@ -154,6 +161,8 @@ class ManagedContext:
     dropped: tuple[dict[str, str], ...]
     recalled_memory_ids: tuple[str, ...]
     compression_fallbacks: tuple[str, ...] = ()
+    context_signals: "ContextSignals | None" = None
+    context_plan: "ContextPlan | None" = None
 
     def as_built_context(self) -> BuiltContext:
         """复用 Citation Validator 所需的 BuiltContext 证据字段。"""
@@ -190,7 +199,8 @@ class ContextEngineConfig:
         if self.reserved_token_count < 0 or self.reserved_token_count >= self.token_budget:
             raise ValueError("reserved token count must be within the total token budget")
         if self.mode not in {
-            "no_memory", "full_history", "recent_window", "summary_recent", "semantic_memory"
+            "no_memory", "full_history", "recent_window", "summary_recent", "semantic_memory",
+            "adaptive",
         }:
             raise ValueError("unknown context mode")
         if self.evidence_strategy not in {"rank_prefix", "source_balanced"}:
@@ -226,10 +236,14 @@ class ContextEngine:
         *,
         summarizer: TextSummarizer | None = None,
         evidence_compressor: EvidenceCompressor | None = None,
+        semantic_similarity: Callable[[str, Sequence[str]], list[float]] | None = None,
+        deduplication_threshold: float = 0.92,
     ) -> None:
         self.estimator = estimator or MixedTokenEstimator()
         self.summarizer = summarizer
         self.evidence_compressor = evidence_compressor
+        self.semantic_similarity = semantic_similarity
+        self.deduplication_threshold = deduplication_threshold
 
     def build(
         self,
@@ -243,8 +257,19 @@ class ContextEngine:
         history: Sequence[ConversationMessage] = (),
         memories: Sequence[MemoryItem] = (),
         history_summary: str | None = None,
+        plan: "ContextPlan | None" = None,
+        signals: "ContextSignals | None" = None,
     ) -> ManagedContext:
-        """构造完整上下文并记录每个保留、裁剪和压缩回退决定。"""
+        """按固定 baseline mode 或自适应 ContextPlan 构造完整上下文。
+
+        输入包括当前 Query、分层记忆候选、RAG 检索证据、统一 token 预算和可选 Plan；
+        先由 Plan 决定启用层与数量，再对 Profile/Memory/Summary/History 跨层去重，
+        最后按优先级装入完整片段并编排 Evidence。预算不足只丢弃完整片段，不静默
+        截断事实。输出 ManagedContext，同时保留 signals/plan、kept/dropped 供 Trace。
+        """
+
+        if config.mode == "adaptive" and plan is None:
+            raise ValueError("adaptive context mode requires a ContextPlan")
 
         fixed = [
             self._segment("system", "system", system_prompt, 100, "required"),
@@ -258,25 +283,45 @@ class ContextEngine:
         candidates: list[ContextSegment] = []
         dropped: list[dict[str, str]] = []
         fallbacks: list[str] = []
-        if profile is not None:
+        if profile is not None and (plan is None or plan.use_profile):
             confirmed = [fact for fact in profile.facts if fact.confirmed]
             if confirmed:
                 text = "\n".join(f"{fact.key}: {fact.value}" for fact in confirmed)
                 candidates.append(self._segment("profile", f"profile:{profile.version}", text, 90, "confirmed_profile"))
 
         history_candidates = self._history_segments(
-            history, config, history_summary, dropped, fallbacks
+            history, config, history_summary, dropped, fallbacks, plan
         )
         candidates.extend(history_candidates)
         available_memories = sorted(
             (item for item in memories if item.is_available),
-            key=lambda item: (-item.importance, item.created_at, item.memory_id),
+            key=lambda item: (
+                -float(item.similarity or 0.0) * item.importance,
+                -item.importance,
+                item.created_at,
+                item.memory_id,
+            ),
         )
-        if config.mode == "semantic_memory":
+        memory_limit = (
+            plan.memory_top_k
+            if plan is not None
+            else (len(available_memories) if config.mode == "semantic_memory" else 0)
+        )
+        if memory_limit > 0:
             candidates.extend(
-                self._segment("memory", item.memory_id, item.content, 80, f"semantic_memory:{item.source}")
-                for item in available_memories
+                self._segment(
+                    "memory", item.memory_id, item.content, 80,
+                    f"semantic_memory:{item.source}:similarity={float(item.similarity or 0.0):.4f}",
+                )
+                for item in available_memories[:memory_limit]
             )
+
+        candidates = deduplicate_memory_layers(
+            candidates,
+            dropped,
+            similarity=self.semantic_similarity,
+            threshold=self.deduplication_threshold,
+        )
 
         evidence = build_context(
             query,
@@ -331,6 +376,8 @@ class ContextEngine:
                 item.segment_id for item in kept if item.kind == "memory"
             ),
             compression_fallbacks=tuple(fallbacks),
+            context_signals=signals,
+            context_plan=plan,
         )
 
     def _history_segments(
@@ -340,16 +387,23 @@ class ContextEngine:
         history_summary: str | None,
         dropped: list[dict[str, str]],
         fallbacks: list[str],
+        plan: "ContextPlan | None",
     ) -> list[ContextSegment]:
-        if config.mode in {"no_memory", "semantic_memory"}:
+        if plan is not None:
+            recent_count = plan.recent_history_count
+            recent = list(history[-recent_count:]) if recent_count else []
+            use_summary = plan.use_summary
+        elif config.mode in {"no_memory", "semantic_memory"}:
             return []
-        recent = (
-            list(history)
-            if config.mode == "full_history"
-            else list(history[-config.recent_message_count :])
-        )
+        else:
+            recent = (
+                list(history)
+                if config.mode == "full_history"
+                else list(history[-config.recent_message_count :])
+            )
+            use_summary = config.mode == "summary_recent"
         output: list[ContextSegment] = []
-        if config.mode == "summary_recent":
+        if use_summary:
             summary = history_summary
             if summary is None and self.summarizer is not None:
                 try:
@@ -362,14 +416,17 @@ class ContextEngine:
             output.append(
                 self._segment(
                     "history", message.message_id, f"{message.role}: {message.content}", 50,
-                    "full_history" if config.mode == "full_history" else "recent_window",
+                    "adaptive_recent" if plan is not None else (
+                        "full_history" if config.mode == "full_history" else "recent_window"
+                    ),
                 )
             )
         recent_ids = {item.message_id for item in recent}
         dropped.extend(
             {"segment_id": item.message_id, "reason": "outside_recent_window"}
             for item in history
-            if item.message_id not in recent_ids and config.mode == "recent_window"
+            if item.message_id not in recent_ids
+            and (plan is not None or config.mode == "recent_window")
         )
         return output
 
@@ -396,3 +453,46 @@ def _deduplicate_results(results: Sequence[RetrievalResult]) -> list[RetrievalRe
 
 def _format_segment(segment: ContextSegment) -> str:
     return f"[{segment.kind}:{segment.segment_id}]\n{segment.text}"
+
+
+def deduplicate_memory_layers(
+    segments: Sequence[ContextSegment],
+    dropped: list[dict[str, str]],
+    *,
+    similarity: Callable[[str, Sequence[str]], list[float]] | None = None,
+    threshold: float = 0.92,
+) -> list[ContextSegment]:
+    """在 Profile/Memory/Summary/History 之间去重并保留优先级更高的片段。
+
+    先按 priority 排序；规范化文本完全相同直接去重，配置 embedding 相似度函数时，
+    相似度超过阈值也视为重复。Evidence 不参与此处去重，避免删除 Citation 所需证据。
+    """
+
+    ordered = sorted(segments, key=lambda item: (-item.priority, item.segment_id))
+    kept: list[ContextSegment] = []
+    for segment in ordered:
+        if segment.kind == "evidence":
+            kept.append(segment)
+            continue
+        comparable = [item for item in kept if item.kind != "evidence"]
+        normalized = " ".join(segment.text.lower().split())
+        duplicate = next(
+            (
+                item for item in comparable
+                if " ".join(item.text.lower().split()) == normalized
+            ),
+            None,
+        )
+        if duplicate is None and similarity is not None and comparable:
+            scores = similarity(segment.text, [item.text for item in comparable])
+            best_index = max(range(len(scores)), key=scores.__getitem__)
+            if scores[best_index] >= threshold:
+                duplicate = comparable[best_index]
+        if duplicate is not None:
+            dropped.append({
+                "segment_id": segment.segment_id,
+                "reason": f"cross_layer_duplicate:{duplicate.segment_id}",
+            })
+            continue
+        kept.append(segment)
+    return kept

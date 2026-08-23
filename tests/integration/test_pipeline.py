@@ -6,6 +6,7 @@ import unittest
 from intern_rag.agent import (
     ContextEngine,
     ContextInputs,
+    ContextSignalExtractor,
     EvidenceConfig,
     FakeLlmClient,
     GatewayProvider,
@@ -228,6 +229,45 @@ class PipelineIntegrationTests(unittest.TestCase):
         self.assertEqual(trace.context["token_budget"], 600)
         self.assertIn("profile:1", trace.context["kept_segment_ids"])
         self.assertNotIn("广州", json.dumps(trace.context, ensure_ascii=False))
+
+    def test_adaptive_context_records_signals_and_plan_in_trace(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            trace_path = Path(temp_dir) / "adaptive.jsonl"
+            pipeline = RagPipeline(
+                chunks=_chunks(),
+                llm_client=FakeLlmClient([_raw_generation(
+                    answer="岗位要求 Python。",
+                    cited_chunk_ids=["jd-1"],
+                    sufficient=True,
+                    reason="证据充分",
+                )]),
+                config=PipelineConfig(
+                    model="fake-model", context_token_budget=600, context_mode="adaptive"
+                ),
+                trace_path=trace_path,
+                context_engine=ContextEngine(),
+                context_signal_extractor=ContextSignalExtractor(),
+                context_provider=lambda request: ContextInputs(
+                    profile=UserProfile(
+                        request.user_id or "u1",
+                        (ProfileFact("技能", "Python", "explicit"),),
+                        1,
+                        "2026-08-16T00:00:00+00:00",
+                    ),
+                    history_summary="用户正在分析岗位要求。",
+                ),
+            )
+
+            response = pipeline.run(RagRequest(
+                "分析岗位 Python 要求", user_id="u1", session_id="s1"
+            ))
+            trace = read_traces_jsonl(trace_path)[0]
+
+        self.assertEqual(response.status, "answered")
+        self.assertEqual(trace.context["mode"], "adaptive")
+        self.assertIn("context_policy", trace.context)
+        self.assertIn("context_plan", trace.context)
+        self.assertTrue(trace.context["context_plan"]["use_profile"])
 
     def test_request_can_select_configured_dense_retriever(self) -> None:
         def dense_retriever(query, chunks, top_k=5, source_types=None):

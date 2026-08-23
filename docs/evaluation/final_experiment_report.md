@@ -76,24 +76,31 @@ dev 上，Recall@3/Recall@5/MRR 分别从 80.83%/85.56%/83.19% 降至
 放得下，两种策略没有差异。P1 服务默认启用 Source Balanced，完整预算扫描见
 [Context Ablation](../../reports/ablations/p1-context-builder-v02-dev-20260811/report.md)。
 
-### Context Engine 与分层记忆消融
+### Adaptive Context Engine 与分层记忆消融
 
 `evalrag_context_v0.1/dev` 包含 60 组、每组 5 轮，共 300 turns，覆盖指代、省略、历史约束、
 跨会话记忆、冲突、主题切换、多来源和不可回答。四种策略运行相同 Case 和 220 token 预算：
 
-| Strategy | Follow-up | Semantic KPC | Grounding | Prompt tokens | Repeat reads | P95 ms |
+| Strategy | Follow-up | Semantic KPC | Prompt tokens | History Redundancy | Memory Recall | P95 ms |
 |---|---:|---:|---:|---:|---:|---:|
-| No memory | 36.67% | 28.30% | 36.67% | 38.18 | 0 | 0.101 |
-| Recent window | 36.67% | 28.30% | 36.67% | 67.18 | 3 | 0.134 |
-| Summary + recent | 100.00% | 100.00% | 100.00% | 76.62 | 3 | 0.145 |
-| Semantic memory | 100.00% | 100.00% | 100.00% | 66.22 | 0 | 296.933 |
+| Recent window | 36.67% | 28.30% | 67.18 | 42.86% | 0.00% | 1800.79 |
+| Summary + recent | 100.00% | 100.00% | 75.55 | 42.86% | 0.00% | 3903.68 |
+| Semantic memory | 100.00% | 100.00% | 65.38 | 0.00% | 84.91% | 3795.67 |
+| Adaptive policy | **100.00%** | **100.00%** | **60.68** | **0.00%** | 56.60% | 4108.42 |
 
-Semantic KPC 使用固定 `BAAI/bge-small-zh-v1.5` revision
+Adaptive 先以 History Token Pressure、指代/省略和 BGE 语义连续性、Memory
+`similarity * importance` 生成 ContextPlan，再由同一 ContextEngine 执行预算和跨层去重。
+相对质量同为 100% 的 Summary+Recent，平均 Prompt Token 降低 19.68%，History
+Redundancy 降低 100%。按需 Memory Recall 56.60% 低于 Semantic Memory 的 84.91%，
+说明减少 Memory 调用会牺牲部分“相关记忆进入 Context”的覆盖，但本组场景可由 Summary
+保留必要事实。Adaptive CPU P95 比 Summary+Recent 高 5.24%，来自每轮语义信号计算，
+因此该方案优化的是 Prompt 成本与重复度，并非延迟上的全面 Pareto 提升。
+
+Semantic KPC 与策略信号使用固定 `BAAI/bge-small-zh-v1.5` revision
 `7999e1d3359715c523056ef9478215996d62a620`。该实验由 Context Engine 产生确定性摘录，
 不调用 LLM，数据是 scenario-authored AI-assisted，因此 100% 只说明构造场景中的必要事实被保留，
-不能写作真实多轮问答准确率。Semantic Memory 从加入同用户干扰项的候选集合中执行真实 BGE
-top-k，质量保持的代价是 CPU P95 明显增加。逐 Case 裁剪和 15 个差异 Case 见
-[P1-D5 report](../../reports/ablations/p1-d5-context-memory-v01-dev-20260816-bge/report.md)。
+不能写作真实多轮问答准确率。逐 turn signals/plan、裁剪原因和 Case 结果见
+[Adaptive Context report](../../reports/ablations/p1-adaptive-context-v02-dev-20260823/report.md)。
 
 ### Corpus v0.3 与 Graph + Vector
 
@@ -328,16 +335,12 @@ Always Rerank 将 MRR 提高 4.91 pp，但 P95 增加 1546.76 ms；On-demand 只
 
 ### 9.4 Context Engine
 
-| Strategy | Follow-up | Key-point | Prompt Tokens | Token Reduction vs Raw | Repeat Reads | P95 ms |
-|---|---:|---:|---:|---:|---:|---:|
-| No memory | 36.67% | 28.30% | 38.18 | 31.50% | 0 | 0.101 |
-| Recent window | 36.67% | 28.30% | 67.18 | 0.00% | 3 | 0.134 |
-| Summary + recent | 100.00% | 100.00% | 76.62 | 0.00% | 3 | 0.145 |
-| Semantic memory | 100.00% | 100.00% | 66.22 | 4.18% | 0 | 296.933 |
-
-Context 结论不变：Semantic Memory 在该确定性场景集上保持全部 Follow-up 要点，
-同时减少 Prompt Token 和重复读取，代价是 BGE 检索带来约 297 ms P95。它不是
-真实 LLM 多轮答案准确率。
+P1-D9 的固定 mode 表已由本报告前文的 Adaptive Context v0.2 对照替代。新实验仍使用
+相同 `evalrag_context_v0.1/dev` 60 组/300 turns 和 220 token 预算，但统一启用升级后的
+跨层去重并新增 Adaptive Policy，因此旧版 76.62/66.22 token 与微秒级 baseline 延迟
+不能和新版表混用。当前可引用结论为：Adaptive 保持 100% Follow-up Success，相对
+Summary+Recent 将 Prompt Token 降低 19.68%、History Redundancy 降低 100%，但 CPU
+P95 高 5.24%，且该结果不是自由生成答案准确率。
 
 完整配置、逐 Case 结果、failures 和差异 Case 见
 [`p1-d9-v03-dev-ablation-20260817`](../../reports/ablations/p1-d9-v03-dev-ablation-20260817/report.md)。

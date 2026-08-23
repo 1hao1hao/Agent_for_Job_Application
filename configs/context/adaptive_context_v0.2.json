@@ -1,0 +1,26 @@
+{
+  "config_version": "adaptive-context-v0.2-20260823",
+  "token_budget": 220,
+  "token_estimator": "mixed-lexical-token-v1",
+  "mode": "adaptive",
+  "evidence_strategy": "source_balanced",
+  "context_policy": {
+    "version": "adaptive-context-policy-v1",
+    "followup_threshold": 0.7,
+    "memory_threshold": 0.35,
+    "long_history_threshold": 0.5,
+    "summary_pressure_threshold": 0.08,
+    "recent_history_high": 1,
+    "recent_history_low": 0,
+    "memory_top_k": 1
+  },
+  "followup_signal": {
+    "reference_weight": 0.5,
+    "semantic_continuity_weight": 0.5
+  },
+  "memory_score": "max(cosine_similarity * importance)",
+  "cross_layer_deduplication_threshold": 0.92,
+  "embedding_model": "BAAI/bge-small-zh-v1.5",
+  "embedding_revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "calibration_dataset": "evalrag_context_v0.1/dev"
+}

@@ -38,6 +38,15 @@ class FakeMemoryExtractor:
         return [self.memory]
 
 
+class FakeMemoryEmbedder:
+    def __init__(self) -> None:
+        self.encoded = []
+
+    def encode_one(self, text: str) -> list[float]:
+        self.encoded.append(text)
+        return [1.0, 0.0]
+
+
 class SessionMemoryTests(unittest.TestCase):
     def setUp(self) -> None:
         self.repository = InMemoryPersistenceRepository()
@@ -117,6 +126,21 @@ class SessionMemoryTests(unittest.TestCase):
             self.service.extract_confirmed_memories(
                 "u1", self.session.session_id, [], FakeMemoryExtractor(cross_user)
             )
+
+    def test_query_aware_load_encodes_query_before_memory_search(self) -> None:
+        embedder = FakeMemoryEmbedder()
+        service = SessionMemoryService(self.repository, self.cache, embedder)
+        service.add_memory(
+            MemoryItem("m-query", "u1", "preference", "优先广州", "chat", 0.8, self.now),
+            embedding=[1.0, 0.0],
+        )
+
+        loaded = service.load_context_for_query(
+            "u1", self.session.session_id, "我适合哪个城市？", memory_top_k=2
+        )
+
+        self.assertEqual(embedder.encoded, ["我适合哪个城市？"])
+        self.assertEqual([item.memory_id for item in loaded.memories], ["m-query"])
 
 
 if __name__ == "__main__":

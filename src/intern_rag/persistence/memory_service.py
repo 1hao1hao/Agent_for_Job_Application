@@ -34,6 +34,16 @@ class MemoryEmbeddingProvider(Protocol):
     def encode_one(self, text: str) -> list[float]: ...
 
 
+class DenseMemoryEmbeddingProvider:
+    """把项目已有 EmbeddingModel 适配为 Memory Query 编码器。"""
+
+    def __init__(self, embedding_model) -> None:
+        self.embedding_model = embedding_model
+
+    def encode_one(self, text: str) -> list[float]:
+        return self.embedding_model.encode([text])[0]
+
+
 class RedisRecentHistoryCache:
     """Redis 只缓存最近消息；缓存故障由 SessionMemoryService 回源 PostgreSQL。"""
 
@@ -88,6 +98,7 @@ class SessionMemoryService:
         *,
         history_limit: int = 50,
         memory_query_embedding: list[float] | None = None,
+        memory_top_k: int = 10,
     ) -> SessionContext:
         session = self.repository.get_session(user_id, session_id)
         if session is None:
@@ -109,7 +120,7 @@ class SessionMemoryService:
                 except Exception:
                     pass
         memories = (
-            self.repository.search_memories(user_id, memory_query_embedding)
+            self.repository.search_memories(user_id, memory_query_embedding, memory_top_k)
             if memory_query_embedding is not None
             else self.repository.list_memories(user_id)
         )
@@ -120,6 +131,35 @@ class SessionMemoryService:
             summary=self.repository.get_summary(user_id, session_id),
             memories=tuple(memories),
             history_source=source,  # type: ignore[arg-type]
+        )
+
+    def load_context_for_query(
+        self,
+        user_id: str,
+        session_id: str,
+        query: str,
+        *,
+        history_limit: int = 50,
+        memory_top_k: int = 10,
+    ) -> SessionContext:
+        """按 user/session 边界读取四层记忆，并用 Query embedding 召回 Memory。
+
+        History 仍采用 Redis 优先、异常回源 PostgreSQL；Profile 与 Summary 直接读
+        PostgreSQL。配置 memory embedder 时调用 pgvector search_memories，否则回退到
+        已确认有效记忆列表，保证模型或索引不可用时请求仍可受控执行。
+        """
+
+        query_embedding = (
+            self.memory_embedder.encode_one(query)
+            if self.memory_embedder is not None
+            else None
+        )
+        return self.load_context(
+            user_id,
+            session_id,
+            history_limit=history_limit,
+            memory_query_embedding=query_embedding,
+            memory_top_k=memory_top_k,
         )
 
     def append_message(self, message: ConversationMessage) -> None:

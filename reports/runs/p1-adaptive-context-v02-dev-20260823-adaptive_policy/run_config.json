@@ -1,0 +1,22 @@
+{
+  "dataset": "evalrag_context_v0.1",
+  "split": "dev",
+  "strategy": "adaptive_policy",
+  "token_budget": 220,
+  "recent_message_count": 4,
+  "evidence_char_budget": 4000,
+  "mode": "adaptive",
+  "evidence_strategy": "source_balanced",
+  "compress_evidence": false,
+  "reserved_token_count": 0,
+  "context_policy": {
+    "followup_threshold": 0.7,
+    "memory_threshold": 0.35,
+    "long_history_threshold": 0.5,
+    "summary_pressure_threshold": 0.08,
+    "recent_history_high": 1,
+    "recent_history_low": 0,
+    "memory_top_k": 1,
+    "version": "adaptive-context-policy-v1"
+  }
+}

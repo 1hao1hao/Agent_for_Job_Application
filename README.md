@@ -72,17 +72,20 @@ Context Builder 同时保留 Rank Prefix baseline 和 Source Balanced 策略。�
 字符紧预算下将平均来源覆盖率从 61.32% 提升至 78.93%，完整来源覆盖率从 30.19%
 提升至 54.72%，相关证据召回下降 0.94 pp；默认 4000 字符下两种策略结果相同。
 
-P1-D5 在此基础上实现 Context Engine，将 system、当前 Query、确认 Profile、会话历史、
-长期 Memory 和完整 Evidence 放入统一 token 预算，并记录每个保留、裁剪、召回与压缩回退决定。
-PostgreSQL 持久化 Session/Profile/Message/Summary/Memory，Redis 缓存最近历史且故障时回源；
-Memory 支持用户隔离、来源、版本、TTL、冲突保留与删除。
+Context Engine 采用 `ContextSignalExtractor -> ContextPolicy -> ContextPlan -> ContextEngine`
+两阶段编排：根据 History Token Pressure、指代/省略与 BGE 语义连续性形成 Follow-up
+分数，再结合 pgvector Memory 的 `similarity * importance` 动态决定 Summary、Recent
+History 和 Memory top-k；Engine 在统一 token 预算中完成 Profile 注入、跨层去重、优先级
+裁剪与完整 Evidence 编排。PostgreSQL 持久化 Profile/Summary/Memory，Redis 缓存最近 History，
+miss 或异常时回源 PostgreSQL。
 
-在 `evalrag_context_v0.1/dev` 的 60 组五轮场景上，无记忆、recent window、summary + recent、
-semantic memory 的 Follow-up Success 分别为 36.67%、36.67%、100% 和 100%；semantic memory
-从带干扰项的候选中执行固定 BGE top-k，平均 prompt tokens 为 66.22，低于 summary + recent
-的 76.62，并将重复历史读取从 3 次降至 0，但 P95 从 0.15 ms 增至 296.93 ms。
+在 `evalrag_context_v0.1/dev` 的 60 组/300 turns 上，Recent、Summary+Recent、Semantic
+Memory 与 Adaptive Policy 的 Follow-up Success 分别为 36.67%、100%、100%、100%。与
+同为 100% 的 Summary+Recent 相比，Adaptive 将平均 Prompt Token 从 75.55 降至 60.68
+（-19.68%），History Redundancy 从 42.86% 降至 0（-100%）；按需 Memory Recall 为
+56.60%，低于始终召回 Memory 的 84.91%，体现质量、成本和召回范围的明确取舍。
 这是不调用 LLM 的确定性 Context 场景消融，标签为 AI-assisted，不等于真实多轮回答准确率。
-详见 [Context/Memory Ablation](reports/ablations/p1-d5-context-memory-v01-dev-20260816-bge/report.md)。
+详见 [Adaptive Context Ablation](reports/ablations/p1-adaptive-context-v02-dev-20260823/report.md)。
 
 真实 LLM frozen run 共 40 条 Query，Citation Validity 与 Abstention Accuracy 均为
 100%，总延迟 P95 为 4136.71 ms，25 次模型调用共 39,147 tokens，按运行时价格

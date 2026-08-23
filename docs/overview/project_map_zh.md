@@ -104,6 +104,8 @@ PostgreSQL 是任务状态的真相来源；Redis 负责短期队列和最近会
 | `RouteDecision` | intent、目标 sources、置信度和匹配依据 | Router -> Retriever / Gate |
 | `RetrievalResult` | Chunk、score、rank 和策略解释 | Retriever -> Gate / Context |
 | `EvidenceDecision` | sufficient / retryable / insufficient 及原因 | Gate -> Pipeline |
+| `ContextSignals` | 历史 token 压力、Follow-up 前文依赖度、Memory 最高相关度及其分解信号 | ContextSignalExtractor -> ContextPolicy |
+| `ContextPlan` | 是否使用 Profile/Summary，以及 Recent History/Memory 数量和决策原因 | ContextPolicy -> ContextEngine |
 | `ManagedContext` / `BuiltContext` | 在预算内选出的模型输入证据和记忆 | Context Engine -> Generator |
 | `GenerationResult` | 模型解析后的 answer、引用 ID、sufficient 和 reason | Generator -> Validator |
 | `Citation` | 合法 chunk_id 与 source_path | Validator -> RagResponse |
@@ -130,7 +132,7 @@ PostgreSQL 是任务状态的真相来源；Redis 负责短期队列和最近会
 | CrossEncoder Rerank Policy | 召回改善后仍可能存在前排噪声，但全量重排成本高 | 对同一 BM25+Dense+RRF 候选分别运行 never / always / low-confidence，用同一 MiniLM revision 控制变量 | v0.3 dev：always 将 MRR 44.31% -> 49.22%但 P95 1252 -> 2799 ms；按需调用率 18.12%、MRR 45.18%、P95 2175 ms，无 Pareto 最优 |
 | Evidence Gate | 检索有结果不等于证据足够生成 | 检查 route、结果数量、最高分和 required-source coverage；只允许一次扩源重试 | 将生成、重试、拒答变为可解释决策，避免弱证据直接进入模型 |
 | Source-Balanced Context | 纯 rank 贪心容易被单一来源占满预算 | 在紧预算下优先保证 required sources，再按 rank 补充，且不截断单个 Chunk | 1200 字符预算下完整来源覆盖率 30.19% -> 54.72%，相关证据召回下降 0.94 pp |
-| Context Engine / 分层记忆 | 多轮 Prompt 会膨胀并重复读历史 | 对 system、query、profile、recent history、semantic memory、evidence 统一 token 预算和去重；PG 持久化、Redis 缓存 | 60 组场景中 semantic memory 平均 66.22 tokens、重复历史读取 3 -> 0；该结果不是回答准确率 |
+| Adaptive Context Engine / 分层记忆 | 固定 Recent、Summary 或 Memory 策略无法同时适配独立问题、追问和长会话 | `ContextSignalExtractor -> ContextPolicy -> ContextPlan -> ContextEngine`：以 History Token Pressure、指代/省略+BGE 语义连续性、Memory `similarity * importance` 动态决定各层；Engine 再按统一预算、优先级和跨层语义去重编排 Profile/History/Summary/Memory/Evidence | 60 组/300 turns dev 中保持 100% Follow-up Success；相对 Summary+Recent，Prompt Token 75.55 -> 60.68（-19.68%），History Redundancy 42.86% -> 0；该 Context-level 结果不等于自由生成答案准确率 |
 | Generator JSON Contract | 自由文本难以校验引用和拒答状态 | Prompt 约束只依据 Context，模型返回 answer/cited_chunk_ids/sufficient/reason；解析失败受控重试一次 | 生成结果可被程序验证，而不是把模型输出直接交给用户 |
 | Model Gateway | 外部模型有 timeout、429、5xx 和供应商故障 | Provider Protocol + 有界退避、并发 semaphore、熔断和 fallback，鉴权错误不盲重试 | 6 类 Fake 故障注入验证控制流，真实 DeepSeek primary smoke 通过；备用 Provider 未做真实 fallback |
 | Citation Validator | 模型可能返回不存在或重复的证据 ID | 校验 ID 存在性、去重和 sufficient/citation 组合，合法后才构造 Citation | 非法引用不能进入最终回答；Citation Validity 不等于事实支持度 |

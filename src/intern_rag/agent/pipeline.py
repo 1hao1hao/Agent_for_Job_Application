@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
 from time import perf_counter
 from typing import Callable, Mapping
@@ -13,6 +13,11 @@ from intern_rag.agent.context_engine import (
     ContextEngineConfig,
     ContextInputs,
     ContextMode,
+)
+from intern_rag.agent.context_policy import (
+    ContextPolicy,
+    ContextSignalExtractor,
+    rank_memories,
 )
 from intern_rag.agent.evidence import EvidenceConfig, check_evidence
 from intern_rag.agent.generation import (
@@ -75,7 +80,8 @@ class PipelineConfig:
         if self.context_token_budget <= 0:
             raise ValueError("context_token_budget must be greater than 0")
         if self.context_mode not in {
-            "no_memory", "full_history", "recent_window", "summary_recent", "semantic_memory"
+            "no_memory", "full_history", "recent_window", "summary_recent", "semantic_memory",
+            "adaptive",
         }:
             raise ValueError("unknown context_mode")
         if not self.router_name.strip():
@@ -107,6 +113,8 @@ class RagPipeline:
         trace_sink: Callable[[AgentTrace], None] | None = None,
         context_engine: ContextEngine | None = None,
         context_provider: Callable[[RagRequest], ContextInputs] | None = None,
+        context_signal_extractor: ContextSignalExtractor | None = None,
+        context_policy: ContextPolicy | None = None,
     ) -> None:
         self.chunks = list(chunks)
         self.llm_client = llm_client
@@ -123,6 +131,10 @@ class RagPipeline:
         self.trace_sink = trace_sink
         self.context_engine = context_engine
         self.context_provider = context_provider
+        self.context_signal_extractor = context_signal_extractor or ContextSignalExtractor(
+            estimator=context_engine.estimator if context_engine is not None else None
+        )
+        self.context_policy = context_policy or ContextPolicy()
         self.last_trace: AgentTrace | None = None
         self.last_trace_persistence_errors: list[str] = []
 
@@ -272,6 +284,21 @@ class RagPipeline:
                         if self.context_provider is not None
                         else ContextInputs()
                     )
+                    context_signals = None
+                    context_plan = None
+                    if self.config.context_mode == "adaptive":
+                        ranked_memories = rank_memories(
+                            request.query,
+                            inputs.memories,
+                            self.context_signal_extractor,
+                        )
+                        inputs = replace(inputs, memories=ranked_memories)
+                        context_signals = self.context_signal_extractor.extract(
+                            request.query,
+                            inputs,
+                            token_budget=self.config.context_token_budget,
+                        )
+                        context_plan = self.context_policy.decide(context_signals)
                     # 先估算 Generator 外层指令、Query 与候选 citation id 的固定开销，
                     # Context Engine 的 token_budget 因而覆盖最终完整 Prompt，而非仅证据正文。
                     candidate_ids = [item.chunk_id for item in retrieved_results]
@@ -305,6 +332,8 @@ class RagPipeline:
                         history=inputs.history,
                         memories=inputs.memories,
                         history_summary=inputs.history_summary,
+                        plan=context_plan,
+                        signals=context_signals,
                     )
                     built_context = managed_context.as_built_context()
                     actual_prompt_tokens = self.context_engine.estimator.count(
@@ -340,6 +369,14 @@ class RagPipeline:
                         "memory_write_reason": "disabled_without_explicit_confirmation",
                         "compression_fallbacks": list(managed_context.compression_fallbacks),
                     })
+                    if managed_context.context_signals is not None:
+                        context_trace["context_policy"] = asdict(
+                            managed_context.context_signals
+                        )
+                    if managed_context.context_plan is not None:
+                        context_trace["context_plan"] = asdict(
+                            managed_context.context_plan
+                        )
 
                 while True:
                     current_stage = "generation"

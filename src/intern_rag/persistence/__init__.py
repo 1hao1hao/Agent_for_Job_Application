@@ -4,6 +4,7 @@ from intern_rag.persistence.base import PersistenceRepository
 from intern_rag.persistence.memory_service import (
     MemoryExtractor,
     MemoryEmbeddingProvider,
+    DenseMemoryEmbeddingProvider,
     RedisRecentHistoryCache,
     SessionMemoryService,
 )
@@ -18,6 +19,7 @@ __all__ = [
     "RedisRecentHistoryCache",
     "MemoryExtractor",
     "MemoryEmbeddingProvider",
+    "DenseMemoryEmbeddingProvider",
     "SessionContext",
     "SessionMemoryService",
     "SessionRecord",

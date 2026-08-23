@@ -24,6 +24,14 @@ from intern_rag.agent.context_engine import (
     ProfileFact,
     UserProfile,
 )
+from intern_rag.agent.context_policy import (
+    ContextPlan,
+    ContextPolicy,
+    ContextPolicyConfig,
+    ContextSignalExtractor,
+    ContextSignals,
+    rank_memories,
+)
 from intern_rag.agent.evidence import (
     EvidenceConfig,
     EvidenceDecision,
@@ -75,7 +83,12 @@ __all__ = [
     "ContextEngine",
     "ContextEngineConfig",
     "ContextInputs",
+    "ContextPlan",
+    "ContextPolicy",
+    "ContextPolicyConfig",
     "ContextSegment",
+    "ContextSignalExtractor",
+    "ContextSignals",
     "ConversationMessage",
     "ManagedContext",
     "MemoryItem",
@@ -112,6 +125,7 @@ __all__ = [
     "format_context_item",
     "generate_answer",
     "parse_generation_result",
+    "rank_memories",
     "ValidationIssue",
     "ValidationResult",
     "validate_generation",

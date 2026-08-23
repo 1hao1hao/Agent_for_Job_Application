@@ -273,25 +273,44 @@ P0-D1-T1 已实现 `ContextItem`、`BuiltContext` 和 `build_context()`。
   覆盖和预算利用率，不把 Context 局部指标包装成答案准确率。
 - Context Builder 的选择必须写入 Trace。
 
-### P1 Context Engine 与分层记忆
+### Adaptive Context Engine 与分层记忆
 
 P1-D5 在 `BuiltContext` 上增加 `ManagedContext`，预算单位由字符扩展为可注入 token
 estimator。预算覆盖 Generator 外层 Prompt、system、当前 Query、确认 Profile、历史/摘要、
 长期 Memory 和 Evidence；system 与当前 Query 放不下时受控失败，不静默删除。
 
 ```text
-RagRequest(user_id, session_id)
-  -> SessionMemoryService(Redis recent cache -> PostgreSQL fallback)
-  -> ContextInputs(profile, messages, summary, memories)
-  -> ContextEngine.build()
+RagRequest(query, user_id, session_id)
+  -> SessionMemoryService
+     History: Redis -> miss/error 回源 PostgreSQL
+     Profile/Summary: PostgreSQL
+     Memory: Query embedding -> pgvector user-scoped top-k
+  -> ContextInputs(Profile, History, Summary, Memory)
+  -> ContextSignalExtractor(
+       history_token_pressure,
+       followup_score=0.5*reference+0.5*semantic_continuity,
+       memory_score=max(similarity*importance))
+  -> ContextPolicy.decide() -> ContextPlan
+  -> ContextEngine.build(plan=ContextPlan)
   -> ManagedContext + BuiltContext-compatible evidence
   -> Generator / Citation Validator / AgentTrace
 ```
+
+`ContextPolicy` 只回答“本轮启用哪些层、各取多少”，Plan 包含 `use_profile`、
+`use_summary`、`recent_history_count`、`memory_top_k` 和 reason；`ContextEngine` 只负责在
+预算中执行 Plan，按 Profile 90、Memory 80、Evidence 70、Summary 60、History 50 编排，
+并对 Profile/Memory/Summary/History 做跨层去重。固定 `recent_window`、`summary_recent`
+和 `semantic_memory` 只保留为同集实验 baseline，生产主流程默认 `adaptive`。
 
 Profile 只允许显式确认写入并使用版本检查；摘要不能覆盖 Profile。MemoryItem 包含 user scope、
 fact/preference/experience/decision 类型、来源、重要性、版本、TTL 和 active 状态；同内容去重，
 冲突内容保留独立来源，不进行静默覆盖。Trace 只记录 segment/memory id、预算和 reason，不复制
 敏感 Profile 原文。
+
+60 组/300 turns dev 对照中，Adaptive 与 Summary+Recent 均为 100% Follow-up Success，
+平均 Prompt Token 75.55 -> 60.68（-19.68%），History Redundancy 42.86% -> 0；但按需
+Memory Recall 56.60% 低于始终召回 Memory 的 84.91%。该结果说明策略减少了无关上下文，
+不代表自由生成回答准确率，且当前数据集没有 untouched multi-turn test。
 
 ### Structured LLM Generator
 
