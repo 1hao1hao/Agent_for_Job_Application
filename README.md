@@ -1,183 +1,169 @@
 # EvalRAG
 
-EvalRAG 是一个面向求职知识问答的、可观测、可评测、可回归的 RAG Agent Harness。
-系统融合岗位 JD、技术面经、项目文档和个人经历等中文多源知识，重点解决三类问题：
-一次回答为何产生、失败发生在哪个阶段、系统修改后是否真的改善。
+EvalRAG 是一个面向中文求职知识推理的图增强、自适应 RAG Agent Harness。系统统一处理岗位
+JD、技术面经、项目资料、简历和用户画像，通过 Query 理解、混合/图检索、证据门控、分层
+Context、结构化生成与引用校验回答问题；同时用 Run/Span Trace、版本化 Benchmark、Regression
+和 CI Gate 说明一次回答为何产生、失败发生在哪一阶段、修改后是否真实改善。
 
-## 快速理解
+## 快速入口
 
-- [项目地图：主链、模块设计、算法和真实效果](docs/overview/project_map_zh.md)
-- [三条运行链路：在线回答、离线评测、异步 Job](docs/overview/system_flows_explained_zh.md)
-- [最终实验报告：配置、指标、失败和证据路径](docs/evaluation/final_experiment_report.md)
+- [当前架构图：知识构建、在线回答、评测回归和服务链](docs/overview/architecture_diagram.md)
+- [项目地图：模块、算法、设计原因与真实效果](docs/overview/project_map_zh.md)
+- [三条运行链路：在线回答、离线评测和异步 Job](docs/overview/system_flows_explained_zh.md)
+- [最终实验报告：dataset、配置、指标、失败和证据路径](docs/evaluation/final_experiment_report.md)
 
-## 核心结果
-
-P1-D4 将知识库升级为 `evalrag_v0.3`：从固定 revision 的公开数据集/开源仓库和
-脱敏自有资料导入 669 份文档，经 exact hash 与 SimHash 去重后保留 658 份、生成
-4208 个自然 Chunk。五类 source 均有覆盖，每份材料保留 URL/采集方式/时间/许可与
-审核状态；质量报告记录 6 个完全重复、5 个近重复和 3.06% 模板行占比。v0.3
-benchmark 共 240 条（160 dev / 80 frozen test），覆盖单源、跨源、语义改写、
-hard negative、不可回答、时效冲突及 2/3 跳关系问题；标签为 corpus-grounded
-AI-assisted，未冒充人工审核。
-
-在 160 条 v0.3 dev 上，Graph + Vector 取得当前最佳检索结果：Recall@3 42.50%、
-Recall@5 47.50%、MRR 41.25%、NDCG@5 40.49%，路径有效率 100%。相比 BM25，
-Recall@5 提升 10.42 pp、MRR 提升 11.21 pp；相比 Adaptive Vector，Recall@5
-提升 2.92 pp、MRR 提升 0.99 pp。Graph-only 总体较弱，但在 2/3 跳问题上提供了
-向量检索缺少的关系证据，因此最终采用融合而非单独图检索。完整结果见
-[v0.3 Dev Ablation](reports/ablations/p1-d4-v03-dev-20260816-final/report.md)。
-
-最终配置固定后只运行一次 `evalrag_v0.3/test`。在 80 条 frozen Case（60 条可答）上，
-Graph + Vector 相比 BM25 将 Recall@3 从 39.17% 提升至 49.17%、Recall@5 从
-46.67% 提升至 63.33%、MRR 从 35.19% 提升至 57.58%，路径有效率为 100%；
-P95 从 15.50 ms 增至 1209.40 ms。结果体现关系召回收益及 CPU 延迟代价，见
-[P1 Frozen Release](reports/releases/p1-d7-v03-frozen-20260816/report.md)。
-
-为避免早期实验分别使用不同 Corpus 和候选配置，P1-D9 又在同一
-`evalrag_v0.3/dev` 上补齐 4 种 Router、8 种 Retriever 与 Never/Always/On-demand
-Reranker 矩阵。固定 Graph+Vector RRF 取得最高 Recall@5/MRR（58.33%/52.10%）；
-当前 Adaptive Graph 为 48.33%/42.21%，说明 selector 仍会漏触发关系 Query。
-Always Rerank 将 MRR 从 44.31% 提高至 49.22%，但 P95 从 1252 ms 增至
-2799 ms；按需策略调用率 18.12%，但未取得质量/延迟 Pareto 最优。该轮仅使用
-dev，未重跑 frozen test。详见 [v0.3 Unified Ablation](reports/ablations/p1-d9-v03-dev-ablation-20260817/report.md)。
-
-正式数据集 `evalrag_v0.2` 包含 100 份五类中文文档、310 个自然 Chunk 和 120 条
-审核 Query（80 dev / 40 frozen test）。下表是同一 frozen test、相同 Router 与 top-k
-下的检索结果：
-
-| Retriever | Recall@3 | Recall@5 | MRR | Retrieval P95 |
-|---|---:|---:|---:|---:|
-| Keyword | 55.56% | 67.22% | 60.83% | 99.55 ms |
-| Dense | 56.67% | 74.44% | 59.28% | 494.05 ms |
-| RRF Hybrid | **68.33%** | **74.44%** | **66.78%** | 802.50 ms |
-
-Hybrid 提高了候选覆盖和首个相关结果排名，但 CPU P95 明显增加。早期
-BGE CrossEncoder 在 v0.2 dev 上同时降低 Recall/MRR 并增加延迟；后续 v0.3 控制实验
-表明 MiniLM Always Rerank 可改善 MRR，但延迟代价高，所以结论应该是“效果依赖
-模型、候选集和触发策略”，而不是 Reranker 普遍无效。早期数字和失败 Case 见
-[Frozen Retrieval Comparison](reports/comparisons/p0-d5-v02-frozen-test-20260804/report.md)
-和 [CrossEncoder Ablation](reports/ablations/p1-cross-encoder-v02-dev-20260811/report.md)。
-
-P1 在此基础上增加自适应检索与 Job-Skill-Experience Graph。图工件从 248 个
-JD/简历/项目日志/用户画像 Chunk 构建出 121 个节点、346 条可回指 Chunk 的关系；
-独立 `evalrag_graph_v0.1` 包含 40 条关系型 challenge（30 dev / 10 frozen）。在 30 条 dev 上，Graph + Vector 相比 Adaptive Vector 将 Recall@5
-从 71.21% 提升至 77.27%、MRR 从 30.98% 提升至 52.27%、NDCG@5 从 41.96%
-提升至 53.81%，返回路径有效率为 100%。Graph-only Recall@5 只有 59.85%，说明图
-适合作为关系证据补充而不是替代文本召回。详见
-[Graph + Vector Dev Ablation](reports/ablations/p1-d3-graph-v01-dev-20260816-fixed/report.md)。
-最终 10 条 frozen challenge（8 条可答）取得 Recall@5 91.67%、MRR 58.33%、
-路径有效率与 selector accuracy 100%；小样本只作为关系检索验证，不外推线上效果。
-
-Context Builder 同时保留 Rank Prefix baseline 和 Source Balanced 策略。后者在 1200
-字符紧预算下将平均来源覆盖率从 61.32% 提升至 78.93%，完整来源覆盖率从 30.19%
-提升至 54.72%，相关证据召回下降 0.94 pp；默认 4000 字符下两种策略结果相同。
-
-Context Engine 采用 `ContextSignalExtractor -> ContextPolicy -> ContextPlan -> ContextEngine`
-两阶段编排：根据 History Token Pressure、指代/省略与 BGE 语义连续性形成 Follow-up
-分数，再结合 pgvector Memory 的 `similarity * importance` 动态决定 Summary、Recent
-History 和 Memory top-k；Engine 在统一 token 预算中完成 Profile 注入、跨层去重、优先级
-裁剪与完整 Evidence 编排。PostgreSQL 持久化 Profile/Summary/Memory，Redis 缓存最近 History，
-miss 或异常时回源 PostgreSQL。
-
-在 `evalrag_context_v0.1/dev` 的 60 组/300 turns 上，Recent、Summary+Recent、Semantic
-Memory 与 Adaptive Policy 的 Follow-up Success 分别为 36.67%、100%、100%、100%。与
-同为 100% 的 Summary+Recent 相比，Adaptive 将平均 Prompt Token 从 75.55 降至 60.68
-（-19.68%），History Redundancy 从 42.86% 降至 0（-100%）；按需 Memory Recall 为
-56.60%，低于始终召回 Memory 的 84.91%，体现质量、成本和召回范围的明确取舍。
-这是不调用 LLM 的确定性 Context 场景消融，标签为 AI-assisted，不等于真实多轮回答准确率。
-详见 [Adaptive Context Ablation](reports/ablations/p1-adaptive-context-v02-dev-20260823/report.md)。
-
-真实 LLM frozen run 共 40 条 Query，Citation Validity 与 Abstention Accuracy 均为
-100%，总延迟 P95 为 4136.71 ms，25 次模型调用共 39,147 tokens，按运行时价格
-快照估算 $0.006317。Claim-Level Grounding 对 23 条 answered case 中的 20 条得到
-可判断结论，另有 3 条 unknown，因此不宣称“零幻觉”或完整 E2E 可用。证据分别见
-[Live LLM Report](reports/final/p0-d5-live-llm-v0.2/report.md) 和
-[Semantic/Grounding Audit](reports/final/p0-d6-semantic-grounding-v0.2/report.md)。
-
-## 两条主链
+## 当前主链
 
 ```mermaid
 flowchart LR
     Q[RagRequest] --> RT[AgentRuntime]
     RT --> R[Feedback Hybrid Router]
-    R --> RET[Adaptive BM25 / Dense / RRF / Graph + Vector]
-    RET --> G[Evidence Gate]
-    G -->|sufficient| C[Context Engine]
-    G -->|retryable| RET
+    R --> QA[QueryFeatures -> EvidenceRequirement]
+    QA --> RET[Adaptive BM25 / Dense / RRF / Graph+Vector]
+    RET --> RR[Optional CrossEncoder]
+    RR --> G[Evidence Gate]
+    G -->|retry once| RET
     G -->|insufficient| A[Abstain]
-    C --> L[Generator / Model Gateway]
-    L --> V[Citation Validator]
+    G -->|sufficient| CP[ContextPolicy -> ContextPlan]
+    CP --> CE[ContextEngine + Layered Memory]
+    CE --> GW[Generator / Model Gateway]
+    GW --> V[Citation Validator]
     V --> O[RagResponse]
-    RT -.-> T[Run / Span AgentTrace]
-    R -.-> T
-    RET -.-> T
-    G -.-> T
-    C -.-> T
-    L -.-> T
-    V -.-> T
+    RT -. Run / Spans .-> T[AgentTrace]
 ```
 
-```mermaid
-flowchart LR
-    COR[Corpus + Manifest] --> DS[EvaluationCase]
-    DS --> RUN[Evaluation Runner]
-    CFG[Versioned RunConfig] --> RUN
-    RUN --> P[Predictions + Trace]
-    P --> M[Metrics / Semantic Audit]
-    M --> F[Failures + Summary]
-    F --> REG[Fixed / Open Regression]
+Query Analyzer 先提取精确词面、语义、多来源和实体关系四类核心证据信号，再生成
+`EvidenceRequirement` 并选择 Retriever；检索后只在策略允许且候选低置信时触发一次
+CrossEncoder。Evidence Gate 决定生成、扩源一次或拒答；ContextPolicy 决定本轮需要哪些
+Profile/History/Summary/Memory，ContextEngine 再在统一 token budget 下执行去重、裁剪和 Evidence
+编排。Model Gateway 负责 timeout、瞬时错误有界重试、并发限制、熔断和 Provider fallback。
+
+完整数据结构与失败分支见 [架构图](docs/overview/architecture_diagram.md)。
+
+## 可复查结果
+
+### Corpus 与 Benchmark
+
+`evalrag_v0.3` 从固定 revision 的公开数据集/开源仓库和脱敏自有材料导入 669 份文档，经
+SHA-256 与 SimHash 去重后保留 658 份、生成 4208 个自然 Chunk。五类 source 均有覆盖，
+Manifest 保存 URL、revision、许可、采集时间、公开/脱敏和审核状态。
+
+v0.3 Benchmark 共 240 条 Query（160 dev / 80 frozen test），覆盖单来源、跨来源、语义改写、
+hard negative、不可回答、时效冲突和 2/3-hop 关系问题。标签是 corpus-grounded AI-assisted，
+未冒充独立人工标注。统计与校验位于
+[corpus_stats_v0.3.json](data/evaluation/corpus_stats_v0.3.json) 和
+[evalrag_v0.3_validation.json](data/evaluation/evalrag_v0.3_validation.json)。
+
+### Graph + Vector Frozen Retrieval
+
+最终配置固定后在同一 `evalrag_v0.3/test`（80 Case，其中 60 条可答）上运行：
+
+| Retriever | Recall@3 | Recall@5 | MRR | NDCG@5 | P95 |
+|---|---:|---:|---:|---:|---:|
+| BM25 | 39.17% | 46.67% | 35.19% | 36.49% | 15.50 ms |
+| Graph + Vector | **49.17%** | **63.33%** | **57.58%** | **55.08%** | 1209.40 ms |
+
+Graph + Vector 提高跨文档关系证据覆盖与前排排序，但 CPU P95 明显增加。图节点/边均回指原始
+Chunk，LLM 引用的仍是文本证据而不是图结构。完整工件见
+[P1 Frozen Release](reports/releases/p1-d7-v03-frozen-20260816/report.md)。
+
+### Adaptive Retrieval 与 Reranker 的负结果
+
+在统一 v0.3/dev 对照中，固定 Graph+Vector RRF 的 Recall@5/MRR 为 58.33%/52.10%，旧
+Adaptive Graph 为 48.33%/42.21%。升级为 `QueryFeatures -> EvidenceRequirement -> Strategy`
+后，Recall@5 为 48.75%，但 MRR 降至 39.01%；说明关系 Query 覆盖略增，策略误选和前排噪声
+仍未解决，不能包装成质量提升。见
+[Evidence-Need Adaptive Ablation](reports/ablations/p1-query-evidence-adaptive-v03-dev-20260825-fixed/report.md)。
+
+CrossEncoder 支持 Never/Always/On-demand 三种策略。Always 在同集 dev 将 MRR 从 44.31%
+提高到 49.22%，但 P95 从 1252 ms 增至 2799 ms；On-demand 调用率 18.12%，仍未取得质量与
+延迟的 Pareto 最优。因此该能力保留为可配置策略和失败分析，不宣称默认配置获得稳定收益。
+
+### Adaptive Context Engine
+
+Context 链路为：
+
+```text
+SessionMemoryService
+-> ContextSignalExtractor
+-> ContextPolicy -> ContextPlan
+-> ContextEngine -> ManagedContext
 ```
 
-更完整的数据结构和失败分支见 [架构图](docs/overview/architecture_diagram.md) 与
-[项目地图](docs/overview/project_map_zh.md)。
+History 优先读取 Redis，miss/error 回源 PostgreSQL；Profile/Summary 保存于 PostgreSQL；长期
+Memory 使用 pgvector 按用户范围语义召回。在 `evalrag_context_v0.1/dev` 的 60 组/300 turns
+确定性测试中，Adaptive 与 Summary+Recent 均保持 100% Follow-up Success；Adaptive 将平均
+Prompt Token 从 75.55 降至 60.68（-19.68%），History Redundancy 从 42.86% 降至 0。
+该结果衡量 Context 选择，不等于自由生成答案准确率。见
+[Adaptive Context Ablation](reports/ablations/p1-adaptive-context-v02-dev-20260823/report.md)。
 
-## 可复现验证
+### 端到端可靠性边界
 
-Python 3.10+，推荐在虚拟环境中运行：
+早期 v0.2 真实 LLM frozen run 的 Citation Validity 与不可回答 Case 的 Abstention Accuracy
+均为 100%，但 Claim-Level Grounding 有 3 条 `unknown`，因此不声称“零幻觉”。P1 v0.3 frozen
+E2E 又暴露过度拒答：80 条中 8 条 answered、69 条 insufficient、3 条 error，可答案例的
+End-to-End Success 仅 8.33%。这表明检索指标提升不等于最终答案质量提升，也定位出 Router、
+Evidence Gate 与新关系型 Query 分布未同步标定的问题。详见
+[最终实验报告](docs/evaluation/final_experiment_report.md)。
+
+## 可观测与回归
+
+AgentRuntime 为每次请求创建 root Run，各阶段作为 Span 记录：
+
+```text
+routing -> query_analysis -> retrieval -> rerank -> evidence
+-> context -> generation -> validation
+```
+
+Trace 保存 config version、attempt、候选 rank/reason、used/skipped evidence、latency、token 和
+error type。确认的失败进入 `open` regression；修复并跑完整 dev 后转为 `fixed`，由 executable
+regression 和 CI Gate 防止旧问题复发。Trace Replay 使用保存的配置与输入重放控制流，不用重新
+调用随机模型来挑更好的结果。
+
+## 服务与持久化
+
+FastAPI 提供 Query、Trace、Session 和 Evaluation Job 接口。PostgreSQL 保存请求、Run/Trace、
+Profile 与任务状态；Redis 承担最近会话缓存和异步 Job 队列；独立 Worker 执行批量评测并把
+`queued -> running -> succeeded/failed` 状态写回 PostgreSQL；pgvector 和 Neo4j 分别承载
+持久化向量与图检索。Docker Compose 统一编排服务依赖和持久化卷。
+
+```text
+POST /v1/query -> AgentRuntime -> RagResponse + trace_id
+POST /v1/evaluation-jobs -> PostgreSQL queued -> Redis -> Worker -> report + final status
+```
+
+同一 idempotency key 不会重复创建评测 Job。Worker 只对配置允许的瞬时故障做有上限重试；
+鉴权、业务错误或重试耗尽会受控落为 `failed` 并保留 error type。
+
+## 运行与验证
+
+Python 3.10+：
 
 ```bash
 python -m pip install -r requirements.txt
 PYTHONPATH=src python -m unittest discover -s tests -p 'test_*.py'
 ```
 
-当前本地全量结果为 218 tests run、214 passed、4 skipped（2026-08-17）；测试通过
-证明代码行为稳定，不代表回答准确率。需要 PostgreSQL/Redis 的容器集成验证由对应
-环境单独执行。
+测试验证代码契约与确定性行为，不代表回答准确率；真实 LLM、PostgreSQL/Redis/Neo4j 和模型权重
+下载不进入默认离线单测。当前仓库在 2026-08-28 执行上述命令的结果为 227 tests run、
+223 passed、4 skipped、0 failed。
 
-### HTTP 与异步 Evaluation
-
-P1 服务层复用相同 `RagRequest`、`RagResponse`、Citation 和 AgentTrace：
-
-```text
-HTTP Query -> FastAPI -> RagPipeline -> PostgreSQL request/trace
-Evaluation Job -> PostgreSQL queued -> Redis -> Worker -> report + final status
-```
-
-在 Docker 可用的机器上启动完整服务：
+Docker 可用时启动服务：
 
 ```bash
 docker compose up --build
 curl http://localhost:8000/health
 ```
 
-提交 BM25 Query：
+提交 Query：
 
 ```bash
 curl -X POST http://localhost:8000/v1/query \
   -H 'Content-Type: application/json' \
-  -d '{"query":"请分析大模型应用研发实习生的岗位要求","retriever":"bm25"}'
+  -d '{"query":"哪个项目能证明我符合 RAG 岗位要求？","retriever":"graph_adaptive"}'
 ```
 
-批量 Evaluation 通过 `POST /v1/evaluation-jobs` 创建，接口只返回 job id；独立
-Worker 执行后可通过 `GET /v1/evaluation-jobs/{job_id}` 查询状态。Compose 端到端
-流程由 [P1 Service Integration](.github/workflows/p1-service.yml) 自动验证。
-
-CI 分为两级：push 自动运行服务链与小型 pgvector/Neo4j 重启恢复测试；耗时更长的
-[Full Persistent Retrieval Ablation](.github/workflows/p1-persistent-ablation.yml)
-按需构建固定 revision 的 BGE 索引，在完整 v0.3/dev 上比较文件精确扫描、pgvector
-exact 和 HNSW，并上传版本化 Run Artifacts，避免每次提交都重复下载模型和运行全量实验。
-
-导出不访问网络的三个固定 Demo：
+导出不访问网络的固定 Demo：
 
 ```bash
 python scripts/export_fixed_demos.py
@@ -187,60 +173,46 @@ python scripts/export_fixed_demos.py
 - [多来源回答](examples/fixed_demos/multi_source.json)
 - [证据不足拒答](examples/fixed_demos/abstention.json)
 
-三个文件来自同一次真实 frozen run，均包含 `answer`、带 source path 的 citations、
-精简 Trace 和完整 RunConfig。脚本只重放已保存工件，不重新调用 LLM。
-
-需要运行真实模型 smoke test 时，在本地 `.env` 或 shell 中设置
-`DEEPSEEK_API_KEY`；密钥不会写入代码、Trace 或报告：
+真实模型只从环境变量读取密钥，密钥不会进入代码、Trace 或报告：
 
 ```bash
 export DEEPSEEK_API_KEY='your-key'
 PYTHONPATH=src python scripts/run_rag_smoke.py
 ```
 
+## CI
+
+- [Service Integration](.github/workflows/p1-service.yml)：`main` push/手动触发，验证 API、Worker、
+  PostgreSQL、Redis、Neo4j、异步 Job 和持久化恢复链路。
+- [Evaluation Gate](.github/workflows/evaluation-gate.yml)：Pull Request/手动触发，运行确定性测试、
+  regression 与 reference quality gate。
+- [Persistent Retrieval Ablation](.github/workflows/p1-persistent-ablation.yml)：手动运行完整 v0.3/dev
+  的文件精确扫描、pgvector exact/HNSW 和 Neo4j 对照，并上传版本化工件。
+
 ## 代码导航
 
 | 模块 | 入口 | 作用 |
 |---|---|---|
-| Ingestion | `src/intern_rag/ingestion/chunking.py` | 统一 Document/Chunk 与 metadata |
-| Router | `src/intern_rag/routing/factory.py` | Rule/Semantic/Hybrid 路由切换 |
-| Retrieval | `src/intern_rag/retrieval/factory.py` | BM25/Dense/RRF/Adaptive/Graph + Vector 统一接口 |
-| Knowledge Graph | `src/intern_rag/graph/` | 版本化实体关系、问题分解与 Chunk 证据引用 |
-| Corpus v0.3 | `src/intern_rag/evaluation/corpus_v03.py` | provenance、去重、质量统计与版本化导出 |
-| Persistent Retrieval | `src/intern_rag/retrieval/pgvector.py`、`src/intern_rag/graph/neo4j.py` | pgvector HNSW 与 Neo4j adapter |
-| Agent | `src/intern_rag/agent/pipeline.py` | 门控、有限重试、生成与引用校验 |
-| Model Gateway | `src/intern_rag/agent/model_gateway.py` | Provider fallback、有界重试、并发限制与熔断 |
-| Context Engine | `src/intern_rag/agent/context_engine.py` | 完整 Prompt 预算、历史/画像/长期记忆与证据编排 |
-| Trace | `src/intern_rag/tracing/trace.py` | 一次请求一条可回放 Trace |
-| Evaluation | `src/intern_rag/evaluation/runner.py` | 运行预测并保存标准工件 |
-| Semantic Audit | `src/intern_rag/evaluation/semantic_audit.py` | 要点覆盖与逐 claim Grounding |
-| Regression | `src/intern_rag/evaluation/regression.py` | fixed/open 失败案例自动化检查 |
-| Serving | `src/intern_rag/serving/api.py` | Query、Trace、异步 Evaluation HTTP 契约 |
-| Persistence | `src/intern_rag/persistence/postgres.py` | PostgreSQL 请求、Trace、Job、Session/Profile 与 Memory |
-| Worker | `src/intern_rag/worker/evaluation_worker.py` | Redis Queue 与独立 Evaluation Worker |
+| Ingestion | `src/intern_rag/ingestion/chunking.py` | 统一 Document/Chunk、边界切分与 metadata 继承 |
+| Router | `src/intern_rag/routing/factory.py` | Rule/Semantic/Hybrid/Feedback 路由 |
+| Adaptive Retrieval | `src/intern_rag/retrieval/adaptive.py` | Query 特征、证据需求、策略选择和按需重排 |
+| Graph Retrieval | `src/intern_rag/graph/`、`src/intern_rag/retrieval/graph.py` | 实体关系、有界多跳和 Graph+Vector 融合 |
+| Context | `src/intern_rag/agent/context_policy.py`、`context_engine.py` | 分层记忆策略与统一预算编排 |
+| Pipeline | `src/intern_rag/agent/pipeline.py` | Evidence Gate、有限重试、生成和引用校验 |
+| Model Gateway | `src/intern_rag/agent/model_gateway.py` | timeout、退避、熔断、并发与 Provider fallback |
+| Runtime / Trace | `src/intern_rag/runtime/agent_runtime.py`、`src/intern_rag/tracing/trace.py` | Run/Span、checkpoint 和 replay |
+| Evaluation | `src/intern_rag/evaluation/` | predictions、metrics、semantic audit 和 regression |
+| Serving / Worker | `src/intern_rag/serving/api.py`、`src/intern_rag/worker/evaluation_worker.py` | HTTP 契约与异步评测任务 |
+| Persistence | `src/intern_rag/persistence/postgres.py`、`src/intern_rag/retrieval/pgvector.py`、`src/intern_rag/graph/neo4j.py` | 状态、记忆、向量与图持久化 |
 
-## P1 冻结发布边界
+## 数据与结论边界
 
-Model Gateway 自动化覆盖 timeout fallback、429/5xx retry、鉴权不重试、熔断
-open/half-open、并发上限和双 Provider 失败。真实 DeepSeek primary smoke 成功；
-OpenAI-compatible backup 已完成配置级接入，但因当前没有 `OPENAI_API_KEY`，真实
-fallback 未执行。固定 Fake 故障矩阵不是线上 SLO，见
-[Gateway Fault Matrix](reports/fault_injection/p1-d7-model-gateway-v01/report.md)。
+- v0.3 是当前主版本；v0.2 只保留为 P0 历史基线，不能代表当前 Corpus 和 Query 设计。
+- v0.3 标签是 corpus-grounded AI-assisted，不代表线上分布或独立人工标注。
+- Recall@k/MRR/NDCG 衡量检索，不等于答案准确率；Citation Validity 只验证引用 ID 合法；
+  Semantic Coverage 与 Claim-Level Grounding 依赖版本化 grader，也不是人工金标准。
+- 当前自适应 selector、On-demand Reranker 和 v0.3 端到端链路仍有明确负结果；报告保留退化 Case，
+  不以功能已实现替代效果提升。
+- 项目不包含前端、Kubernetes、微服务拆分或在线自动学习 Router。
 
-冻结 E2E 也保留了负结果：v0.3/test 中 8 条 answered、69 条拒答、3 条错误，
-Abstention Accuracy 为 100%，但可答案例的无 Grounding 成功率仅 8.33%。主要原因是
-v0.2 Router/Evidence Gate 的意图和 required-source coverage 没有随 v0.3 关系型 Query
-同步标定，导致过度拒答。因此本项目不声称 P1 已提升端到端答案质量；该 Run 用于定位下一版本
-问题，并且不会继续使用同一 frozen test 调参。
-
-## 实验与边界
-
-- [文档导航](docs/README.md)：项目概览、评测协议、架构与模块说明。
-- [最终实验报告](docs/evaluation/final_experiment_report.md)：数据、检索、Router、可靠性、成本和失败闭环。
-- `evalrag_v0.2` 是项目自建、人工审核的半真实 benchmark，不代表线上业务分布。
-- Recall@k/MRR 只衡量检索；Citation Validity 只验证引用 ID；Semantic Coverage 与
-  Claim-Level Grounding 使用模型评分，均不等于人工答案准确率。
-
-项目使用原生 Python 实现核心 Harness；Sentence Transformers/scikit-learn 用于向量
-编码，OpenAI-compatible client 作为可替换 LLM adapter。P1 使用 FastAPI、PostgreSQL、
-Redis Worker 和 Docker Compose 提供可复现服务链；不包含前端、Kubernetes 或微服务拆分。
+更多公开文档见 [文档导航](docs/README.md)。

@@ -31,9 +31,11 @@ prototype 并通过 shadow/dev gate 后发布，单次在线请求不会直接�
 
 ### 3. Adaptive Retriever
 
-Query Analyzer 判断问题更依赖精确词、语义还是关系路径。Retriever 从 BM25、Dense、RRF 和
-Graph + Vector 中选择策略，统一输出按 rank 排序的 `list[RetrievalResult]`。复杂且低置信的
-Query 才触发 CrossEncoder，对已经召回的候选重排，不能找回第一阶段完全漏掉的 Chunk。
+Query Analyzer 先把 Query 转为四类核心证据信号：精确词面、语义、多来源和实体关系；再生成
+`EvidenceRequirement`，把事实、语义解释、多源综合或关系推理需求映射到 BM25、Dense、RRF
+或 Graph + Vector。首次检索后再根据候选数量、首位 margin、来源覆盖和双路一致性计算置信度；
+只有策略允许且低置信时才触发 CrossEncoder。重排只能调整已召回候选，不能找回第一阶段完全
+漏掉的 Chunk。
 
 ### 4. Evidence Gate
 
@@ -110,7 +112,8 @@ Client -> FastAPI -> PostgreSQL queued Job -> Redis Queue
 - **Redis**：队列只存待执行 job ID，并缓存最近会话；不保存最终任务结果。
 - **Worker**：独立消费队列，执行耗时评测，把状态从 `queued` 推进到
   `running -> succeeded/failed`。
-- **Docker Compose**：统一启动 API、Worker、PostgreSQL 和 Redis，并配置健康检查和持久化卷。
+- **pgvector / Neo4j**：分别保存用户长期语义 Memory/Dense 索引和版本化知识图。
+- **Docker Compose**：统一启动 API、Worker、PostgreSQL、Redis 和 Neo4j，并配置健康检查和持久化卷。
 
 同一个 idempotency key 重复提交评测时，PostgreSQL 返回原 Job，不会重复入队。Worker 的受控
 重试只处理配置允许的瞬时失败，有次数上限；业务错误、鉴权错误或重试耗尽会落为 `failed`，

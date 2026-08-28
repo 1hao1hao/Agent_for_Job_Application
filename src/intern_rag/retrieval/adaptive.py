@@ -12,19 +12,38 @@ from intern_rag.retrieval.rerank import RerankScorer
 
 RetrievalStrategy = Literal["bm25", "dense", "hybrid", "graph_hybrid"]
 RerankPolicy = Literal["never", "always", "low_confidence"]
+EvidenceNeedType = Literal[
+    "unanswerable",
+    "exact_fact",
+    "semantic_explanation",
+    "relation_reasoning",
+    "multi_source_synthesis",
+    "balanced_retrieval",
+]
 
 
 @dataclass(frozen=True)
 class QueryFeatures:
-    """Query Analyzer 输出的可解释特征，不依赖评测标签或 LLM。"""
+    """四个核心证据需求信号，以及实体和路由两个上下文信息。"""
 
-    char_count: int
-    source_count: int
-    has_exact_term: bool
-    has_semantic_rewrite: bool
-    is_multi_source: bool
-    is_cross_document: bool
+    needs_exact_match: bool
+    needs_semantic_match: bool
+    needs_multi_source: bool
+    requires_entity_reasoning: bool
+    entity_types: tuple[str, ...]
     is_unanswerable_route: bool
+
+
+@dataclass(frozen=True)
+class EvidenceRequirement:
+    """描述当前问题需要哪类证据，而不是直接描述某个检索算法。"""
+
+    need_type: EvidenceNeedType
+    lexical_required: bool
+    semantic_required: bool
+    graph_required: bool
+    multi_source_required: bool
+    reason: str
 
 
 @dataclass(frozen=True)
@@ -39,6 +58,8 @@ class RetrievalDecision:
     reason: str
     reranker_name: str | None = None
     reranker_version: str | None = None
+    query_features: dict[str, object] | None = None
+    evidence_requirement: dict[str, object] | None = None
 
     def to_trace(self) -> dict[str, object]:
         """转换为可写入 AgentTrace/评测工件的普通字典。"""
@@ -70,20 +91,40 @@ class AdaptiveRetrieverConfig:
 
 
 class QueryAnalyzer:
-    """用稳定规则识别精确术语、语义改写与多来源 Query。"""
+    """将 Query 转成可解释特征，再判断它真正需要哪类证据。
 
-    _semantic_markers = ("换句话", "同义", "通俗", "口语", "改写", "另一种说法")
-    _multi_source_markers = ("结合", "对比", "匹配", "综合", "个人经历")
-    _cross_document_markers = (
-        "哪些项目", "哪个项目", "哪些经历", "哪段经历", "能否证明", "可以证明",
-        "是否匹配", "对应起来", "结合岗位", "岗位要求与", "候选人是否",
-        "简历经历", "项目记录", "共同体现",
-        "跨来源", "知识关系", "跳联系", "关系路径", "互补证据",
+    输入 Query 和 Router 已限定的来源，先提取精确术语、语义解释、实体类型、
+    关系推理和多来源综合信号，再生成 `EvidenceRequirement`。策略选择只消费
+    证据需求，因此不会再用“Query 很短”这类弱信号直接决定检索算法。
+    """
+
+    _semantic_markers = (
+        "换句话", "同义", "通俗", "口语", "改写", "另一种说法",
+        "如何", "怎么", "为什么", "原理", "解释", "提升", "降低", "减少", "优化",
+        "不使用原文", "不用原文", "概括", "转述",
     )
+    _multi_source_markers = ("结合", "对比", "综合", "分别", "共同分析")
+    _comparison_markers = ("对比", "比较", "区别", "差异", "更适合", "优先选择")
+    _strong_relation_markers = (
+        "哪些项目", "哪个项目", "哪项项目", "哪些经历", "哪段经历",
+        "能否证明", "是否证明", "可以证明", "如何证明", "对应关系", "对应起来",
+        "关联起来", "有什么关联", "根据经历推荐", "共同体现",
+        "知识关系", "关系路径", "关系链", "跳联系", "多跳", "为什么符合", "为何符合",
+    )
+    _weak_relation_markers = ("匹配", "适合这个岗位", "符合这个岗位", "关联")
+    _fact_markers = ("是什么", "有哪些", "多少", "何时", "哪里", "职责", "要求", "版本")
     _technical_terms = (
         "混合检索", "引用校验", "请求追踪", "意图路由", "上下文预算", "失败回归",
-        "bm25", "dense", "rrf", "agent", "rag", "trace", "citation",
+        "bm25", "dense", "rrf", "agent", "rag", "trace", "citation", "redis",
+        "pgvector", "neo4j", "crossencoder", "cross-encoder", "fastapi", "docker",
     )
+    _entity_markers = {
+        "job": ("岗位", "职位", "jd", "招聘"),
+        "skill": ("技能", "能力", "要求", "技术栈"),
+        "project": ("项目", "作品", "系统"),
+        "experience": ("经历", "简历", "经验", "候选人", "个人背景"),
+        "company": ("公司", "企业", "部门"),
+    }
     _latin_term_pattern = re.compile(r"[A-Za-z][A-Za-z0-9_.+-]+")
 
     def analyze(
@@ -91,55 +132,107 @@ class QueryAnalyzer:
         query: str,
         source_types: set[str] | None,
     ) -> QueryFeatures:
-        """从 Query 和 Router source filter 提取策略选择所需特征。"""
+        """提取词面、语义、实体关系和来源需求信号。"""
 
         normalized = query.strip().lower()
         sources = source_types or set()
+        entity_types = tuple(
+            entity_type
+            for entity_type, markers in self._entity_markers.items()
+            if any(marker in normalized for marker in markers)
+        )
+        strong_relations = tuple(
+            marker for marker in self._strong_relation_markers if marker in normalized
+        )
+        weak_relations = tuple(
+            marker for marker in self._weak_relation_markers if marker in normalized
+        )
+        needs_exact_match = (
+            any(term in normalized for term in self._technical_terms)
+            or bool(self._latin_term_pattern.search(query))
+            or any(marker in normalized for marker in self._fact_markers)
+        )
+        needs_semantic_match = any(
+            marker in normalized for marker in self._semantic_markers
+        )
+        needs_multi_source = (
+            len(sources) >= 2
+            or any(marker in normalized for marker in self._multi_source_markers)
+            or any(marker in normalized for marker in self._comparison_markers)
+        )
+        requires_entity_reasoning = bool(strong_relations) or (
+            bool(weak_relations) and len(entity_types) >= 3
+        )
         return QueryFeatures(
-            char_count=len(normalized),
-            source_count=len(sources),
-            has_exact_term=(
-                any(term in normalized for term in self._technical_terms)
-                or bool(self._latin_term_pattern.search(query))
-            ),
-            has_semantic_rewrite=any(
-                marker in normalized for marker in self._semantic_markers
-            ),
-            is_multi_source=(
-                len(sources) >= 2
-                or any(marker in normalized for marker in self._multi_source_markers)
-            ),
-            is_cross_document=(
-                any(marker in normalized for marker in self._cross_document_markers)
-                or (
-                    "岗位" in normalized
-                    and any(marker in normalized for marker in ("项目", "经历", "简历"))
-                )
-            ),
+            needs_exact_match=needs_exact_match,
+            needs_semantic_match=needs_semantic_match,
+            needs_multi_source=needs_multi_source,
+            requires_entity_reasoning=requires_entity_reasoning,
+            entity_types=entity_types,
             is_unanswerable_route=source_types is not None and not source_types,
+        )
+
+    def classify_evidence_need(
+        self,
+        features: QueryFeatures,
+    ) -> EvidenceRequirement:
+        """把 Query 特征归纳为事实、语义、关系或综合证据需求。"""
+
+        if features.is_unanswerable_route:
+            return EvidenceRequirement(
+                "unanswerable", False, False, False, False,
+                "router returned no searchable sources",
+            )
+        if features.requires_entity_reasoning:
+            return EvidenceRequirement(
+                "relation_reasoning", True, True, True,
+                features.needs_multi_source or len(features.entity_types) >= 2,
+                "query needs an explicit relation path between entities",
+            )
+        if features.needs_multi_source:
+            return EvidenceRequirement(
+                "multi_source_synthesis", True, True, False, True,
+                "query needs evidence synthesis or comparison across sources",
+            )
+        if features.needs_semantic_match:
+            return EvidenceRequirement(
+                "semantic_explanation", False, True, False, False,
+                "query asks for semantic explanation or paraphrased evidence",
+            )
+        if features.needs_exact_match:
+            return EvidenceRequirement(
+                "exact_fact", True, False, False, False,
+                "query asks for an exact term or literal fact",
+            )
+        return EvidenceRequirement(
+            "balanced_retrieval", True, True, False, False,
+            "evidence need is ambiguous, so lexical and semantic recall are retained",
         )
 
     def choose_strategy(
         self,
-        features: QueryFeatures,
+        requirement: QueryFeatures | EvidenceRequirement,
         *,
         graph_enabled: bool = False,
     ) -> tuple[RetrievalStrategy, str]:
-        """根据特征选择检索策略；图未配置时保持 P1-D2 行为。"""
+        """把证据需求映射到可用 Retriever，并对缺失图能力受控降级。"""
 
-        if features.is_unanswerable_route:
-            return "bm25", "router returned no searchable sources"
-        if graph_enabled and features.is_cross_document:
-            return "graph_hybrid", "cross-document relation query uses graph and vector evidence"
-        if features.is_multi_source:
-            return "hybrid", "multi-source query needs lexical and semantic recall"
-        if features.has_semantic_rewrite and not features.has_exact_term:
-            return "dense", "semantic rewrite has weak exact-term overlap"
-        if features.char_count <= 8 and not features.has_exact_term:
-            return "bm25", "short literal query uses low-cost lexical retrieval"
-        if features.has_exact_term:
-            return "hybrid", "exact term benefits from lexical recall with dense backup"
-        return "hybrid", "ambiguous query keeps lexical and semantic recall paths"
+        evidence = (
+            self.classify_evidence_need(requirement)
+            if isinstance(requirement, QueryFeatures)
+            else requirement
+        )
+        if evidence.need_type == "unanswerable":
+            return "bm25", evidence.reason
+        if evidence.graph_required:
+            if graph_enabled:
+                return "graph_hybrid", evidence.reason
+            return "hybrid", f"{evidence.reason}; graph unavailable, use hybrid fallback"
+        if evidence.lexical_required and not evidence.semantic_required:
+            return "bm25", evidence.reason
+        if evidence.semantic_required and not evidence.lexical_required:
+            return "dense", evidence.reason
+        return "hybrid", evidence.reason
 
 
 class AdaptiveRetriever:
@@ -187,8 +280,9 @@ class AdaptiveRetriever:
         """执行策略选择、置信度判断和最多一次 CrossEncoder 重排。"""
 
         features = self.analyzer.analyze(query, source_types)
+        evidence_requirement = self.analyzer.classify_evidence_need(features)
         strategy, strategy_reason = self.analyzer.choose_strategy(
-            features, graph_enabled=self.graph_retriever is not None
+            evidence_requirement, graph_enabled=self.graph_retriever is not None
         )
         if self.config.force_strategy is not None:
             strategy = self.config.force_strategy
@@ -201,6 +295,8 @@ class AdaptiveRetriever:
                 rerank_applied=False,
                 candidate_count=0,
                 reason=strategy_reason,
+                query_features=asdict(features),
+                evidence_requirement=asdict(evidence_requirement),
             )
             self._last_decision.set(decision)
             self._last_stage_trace.set({})
@@ -253,6 +349,8 @@ class AdaptiveRetriever:
             ),
             reranker_name=self.scorer.name if should_rerank else None,
             reranker_version=self.scorer.version if should_rerank else None,
+            query_features=asdict(features),
+            evidence_requirement=asdict(evidence_requirement),
         )
         self._last_decision.set(decision)
         self._last_stage_trace.set(stage_trace)

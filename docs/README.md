@@ -5,10 +5,11 @@
 ## 推荐阅读顺序
 
 1. [项目地图](overview/project_map_zh.md)：先理解系统位置、主链和核心数据结构。
-2. [三条链路快速复习](overview/system_flows_explained_zh.md)：复习在线回答、离线评测和 P1 服务链路。
-3. [详细架构](overview/architecture.md)：需要理解设计取舍时再读。
-4. [最终实验报告](evaluation/final_experiment_report.md)：核对指标、失败案例和实验边界。
-5. [Chunking 模块说明](guides/chunking_explained_zh.md)：Document、Chunk 与 metadata 设计。
+2. [当前架构图](overview/architecture_diagram.md)：查看知识构建、在线链路、评测回归和服务持久化。
+3. [三条链路快速复习](overview/system_flows_explained_zh.md)：复习在线回答、离线评测和 P1 服务链路。
+4. [详细架构](overview/architecture.md)：需要理解契约、边界和失败状态时再读。
+5. [最终实验报告](evaluation/final_experiment_report.md)：核对指标、负结果和实验边界。
+6. [Chunking 模块说明](guides/chunking_explained_zh.md)：Document、Chunk 与 metadata 设计。
 
 ## 目录职责
 

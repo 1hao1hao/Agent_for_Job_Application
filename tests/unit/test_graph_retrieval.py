@@ -125,7 +125,7 @@ class GraphRetrievalTests(unittest.TestCase):
         self.assertEqual([item.chunk_id for item in fallback], ["jd-1", "resume-1"])
         self.assertTrue(retriever.get_last_trace()["vector_fallback"])
 
-    def test_adaptive_selects_graph_only_for_cross_document_query(self) -> None:
+    def test_adaptive_selects_graph_only_for_relation_reasoning_query(self) -> None:
         base_results = [RetrievalResult("jd-1", 0.9, 1, self.chunks[0])]
         base = FixedRetriever(base_results)
         graph_vector = GraphVectorRetriever(GraphRetriever(_graph()), base)

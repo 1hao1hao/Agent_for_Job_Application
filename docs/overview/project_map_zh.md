@@ -126,7 +126,7 @@ PostgreSQL 是任务状态的真相来源；Redis 负责短期队列和最近会
 | BM25 | token overlap 没有词频、逆文档频率和长度归一 | 标准 BM25 公式，离线统计文档频率与平均长度，接口与其他 Retriever 一致 | 提供可解释稀疏检索基线；精确术语快，但同义召回弱 |
 | Dense Retrieval | BM25 依赖词面重叠 | `BAAI/bge-small-zh-v1.5` 离线编码 Chunk，查询时只编码 Query并计算余弦相似度 | 找回“参与智能问答开发”等语义改写，代价是更高 CPU 延迟 |
 | RRF Hybrid | BM25 与 Dense 原始分数不可直接相加 | Reciprocal Rank Fusion 只融合名次，去重后稳定排序 | v0.2 frozen 相比 Keyword，Recall@3 55.56% -> 68.33%，MRR 60.83% -> 66.78% |
-| Query Analyzer / Adaptive Retrieval | 所有 Query 都跑最重策略会浪费延迟 | 检索前从 Query 和 Router sources 提取 7 个可解释特征选择 BM25、Dense、Hybrid 或 Graph+Vector；检索后再计算候选置信度，决定是否 CrossEncoder 重排 | 将“首次检索选路”与“低置信补救”分成两阶段；但 v0.3 dev 因规则漏触发关系 Query，Adaptive Recall@5/MRR 为 48.33%/42.21%，低于固定 Graph+Vector 的 58.33%/52.10% |
+| Query Analyzer / Adaptive Retrieval | 固定策略无法同时适配精确事实、语义解释、多源综合和关系推理 | `Query Feature Extraction -> Evidence Need Classification -> Retriever Selection`：先识别精确术语、语义意图、实体类型和关系需求，再选择 BM25、Dense、Hybrid 或 Graph+Vector；检索后按候选置信度决定是否 CrossEncoder 重排 | Graph 不再由“跨文档”机械触发，而由实体关系推理需求触发；策略、特征、证据需求和重排原因均进入 Trace，便于按错误类型继续做同集消融 |
 | Job-Skill-Experience Graph | 向量相似不等于能连接“岗位要求-项目技能-个人经历” | 抽取 Job、Skill、Project、Experience、Technology、Company 节点和有向关系，全部回指 Chunk | v0.3 构建 3098 节点、2741 边，支持可解释多跳证据 |
 | Graph + Vector Retrieval | Graph-only 容易漏文本，Vector-only 缺关系路径 | 实体链接和有界多跳召回图证据，再用 RRF 与向量 Chunk 融合 | 80 条 frozen 上相对 BM25：Recall@5 46.67% -> 63.33%，MRR 35.19% -> 57.58%；P95 15.50 -> 1209.40 ms |
 | CrossEncoder Rerank Policy | 召回改善后仍可能存在前排噪声，但全量重排成本高 | 对同一 BM25+Dense+RRF 候选分别运行 never / always / low-confidence，用同一 MiniLM revision 控制变量 | v0.3 dev：always 将 MRR 44.31% -> 49.22%但 P95 1252 -> 2799 ms；按需调用率 18.12%、MRR 45.18%、P95 2175 ms，无 Pareto 最优 |
@@ -415,12 +415,14 @@ Vector 路：
 
 ## Query Analyzer + Adaptive Retriever 详解
 
-### 1. 它不是一次决策，而是两阶段决策
+### 1. 它是“理解证据需求 + 检索后补救”两阶段决策
 
 ```text
 Query + Router.routed_sources
   -> QueryAnalyzer.analyze()
   -> QueryFeatures
+  -> QueryAnalyzer.classify_evidence_need()
+  -> EvidenceRequirement
   -> QueryAnalyzer.choose_strategy()
   -> 选择首次检索策略
   -> 产生 candidates
@@ -430,56 +432,108 @@ Query + Router.routed_sources
   -> list[RetrievalResult] + RetrievalDecision Trace
 ```
 
-- **检索前**：Query Analyzer 只看 Query 文本和 Router 给出的 `source_types`，选择首次检索策略。
+- **检索前**：先判断“回答需要什么证据”，再把证据需求映射到 Retriever。Query 长短不再
+  直接决定 BM25，多个来源也不再自动等同于图推理。
 - **检索后**：Adaptive Retriever 才能看到候选排名和分数，计算置信度并决定是否重排。
 - 因此“低置信”**不是** Query Analyzer 特征，而是首次检索后的结果质量信号。
+
+这仍然是确定性、可解释的 Query Understanding 模块，不调用 LLM。它比原来的规则表多了一层
+`EvidenceRequirement` 契约，使“问题类型”和“具体检索实现”解耦。
 
 ### 2. 可选的检索与重排算法
 
 | 策略 | 实际做什么 | 适合的 Query |
 |---|---|---|
-| `bm25` | 根据词频、逆文档频率和文档长度计算词面相关性 | 短 Query、岗位名、技术名和精确术语 |
-| `dense` | 用 `BAAI/bge-small-zh-v1.5` 编码 Query，与离线 Chunk 向量计算余弦相似度 | 同义改写、词面不重合的语义问题 |
-| `hybrid` | 分别运行稀疏检索和 Dense，再用 RRF 融合 rank | 多来源、含精确术语但也需要语义召回的 Query |
-| `graph_hybrid` | 运行有界 Graph Retrieval，再用 RRF 与 Vector Hybrid 候选融合 | 需要连接“岗位-技能-项目/经历”的跨文档关系 Query |
+| `bm25` | 根据词频、逆文档频率和文档长度计算词面相关性 | 专有名词、技术缩写、岗位字段和精确事实，例如“Redis Stream 是什么” |
+| `dense` | 用 `BAAI/bge-small-zh-v1.5` 编码 Query，与离线 Chunk 向量计算余弦相似度 | 同义改写和语义解释，例如“如何减少检索偏差” |
+| `hybrid` | 分别运行稀疏检索和 Dense，再用 RRF 融合 rank | 多源综合、比较分析，或无法可靠单选词面/语义的 Query |
+| `graph_hybrid` | 运行有界 Graph Retrieval，再用 RRF 与 Vector Hybrid 候选融合 | 需要实体关系路径才能回答，例如“哪个项目能证明我符合这个岗位” |
 | CrossEncoder Rerank | 将 `Query + 候选 Chunk` 成对编码并重新评分，再用加权 RRF 融合原排名与重排名 | 首次候选置信度低且希望改善前排排序时 |
 
 `hybrid` 的稀疏路可配置：`adaptive_lexical="bm25"` 时是 BM25 + Dense；未配置时
 工厂保留旧的 Keyword + Dense 默认行为。P1-D9 的 Reranker 控制实验明确使用
 BM25 + Dense + RRF；P1-D7 已冻结的旧配置没有因本轮文档更新而改写。
 
-### 3. QueryFeatures 的数值从哪里来
+### 3. QueryFeatures 如何得到
 
-| 特征 | 计算方法 | 作用 |
-|---|---|---|
-| `char_count` | `query.strip().lower()` 后的字符数 | `<= 8` 且没有精确术语时，视为短词面 Query |
-| `source_count` | Router 输出的 `routed_sources` 数量 | 两种及以上来源时视为多来源 Query |
-| `has_exact_term` | 命中 `BM25/RRF/RAG/Trace/...` 技术词表，或匹配英文/数字技术名正则 | 保留稀疏检索的精确匹配优势 |
-| `has_semantic_rewrite` | 命中“换句话、同义、通俗、口语、改写”等标记词 | 表示词面重合可能较弱，倾向 Dense |
-| `is_multi_source` | Router 来源数 `>= 2`，或命中“结合、对比、匹配、综合、个人经历” | 同时保留词面和语义召回路 |
-| `is_cross_document` | 命中“哪些项目、能否证明、对应起来、关系路径”等词，或同时出现“岗位”与“项目/经历/简历” | Graph 可用时触发 Graph + Vector |
-| `is_unanswerable_route` | Router 明确返回空 `source_types=set()` | 直接返回空检索结果，不调用实际 Retriever |
+面试时不需要背十几个字段，只记住**四个核心信号**：精确、语义、多源、关系。
+另外两个字段只是上下文，不属于新的决策维度。
 
-这些都是**确定性规则特征**，不是 LLM 或学习模型预测出来的“通用语义复杂度”。
-好处是便宜、可解释和易于写 Trace；局限是 marker 没覆盖新表达时会选错策略。
+| 类别 | 特征 | 计算方法 | 作用 |
+|---|---|---|---|
+| 核心信号 | `needs_exact_match` | 技术词/英文缩写，或“是什么、职责、版本”等事实问法 | 需要保留精确词面匹配 |
+| 核心信号 | `needs_semantic_match` | “如何、为什么、概括、改写、优化”等语义问法 | 需要处理同义表达和概念解释 |
+| 核心信号 | `needs_multi_source` | Router 给出多个来源，或命中“结合、对比、综合、区别”等信号 | 需要融合多来源证据 |
+| 核心信号 | `requires_entity_reasoning` | 强关系表达；或弱关系表达同时涉及至少 3 类实体 | 需要显式实体关系路径 |
+| 上下文 | `entity_types` | 轻量词典识别 Job、Skill、Project、Experience、Company | 辅助关系需求判断和 Trace 解释 |
+| 边界 | `is_unanswerable_route` | Router 明确返回空 `source_types=set()` | 不调用 Retriever，直接进入证据不足分支 |
 
-### 4. 首次检索策略的优先级
+这些特征会完整写入 `RetrievalDecision.query_features`。其中实体识别是轻量类型词典，
+不是完整 NER（命名实体识别）；优点是低延迟和可复现，局限是新表达仍需要通过失败 Case 扩展。
 
-`choose_strategy()` 从上往下判断，命中后立即停止：
+### 4. QueryFeatures 如何映射到 EvidenceRequirement
 
-| 优先级 | 条件 | 策略 | 例子 |
+`classify_evidence_need()` 按下表从上到下判断，命中后停止：
+
+| 优先级 | QueryFeatures 条件 | EvidenceRequirement | 所需能力 |
 |---:|---|---|---|
-| 1 | Router 明确无可搜来源 | 不执行检索 | “给我未公开的公司薪资名单” |
-| 2 | Graph 可用且 `is_cross_document=true` | `graph_hybrid` | “哪个项目能证明我符合这个岗位的 RAG 要求？” |
-| 3 | `is_multi_source=true` | `hybrid` | “结合 JD 和简历分析匹配度” |
-| 4 | 明确语义改写且没有精确术语 | `dense` | “换句话说明如何减少召回偏科” |
-| 5 | Query 不超过 8 字且没有精确术语 | `bm25` | “岗位职责” |
-| 6 | 命中精确技术术语 | `hybrid` | “RRF 是什么？” |
-| 7 | 上述均未命中 | `hybrid` | 普通但无法明确判定偏词面还是偏语义的 Query |
+| 1 | `is_unanswerable_route` | `unanswerable` | 不检索 |
+| 2 | `requires_entity_reasoning` | `relation_reasoning` | lexical + semantic + graph |
+| 3 | `needs_multi_source` | `multi_source_synthesis` | lexical + semantic + multi-source |
+| 4 | `needs_semantic_match` | `semantic_explanation` | semantic |
+| 5 | `needs_exact_match` | `exact_fact` | lexical |
+| 6 | 都未命中 | `balanced_retrieval` | lexical + semantic |
 
-这里的“自适应”是**一个可解释的规则策略选择器**，不是训练出来的 Policy Model。
+优先级很重要。例如“如何降低 RAG 幻觉”同时含精确术语 `RAG` 和语义问法“如何”，
+最终归为 `semantic_explanation`；“结合 JD 和简历分析匹配度”先归为多源综合，而不是
+因为 `JD` 是英文就退化成精确事实查询。
 
-### 5. 检索置信度怎么算
+### 5. EvidenceRequirement 如何映射到 Retriever
+
+`EvidenceRequirement` 不决定具体算法，只声明需要哪些检索能力；`choose_strategy()` 根据
+当前系统可用能力进行映射：
+
+| 所需能力 | Retriever | 原因 |
+|---|---|---|
+| `graph_required=true` 且 Graph 可用 | Graph + Vector | 同时提供关系路径与可引用文本 |
+| `graph_required=true` 但 Graph 不可用 | Hybrid | 受控降级，不让 Pipeline 报错 |
+| 只需要 lexical | BM25 | 精确匹配且成本最低 |
+| 只需要 semantic | Dense | 处理同义表达和语义解释 |
+| lexical + semantic | Hybrid | 用 RRF 保留两路候选 |
+
+`EvidenceRequirement` 还保存 `lexical_required / semantic_required / graph_required /
+multi_source_required / reason`。这样即使以后把特征提取替换成分类模型，Retriever Selection
+和 Pipeline 接口也不用重写。
+
+因此 `choose_strategy()` **不是多余步骤**：EvidenceRequirement 是“我要什么证据”，
+Selector 是“现有系统用哪个实现满足它”。如果未来 Dense 不可用、增加新的图服务或需要按延迟
+降级，只改 Selector，不改 Query Understanding。
+
+### 6. Graph 为什么由关系推理触发
+
+旧实现把“跨文档”近似成 Graph 需求，例如同时出现“岗位 + 项目”就走图。这会误判：
+跨来源总结可以直接用 Hybrid 找证据，不一定需要图。
+
+新版只有两类情况设置 `requires_entity_reasoning=true`：
+
+1. 命中“哪个项目、哪段经历、证明、对应关系、共同体现”等强关系表达；
+2. 命中“匹配、符合、关联”等弱关系表达，并且 Query 同时包含至少 3 类实体。
+
+例如：
+
+```text
+“结合 JD 和简历分析匹配度”
+  -> 多源综合 -> Hybrid
+
+“哪个项目能证明我符合这个 RAG 岗位要求”
+  -> Job + Skill + Project + 证明关系
+  -> Graph + Vector
+  -> Job -requires-> Skill <-demonstrates- Project
+```
+
+Graph 未配置时不会报错，而是受控降级到 Hybrid，并把降级原因写进 Trace。
+
+### 7. 检索置信度怎么算
 
 首次检索后，`_retrieval_confidence()` 把四项信号加权到 `0~1`：
 
@@ -500,7 +554,7 @@ confidence = 0.25 * quantity
 当前 v0.3 配置门槛为 `0.65`。例如候选够 5 条，但前两名几乎同分、缺一个
 Router 要求的来源，且首位只被单路召回，置信度就会低于门槛。
 
-### 6. 什么时候重排
+### 8. 什么时候重排
 
 | `rerank_policy` | 行为 |
 |---|---|
@@ -517,17 +571,22 @@ fused_score = 2 / (60 + original_rank)
 ```
 
 原排名权重为 2，重排名权重为 1，目的是让 CrossEncoder 改善前排，同时降低它将已验证
-召回排序完全推翻的风险。最终的 `strategy / confidence / rerank_invoked / reason /
-candidate_count / model version` 都会写入 `RetrievalDecision` 和 Trace。
+召回排序完全推翻的风险。最终的 `query_features / evidence_requirement / strategy /
+confidence / rerank_invoked / reason / candidate_count / model version` 都会写入
+`RetrievalDecision` 和 Trace。
 
-### 7. 当前实验告诉我们什么
+### 9. 当前实验与本轮改进边界
 
-- 固定 Graph + Vector 在 v0.3 dev 的 Recall@5/MRR 为 58.33%/52.10%，当前 Adaptive Graph
-  为 48.33%/42.21%；根因是手工 cross-document markers 没覆盖所有关系型问法。
+- 旧版固定 Graph + Vector 在 v0.3 dev 的 Recall@5/MRR 为 58.33%/52.10%，旧版 Adaptive
+  Graph 为 48.33%/42.21%；失败分析表明 `is_cross_document` 同时存在漏触发和误触发风险。
+- 本轮把它替换为 `requires_entity_reasoning + EvidenceRequirement`。在同一 v0.3/dev 160 条
+  Case 上，新版 Recall@5 为 48.75%，略高于旧版 48.33%；MRR 为 39.01%，低于旧版
+  42.21%，说明关系召回覆盖略升但前排排序仍需改进。完整失败修复与策略分布见
+  `reports/ablations/p1-query-evidence-adaptive-v03-dev-20260825-fixed/`。
 - Always Rerank 把 MRR 从 44.31% 提高到 49.22%，但 P95 从 1252 ms 增加到
   2799 ms；按需重排调用率 18.12%，但没有同时取得最优质量和延迟。
-- 所以这个模块已经实现了可配、可解释和可消融的自适应控制，但当前规则选择器
-  还不是最终质量最优策略。
+- 所以该模块的价值是把问题理解、证据需求、检索执行和低置信补救分层，并保留逐 Case
+  审计能力；它仍是可解释规则版 Query Understanding，不包装成训练得到的 Policy Model。
 
 ## 评测指标速查
 
@@ -561,5 +620,5 @@ Abstention 与重试不是一回事：重试是得到最终决策前的内部动
 
 1. 本文四条主链和模块表。
 2. [系统链路解释](system_flows_explained_zh.md)：用一次请求和一次评测理解数据如何流动。
-3. [最终实验报告](../evaluation/final_experiment_report.md)：核对指标、负结果和证据路径。
-4. [口头介绍](../development/interview_guide_zh.md)：练习 30 秒和 5 分钟版本。
+3. [当前架构图](architecture_diagram.md)：查看四条链路及数据结构如何连接。
+4. [最终实验报告](../evaluation/final_experiment_report.md)：核对指标、负结果和证据路径。

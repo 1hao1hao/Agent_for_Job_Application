@@ -1,813 +1,274 @@
-# EvalRAG Architecture
+# EvalRAG 详细架构
+
+本文件描述当前 P1 的模块契约、职责边界和失败状态。第一次阅读请先看
+[项目地图](project_map_zh.md)；需要看整体连接时查 [架构图](architecture_diagram.md)；
+数字统一以 [最终实验报告](../evaluation/final_experiment_report.md) 为准。
 
 ## 架构目标
 
-EvalRAG 是一个围绕 RAG 运行与质量评估设计的轻量 Agent Harness。P0 使用原生 Python 和少量必要依赖，重点不是框架数量，而是：
-
-- 模块契约清楚。
-- 运行过程可追踪。
-- 失败可以归因。
-- 实验能够复现。
-- 修改能够回归验证。
-
-新人第一次理解项目时先读 `docs/overview/project_map_zh.md`。本文件用于补充详细职责、
-约束和设计取舍，不要求按文件顺序一次读完。
-
-## 系统边界
+EvalRAG 是围绕中文多源知识推理构建的 RAG Agent Harness。它不把“能调用 LLM”当作完成，
+而要求每次请求可追踪、每次改动可评测、已确认失败可回归、证据不足时可拒答。
 
 系统分为四条链路：
 
 ```text
-1. Data Pipeline
-   raw documents -> normalize -> chunk -> index
-
-2. Online RAG Pipeline
-   query -> route -> retrieve -> evidence gate
-         -> context -> generate -> validate -> answer / retry / abstain
-         -> trace
-
-3. Evaluation Harness
-   frozen labels + run config -> execute pipeline -> case results
-                              -> metrics -> report -> failures
-
-4. Serving
-   FastAPI -> request validation -> pipeline -> response / error
+Knowledge Build: raw/public data -> Document -> Chunk -> indexes / graph
+Online Runtime:  request -> route -> adaptive retrieve -> gate -> context -> generate -> validate
+Evaluation:      cases + config -> predictions -> metrics -> failures -> regression / CI gate
+Serving:         FastAPI -> Runtime / Worker -> PostgreSQL / Redis / pgvector / Neo4j / reports
 ```
 
-求职资料只属于 Data 与 Evaluation 的一个 profile，核心 pipeline 不应直接硬编码“简历回答模板”。
+求职资料是当前业务 profile，核心 Retriever、Runtime、Trace 和 Evaluation 不硬编码求职回答模板。
 
-## 当前状态
+## 1. 知识与索引
 
-当前已实现：
+### 统一证据契约
+
+`Document` 保存原文与统一 metadata；`Chunk` 是检索、图关系、Context 和 Citation 共同消费的
+最小证据单元。Chunk 完整继承 source、路径、时效、owner scope 和 provenance，并增加稳定 ID、
+序号和切分信息。
 
 ```text
-raw files -> Document -> Chunk
-query -> rule router -> keyword retrieval -> context -> structured generation
-      -> citation validation -> RagResponse
-routing/retrieval/context/generation/validation -> AgentTrace JSONL
-versioned reviewed labels -> real router/retriever predictions
-                          -> Recall@3 / Recall@5 / MRR / Router Accuracy
-                          -> standard run artifacts
+Importer -> Document -> boundary-aware chunking -> Chunk
 ```
 
-P0 目标：
+稳定 `chunk_id` 由来源路径、source type、文本内容和 chunk 序号等稳定输入生成；相同快照重复构建
+得到相同 ID，使 `relevant_chunk_ids`、Citation 和 Regression 不会随运行随机漂移。
+
+### Corpus v0.3
+
+知识构建保存三类工件：
+
+- `manifest`：原始材料的来源、revision、许可、采集时间、公开/脱敏和审核状态。
+- `versioned chunks`：固定版本的证据快照，供索引与评测共同引用。
+- `stats`：文档/Chunk 数、长度分布、空文档、重复 hash、近重复组和来源占比。
+
+SHA-256 用于完全重复检测；SimHash 用于模板化近重复候选；provenance 用于回答“材料从哪里来、
+何时获取、能否公开、是否脱敏”。它们属于离线 Corpus 构建，不参与在线 Query 检索打分。
+
+### 索引与图
 
 ```text
-raw files
-  -> normalized chunks
-  -> keyword index / dense index
-
-RagRequest
-  -> Router
-  -> Configurable Retriever
-  -> Context Builder
-  -> Structured LLM Generator
-  -> Citation Validator
-  -> Evidence Checker
-       -> GENERATE
-       -> BROADEN_SOURCE_AND_RETRY_ONCE
-       -> ABSTAIN
-  -> RagResponse
-  -> AgentTrace
-
-EvaluationDataset + RunConfig
-  -> EvaluationRunner
-  -> Metrics + CaseResults + FailureTaxonomy
-  -> Versioned Report
-  -> Executable Regression
+Versioned Chunks
+  -> BM25 document statistics
+  -> BGE Dense vectors -> file exact / pgvector exact or HNSW
+  -> deterministic entity/relation extraction -> Graph JSON / Neo4j
 ```
 
-## 离线数据链路
+图包含 Job、Skill、Project、Experience、Technology、Company 等节点，以及 `requires`、
+`demonstrates`、`uses`、`belongs_to`、`related_to` 等有向关系。节点和边必须保留支撑它们的
+`chunk_ids`；图只用于寻路，最终进入 Prompt 和 Citation 的仍是原始 Chunk。
 
-查询时不重新切分全部文档。数据新增或变化后执行离线处理：
+## 2. 在线 Runtime
 
-1. importer 将 manual、JSON 或 CSV 数据转成 `Document`。
-2. chunking 生成稳定 `Chunk.id` 并继承 metadata。
-3. exporter 保存版本化 chunks。
-4. keyword retriever 直接消费 chunks。
-5. dense index builder 预计算 embedding 并保存索引。
+### 请求与响应
 
-### 当前 source types
+`RagRequest` 包含 query、请求配置以及可选 `user_id/session_id`；`RagResponse` 返回 answer、
+合法 citations、状态、trace_id、路由来源、延迟和受控错误。服务、CLI 和 Evaluation Worker
+复用同一 Runtime，不平行实现三套 Pipeline。
 
-- `jd`
-- `resume`
-- `interview`
-- `project_logs`
-- `user_profile`
+### Router
 
-### 岗位时效性 metadata
+统一 `Router` 接口输出：
 
 ```text
-source_type
-job_id
-company
-job_title
-city
-source_platform
-source_url
-first_seen_at
-last_seen_at
-status: active | expired | unknown
-version
-source_priority
-content_hash
+RouteDecision(intent, routed_sources, confidence, reason, details)
 ```
 
-Chunk 必须完整继承 Document metadata。`expired`、`last_seen_at` 和 `source_priority` 后续可用于 freshness filter，但 P0 不实现爬虫或复杂数据库。
+- Rule：关键词命中，低延迟且可解释。
+- Semantic：BGE Query 与版本化 intent prototypes 的相似度和 margin。
+- Hybrid：一致时采用结果；只允许高分、高 margin 的 Semantic 覆盖弱 Rule。
+- Feedback：只消费已确认、通过 shadow/dev gate 的短意图锚点；在线请求不直接学习。
 
-## 在线 Pipeline
+Router 负责缩小知识来源，不负责决定 BM25/Dense/Graph；后者由 Query Analyzer 处理。
 
-### RagRequest / RagResponse
-
-目标请求：
+### Query Analyzer 与 Adaptive Retriever
 
 ```text
-RagRequest
-  request_id: str
-  query: str
-  top_k: int
-  retriever: keyword | dense | hybrid
+query + routed_sources
+-> QueryFeatures
+-> EvidenceRequirement
+-> strategy selection
+-> candidates
+-> retrieval confidence
+-> optional CrossEncoder
+-> list[RetrievalResult] + RetrievalDecision
 ```
 
-目标响应：
+`QueryFeatures` 只保留四个核心证据信号：精确词面、语义、多来源、实体关系；实体类型和
+`is_unanswerable_route` 是辅助上下文。`EvidenceRequirement` 描述需要 lexical、semantic、
+graph 或 multi-source 能力，策略映射为：
+
+| 证据需求 | Retriever |
+|---|---|
+| 精确事实 | BM25 |
+| 语义解释/改写 | Dense |
+| 多源综合或不确定 | BM25 + Dense RRF Hybrid |
+| 实体关系推理 | Graph + Vector |
+| Graph 不可用 | 受控降级到 Hybrid |
+
+首次检索后，数量、首位 margin、required source coverage 和双路一致性组合成置信度。
+`rerank_policy=low_confidence` 时只对低置信候选运行一次 CrossEncoder，并用加权 RRF 保留原排序；
+它不能找回未进入候选集的 Chunk。策略、特征、证据需求、置信度、重排原因和模型版本进入 Trace。
+
+### Graph + Vector
+
+Graph Retriever 先做实体链接和关系识别，再执行有 hop、节点数和 timeout 上限的双向 BFS，收集
+节点/边引用的 Chunk。Vector 分支为 Sparse + BGE Dense 的 RRF Hybrid；两路候选去重后再用
+外层 RRF 融合，并保存 vector rank、graph rank、path、edge IDs 和 path validity。
+
+Graph 没有链接到实体时返回空路，由 Vector 候选兜底。Graph-only 不是默认策略，因为它提供关系
+路径但文本覆盖不足。
+
+### Evidence Gate 与两类重试
+
+Evidence Gate 检查 route、结果数量、最高分和 required-source coverage，输出：
 
 ```text
-RagResponse
-  request_id: str
-  trace_id: str
-  answer: str
-  citations: list[Citation]
-  routed_sources: list[str]
-  status: answered | insufficient_evidence | error
-  latency_ms: float
-  error_type: str | None
+sufficient   -> 构建 Context 并生成
+retryable    -> 去掉 source filter，全库检索一次
+insufficient -> 明确拒答
 ```
 
-先检查能否复用现有 `AnswerResult`、`Citation` 和 `AgentTrace`，不平行定义重复结构。
+扩源重试只解决“Router 过滤过窄但全库可能有证据”，最多一次。模型 JSON 格式错误由 Generator
+使用修复 Prompt 再生成一次；这两类重试原因不同、计数独立，均不能无限循环。
 
-### Source Router
-
-职责：
-
-- 根据 query 预测 intent。
-- 返回优先 source types。
-- 保留 matched rules 或置信信息，供 Trace 与评测使用。
-
-当前实现是规则 Router。P0 先保留为可解释 baseline，不急于换 LLM Router。
-
-Router 失败不通过“全库搜索后看答案不错”来掩盖，必须单独计算 Router Accuracy。
-
-### Retriever
-
-统一目标接口：
-
-```python
-class Retriever(Protocol):
-    def __call__(
-        self,
-        query: str,
-        chunks: list[Chunk],
-        top_k: int = 5,
-        source_types: set[str] | None = None,
-    ) -> list[RetrievalResult]:
-        ...
-```
-
-三种 P0 配置：
-
-1. `keyword`：现有关键词重叠 baseline。
-2. `dense`：P0-D3 正式配置使用 512 维 `BAAI/bge-small-zh-v1.5` 中文
-   embedding，并固定 Hugging Face commit；字符 TF-IDF + LSA 保留为无模型下载
-   fallback。
-3. `hybrid`：Keyword 与 Dense 使用 RRF 融合。
-
-RRF：
+### ContextPolicy 与 ContextEngine
 
 ```text
-rrf_score(document) = sum(1 / (rrf_k + rank_i))
+SessionMemoryService
+  History: Redis -> miss/error -> PostgreSQL
+  Profile/Summary: PostgreSQL
+  Memory: query embedding -> pgvector user-scoped retrieval
+-> ContextInputs
+-> ContextSignalExtractor
+-> ContextPolicy -> ContextPlan
+-> ContextEngine -> ManagedContext
 ```
 
-Hybrid 结果应保留：
+ContextSignalExtractor 计算 History Token Pressure、指代/省略与 BGE 语义连续性组成的 Follow-up
+分数，以及长期 Memory 的最高相关度。ContextPolicy 只决定是否使用 Profile/Summary、Recent
+History 条数和 Memory top-k；ContextEngine 在统一 token budget 下执行优先级、跨层去重、完整
+Evidence 选择和裁剪。system 与当前 query 放不下时受控失败，不静默删除。
 
-- keyword rank/score。
-- dense rank/score。
-- fused score。
-- retrieval reason。
+Profile 只允许显式确认写入；Memory 有 user scope、来源、重要性、版本、TTL 和 active 状态。
+Trace 只保存 segment/memory ID、预算和选择原因，不复制敏感 Profile 原文。
 
-不得删除 Keyword 实现，它是实验对照组。
+### Generator、Gateway 与 Validator
 
-### Reranker
-
-`RerankRetriever` 先让基础 Retriever 召回 top-N，再通过统一 `RerankScorer`
-接口对 Query-Chunk pair 重新打分。它只能改变候选顺序，不能找回召回阶段完全
-遗漏的 Chunk。自动化测试使用 `FakeRerankScorer`；真实 adapter 为固定 model 与
-revision 的 `CrossEncoderRerankScorer`。
-
-P0-D5 因运行环境未完成 CrossEncoder 权重下载，正式 dev 对照使用确定性的中文
-token overlap scorer。该 candidate 的 Recall@3/5、MRR 均退化且 P95 增加，因此
-最终配置关闭 Reranker。这个负向结果保留在报告中，不能声称神经 Reranker 带来提升。
-
-P1 随后补跑固定 revision 的 `BAAI/bge-reranker-base`：对相同 Hybrid top-20 做
-CrossEncoder 重排后 Recall@3/5、MRR 仍退化，CPU P95 增至约 7.5 秒，因此默认继续
-关闭。该 Run 证明真实神经 Reranker 已被验证，但不支持“Reranker 提升效果”的表述。
-
-### Adaptive Graph + Vector Retrieval
-
-P1-D3 在统一 Retriever 契约内增加 `graph` 和 `graph_adaptive`。构建阶段从版本化
-Chunk 中确定性抽取 Job、Skill、Project、Experience、Technology、Company 六类节点，
-以及 `requires`、`demonstrates`、`uses`、`belongs_to`、`related_to` 五类关系；节点和
-边均保留 source chunk ids，图本身不能替代 Citation 证据。
-
-```text
-query
-  -> Query Analyzer / Query Decomposition
-  -> entity linking -> bounded 1-2 hop traversal
-  -> Graph RetrievalResult
-  + Adaptive Vector RetrievalResult
-  -> RRF fusion -> Context Builder
-```
-
-只有“岗位要求与哪些项目/经历对应”等跨文档关系 Query 才选择 `graph_hybrid`；普通
-问题继续使用 BM25、Dense 或 RRF。遍历受 hop、节点数和 timeout 限制，实体链接失败时
-保留原 Query 并回退到 Vector 结果。Graph + Vector 统一输出 `RetrievalResult`，details
-中保存 vector rank、graph rank、fused score、edge ids 和可读 path，Pipeline 无需增加
-Graph 专属分支。
-
-`evalrag_graph_v0.1/dev` 的 30 条关系型 Case 显示 Graph + Vector 相比 Adaptive Vector：
-Recall@5 `0.7121 -> 0.7727`、MRR `0.3098 -> 0.5227`、NDCG@5
-`0.4196 -> 0.5381`；Graph-only Recall@5 为 `0.5985`。这些是 dev 关系检索指标，
-不等于最终答案准确率，10 条 frozen test 保留到 P1 最终配置确定后运行。
-
-P0-D3 的索引保存在 `data/processed/indexes/<dataset_version>/`，记录 dataset、
-embedding name/version、dimensions 和 chunk count。查询阶段只编码 Query，不能
-重新拟合语料或重复编码全库。Retriever 由配置工厂注入 Pipeline 和 Evaluation，
-两者不针对具体策略编写分支。
-
-### Context Builder
-
-P0-D1-T1 已实现 `ContextItem`、`BuiltContext` 和 `build_context()`。
-
-输入：
-
-- query。
-- ranked retrieval results。
-- context budget。
-
-输出：
-
-- 带 chunk id、source type、title 和 text 的上下文。
-- used chunk ids。
-- skipped chunk ids。
-- truncation reason。
-
-规则：
-
-- 保持 retrieval rank。
-- 不生成新事实。
-- 不丢失 chunk id。
-- 预算不足时只在 chunk 边界截断，P0 不截断单个 chunk 中间。
-- `rank_prefix` 保留严格 rank 前缀，作为可解释 baseline。
-- `source_balanced` 先为 Router 必需的每个来源保留最高排名证据，再按 rank 填充；
-  某条完整 Chunk 放不下时继续尝试后续候选，不截断原文。
-- P1 服务默认使用 `source_balanced`；紧预算 dev 消融同时报告相关证据召回、来源
-  覆盖和预算利用率，不把 Context 局部指标包装成答案准确率。
-- Context Builder 的选择必须写入 Trace。
-
-### Adaptive Context Engine 与分层记忆
-
-P1-D5 在 `BuiltContext` 上增加 `ManagedContext`，预算单位由字符扩展为可注入 token
-estimator。预算覆盖 Generator 外层 Prompt、system、当前 Query、确认 Profile、历史/摘要、
-长期 Memory 和 Evidence；system 与当前 Query 放不下时受控失败，不静默删除。
-
-```text
-RagRequest(query, user_id, session_id)
-  -> SessionMemoryService
-     History: Redis -> miss/error 回源 PostgreSQL
-     Profile/Summary: PostgreSQL
-     Memory: Query embedding -> pgvector user-scoped top-k
-  -> ContextInputs(Profile, History, Summary, Memory)
-  -> ContextSignalExtractor(
-       history_token_pressure,
-       followup_score=0.5*reference+0.5*semantic_continuity,
-       memory_score=max(similarity*importance))
-  -> ContextPolicy.decide() -> ContextPlan
-  -> ContextEngine.build(plan=ContextPlan)
-  -> ManagedContext + BuiltContext-compatible evidence
-  -> Generator / Citation Validator / AgentTrace
-```
-
-`ContextPolicy` 只回答“本轮启用哪些层、各取多少”，Plan 包含 `use_profile`、
-`use_summary`、`recent_history_count`、`memory_top_k` 和 reason；`ContextEngine` 只负责在
-预算中执行 Plan，按 Profile 90、Memory 80、Evidence 70、Summary 60、History 50 编排，
-并对 Profile/Memory/Summary/History 做跨层去重。固定 `recent_window`、`summary_recent`
-和 `semantic_memory` 只保留为同集实验 baseline，生产主流程默认 `adaptive`。
-
-Profile 只允许显式确认写入并使用版本检查；摘要不能覆盖 Profile。MemoryItem 包含 user scope、
-fact/preference/experience/decision 类型、来源、重要性、版本、TTL 和 active 状态；同内容去重，
-冲突内容保留独立来源，不进行静默覆盖。Trace 只记录 segment/memory id、预算和 reason，不复制
-敏感 Profile 原文。
-
-60 组/300 turns dev 对照中，Adaptive 与 Summary+Recent 均为 100% Follow-up Success，
-平均 Prompt Token 75.55 -> 60.68（-19.68%），History Redundancy 42.86% -> 0；但按需
-Memory Recall 56.60% 低于始终召回 Memory 的 84.91%。该结果说明策略减少了无关上下文，
-不代表自由生成回答准确率，且当前数据集没有 untouched multi-turn test。
-
-### Structured LLM Generator
-
-模型输入：
-
-- query。
-- context。
-- prompt version。
-
-模型目标输出：
+Generator 要求模型只依据本轮 Context 返回：
 
 ```json
 {
-  "answer": "回答内容",
-  "cited_chunk_ids": ["chunk_001"],
+  "answer": "...",
+  "cited_chunk_ids": ["chunk-id"],
   "sufficient": true,
   "reason": ""
 }
 ```
 
-约束：
+Model Gateway 在统一 `LlmClient` 契约外处理 timeout、429/5xx 有界退避、并发 semaphore、熔断和
+Provider fallback；鉴权错误不盲目重试。API key 只从环境变量读取，不进入配置、Trace 或报告。
 
-- 只能根据上下文回答。
-- 关键结论必须引用 chunk id。
-- 证据不足时返回 `sufficient=false`。
-- 不允许引用上下文中不存在的 id。
+Citation Validator 校验 cited ID 是否来自本轮 Context、是否重复，以及 `sufficient` 与 citations
+组合是否合法。它只验证结构与证据引用范围，不判断自然语言事实是否真的被证据支持。
 
-Generator 只负责模型调用与结构解析，不负责判断引用是否真实存在。
+## 3. Run、Span 与恢复
 
-自动化测试使用 Fake LLM；真实模型仅用于显式 smoke test 和离线评测 run。
-当前真实 adapter 包括基于标准库的 `OpenAIResponsesClient`，以及基于 OpenAI
-兼容 Chat Completions 的 `DeepSeekChatClient`。DeepSeek adapter 开启 JSON Mode、
-关闭思考模式，并记录 input/output/cache token；API key 只读取
-`DEEPSEEK_API_KEY`，不进入配置、Trace 或报告。
+AgentRuntime 为一次请求创建一个 root Run；routing、query analysis、retrieval、rerank、evidence、
+context、generation、validation 和 retry 是子 Span。Trace 记录配置 fingerprint、attempt、ID 引用、
+latency、token、错误和决策原因，不保存密钥、未脱敏正文或完整原始 Prompt。
 
-### Citation Validator
+- Checkpoint 保存已完成阶段、工件引用和 side-effect key。
+- Resume 只恢复 fingerprint 一致且工件仍存在的同一 Run；漂移时拒绝旧状态并安全重跑。
+- Replay 对保存的 request/config/artifact 执行 Fake 全链或阶段重放；不可确定复现的外部模型输出
+  返回 unavailable，不伪装一致。
 
-LLM 输出是不可信外部输入。第一版执行确定性校验：
+Trace 写入失败与业务结果隔离：能返回回答时不因观测后端异常而丢失业务响应，但会保留受控错误。
 
-- JSON 和字段是否合法。
-- cited id 是否存在于本轮 context。
-- cited id 是否重复。
-- `sufficient=true` 时 citations 是否为空。
-- `sufficient=false` 时是否仍返回 citations。
+## 4. Evaluation Harness
 
-Citation Validity 只说明引用 id 合法，不等于引用语义支持结论。语义支持由人工标注或独立 grader 评估。
+`EvaluationCase` 保存 query、category、split、expected sources/intent、relevant Chunk IDs、answerable
+和 expected points；这些标签不会传给在线 Pipeline。`RunConfig` 固定 dataset、split、组件版本、
+阈值、模型、Prompt 和预算。
 
-### P0-D4 门控与有限重试 Pipeline
-
-当前 `RagPipeline.run()` 可按配置选择 Rule、Semantic 或 Hybrid Router，并
-串联 Retriever、Evidence Gate、Context Builder、Structured Generator 与
-Citation Validator。一次请求只写一条 JSONL Trace，内部重试保存在
-`attempts`，最终返回 `answered`、`insufficient_evidence` 或 `error`。
-
-### Evidence Checker
-
-状态：
+一次真实运行保存：
 
 ```text
-sufficient
-retryable
-insufficient
-```
-
-第一版可解释规则：
-
-```text
-unknown route
-  -> insufficient（正常不可回答，不调用模型）
-
-retrieval results empty
-  -> retryable；重试耗尽后 retrieval_miss
-
-top score / rank evidence below calibrated threshold
-  -> retryable
-
-intent/source policy requires multiple sources but one required source has no evidence
-  -> retryable
-
-valid evidence available
-  -> sufficient
-```
-
-阈值只允许在 dev 集校准，冻结 test 集不得用于调参。
-
-### 有限状态与重试
-
-```text
-ROUTE
-  -> RETRIEVE
-  -> CHECK_EVIDENCE
-       -> sufficient: GENERATE
-       -> retryable and retry_count == 0:
-            BROADEN_SOURCES -> RETRIEVE
-       -> insufficient:
-            ABSTAIN
-  -> VALIDATE_GENERATION
-       -> format error and retry_count == 0:
-            REGENERATE
-       -> invalid citation:
-            CONTROLLED_ERROR
-       -> valid:
-            ANSWER
-```
-
-约束：
-
-- source 扩展最多一次。
-- 格式修复最多一次。
-- 每次重试记录 reason、latency 和 token usage；客户端不返回 usage 时明确记为
-  `not_reported_by_client`，不使用字符数伪装 token。
-- 不允许无限循环。
-
-### Router V2
-
-- Rule Router 保留关键词命中理由，适合精确且低延迟的显式表达。
-- Semantic Router 使用固定 revision 的中文 embedding 比较 Query 与意图原型；
-  模型和阈值只在 dev 选择。
-- Hybrid Router 在 Rule 与 Semantic 一致时直接采用结果，只允许高分且有足够
-  margin 的语义结果覆盖弱规则，并在 `RouteDecision.details` 保存两路判断。
-- Pipeline 只依赖统一 `Router` Protocol，不包含实验策略分支。
-
-## Trace 设计
-
-一次 Query 对应一条完整 Trace，重试作为同一 Trace 内的 attempt 记录。
-
-目标字段：
-
-```text
-trace_id
-request_id
-query
-dataset_case_id
-run_id
-git_commit
-intent
-routed_sources
-retrieval_config
-retrieval_attempts
-context_chunk_ids
-prompt_version
-model_config
-generation_attempts
-citations
-evidence_decision
-response_status
-latency_by_stage
-token_usage
-estimated_cost
-error_type
-error_message
-created_at
-```
-
-Trace 的目的不是记录越多越好，而是能回答：
-
-- 失败发生在哪个阶段？
-- 使用了什么配置？
-- 为什么重试或拒答？
-- 该请求属于哪个评测 run？
-- 修改后同一 case 是否变好？
-
-## Evaluation Harness
-
-### EvaluationDataset
-
-每条 case 至少包含：
-
-```text
-case_id
-query
-category
-split: dev | test
-expected_intent
-expected_sources
-relevant_chunk_ids
-answerable
-expected_points
-```
-
-### RunConfig
-
-```text
-run_id
-dataset_version
-git_commit
-retriever_name
-top_k
-embedding_model
-rrf_k
-llm_model
-temperature
-prompt_version
-context_budget
-evidence_thresholds
-```
-
-### EvaluationRun
-
-一次运行产出：
-
-```text
-summary.json
+run_config.json
 case_results.jsonl
 failures.jsonl
-run_config.json
-latency.json
+summary.json
+report.md
+traces / grader verdicts（按任务需要）
 ```
 
-必须从真实 Router、Retriever 和 Pipeline 生成 predictions，不再从 fixture 读取手写 predicted values作为正式报告。
+指标分层：
 
-### 指标分层
+- Routing：Router Accuracy / Source Exact。
+- Retrieval：Recall@3/5、MRR、NDCG@5、P50/P95。
+- Reliability：Citation Validity、Abstention Accuracy、End-to-End Success。
+- Answer Audit：Semantic Key-Point Coverage、Claim-Level Grounding。
+- Context：Follow-up Success、Prompt Token、History Redundancy、Memory Recall。
+- Runtime：total/stage latency、tokens、估算成本、failure type。
 
-Routing：
+Lexical Key-Point scorer 保留为确定性 baseline；LLM grader 保存逐 point/claim 的 verdict、reason、
+answer evidence、citation 和 cited evidence。`unknown/unavailable` 不能默认改为 covered/supported。
 
-- Router Accuracy。
+### Failure 与 Regression
 
-Retrieval：
-
-- Recall@3。
-- Recall@5。
-- MRR。
-- P50/P95 retrieval latency。
-
-Grounding 与 Safety：
-
-- Citation Validity。
-- Key-Point Coverage。
-- Abstention Accuracy。
-- Unsupported Answer Rate。
-
-P0-D5 的 Key-Point Coverage 使用规范化子串匹配，只作为 lexical baseline；它会
-漏判同义表达。P0-D6 已通过可注入 Grader Protocol 增加语义要点评分，并保留
-逐 point 的 verdict、reason 和 evidence span。Unsupported Answer 不由指标汇总
-函数自动推断，而应先把回答拆成 factual claims，再逐条对照 cited Context 保存
-`supported | unsupported | unknown`、证据位置和理由；grader 失败或证据模糊时必须
-记为 unknown/unavailable，不能默认 supported。
-
-P0-D6 只读取 P0-D5 保存的 Case Results 和 Trace：
+`failures.jsonl` 保存预测不满足标签或可靠性协议的 Case，不只是脚本异常。确认失败后先进入
+`open regression`；修复、完整 dev 验证且无隐藏退化后转为 `fixed regression`。CI 自动断言 fixed
+Case，并比较 reference 指标阈值；open Case 不伪装成 pass，也不计入 fixed pass rate。
 
 ```text
-expected_points + answer
-  -> KeyPointGrader
-  -> PointJudgment[]
-
-answer + cited chunk text
-  -> GroundingGrader
-  -> ClaimJudgment[]
-  -> unsupported_answer: true | false | unknown
+failure -> inspect Trace -> classify root cause -> scoped fix
+        -> rerun complete dev -> fixed RegressionCase -> CI Gate
 ```
 
-自动化测试注入 Fake grader；正式离线审核使用 DeepSeek JSON Mode。Prompt、模型、
-token、成本、延迟和逐调用错误均落盘。Judge 与 Generator 使用同一模型家族，因此
-报告必须声明自评偏差，不能把模型 verdict 冒充独立人工 ground truth。
+dev 可反复比较；frozen test 只在配置固定后运行。指标代码出错时可以用同一批已保存 predictions
+重算，但不能重新调用随机模型并挑选更好的 Run。
 
-End-to-End：
+## 5. Serving 与持久化
 
-- Success Rate。
-- P50/P95 total latency。
-- token usage。
-- estimated cost。
-
-Regression：
-
-- Regression Pass Rate。
-
-固定公式、分割方式与运行规则见 `docs/evaluation/evaluation_protocol.md`。
-
-## Failure Taxonomy
-
-统一错误类型：
-
-- `router_wrong`
-- `retrieval_miss`
-- `context_insufficient`
-- `context_truncated`
-- `llm_timeout`
-- `llm_format_error`
-- `citation_invalid`
-- `unsupported_answer`
-- `should_abstain`
-- `unexpected_abstention`
-- `service_error`
-- `unknown_error`
-
-`insufficient_evidence` 是合法业务状态；只有预期可回答却因系统失败没有回答时，才记为 failure。
-
-## Regression
-
-Regression Case 至少包含：
+FastAPI 暴露：
 
 ```text
-case_id
-query
-failure_type
-expected_behavior
-original_run_id
-original_trace_id
-fixed_in_commit
-added_at
-```
-
-状态：
-
-- `open`：已确认但尚未修复，不计入 pass rate 分母。
-- `fixed`：已经修复，必须进入自动化回归。
-
-闭环：
-
-```text
-evaluation failure
-  -> inspect trace
-  -> classify
-  -> reproduce on dev
-  -> implement one scoped change
-  -> rerun dev
-  -> run frozen test
-  -> add fixed regression case
-```
-
-P0-D5 已实现版本化 `RegressionCase` loader/runner：`fixed` case 必须被自动化断言，
-`open` case 只作为待修复清单，不进入 pass rate。当前 fixed 1/1 通过、open 3 条。
-
-## P0-D5 Frozen Configuration
-
-最终配置及输入文件 hash 固定在 `configs/final/p0_v0.2.json`。Frozen test 只执行
-声明的四种检索配置一次，最终选择 Hybrid 并关闭 Reranker。端到端工件使用
-deterministic extractive generator，因此可验证 citation id、拒答和 Harness 数据流，
-但不能替代真实 LLM 的答案支持性、token 或成本评测。
-
-随后在相同冻结 Router/Retriever/Evidence 配置上运行 `deepseek-v4-flash`：真实
-Pipeline 直接复用 `RagPipeline`，每条 Case 生成 `RagResponse` 和请求级 Trace，
-汇总 token、价格快照成本和阶段延迟。模型返回的 `sufficient` 与 citations 不被
-直接信任，仍由确定性 Validator 决定最终状态。
-
-## Serving 与异步评测
-
-P1-D1 在质量闭环之后增加 FastAPI 服务：
-
-```text
-POST /v1/query
 GET  /health
+POST /v1/query
 GET  /v1/traces/{trace_id}
 POST /v1/evaluation-jobs
 GET  /v1/evaluation-jobs/{job_id}
 ```
 
-服务层负责：
-
-- 请求校验。
-- request/trace id。
-- timeout。
-- 统一错误响应。
-- 调用 pipeline。
-
-服务层不负责：
-
-- 重新实现 Router/Retriever。
-- 在 Web 请求中运行完整批量评测。
-- 用内存变量伪装持久化队列。
-
-批量评测已经具备明显的长任务属性，不能阻塞 HTTP 请求。P1-D1 使用如下职责划分：
+在线 Query 同步调用 Runtime；批量 Evaluation 只快速创建 Job，不阻塞 HTTP：
 
 ```text
 EvaluationJobRequest
-  -> FastAPI 创建 PostgreSQL job（queued）
-  -> Redis Queue 入队
-  -> Evaluation Worker 更新 running
-  -> 复用 Evaluation Runner 生成标准工件
-  -> PostgreSQL 更新 succeeded / failed 与 report_path
+-> PostgreSQL idempotent queued Job
+-> Redis Queue(job_id)
+-> Worker: queued -> running -> succeeded | failed
+-> report volume + PostgreSQL summary/report_path
 ```
 
-- PostgreSQL 是请求索引、Trace、Evaluation Job 和 Run 元数据的持久化真相来源。
-- Redis 只负责队列与 Worker 协调，不作为最终任务状态数据库。
-- 完整 report、case results 和 failures 保存到持久化 volume，数据库保存路径与摘要。
-- idempotency key 防止同一评测配置重复入队。
-- Worker 重试次数受配置约束，失败必须保存 error type，不允许无限循环。
+- PostgreSQL：请求、Run/Trace、Job、Profile/Summary/Memory 元数据的真相来源。
+- Redis：短期 Job 队列和最近 Session History 缓存，不保存最终任务状态。
+- pgvector：持久化 Dense Index 与 user-scoped Semantic Memory。
+- Neo4j：版本化知识图、Chunk 引用与 provenance。
+- 文件卷：完整 report、case results、failures 和大体积工件。
 
-### Corpus v0.3 与持久化检索
+Docker Compose 编排 API、Worker、PostgreSQL/pgvector、Redis 和 Neo4j。GitHub Actions 分为服务链
+集成、PR Evaluation Gate 和手动完整持久化消融；本地无 Docker 时不能用 adapter 单测冒充容器
+重启恢复验证。
 
-P1-D4 将语料扩展到去重后的 658 份文档和 4208 个 Chunk。Document/Chunk 增加
-`owner_scope`、`source_method`、`source_domain`、采集/发布时间、许可、脱敏、审核状态和
-近重复组等 provenance 字段；exact hash 与 SimHash 的拒绝结果单独保存，避免复制模板
-抬高知识库规模。
+## 6. 当前证据边界
 
-Dense 仍保留版本化文件索引作为可复现对照，同时增加 `PgVectorIndexRepository`：文档向量
-离线写入 PostgreSQL/pgvector，查询时只编码 Query，可切换 exact 与 HNSW。知识图通过
-`Neo4jGraphRepository` 保存版本化节点、边、Chunk 引用和 provenance；内存图继续用于快速
-单元测试。两种 adapter 都返回既有 `RetrievalResult`/`KnowledgeGraph`，Pipeline 不依赖
-具体存储后端。
+- `evalrag_v0.3` 是当前 Corpus/Benchmark；v0.2 只保留为 P0 历史实验。
+- v0.3 标签为 corpus-grounded AI-assisted，不是线上分布或独立人工金标准。
+- Graph+Vector 提升 frozen 检索指标，但 CPU P95 增加；Adaptive selector 和 On-demand Reranker
+  尚未取得质量/延迟 Pareto 最优。
+- Context 60 组/300 turns 是不调用 LLM 的确定性 dev benchmark，没有 untouched multi-turn test。
+- Citation Validity 不等于事实支持度；检索 Recall/MRR 不等于最终答案准确率。
+- v0.3 frozen E2E 暴露过度拒答，因此不能用局部检索提升声称端到端质量已经提升。
 
-```text
-versioned chunks -> BGE offline index -> file exact | pgvector exact/HNSW
-versioned graph  -> in-memory graph   | Neo4j repository
-query -> configured retriever -> unified RetrievalResult -> Evidence Gate
-```
-
-Compose 已包含 pgvector 与 Neo4j，并提供写入、查询、容器重启、再次读取的验证脚本。由于当前
-宿主机没有 Docker，本地只完成 adapter 单元测试；真实持久化验收必须在 Docker-enabled CI
-运行后才能标记通过，不能由文件索引结果替代。
-
-## Agent Runtime、Replay 与发布门禁
-
-P1-D6 用 `AgentRuntime` 统一 HTTP、CLI 和 Evaluation Worker 的执行上下文，但保留现有
-Router/Retriever/Pipeline 算法接口。一次请求只有一个 root run；routing、retrieval、evidence、
-context、generation、validation 和 bounded retry 是 child spans。Span 保存 ID 引用、阶段耗时、
-token 摘要、错误和版本指纹，不保存 API key、原始 Prompt 或未脱敏正文。
-
-```text
-RunContext(request/config/model/prompt/index/dataset versions)
-  -> AgentRuntime
-     -> one AgentTrace
-     -> stage/attempt SpanEvent
-     -> SpanSink（失败与业务结果隔离）
-     -> StageCheckpoint（完成阶段 + side-effect key + fingerprint）
-```
-
-- **Replay**：读取保存的 request/config/artifact refs，复现 Fake 全链或指定阶段；外部模型输出
-  不可确定复现时返回 `unavailable`，不伪装一致。
-- **Resume**：只恢复同一个 Run。fingerprint 一致且工件仍存在时跳过已完成阶段；配置、索引或
-  工件漂移时丢弃旧状态并安全重跑。side-effect key 防止恢复时重复模型调用或外部写入。
-- **Router Feedback**：在线只收集确认反馈，离线生成候选版本；候选经过完整 dev/reference
-  shadow gate 后才能发布，registry 保留 parent/report/feedback dataset 并支持回滚。
-- **CI Evaluation Gate**：执行 fixed regression，并比较 Router Accuracy、Recall@5、NDCG@5、
-  Grounding、E2E 和 P95 阈值；只使用 dev/reference，不消费 frozen test 调参。
-
-故障注入覆盖模型 timeout、非法生成、非法 citation、Span/Trace sink 故障、中断恢复和配置/工件
-漂移。三条脱敏 Trace 位于 `traces/sanitized_examples/p1-d6-*.json`，Runtime/故障矩阵位于
-`reports/runtime/p1-d6-runtime-v01/`。
-
-## 运行工件目录
-
-```text
-configs/
-  retrieval/
-  generation/
-  evaluation/
-
-data/
-  raw/
-  processed/chunks/
-  indexes/
-  evaluation/
-
-reports/
-  runs/<run_id>/
-  comparisons/
-  failure_cases/
-
-traces/
-  local/
-  sanitized_examples/
-```
-
-目录按任务按需创建。运行工件必须能够关联 `run_id`、dataset version 和 Git commit。
-
-## 配置、安全与隐私
-
-- API key 只从环境变量读取。
-- 不在源码、配置、Trace、报告和对话中打印密钥。
-- 真实简历、手机号、邮箱和账号必须脱敏。
-- 外部文档记录来源、采集日期和可公开状态。
-- 自动化测试不访问网络或付费 API。
-- 真实模型 run 显式记录模型、参数、token 和成本。
-
-## P0 之后
-
-只有 P0 指标和失败闭环完成后，才考虑：
-
-- reranker。
-- LLM Router。
-- Redis Evaluation Worker。
-- Trace 可视化。
-- LangGraph 状态机重构。
-- 更通用的数据 profile。
-
-不做多 Agent、MCP 或 Kubernetes 作为 P0 装饰。
-
-## Model Gateway 与 P1 冻结发布
-
-Generator、Semantic Grader 和后续 Summarizer 统一依赖 `LlmClient` 契约，生产配置可注入
-`ModelGateway`：
-
-```text
-Prompt -> ModelGateway
-  -> primary（最多 2 attempts）
-  -> transient failure: exponential backoff
-  -> circuit open / request or auth error: fallback provider
-  -> all unavailable: controlled ModelGatewayUnavailable
-```
-
-并发由固定 worker pool 限制为 4；单次 Provider timeout 为 60 秒；熔断阈值 3，30 秒后只允许
-一个 half-open probe。Trace 记录 provider、attempt、reason、latency、tokens、cost 和 circuit
-状态，不保存 Prompt、响应正文或 API key。底层 DeepSeek SDK 的自动重试关闭，避免 Gateway
-重试与 SDK 重试相乘。
-
-P1 发布配置由 `configs/final/p1_v0.3.json` 冻结，文件保存 dataset、chunks、Router、Context、
-Retriever 和 Gateway 配置的 SHA-256。冻结脚本拒绝覆盖已有 release 目录；test 失败只进入
-failure artifacts，不再用同一版本调参。`evalrag_context_v0.1` 没有 untouched test split，
-所以 Context/Memory 仍是 dev-only，不包装成 multi-turn frozen。
+详细数字、run ID 和失败 Case 见 [最终实验报告](../evaluation/final_experiment_report.md)。

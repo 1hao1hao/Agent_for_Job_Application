@@ -1,15 +1,70 @@
 # EvalRAG P0-P1 最终实验报告
 
-## 1. 实验范围
+## 1. 实验范围与数据版本
 
-- Dataset：`evalrag_v0.2`，项目自建并审核的中文求职场景 benchmark。
-- Corpus：100 文档、310 Chunk；JD、简历、面经、项目日志、用户画像各 20 份。
-- Query：120 条，单来源、多来源、语义改写、不可回答各 30 条；80 dev / 40 frozen test。
-- Frozen 规则：只在 dev 选择配置；test 上每个声明策略运行一次，查看结果后不调参。
-- Corpus 统计：[corpus_stats.json](../../data/evaluation/corpus_stats.json)；标签校验：[evalrag_v0.2_validation.json](../../data/evaluation/evalrag_v0.2_validation.json)。
+### 1.1 当前主版本：evalrag_v0.3
 
-Chunk 长度为 121--376 字符，均值 253.15，P50 261，P95 277；空文档和重复
-content hash 均为 0。数据为项目自建半真实材料，不等同于线上业务数据。
+- Corpus：669 份输入经 SHA-256/SimHash 去重后保留 658 份文档、4208 个 Chunk。
+- 来源：339 份 JD、120 份面试资料、159 份项目文档、20 份简历、20 份用户画像。
+- 来源方式：558 份公开数据集/开源仓库材料，100 份本地半真实材料；公开材料保存 URL、
+  revision、许可与采集时间。
+- Benchmark：240 条 Query，160 dev / 80 frozen test；每类 30 条。
+- 当前类别：单来源、跨来源、语义改写、hard negative（当前标为不可回答）、不可回答、时效冲突、
+  2-hop 关系和 3-hop 关系。
+- Frozen 规则：只在 dev 选择配置；test 上每个声明策略运行一次，查看结果后不继续调参。
+- Corpus 统计：[corpus_stats_v0.3.json](../../data/evaluation/corpus_stats_v0.3.json)；标签校验：
+  [evalrag_v0.3_validation.json](../../data/evaluation/evalrag_v0.3_validation.json)。
+
+v0.3 Benchmark 标签由系统依据真实 Chunk ID 和 Graph Edge 构造并进行一致性校验，审核方式为
+`corpus_grounded_ai_assisted`，不是完整人工标注。当前知识构建、Graph+Vector、Adaptive
+Retrieval 和 P1 frozen 结果均以 v0.3 为主。
+
+### 1.2 evalrag_v0.2 是历史 P0 基线
+
+v0.2 包含 100 份本地半真实文档、310 个 Chunk 和 120 条 Query；单来源、多来源、语义改写、
+不可回答各 30 条，80 dev / 40 frozen test。它只用于保存 Keyword/Dense/RRF、Router、
+Evidence Gate 和早期 LLM Pipeline 的历史可复现实验，**不代表当前知识库规模和 Query 设计**。
+
+对应工件仍保留在 [corpus_stats.json](../../data/evaluation/corpus_stats.json) 和
+[evalrag_v0.2_validation.json](../../data/evaluation/evalrag_v0.2_validation.json)，不能因为升级到
+v0.3 就覆盖或删除。
+
+### 1.3 为什么 data/raw 仍能看到 v02 文件
+
+`data/raw/` 是早期本地输入层，不是当前完整 Corpus。目录中仍有约 70 份 `v02_*.md`，因为版本
+升级采用追加和生成新快照，而不是修改旧原始材料。v0.3 构建时会读取这 100 份本地材料，再合并
+558 份公开材料；公开材料直接规范化到：
+
+```text
+data/processed/documents/evalrag_v0.3.jsonl
+data/processed/chunks/evalrag_v0.3.jsonl
+data/evaluation/corpus_manifest_v0.3.jsonl
+```
+
+因此打开 `data/raw/jd/v02_*.md` 看到不相关文本，不代表 v0.3 只有这些文本；但它也暴露了真实
+问题：v0.3 仍把旧半真实材料以及教师、电气等宽领域岗位纳入统一抽样，部分 Query 甚至直接询问
+`v02_07_jd` 这类文件标题。规模提高了，面向 AI/RAG 求职推理的场景纯度仍然不足。
+
+### 1.4 下一版 Benchmark 的改进口径
+
+已冻结的 v0.3 不原地修改。下一版必须创建独立 `evalrag_v0.4`，Query 不再以“根据某文件标题
+概括内容”为主要模板，而围绕 Query Analyzer 的证据需求分层，每类 30 条、保持 160 dev / 80
+frozen test：
+
+| Query 类型 | 主要验证能力 | 示例方向 |
+|---|---|---|
+| `exact_fact` | BM25 精确术语和岗位字段召回 | 某 AI 岗位明确要求哪些框架或实习时长 |
+| `semantic_explanation` | Dense 同义表达和概念解释 | 不使用原文措辞说明如何降低 RAG 无依据回答 |
+| `multi_source_synthesis` | Hybrid 跨来源证据融合 | 结合 JD、简历和项目日志分析技能缺口 |
+| `relation_reasoning` | Graph+Vector 实体链接和有界多跳 | 哪个项目通过哪些技能证明符合目标岗位 |
+| `comprehensive_analysis` | Adaptive 在 Hybrid/Graph 间选路 | 比较两个岗位并结合个人经历给出取舍依据 |
+| `freshness_conflict` | 岗位版本、状态与来源优先级 | 同一岗位多个版本冲突时应采用哪条证据 |
+| `answerable_hard_negative` | 在同主题干扰项中找正确证据 | 多个 RAG 项目中只有一个满足特定技术条件 |
+| `unanswerable` | Evidence Gate 与可靠拒答 | Corpus 没有内部薪资或未公开招聘结论 |
+
+v0.4 还需限制目标领域，优先选择 AI Agent、RAG、搜索推荐、后端/平台工程相关 JD 与项目材料；
+`relevant_chunk_ids`、关系路径和 expected points 必须回到具体证据，不能再用标题或 `unknown`
+充当核心答案标签。在该版本真正构建并完成同集实验前，本报告不会把它写成已实现结果。
 
 ## 2. 检索策略
 
@@ -317,6 +372,26 @@ Feedback Hybrid 在 v0.2 dev 上的改善没有迁移到 v0.3：3 条旧反馈�
 Query 漏触发 Graph，使 Adaptive Graph 的 Recall@5/MRR 低 10.00/9.89 pp。因此
 自适应不能只看“是否减少重策略调用”，还必须评估 selector 造成的质量损失。
 
+#### Evidence-Need Query Analyzer 迭代（2026-08-25）
+
+后续将旧 `is_cross_document` 规则改为：
+
+```text
+QueryFeatures（精确 / 语义 / 多源 / 关系）
+  -> EvidenceRequirement
+  -> BM25 / Dense / Hybrid / Graph+Vector
+```
+
+Graph 只由实体关系推理需求触发；精确事实、语义解释和多源综合分别选择 BM25、Dense 和
+Hybrid。首轮因漏掉“知识关系、2/3 跳联系”和“不使用原文、概括”等表达，Recall@5/MRR
+退化到 43.75%/38.29%；根据逐 Case Trace 做单变量修复后，160 条 dev 的 Recall@5 为
+48.75%、MRR 为 39.01%、P95 为 1322.25 ms。相比旧 Adaptive 的 48.33%/42.21%，
+召回覆盖略升但首条相关证据排序退化，因此仍没有超过固定 Graph+Vector。
+
+失败工件和修复后报告均保留在
+[`p1-query-evidence-adaptive-v03-dev-20260825-fixed`](../../reports/ablations/p1-query-evidence-adaptive-v03-dev-20260825-fixed/report.md)。
+该实验是 dev-only，没有重跑或修改 frozen test。
+
 ### 9.3 Reranker 控制变量
 
 三组固定为 BM25 + Dense + RRF、同一 MiniLM revision、`candidate_k=10`，只改变
@@ -355,6 +430,10 @@ EvalRAG 已形成 `Pipeline -> Trace -> Evaluation -> Failure -> Regression` 闭
 Graph + Vector 是当前 quality-first candidate，但 Adaptive selector、Router 迁移和按需
 Reranker 仍有可明确定位的改进空间。
 
-当前主要限制是 benchmark 规模和分布仍偏项目化，Hybrid CPU 延迟较高，Evidence
-Gate 对多来源覆盖要求过严，Grounding Judge 与 Generator 属于同模型家族且存在
-unknown。FastAPI、Docker、可视化和高并发压测未实现，也不计入 P0 成果。
+当前主要限制是 v0.3 虽然扩大到 658 份文档，但仍混有早期 `v02_*` 半真实材料和与目标
+AI/RAG 岗位无关的宽领域 JD；部分 Query 依赖文件标题或 `unknown` 要点，标签为
+corpus-grounded AI-assisted 而非完整人工审核。Adaptive selector 的 Recall@5 略升但 MRR
+退化，Evidence Gate 对新关系型 Query 仍有过度拒答，Grounding Judge 与 Generator 属于
+同模型家族且存在 unknown。FastAPI、PostgreSQL、Redis Worker 和 Docker Compose 已实现；
+校园服务器没有 Docker Engine，真实多容器持久化验证主要依赖 GitHub Actions。可视化前端和
+高并发压测未实现，也不作为当前项目亮点。

@@ -4,6 +4,7 @@ from intern_rag.retrieval.base import RetrievalResult, Retriever
 from intern_rag.retrieval.adaptive import (
     AdaptiveRetriever,
     AdaptiveRetrieverConfig,
+    EvidenceRequirement,
     QueryAnalyzer,
     QueryFeatures,
     RetrievalDecision,
@@ -59,6 +60,7 @@ __all__ = [
     "Retriever",
     "AdaptiveRetriever",
     "AdaptiveRetrieverConfig",
+    "EvidenceRequirement",
     "QueryAnalyzer",
     "QueryFeatures",
     "RetrievalDecision",

@@ -1,0 +1,82 @@
+{
+  "ablation_id": "p1-query-evidence-adaptive-v03-dev-20260825",
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "case_count": 160,
+  "strategies": [
+    "graph_vector"
+  ],
+  "summaries": {
+    "graph_vector": {
+      "run_id": "p1-query-evidence-adaptive-v03-dev-20260825-graph_vector",
+      "dataset_version": "evalrag_v0.3",
+      "graph_version": "job-skill-experience-v0.2",
+      "split": "dev",
+      "strategy": "graph_vector",
+      "case_count": 160,
+      "answerable_case_count": 120,
+      "error_count": 0,
+      "metrics": {
+        "recall_at_3": 0.39166666666666666,
+        "recall_at_5": 0.4375,
+        "mrr": 0.3829166666666667,
+        "ndcg_at_5": 0.3784808713449766,
+        "path_validity": null
+      },
+      "category_metrics": {
+        "cross_source": {
+          "case_count": 20,
+          "recall_at_5": 0.625,
+          "mrr": 0.5458333333333333
+        },
+        "freshness_conflict": {
+          "case_count": 20,
+          "recall_at_5": 0.75,
+          "mrr": 0.725
+        },
+        "hard_negative": {
+          "case_count": 20,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        },
+        "semantic_paraphrase": {
+          "case_count": 20,
+          "recall_at_5": 0.4,
+          "mrr": 0.3125
+        },
+        "single_source": {
+          "case_count": 20,
+          "recall_at_5": 0.4,
+          "mrr": 0.3125
+        },
+        "three_hop": {
+          "case_count": 20,
+          "recall_at_5": 0.35,
+          "mrr": 0.3516666666666667
+        },
+        "two_hop": {
+          "case_count": 20,
+          "recall_at_5": 0.1,
+          "mrr": 0.05
+        },
+        "unanswerable": {
+          "case_count": 20,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        }
+      },
+      "latency_ms": {
+        "p50": 14.5646333694458,
+        "p95": 1696.074927225709
+      },
+      "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+    }
+  },
+  "largest_differences": [],
+  "storage_strategies": {
+    "pgvector_exact": "requires Docker-backed PostgreSQL/pgvector run",
+    "pgvector_hnsw": "requires Docker-backed PostgreSQL/pgvector run",
+    "neo4j": "repository equivalence is validated separately"
+  },
+  "boundary": "dev-only retrieval ablation; 80 frozen test cases were not run; metrics do not measure final answer correctness"
+}

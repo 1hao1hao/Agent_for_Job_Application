@@ -45,16 +45,77 @@ class AdaptiveRetrieverTests(unittest.TestCase):
             "hybrid": FixedRetriever(hybrid_results or base),
         }
 
-    def test_query_analyzer_selects_all_three_strategies(self) -> None:
+    def test_query_analyzer_selects_strategy_from_evidence_need(self) -> None:
         analyzer = QueryAnalyzer()
 
-        exact = analyzer.analyze("RRF 是什么", {"interview"})
-        semantic = analyzer.analyze("换句话说明召回偏科", {"interview"})
-        literal = analyzer.analyze("岗位职责", {"jd"})
+        exact = analyzer.classify_evidence_need(
+            analyzer.analyze("Redis Stream 是什么", {"interview"})
+        )
+        semantic = analyzer.classify_evidence_need(
+            analyzer.analyze("如何减少检索偏差", {"interview"})
+        )
+        synthesis = analyzer.classify_evidence_need(
+            analyzer.analyze("结合 JD 和简历分析匹配度", {"jd", "resume"})
+        )
 
-        self.assertEqual(analyzer.choose_strategy(exact)[0], "hybrid")
+        self.assertEqual(analyzer.choose_strategy(exact)[0], "bm25")
         self.assertEqual(analyzer.choose_strategy(semantic)[0], "dense")
-        self.assertEqual(analyzer.choose_strategy(literal)[0], "bm25")
+        self.assertEqual(analyzer.choose_strategy(synthesis)[0], "hybrid")
+        self.assertEqual(synthesis.need_type, "multi_source_synthesis")
+
+    def test_relation_reasoning_not_cross_document_count_triggers_graph(self) -> None:
+        analyzer = QueryAnalyzer()
+
+        relation = analyzer.analyze(
+            "哪个项目能证明我符合这个 RAG 岗位要求？",
+            {"jd", "project_logs", "resume"},
+        )
+        plain_multi_source = analyzer.analyze(
+            "结合 JD 和简历综合分析优势",
+            {"jd", "resume"},
+        )
+
+        requirement = analyzer.classify_evidence_need(relation)
+        self.assertTrue(relation.requires_entity_reasoning)
+        self.assertGreaterEqual(len(relation.entity_types), 2)
+        self.assertEqual(requirement.need_type, "relation_reasoning")
+        self.assertEqual(
+            analyzer.choose_strategy(requirement, graph_enabled=True)[0],
+            "graph_hybrid",
+        )
+        self.assertEqual(
+            analyzer.choose_strategy(plain_multi_source, graph_enabled=True)[0],
+            "hybrid",
+        )
+
+    def test_relation_reasoning_falls_back_when_graph_is_unavailable(self) -> None:
+        analyzer = QueryAnalyzer()
+        features = analyzer.analyze(
+            "哪段经历可以证明我符合岗位要求？", {"jd", "resume"}
+        )
+
+        strategy, reason = analyzer.choose_strategy(features, graph_enabled=False)
+
+        self.assertEqual(strategy, "hybrid")
+        self.assertIn("graph unavailable", reason)
+
+    def test_benchmark_relation_and_paraphrase_patterns_are_classified(self) -> None:
+        analyzer = QueryAnalyzer()
+        relation = analyzer.analyze(
+            "请沿知识关系说明公司与 Python 之间的2跳联系。", None
+        )
+        paraphrase = analyzer.analyze(
+            "不使用原文标题措辞，概括这份材料解决的问题。", None
+        )
+
+        self.assertEqual(
+            analyzer.classify_evidence_need(relation).need_type,
+            "relation_reasoning",
+        )
+        self.assertEqual(
+            analyzer.classify_evidence_need(paraphrase).need_type,
+            "semantic_explanation",
+        )
 
     def test_high_confidence_hybrid_skips_reranker_and_keeps_source_filter(self) -> None:
         hybrid = [
@@ -71,13 +132,16 @@ class AdaptiveRetrieverTests(unittest.TestCase):
         scorer = FakeRerankScorer({"c1 的证据文本": 0.1})
         retriever = AdaptiveRetriever(retrievers, scorer)
 
-        results = retriever("RRF 检索", [], top_k=2, source_types={"jd"})
+        results = retriever("检索结果质量评估", [], top_k=2, source_types={"jd"})
         decision = retriever.get_last_trace()
 
         self.assertEqual([item.chunk_id for item in results], ["c1", "c2"])
         self.assertFalse(decision["rerank_invoked"])
         self.assertEqual(retrievers["hybrid"].calls, [(20, {"jd"})])
         self.assertEqual(scorer.calls, [])
+        self.assertEqual(
+            decision["evidence_requirement"]["need_type"], "balanced_retrieval"
+        )
 
     def test_low_confidence_multi_source_invokes_reranker_once(self) -> None:
         hybrid = [
