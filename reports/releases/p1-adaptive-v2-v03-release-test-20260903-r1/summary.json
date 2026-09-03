@@ -1,0 +1,213 @@
+{
+  "release_id": "p1-adaptive-v2-v03-release-test-20260903-r1",
+  "dataset_version": "evalrag_v0.3",
+  "split": "test",
+  "case_count": 80,
+  "historical_test_disclosure": "This split has historical runs; this is the release test for the newly locked config, not a never-seen blind test.",
+  "locked_manifest": "configs/final/adaptive_v2_release_v0.3.json",
+  "strategies": {
+    "bm25": {
+      "run_id": "p1-adaptive-v2-v03-release-test-20260903-r1-bm25",
+      "dataset_version": "evalrag_v0.3",
+      "graph_version": "job-skill-experience-v0.2",
+      "split": "test",
+      "strategy": "bm25",
+      "case_count": 80,
+      "answerable_case_count": 60,
+      "error_count": 0,
+      "metrics": {
+        "recall_at_3": 0.39166666666666666,
+        "recall_at_5": 0.4666666666666667,
+        "mrr": 0.35194444444444445,
+        "ndcg_at_5": 0.36490703193422486,
+        "path_validity": null
+      },
+      "category_metrics": {
+        "cross_source": {
+          "case_count": 10,
+          "recall_at_5": 0.05,
+          "mrr": 0.025
+        },
+        "freshness_conflict": {
+          "case_count": 10,
+          "recall_at_5": 0.7,
+          "mrr": 0.525
+        },
+        "hard_negative": {
+          "case_count": 10,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        },
+        "semantic_paraphrase": {
+          "case_count": 10,
+          "recall_at_5": 0.8,
+          "mrr": 0.575
+        },
+        "single_source": {
+          "case_count": 10,
+          "recall_at_5": 0.8,
+          "mrr": 0.5833333333333334
+        },
+        "three_hop": {
+          "case_count": 10,
+          "recall_at_5": 0.35,
+          "mrr": 0.3833333333333333
+        },
+        "two_hop": {
+          "case_count": 10,
+          "recall_at_5": 0.1,
+          "mrr": 0.02
+        },
+        "unanswerable": {
+          "case_count": 10,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        }
+      },
+      "latency_ms": {
+        "p50": 11.655677109956741,
+        "p95": 15.262022614479065
+      },
+      "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+    },
+    "graph_vector": {
+      "run_id": "p1-adaptive-v2-v03-release-test-20260903-r1-graph_vector",
+      "dataset_version": "evalrag_v0.3",
+      "graph_version": "job-skill-experience-v0.2",
+      "split": "test",
+      "strategy": "graph_vector",
+      "case_count": 80,
+      "answerable_case_count": 60,
+      "error_count": 0,
+      "metrics": {
+        "recall_at_3": 0.6416666666666667,
+        "recall_at_5": 0.6916666666666667,
+        "mrr": 0.6291666666666667,
+        "ndcg_at_5": 0.6138372004171272,
+        "path_validity": 1.0
+      },
+      "category_metrics": {
+        "cross_source": {
+          "case_count": 10,
+          "recall_at_5": 0.6,
+          "mrr": 0.6166666666666667
+        },
+        "freshness_conflict": {
+          "case_count": 10,
+          "recall_at_5": 0.8,
+          "mrr": 0.8
+        },
+        "hard_negative": {
+          "case_count": 10,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        },
+        "semantic_paraphrase": {
+          "case_count": 10,
+          "recall_at_5": 0.8,
+          "mrr": 0.75
+        },
+        "single_source": {
+          "case_count": 10,
+          "recall_at_5": 0.7,
+          "mrr": 0.7
+        },
+        "three_hop": {
+          "case_count": 10,
+          "recall_at_5": 0.55,
+          "mrr": 0.6083333333333333
+        },
+        "two_hop": {
+          "case_count": 10,
+          "recall_at_5": 0.7,
+          "mrr": 0.3
+        },
+        "unanswerable": {
+          "case_count": 10,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        }
+      },
+      "latency_ms": {
+        "p50": 902.9349684715271,
+        "p95": 1889.4436731934547
+      },
+      "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+    },
+    "adaptive_v2": {
+      "run_id": "p1-adaptive-v2-v03-release-test-20260903-r1-adaptive_v2",
+      "dataset_version": "evalrag_v0.3",
+      "graph_version": "job-skill-experience-v0.2",
+      "split": "test",
+      "strategy": "adaptive_v2",
+      "case_count": 80,
+      "answerable_case_count": 60,
+      "error_count": 0,
+      "metrics": {
+        "recall_at_3": 0.5583333333333333,
+        "recall_at_5": 0.6916666666666667,
+        "mrr": 0.5311111111111111,
+        "ndcg_at_5": 0.5468856556578827,
+        "path_validity": 1.0
+      },
+      "category_metrics": {
+        "cross_source": {
+          "case_count": 10,
+          "recall_at_5": 0.6,
+          "mrr": 0.575
+        },
+        "freshness_conflict": {
+          "case_count": 10,
+          "recall_at_5": 0.7,
+          "mrr": 0.525
+        },
+        "hard_negative": {
+          "case_count": 10,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        },
+        "semantic_paraphrase": {
+          "case_count": 10,
+          "recall_at_5": 0.8,
+          "mrr": 0.65
+        },
+        "single_source": {
+          "case_count": 10,
+          "recall_at_5": 0.8,
+          "mrr": 0.5833333333333334
+        },
+        "three_hop": {
+          "case_count": 10,
+          "recall_at_5": 0.55,
+          "mrr": 0.5916666666666667
+        },
+        "two_hop": {
+          "case_count": 10,
+          "recall_at_5": 0.7,
+          "mrr": 0.26166666666666666
+        },
+        "unanswerable": {
+          "case_count": 10,
+          "recall_at_5": 0.0,
+          "mrr": 0.0
+        }
+      },
+      "latency_ms": {
+        "p50": 282.68061205744743,
+        "p95": 2031.6713880747557
+      },
+      "metric_scope": "Retrieval metrics use answerable cases only; they do not measure answer correctness."
+    }
+  },
+  "deterministic_gate_e2e": {
+    "config_version": "evidence-gate-v2.0-dev-locked",
+    "case_count": 80,
+    "far": 0.25,
+    "frr": 0.0,
+    "answerable_acceptance": 0.6833333333333333,
+    "abstention_accuracy": 1.0,
+    "deterministic_e2e_success": 0.6,
+    "failure_count": 32
+  },
+  "post_run_policy": "no selector, threshold or label tuning on this release"
+}

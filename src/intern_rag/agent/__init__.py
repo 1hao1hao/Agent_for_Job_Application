@@ -35,7 +35,9 @@ from intern_rag.agent.context_policy import (
 from intern_rag.agent.evidence import (
     EvidenceConfig,
     EvidenceDecision,
+    ScoreGateConfig,
     check_evidence,
+    load_evidence_config,
 )
 from intern_rag.agent.generation import (
     DeepSeekChatClient,
@@ -97,6 +99,7 @@ __all__ = [
     "UserProfile",
     "EvidenceConfig",
     "EvidenceDecision",
+    "ScoreGateConfig",
     "DeepSeekChatClient",
     "FakeLlmClient",
     "GenerationParseError",
@@ -120,6 +123,7 @@ __all__ = [
     "build_context",
     "build_generation_prompt",
     "check_evidence",
+    "load_evidence_config",
     "compose_answer",
     "context_item_from_result",
     "format_context_item",

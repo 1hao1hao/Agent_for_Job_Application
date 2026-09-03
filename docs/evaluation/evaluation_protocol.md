@@ -437,3 +437,15 @@ evidence_thresholds
 - baseline 和优化方案使用相同数据。
 - 能解释样例规模、分割和运行环境。
 - 能从 summary 定位到逐 Case 结果、失败记录和对应代码配置。
+## Adaptive v2 校准与 CI 协议（2026-09-03）
+
+1. Query Analyzer/策略映射只在 `evalrag_v0.3/dev` 选择；语义组 Dense 只有在 Recall@5、
+   MRR 均不比 Hybrid 低超过 `1 / semantic_answerable_count` 且 P95 更低时才能启用。
+2. Evidence Gate 对每个 Retriever 独立扫描 top-1 score。Operating point 按
+   `FAR <= 5% -> 最低 FRR -> 更低 FAR -> 更低 threshold` 选择；若 FRR 仍高于 25%，
+   标记 `raw_score_not_separable` 并关闭 score gate，不把不可分分数硬包装成可靠阈值。
+3. CI blocking 指标为 Recall@5、MRR、P95 工程预算和 100% fixed regression；NDCG@5、
+   strategy distribution 与 Graph invocation rate 只报告。质量动态容差为
+   `1 / answerable_case_count`；P95 最大 1.25 倍是 dev 工程预算，不是线上 SLA。
+4. CI 只运行 dev/reference 和 fixed regression，禁止读取 test。锁定 manifest 保存数据、图、
+   配置与核心源码 SHA-256。v0.3 test 有历史 Run，所以最终结果称 release test，不称全新盲测。

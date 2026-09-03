@@ -437,3 +437,43 @@ corpus-grounded AI-assisted 而非完整人工审核。Adaptive selector 的 Rec
 同模型家族且存在 unknown。FastAPI、PostgreSQL、Redis Worker 和 Docker Compose 已实现；
 校园服务器没有 Docker Engine，真实多容器持久化验证主要依赖 GitHub Actions。可视化前端和
 高并发压测未实现，也不作为当前项目亮点。
+
+## 10. Adaptive Retrieval v2 与 Evidence Gate 收敛（2026-09-03）
+
+本轮不修改 `evalrag_v0.3` 的 Case、relevant Chunk 或 Graph Edge 标签。先在 160 条 dev
+（120 可答）上运行固定 BM25、Dense、BM25+Dense RRF、Graph+Vector，以及可复现的
+Adaptive v1 和 v2。语义组 Dense 与 Hybrid 的 Recall@5 同为 50%，但 MRR 为
+30.83%/40.00%、P95 为 1520.39/1115.83 ms，因此锁定语义需求使用 Hybrid。
+
+| Dev strategy | Recall@5 | MRR | NDCG@5 | P95 ms |
+|---|---:|---:|---:|---:|
+| Adaptive v1 replay | 54.58% | 47.76% | 47.01% | 1518.74 |
+| Adaptive v2 | 55.42% | 49.88% | 48.78% | 1847.35 |
+| Always Graph+Vector | 58.33% | 52.10% | 51.03% | 1696.57 |
+
+Adaptive v2 的策略分布为 BM25 39、Hybrid 41、Graph+Vector 40、`none` 40，Graph 调用率
+25%。它相对 v1 改善 Recall@5/MRR，但没有超过 always Graph，也没有取得全面质量/延迟
+Pareto 优势。逐 EvidenceRequirement 分组、10 条代表差异 Case 与真实 prediction 位于
+`reports/ablations/p1-adaptive-v2-v03-dev-20260903-r1/`。
+
+Gate calibration 分别保存四种 Retriever 的正负 top-1 score 分布和完整 threshold curve。
+满足 FAR <= 5% 的最佳点仍分别产生 BM25 33.33%、Dense 51.11%、Hybrid 100%、Graph
+100% 的 FRR，均超过 25% 预算，因此锁定配置关闭 raw score gate，转而检查最少结果数、
+多来源覆盖与 Graph path。dev 上 Gate FAR 32.74%、FRR 0%、不可回答拒答准确率 100%、
+deterministic E2E success 54.38%；这是“原始分数不可分”的负结果，不宣称门控已解决。
+
+CI Gate v2 真实运行 v1/v2 dev prediction：Recall@5/MRR 使用 `1/120` 动态容差，P95
+允许最多 1.25 倍工程预算，fixed Regression 必须 100%，NDCG/策略分布/Graph 调用率只报告。
+本次门禁通过。配置、数据、图与核心源码 SHA-256 锁定后，在已有历史 Run 的 80 条 test 上
+执行本次 release test：
+
+| Release strategy | Recall@5 | MRR | NDCG@5 | P95 ms |
+|---|---:|---:|---:|---:|
+| BM25 | 46.67% | 35.19% | 36.49% | 15.26 |
+| Graph+Vector | **69.17%** | **62.92%** | **61.38%** | 1889.44 |
+| Adaptive v2 | **69.17%** | 53.11% | 54.69% | 2031.67 |
+
+锁定 Gate 在 release test 的 Abstention Accuracy 为 100%，但 FAR 为 25%、deterministic
+E2E success 为 60%。该 split 曾用于历史实验，因此这里明确称为“锁定配置 release test”，
+不包装成全新盲测。正式工件位于
+`reports/releases/p1-adaptive-v2-v03-release-test-20260903-r1/`。

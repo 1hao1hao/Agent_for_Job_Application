@@ -60,20 +60,26 @@ hard negative、不可回答、时效冲突和 2/3-hop 关系问题。标签是 
 
 | Retriever | Recall@3 | Recall@5 | MRR | NDCG@5 | P95 |
 |---|---:|---:|---:|---:|---:|
-| BM25 | 39.17% | 46.67% | 35.19% | 36.49% | 15.50 ms |
-| Graph + Vector | **49.17%** | **63.33%** | **57.58%** | **55.08%** | 1209.40 ms |
+| BM25 | 39.17% | 46.67% | 35.19% | 36.49% | 15.26 ms |
+| Graph + Vector | **64.17%** | **69.17%** | **62.92%** | **61.38%** | 1889.44 ms |
+| Adaptive v2 | 55.83% | **69.17%** | 53.11% | 54.69% | 2031.67 ms |
 
 Graph + Vector 提高跨文档关系证据覆盖与前排排序，但 CPU P95 明显增加。图节点/边均回指原始
 Chunk，LLM 引用的仍是文本证据而不是图结构。完整工件见
-[P1 Frozen Release](reports/releases/p1-d7-v03-frozen-20260816/report.md)。
+[Adaptive v2 Release Test](reports/releases/p1-adaptive-v2-v03-release-test-20260903-r1/report.md)。
 
-### Adaptive Retrieval 与 Reranker 的负结果
+### Adaptive Retrieval v2 与 Gate 校准
 
-在统一 v0.3/dev 对照中，固定 Graph+Vector RRF 的 Recall@5/MRR 为 58.33%/52.10%，旧
-Adaptive Graph 为 48.33%/42.21%。升级为 `QueryFeatures -> EvidenceRequirement -> Strategy`
-后，Recall@5 为 48.75%，但 MRR 降至 39.01%；说明关系 Query 覆盖略增，策略误选和前排噪声
-仍未解决，不能包装成质量提升。见
-[Evidence-Need Adaptive Ablation](reports/ablations/p1-query-evidence-adaptive-v03-dev-20260825-fixed/report.md)。
+Analyzer v2 不再把任意英文 token 当作精确查询，并将规则、语义策略和 fallback 版本写入
+Trace。相同 v0.3/dev 上，Adaptive v2 相比可复现 v1 将 Recall@5 从 54.58% 提升至
+55.42%、MRR 从 47.76% 提升至 49.88%；Graph 调用率为 25%。固定 Graph+Vector 的
+Recall@5/MRR 仍更高（58.33%/52.10%），所以尚未形成全面 Pareto 优势。见
+[dev closure](reports/ablations/p1-adaptive-v2-v03-dev-20260903-r1/report.md)。
+
+Evidence Gate 对四种 Retriever 分别做 dev-only top-1 score 阈值扫描。没有策略能同时满足
+FAR <= 5% 与 FRR <= 25%，锁定配置因此标记 `raw_score_not_separable` 并关闭 score gate，
+运行时改用结果数量、必要来源覆盖和 Graph path。release test 的不可回答拒答准确率为 100%，
+但 Gate FAR 为 25%、deterministic E2E success 为 60%，不能据此声称可靠性问题已经解决。
 
 CrossEncoder 支持 Never/Always/On-demand 三种策略。Always 在同集 dev 将 MRR 从 44.31%
 提高到 49.22%，但 P95 从 1252 ms 增至 2799 ms；On-demand 调用率 18.12%，仍未取得质量与
@@ -145,8 +151,8 @@ PYTHONPATH=src python -m unittest discover -s tests -p 'test_*.py'
 ```
 
 测试验证代码契约与确定性行为，不代表回答准确率；真实 LLM、PostgreSQL/Redis/Neo4j 和模型权重
-下载不进入默认离线单测。当前仓库在 2026-08-28 执行上述命令的结果为 227 tests run、
-223 passed、4 skipped、0 failed。
+下载不进入默认离线单测。当前仓库在 2026-09-03 执行上述命令的结果为 237 tests run、
+233 passed、4 skipped、0 failed。
 
 Docker 可用时启动服务：
 
@@ -184,8 +190,8 @@ PYTHONPATH=src python scripts/run_rag_smoke.py
 
 - [Service Integration](.github/workflows/p1-service.yml)：`main` push/手动触发，验证 API、Worker、
   PostgreSQL、Redis、Neo4j、异步 Job 和持久化恢复链路。
-- [Evaluation Gate](.github/workflows/evaluation-gate.yml)：Pull Request/手动触发，运行确定性测试、
-  regression 与 reference quality gate。
+- [Evaluation Gate](.github/workflows/evaluation-gate.yml)：Pull Request/手动触发，真实运行
+  v0.3/dev 的 Adaptive v1/v2、动态单 Case 容差、P95 工程预算与 fixed regression；不读取 test。
 - [Persistent Retrieval Ablation](.github/workflows/p1-persistent-ablation.yml)：手动运行完整 v0.3/dev
   的文件精确扫描、pgvector exact/HNSW 和 Neo4j 对照，并上传版本化工件。
 
@@ -211,7 +217,7 @@ PYTHONPATH=src python scripts/run_rag_smoke.py
 - v0.3 标签是 corpus-grounded AI-assisted，不代表线上分布或独立人工标注。
 - Recall@k/MRR/NDCG 衡量检索，不等于答案准确率；Citation Validity 只验证引用 ID 合法；
   Semantic Coverage 与 Claim-Level Grounding 依赖版本化 grader，也不是人工金标准。
-- 当前自适应 selector、On-demand Reranker 和 v0.3 端到端链路仍有明确负结果；报告保留退化 Case，
+- 当前自适应 selector、score gate、On-demand Reranker 和 v0.3 端到端链路仍有明确负结果；报告保留退化 Case，
   不以功能已实现替代效果提升。
 - 项目不包含前端、Kubernetes、微服务拆分或在线自动学习 Router。
 

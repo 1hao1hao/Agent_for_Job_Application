@@ -12,6 +12,8 @@ class MetricGate:
     direction: str
     max_drop: float = 0.0
     max_increase_ratio: float = 1.0
+    blocking: bool = True
+    dynamic_one_case_tolerance: bool = False
 
 
 @dataclass(frozen=True)
@@ -34,6 +36,8 @@ def evaluate_ci_gate(
     *,
     fixed_regression_pass_rate: float,
     failed_case_ids: Sequence[str] = (),
+    case_count: int | None = None,
+    answerable_case_count: int | None = None,
 ) -> EvaluationGateResult:
     """比较版本化 reference 与候选指标，并把回归失败并入发布结论。
 
@@ -44,6 +48,11 @@ def evaluate_ci_gate(
 
     checks: list[dict[str, object]] = []
     reasons: list[str] = []
+    one_case_tolerance = (
+        1.0 / answerable_case_count
+        if answerable_case_count is not None and answerable_case_count > 0
+        else 0.0
+    )
     for gate in gates:
         old = reference.get(gate.name)
         new = candidate.get(gate.name)
@@ -51,7 +60,10 @@ def evaluate_ci_gate(
             passed = False
             reason = f"missing metric: {gate.name}"
         elif gate.direction == "higher_is_better":
-            passed = new >= old - gate.max_drop
+            tolerance = (
+                one_case_tolerance if gate.dynamic_one_case_tolerance else gate.max_drop
+            )
+            passed = new >= old - tolerance
             reason = "" if passed else f"{gate.name} dropped from {old:.6f} to {new:.6f}"
         elif gate.direction == "lower_is_better":
             limit = old * gate.max_increase_ratio
@@ -64,9 +76,17 @@ def evaluate_ci_gate(
             "reference": old,
             "candidate": new,
             "passed": passed,
+            "blocking": gate.blocking,
+            "case_count": case_count,
+            "answerable_case_count": answerable_case_count,
+            "tolerance": (
+                one_case_tolerance
+                if gate.dynamic_one_case_tolerance else gate.max_drop
+            ),
+            "delta": new - old if old is not None and new is not None else None,
             "reason": reason,
         })
-        if reason:
+        if reason and gate.blocking:
             reasons.append(reason)
 
     regression_passed = fixed_regression_pass_rate == 1.0
@@ -75,12 +95,21 @@ def evaluate_ci_gate(
         "reference": 1.0,
         "candidate": fixed_regression_pass_rate,
         "passed": regression_passed,
+        "blocking": True,
+        "case_count": case_count,
+        "answerable_case_count": answerable_case_count,
+        "tolerance": 0.0,
+        "delta": fixed_regression_pass_rate - 1.0,
         "reason": "" if regression_passed else "fixed regression did not fully pass",
     })
     if not regression_passed:
         reasons.append("fixed regression did not fully pass")
     return EvaluationGateResult(
-        passed=all(bool(item["passed"]) for item in checks),
+        passed=all(
+            bool(item["passed"])
+            for item in checks
+            if bool(item.get("blocking", True))
+        ),
         checks=checks,
         failed_case_ids=sorted(set(failed_case_ids)),
         reasons=reasons,

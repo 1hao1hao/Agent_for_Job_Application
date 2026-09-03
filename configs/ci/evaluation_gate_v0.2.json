@@ -1,0 +1,11 @@
+{
+  "config_version": "ci-evaluation-gate-v2.0",
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "blocking": ["recall_at_5", "mrr", "p95_ms", "fixed_regression_pass_rate"],
+  "report_only": ["ndcg_at_5", "strategy_distribution", "graph_invocation_rate"],
+  "quality_tolerance": "1 / answerable_case_count",
+  "max_p95_increase_ratio": 1.25,
+  "p95_scope": "dev engineering budget; not a statistical threshold or online SLA",
+  "frozen_test_policy": "CI must not read test split"
+}

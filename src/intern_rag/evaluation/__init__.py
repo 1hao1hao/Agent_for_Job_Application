@@ -91,6 +91,12 @@ from intern_rag.evaluation.ci_gate import (
     MetricGate,
     evaluate_ci_gate,
 )
+from intern_rag.evaluation.calibration import (
+    CalibrationResult,
+    ThresholdPoint,
+    calibrate_score_gate,
+    is_structurally_positive,
+)
 from intern_rag.evaluation.graph_dataset import (
     GraphChallengeCase,
     GraphDatasetValidation,
@@ -114,6 +120,8 @@ __all__ = [
     "EvaluationRunConfig",
     "EvaluationRunResult",
     "EvaluationGateResult",
+    "CalibrationResult",
+    "ThresholdPoint",
     "EndToEndRunConfig",
     "EndToEndRunResult",
     "LiveLlmRunConfig",
@@ -144,6 +152,8 @@ __all__ = [
     "RegressionResult",
     "MetricGate",
     "calculate_average_recall_at_k",
+    "calibrate_score_gate",
+    "is_structurally_positive",
     "calculate_ndcg_at_k",
     "calculate_recall_at_k",
     "calculate_router_accuracy",

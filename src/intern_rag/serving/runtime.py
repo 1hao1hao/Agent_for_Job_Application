@@ -11,6 +11,7 @@ from intern_rag.agent import (
     ContextSignalExtractor,
     PipelineConfig,
     RagPipeline,
+    load_evidence_config,
 )
 from intern_rag.agent.generation import DeepSeekChatClient
 from intern_rag.evaluation import load_chunks_jsonl
@@ -134,6 +135,13 @@ def create_runtime_app():
         else DeterministicDemoLlmClient()
     )
     trace_path = Path(os.environ.get("TRACE_PATH", "traces/service/agent_trace.jsonl"))
+    evidence_path = Path(
+        os.environ.get(
+            "EVALRAG_EVIDENCE_CONFIG",
+            str(project_root / "configs/evidence/gate_calibrated_v0.3.json"),
+        )
+    )
+    evidence_config = load_evidence_config(evidence_path) if evidence_path.exists() else None
     pipeline = RagPipeline(
         chunks,
         llm_client,
@@ -145,6 +153,7 @@ def create_runtime_app():
             ),
             context_token_budget=int(os.environ.get("EVALRAG_CONTEXT_TOKEN_BUDGET", "1800")),
             context_mode=os.environ.get("EVALRAG_CONTEXT_MODE", "adaptive"),  # type: ignore[arg-type]
+            **({"evidence": evidence_config} if evidence_config is not None else {}),
         ),
         trace_path=trace_path,
         router=route_query,

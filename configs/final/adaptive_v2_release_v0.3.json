@@ -1,0 +1,19 @@
+{
+  "release_config_version": "adaptive-v2-release-v0.3",
+  "dataset_version": "evalrag_v0.3",
+  "dev_run": "reports/ablations/p1-adaptive-v2-v03-dev-20260903-r1/summary.json",
+  "retrieval_config": "configs/retrieval/adaptive_v2_v0.3.json",
+  "evidence_config": "configs/evidence/gate_calibrated_v0.3.json",
+  "sha256": {
+    "data/evaluation/evalrag_v0.3.jsonl": "151ef8b56a84c3c0ffdb62026c705053f68e44002b7c8bde922f0a0154d4acd7",
+    "data/processed/chunks/evalrag_v0.3.jsonl": "40ca3b5bfac78922ae0fcce97836981b096c39260a4eb4295958a3d8720968d6",
+    "data/processed/graphs/evalrag_v0.3/job-skill-experience-v0.2.json": "1fa630bccce4afbeb6af83c5d9cf288505fa331025c337dfe8c7981a294e6d76",
+    "configs/retrieval/adaptive_v2_v0.3.json": "dbbbdbee6fbfd6ecce3852e46a92b21ff93291778f4374bcb232412d65af273a",
+    "configs/evidence/gate_calibrated_v0.3.json": "96562f3e4dee2735b93c5afa53ed8036c52c485c40c291e8ee8b42837731ebac",
+    "src/intern_rag/retrieval/adaptive.py": "33506c3b5c5b2bf3b41bff83bfe6ac4ce5139f04fbcfd1cb593d0d51a1fffbd7",
+    "src/intern_rag/agent/evidence.py": "022c11906c977edb2f49116d047d8984bea42d96015bc60170d1f410186e2dcf",
+    "src/intern_rag/evaluation/calibration.py": "ede8d83b5bc14d2c51c9f1c814fdd0412067b77af52e27b1f4e62fe480409197",
+    "src/intern_rag/evaluation/ci_gate.py": "f32c4e49a532fc3a07e44846a8295288ca5cc12c74e0e669ee32f95036ecdc6a"
+  },
+  "policy": "selector, thresholds and labels are immutable before release test"
+}

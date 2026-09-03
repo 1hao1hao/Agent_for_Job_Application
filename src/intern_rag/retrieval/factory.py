@@ -8,6 +8,9 @@ from intern_rag.graph.neo4j import create_neo4j_repository
 from intern_rag.retrieval.adaptive import (
     AdaptiveRetriever,
     AdaptiveRetrieverConfig,
+    QueryAnalyzer,
+    QueryAnalyzerConfig,
+    StrategySelectionConfig,
 )
 from intern_rag.retrieval.base import Retriever
 from intern_rag.retrieval.bm25 import BM25Retriever, load_bm25_index
@@ -157,6 +160,7 @@ def build_retriever_from_config(config: dict[str, object]) -> Retriever:
         return AdaptiveRetriever(
             {"bm25": bm25, "dense": dense, "hybrid": hybrid},
             scorer,
+            analyzer=_build_query_analyzer(config),
             config=AdaptiveRetrieverConfig(
                 confidence_threshold=float(
                     config.get("adaptive_confidence_threshold", 0.55)
@@ -202,3 +206,31 @@ def _build_rerank_scorer(config: dict[str, object]) -> RerankScorer:
             batch_size=int(config.get("reranker_batch_size", 16)),
         )
     raise ValueError(f"unknown reranker_kind: {scorer_kind}")
+
+
+def _build_query_analyzer(config: dict[str, object]) -> QueryAnalyzer:
+    """从新配置构造 Analyzer，同时让缺少字段的旧配置继续运行。"""
+
+    analyzer_raw = config.get("query_analyzer", {})
+    strategy_raw = config.get("strategy_mapping", {})
+    analyzer_data = analyzer_raw if isinstance(analyzer_raw, dict) else {}
+    strategy_data = strategy_raw if isinstance(strategy_raw, dict) else {}
+    defaults = QueryAnalyzerConfig()
+    return QueryAnalyzer(
+        QueryAnalyzerConfig(
+            version=str(analyzer_data.get("version", defaults.version)),
+            semantic_markers=tuple(analyzer_data.get("semantic_markers", defaults.semantic_markers)),
+            multi_source_markers=tuple(analyzer_data.get("multi_source_markers", defaults.multi_source_markers)),
+            relation_markers=tuple(analyzer_data.get("relation_markers", defaults.relation_markers)),
+            weak_relation_markers=tuple(analyzer_data.get("weak_relation_markers", defaults.weak_relation_markers)),
+            exact_fact_markers=tuple(analyzer_data.get("exact_fact_markers", defaults.exact_fact_markers)),
+            exact_terms=tuple(analyzer_data.get("exact_terms", defaults.exact_terms)),
+            unanswerable_markers=tuple(analyzer_data.get("unanswerable_markers", defaults.unanswerable_markers)),
+            latin_token_is_exact=bool(analyzer_data.get("latin_token_is_exact", False)),
+            entity_markers=defaults.entity_markers,
+        ),
+        StrategySelectionConfig(
+            version=str(strategy_data.get("version", "strategy-map-v2.0")),
+            semantic_strategy=str(strategy_data.get("semantic_strategy", "hybrid")),  # type: ignore[arg-type]
+        ),
+    )

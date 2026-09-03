@@ -27,6 +27,28 @@ class EvaluationGateTests(unittest.TestCase):
         self.assertEqual(result.failed_case_ids, ["reg-1", "reg-2"])
         self.assertIn("grounding dropped", result.reasons[0])
 
+    def test_dynamic_tolerance_and_report_only_ndcg(self) -> None:
+        result = evaluate_ci_gate(
+            {"recall_at_5": 0.8, "ndcg_at_5": 0.8},
+            {"recall_at_5": 0.792, "ndcg_at_5": 0.1},
+            [
+                MetricGate("recall_at_5", "higher_is_better", dynamic_one_case_tolerance=True),
+                MetricGate("ndcg_at_5", "higher_is_better", blocking=False),
+            ],
+            fixed_regression_pass_rate=1.0,
+            case_count=160,
+            answerable_case_count=120,
+        )
+        self.assertTrue(result.passed)
+        self.assertAlmostEqual(result.checks[0]["tolerance"], 1 / 120)
+
+    def test_fixed_regression_always_blocks(self) -> None:
+        result = evaluate_ci_gate(
+            {}, {}, [], fixed_regression_pass_rate=0.99,
+            case_count=160, answerable_case_count=120,
+        )
+        self.assertFalse(result.passed)
+
 
 if __name__ == "__main__":
     unittest.main()

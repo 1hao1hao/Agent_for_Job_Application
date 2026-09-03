@@ -1,0 +1,202 @@
+{
+  "config_version": "ci-evaluation-gate-v2.0",
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "case_count": 160,
+  "answerable_case_count": 120,
+  "frozen_test_used": false,
+  "reference": {
+    "recall_at_3": 0.5041666666666667,
+    "recall_at_5": 0.5458333333333333,
+    "mrr": 0.4776388888888889,
+    "ndcg_at_5": 0.47007814453936453,
+    "path_validity": 1.0,
+    "p95_ms": 1721.3955204933882
+  },
+  "candidate": {
+    "recall_at_3": 0.5041666666666667,
+    "recall_at_5": 0.5541666666666667,
+    "mrr": 0.49875,
+    "ndcg_at_5": 0.4877864220401281,
+    "path_validity": 1.0,
+    "p95_ms": 1887.9672195762396
+  },
+  "regression": {
+    "case_results": [
+      {
+        "case_id": "reg-router-company-list-v1",
+        "status": "fixed",
+        "failure_type": "router_wrong",
+        "passed": true,
+        "expected": {
+          "intent": "unknown",
+          "sources": []
+        },
+        "actual": {
+          "intent": "unknown",
+          "sources": []
+        },
+        "error": ""
+      },
+      {
+        "case_id": "reg-multi-intent-project-match-v1",
+        "status": "open",
+        "failure_type": "router_multi_intent",
+        "passed": null,
+        "note": "open regression is not included in pass rate"
+      },
+      {
+        "case_id": "reg-jd-freshness-v1",
+        "status": "open",
+        "failure_type": "freshness_missing",
+        "passed": null,
+        "note": "open regression is not included in pass rate"
+      },
+      {
+        "case_id": "reg-cross-source-citation-v1",
+        "status": "open",
+        "failure_type": "citation_support",
+        "passed": null,
+        "note": "open regression is not included in pass rate"
+      },
+      {
+        "case_id": "reg-uncited-context-claim-v1",
+        "status": "open",
+        "failure_type": "unsupported_answer",
+        "passed": null,
+        "note": "open regression is not included in pass rate"
+      },
+      {
+        "case_id": "reg-router-feedback-semantic-003",
+        "status": "fixed",
+        "failure_type": "router_wrong",
+        "passed": true,
+        "expected": {
+          "intent": "analyze_jd",
+          "sources": [
+            "jd"
+          ]
+        },
+        "actual": {
+          "intent": "analyze_jd",
+          "sources": [
+            "jd"
+          ]
+        },
+        "error": ""
+      },
+      {
+        "case_id": "reg-router-feedback-semantic-006",
+        "status": "fixed",
+        "failure_type": "router_wrong",
+        "passed": true,
+        "expected": {
+          "intent": "analyze_jd",
+          "sources": [
+            "jd"
+          ]
+        },
+        "actual": {
+          "intent": "analyze_jd",
+          "sources": [
+            "jd"
+          ]
+        },
+        "error": ""
+      },
+      {
+        "case_id": "reg-router-feedback-semantic-019",
+        "status": "fixed",
+        "failure_type": "router_wrong",
+        "passed": true,
+        "expected": {
+          "intent": "project_explain",
+          "sources": [
+            "project_logs",
+            "resume"
+          ]
+        },
+        "actual": {
+          "intent": "project_explain",
+          "sources": [
+            "project_logs",
+            "resume"
+          ]
+        },
+        "error": ""
+      }
+    ],
+    "fixed_count": 4,
+    "fixed_passed": 4,
+    "open_count": 4,
+    "fixed_pass_rate": 1.0
+  },
+  "gate": {
+    "passed": true,
+    "checks": [
+      {
+        "metric": "recall_at_5",
+        "reference": 0.5458333333333333,
+        "candidate": 0.5541666666666667,
+        "passed": true,
+        "blocking": true,
+        "case_count": 160,
+        "answerable_case_count": 120,
+        "tolerance": 0.008333333333333333,
+        "delta": 0.008333333333333415,
+        "reason": ""
+      },
+      {
+        "metric": "mrr",
+        "reference": 0.4776388888888889,
+        "candidate": 0.49875,
+        "passed": true,
+        "blocking": true,
+        "case_count": 160,
+        "answerable_case_count": 120,
+        "tolerance": 0.008333333333333333,
+        "delta": 0.021111111111111136,
+        "reason": ""
+      },
+      {
+        "metric": "p95_ms",
+        "reference": 1721.3955204933882,
+        "candidate": 1887.9672195762396,
+        "passed": true,
+        "blocking": true,
+        "case_count": 160,
+        "answerable_case_count": 120,
+        "tolerance": 0.0,
+        "delta": 166.5716990828514,
+        "reason": ""
+      },
+      {
+        "metric": "ndcg_at_5",
+        "reference": 0.47007814453936453,
+        "candidate": 0.4877864220401281,
+        "passed": true,
+        "blocking": false,
+        "case_count": 160,
+        "answerable_case_count": 120,
+        "tolerance": 0.0,
+        "delta": 0.017708277500763592,
+        "reason": ""
+      },
+      {
+        "metric": "fixed_regression_pass_rate",
+        "reference": 1.0,
+        "candidate": 1.0,
+        "passed": true,
+        "blocking": true,
+        "case_count": 160,
+        "answerable_case_count": 120,
+        "tolerance": 0.0,
+        "delta": 0.0,
+        "reason": ""
+      }
+    ],
+    "failed_case_ids": [],
+    "reasons": []
+  },
+  "p95_scope": "dev engineering budget; not a statistical threshold or online SLA"
+}

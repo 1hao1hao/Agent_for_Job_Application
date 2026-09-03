@@ -1,16 +1,16 @@
 from __future__ import annotations
 
 from contextvars import ContextVar
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 import re
-from typing import Literal
+from typing import Literal, Mapping
 
 from intern_rag.ingestion import Chunk
 from intern_rag.retrieval.base import RetrievalResult, Retriever
 from intern_rag.retrieval.rerank import RerankScorer
 
 
-RetrievalStrategy = Literal["bm25", "dense", "hybrid", "graph_hybrid"]
+RetrievalStrategy = Literal["none", "bm25", "dense", "hybrid", "graph_hybrid"]
 RerankPolicy = Literal["never", "always", "low_confidence"]
 EvidenceNeedType = Literal[
     "unanswerable",
@@ -32,6 +32,55 @@ class QueryFeatures:
     requires_entity_reasoning: bool
     entity_types: tuple[str, ...]
     is_unanswerable_route: bool
+    has_conflicting_signals: bool = False
+
+
+@dataclass(frozen=True)
+class QueryAnalyzerConfig:
+    """Query Analyzer v2 的少量强信号与版本号。"""
+
+    version: str = "query-analyzer-v2.0"
+    semantic_markers: tuple[str, ...] = (
+        "换句话", "同义", "通俗", "口语", "改写", "概括", "转述",
+        "如何", "怎么", "为什么", "原理", "解释", "提升", "降低", "减少", "优化",
+    )
+    multi_source_markers: tuple[str, ...] = (
+        "结合", "对比", "比较", "综合", "分别", "共同分析",
+    )
+    relation_markers: tuple[str, ...] = (
+        "哪些项目", "哪个项目", "哪些经历", "哪段经历", "能否证明", "是否证明",
+        "如何证明", "对应关系", "关联起来", "根据经历推荐", "关系路径", "关系链",
+        "跳联系", "多跳", "共同体现", "为什么符合", "为何符合",
+    )
+    weak_relation_markers: tuple[str, ...] = (
+        "匹配", "适合这个岗位", "符合这个岗位", "关联",
+    )
+    exact_fact_markers: tuple[str, ...] = (
+        "是什么", "有哪些", "多少", "何时", "哪里", "职责", "要求", "版本",
+    )
+    exact_terms: tuple[str, ...] = (
+        "bm25", "rrf", "redis stream", "pgvector", "neo4j", "crossencoder",
+        "cross-encoder", "fastapi", "docker compose", "citation", "trace id",
+    )
+    unanswerable_markers: tuple[str, ...] = (
+        "unpublished-", "内部薪资审批名单", "量子芯片驱动的十亿节点生产图",
+    )
+    latin_token_is_exact: bool = False
+    entity_markers: Mapping[str, tuple[str, ...]] = field(default_factory=lambda: {
+        "job": ("岗位", "职位", "jd", "招聘"),
+        "skill": ("技能", "能力", "要求", "技术栈"),
+        "project": ("项目", "作品", "系统"),
+        "experience": ("经历", "简历", "经验", "候选人", "个人背景"),
+        "company": ("公司", "企业", "部门"),
+    })
+
+
+@dataclass(frozen=True)
+class StrategySelectionConfig:
+    """证据需求到检索策略的版本化映射。"""
+
+    version: str = "strategy-map-v2.0"
+    semantic_strategy: Literal["dense", "hybrid"] = "hybrid"
 
 
 @dataclass(frozen=True)
@@ -60,11 +109,17 @@ class RetrievalDecision:
     reranker_version: str | None = None
     query_features: dict[str, object] | None = None
     evidence_requirement: dict[str, object] | None = None
+    selection_rule: str = ""
+    config_version: str = "legacy"
+    fallback_reason: str | None = None
+    escalation_reason: str | None = None
 
     def to_trace(self) -> dict[str, object]:
         """转换为可写入 AgentTrace/评测工件的普通字典。"""
 
-        return asdict(self)
+        value = asdict(self)
+        value["selected_strategy"] = self.strategy
+        return value
 
 
 @dataclass(frozen=True)
@@ -98,34 +153,13 @@ class QueryAnalyzer:
     证据需求，因此不会再用“Query 很短”这类弱信号直接决定检索算法。
     """
 
-    _semantic_markers = (
-        "换句话", "同义", "通俗", "口语", "改写", "另一种说法",
-        "如何", "怎么", "为什么", "原理", "解释", "提升", "降低", "减少", "优化",
-        "不使用原文", "不用原文", "概括", "转述",
-    )
-    _multi_source_markers = ("结合", "对比", "综合", "分别", "共同分析")
-    _comparison_markers = ("对比", "比较", "区别", "差异", "更适合", "优先选择")
-    _strong_relation_markers = (
-        "哪些项目", "哪个项目", "哪项项目", "哪些经历", "哪段经历",
-        "能否证明", "是否证明", "可以证明", "如何证明", "对应关系", "对应起来",
-        "关联起来", "有什么关联", "根据经历推荐", "共同体现",
-        "知识关系", "关系路径", "关系链", "跳联系", "多跳", "为什么符合", "为何符合",
-    )
-    _weak_relation_markers = ("匹配", "适合这个岗位", "符合这个岗位", "关联")
-    _fact_markers = ("是什么", "有哪些", "多少", "何时", "哪里", "职责", "要求", "版本")
-    _technical_terms = (
-        "混合检索", "引用校验", "请求追踪", "意图路由", "上下文预算", "失败回归",
-        "bm25", "dense", "rrf", "agent", "rag", "trace", "citation", "redis",
-        "pgvector", "neo4j", "crossencoder", "cross-encoder", "fastapi", "docker",
-    )
-    _entity_markers = {
-        "job": ("岗位", "职位", "jd", "招聘"),
-        "skill": ("技能", "能力", "要求", "技术栈"),
-        "project": ("项目", "作品", "系统"),
-        "experience": ("经历", "简历", "经验", "候选人", "个人背景"),
-        "company": ("公司", "企业", "部门"),
-    }
-    _latin_term_pattern = re.compile(r"[A-Za-z][A-Za-z0-9_.+-]+")
+    def __init__(
+        self,
+        config: QueryAnalyzerConfig | None = None,
+        strategy_config: StrategySelectionConfig | None = None,
+    ) -> None:
+        self.config = config or QueryAnalyzerConfig()
+        self.strategy_config = strategy_config or StrategySelectionConfig()
 
     def analyze(
         self,
@@ -138,27 +172,29 @@ class QueryAnalyzer:
         sources = source_types or set()
         entity_types = tuple(
             entity_type
-            for entity_type, markers in self._entity_markers.items()
+            for entity_type, markers in self.config.entity_markers.items()
             if any(marker in normalized for marker in markers)
         )
         strong_relations = tuple(
-            marker for marker in self._strong_relation_markers if marker in normalized
+            marker for marker in self.config.relation_markers if marker in normalized
         )
         weak_relations = tuple(
-            marker for marker in self._weak_relation_markers if marker in normalized
+            marker for marker in self.config.weak_relation_markers if marker in normalized
         )
         needs_exact_match = (
-            any(term in normalized for term in self._technical_terms)
-            or bool(self._latin_term_pattern.search(query))
-            or any(marker in normalized for marker in self._fact_markers)
+            any(term in normalized for term in self.config.exact_terms)
+            or any(marker in normalized for marker in self.config.exact_fact_markers)
+            or (
+                self.config.latin_token_is_exact
+                and bool(re.search(r"[A-Za-z][A-Za-z0-9_.+-]+", query))
+            )
         )
         needs_semantic_match = any(
-            marker in normalized for marker in self._semantic_markers
+            marker in normalized for marker in self.config.semantic_markers
         )
         needs_multi_source = (
             len(sources) >= 2
-            or any(marker in normalized for marker in self._multi_source_markers)
-            or any(marker in normalized for marker in self._comparison_markers)
+            or any(marker in normalized for marker in self.config.multi_source_markers)
         )
         requires_entity_reasoning = bool(strong_relations) or (
             bool(weak_relations) and len(entity_types) >= 3
@@ -169,7 +205,11 @@ class QueryAnalyzer:
             needs_multi_source=needs_multi_source,
             requires_entity_reasoning=requires_entity_reasoning,
             entity_types=entity_types,
-            is_unanswerable_route=source_types is not None and not source_types,
+            is_unanswerable_route=(
+                (source_types is not None and not source_types)
+                or any(marker in normalized for marker in self.config.unanswerable_markers)
+            ),
+            has_conflicting_signals=needs_exact_match and needs_semantic_match,
         )
 
     def classify_evidence_need(
@@ -223,15 +263,15 @@ class QueryAnalyzer:
             else requirement
         )
         if evidence.need_type == "unanswerable":
-            return "bm25", evidence.reason
+            return "none", evidence.reason
         if evidence.graph_required:
             if graph_enabled:
                 return "graph_hybrid", evidence.reason
             return "hybrid", f"{evidence.reason}; graph unavailable, use hybrid fallback"
-        if evidence.lexical_required and not evidence.semantic_required:
+        if evidence.need_type == "exact_fact":
             return "bm25", evidence.reason
-        if evidence.semantic_required and not evidence.lexical_required:
-            return "dense", evidence.reason
+        if evidence.need_type == "semantic_explanation":
+            return self.strategy_config.semantic_strategy, evidence.reason
         return "hybrid", evidence.reason
 
 
@@ -287,7 +327,12 @@ class AdaptiveRetriever:
         if self.config.force_strategy is not None:
             strategy = self.config.force_strategy
             strategy_reason = f"forced {strategy} for controlled ablation"
-        if top_k <= 0 or not query.strip() or features.is_unanswerable_route:
+        fallback_reason = (
+            "graph capability unavailable"
+            if evidence_requirement.graph_required and strategy == "hybrid"
+            else None
+        )
+        if top_k <= 0 or not query.strip() or strategy == "none":
             decision = RetrievalDecision(
                 strategy=strategy,
                 confidence=1.0 if features.is_unanswerable_route else 0.0,
@@ -297,6 +342,12 @@ class AdaptiveRetriever:
                 reason=strategy_reason,
                 query_features=asdict(features),
                 evidence_requirement=asdict(evidence_requirement),
+                selection_rule=evidence_requirement.need_type,
+                config_version=(
+                    f"{self.analyzer.config.version}/"
+                    f"{self.analyzer.strategy_config.version}"
+                ),
+                fallback_reason=fallback_reason,
             )
             self._last_decision.set(decision)
             self._last_stage_trace.set({})
@@ -312,6 +363,7 @@ class AdaptiveRetriever:
             selected_retriever = self.retrievers["hybrid"]
             strategy = "hybrid"
             strategy_reason = "graph retriever unavailable; fallback to hybrid"
+            fallback_reason = "selected graph retriever is unavailable"
         candidates = selected_retriever(
             query, chunks, top_k=candidate_k, source_types=source_types
         )
@@ -351,6 +403,16 @@ class AdaptiveRetriever:
             reranker_version=self.scorer.version if should_rerank else None,
             query_features=asdict(features),
             evidence_requirement=asdict(evidence_requirement),
+            selection_rule=evidence_requirement.need_type,
+            config_version=(
+                f"{self.analyzer.config.version}/"
+                f"{self.analyzer.strategy_config.version}"
+            ),
+            fallback_reason=fallback_reason,
+            escalation_reason=(
+                "retrieval confidence below rerank threshold"
+                if should_rerank else None
+            ),
         )
         self._last_decision.set(decision)
         self._last_stage_trace.set(stage_trace)

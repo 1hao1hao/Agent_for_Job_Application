@@ -1,0 +1,67 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "metric": "recall_at_5",
+      "reference": 0.5458333333333333,
+      "candidate": 0.5541666666666667,
+      "passed": true,
+      "blocking": true,
+      "case_count": 160,
+      "answerable_case_count": 120,
+      "tolerance": 0.008333333333333333,
+      "delta": 0.008333333333333415,
+      "reason": ""
+    },
+    {
+      "metric": "mrr",
+      "reference": 0.4776388888888889,
+      "candidate": 0.49875,
+      "passed": true,
+      "blocking": true,
+      "case_count": 160,
+      "answerable_case_count": 120,
+      "tolerance": 0.008333333333333333,
+      "delta": 0.021111111111111136,
+      "reason": ""
+    },
+    {
+      "metric": "p95_ms",
+      "reference": 1518.7396574765444,
+      "candidate": 1847.3548665642738,
+      "passed": true,
+      "blocking": true,
+      "case_count": 160,
+      "answerable_case_count": 120,
+      "tolerance": 0.0,
+      "delta": 328.61520908772945,
+      "reason": ""
+    },
+    {
+      "metric": "ndcg_at_5",
+      "reference": 0.47007814453936453,
+      "candidate": 0.4877864220401281,
+      "passed": true,
+      "blocking": false,
+      "case_count": 160,
+      "answerable_case_count": 120,
+      "tolerance": 0.0,
+      "delta": 0.017708277500763592,
+      "reason": ""
+    },
+    {
+      "metric": "fixed_regression_pass_rate",
+      "reference": 1.0,
+      "candidate": 1.0,
+      "passed": true,
+      "blocking": true,
+      "case_count": 160,
+      "answerable_case_count": 120,
+      "tolerance": 0.0,
+      "delta": 0.0,
+      "reason": ""
+    }
+  ],
+  "failed_case_ids": [],
+  "reasons": []
+}

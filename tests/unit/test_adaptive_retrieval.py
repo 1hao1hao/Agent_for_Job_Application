@@ -59,9 +59,25 @@ class AdaptiveRetrieverTests(unittest.TestCase):
         )
 
         self.assertEqual(analyzer.choose_strategy(exact)[0], "bm25")
-        self.assertEqual(analyzer.choose_strategy(semantic)[0], "dense")
+        self.assertEqual(analyzer.choose_strategy(semantic)[0], "hybrid")
         self.assertEqual(analyzer.choose_strategy(synthesis)[0], "hybrid")
         self.assertEqual(synthesis.need_type, "multi_source_synthesis")
+
+    def test_arbitrary_english_token_is_not_exact_signal(self) -> None:
+        analyzer = QueryAnalyzer()
+        features = analyzer.analyze("Candidate 如何减少检索偏差", {"interview"})
+
+        self.assertFalse(features.needs_exact_match)
+        self.assertEqual(
+            analyzer.classify_evidence_need(features).need_type,
+            "semantic_explanation",
+        )
+
+    def test_unanswerable_route_selects_none(self) -> None:
+        analyzer = QueryAnalyzer()
+        features = analyzer.analyze("数据库里没有的问题", set())
+
+        self.assertEqual(analyzer.choose_strategy(features)[0], "none")
 
     def test_relation_reasoning_not_cross_document_count_triggers_graph(self) -> None:
         analyzer = QueryAnalyzer()
@@ -186,6 +202,11 @@ class AdaptiveRetrieverTests(unittest.TestCase):
         self.assertEqual(results, [])
         self.assertEqual(sum(len(item.calls) for item in retrievers.values()), 0)
         self.assertEqual(retriever.get_last_trace()["candidate_count"], 0)
+        self.assertEqual(retriever.get_last_trace()["strategy"], "none")
+        self.assertEqual(
+            retriever.get_last_trace()["config_version"],
+            "query-analyzer-v2.0/strategy-map-v2.0",
+        )
 
     def test_rerank_ties_keep_original_order_stable(self) -> None:
         retriever = AdaptiveRetriever(

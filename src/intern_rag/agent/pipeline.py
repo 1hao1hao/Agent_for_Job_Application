@@ -63,6 +63,7 @@ class PipelineConfig:
     context_token_budget: int = 1800
     context_mode: ContextMode = "recent_window"
     system_prompt: str = "仅依据提供的证据回答；证据不足时明确拒答。"
+    config_versions: Mapping[str, str] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         """拒绝无法执行或无法复现的空配置。"""
@@ -223,6 +224,14 @@ class RagPipeline:
                     retry_count=source_retry_count,
                     max_retries=self.config.max_source_retries,
                     config=self.config.evidence,
+                    evidence_requirement=(
+                        retrieval_decision_trace.get("evidence_requirement")
+                        if isinstance(
+                            retrieval_decision_trace.get("evidence_requirement"), dict
+                        )
+                        else None
+                    ),
+                    retrieval_trace=retrieval_decision_trace,
                 )
                 evidence_latency = _elapsed_ms(stage_started_at)
                 latency_ms["evidence"] += evidence_latency
@@ -589,6 +598,8 @@ class RagPipeline:
                 "router_name": self.config.router_name,
                 "max_source_retries": self.config.max_source_retries,
                 "max_format_retries": self.config.max_format_retries,
+                "config_versions": dict(self.config.config_versions),
+                "evidence_config_version": self.config.evidence.config_version,
             },
             prompt_version=self.config.prompt_version,
             response_status=response.status,

@@ -8,6 +8,7 @@ from intern_rag.agent import (
     ContextInputs,
     ContextSignalExtractor,
     EvidenceConfig,
+    ScoreGateConfig,
     FakeLlmClient,
     GatewayProvider,
     ModelGateway,
@@ -336,8 +337,12 @@ class PipelineIntegrationTests(unittest.TestCase):
             def get_last_trace(self):
                 return {
                     "strategy": "hybrid",
+                    "selected_strategy": "hybrid",
                     "confidence": 0.82,
                     "rerank_invoked": False,
+                    "selection_rule": "exact_fact",
+                    "config_version": "adaptive-v2-test",
+                    "evidence_requirement": {"need_type": "exact_fact"},
                 }
 
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -350,7 +355,15 @@ class PipelineIntegrationTests(unittest.TestCase):
                     sufficient=True,
                     reason="证据充分",
                 )]),
-                config=PipelineConfig(model="fake-model"),
+                config=PipelineConfig(
+                    model="fake-model",
+                    evidence=EvidenceConfig(
+                        min_scores={}, config_version="gate-v2-test",
+                        calibrated_scores={
+                            "hybrid": ScoreGateConfig(True, 0.5)
+                        },
+                    ),
+                ),
                 trace_path=trace_path,
                 retrievers={"adaptive": FakeAdaptiveRetriever()},
             )
@@ -363,6 +376,9 @@ class PipelineIntegrationTests(unittest.TestCase):
         self.assertEqual(response.status, "answered")
         self.assertEqual(trace.retrieval["decision"]["strategy"], "hybrid")
         self.assertFalse(trace.retrieval["decision"]["rerank_invoked"])
+        self.assertEqual(trace.evidence["evidence_need"], "exact_fact")
+        self.assertEqual(trace.evidence["effective_retriever"], "hybrid")
+        self.assertEqual(trace.evidence["config_version"], "gate-v2-test")
         self.assertEqual(
             trace.attempts[0]["retrieval_decision"]["confidence"], 0.82
         )

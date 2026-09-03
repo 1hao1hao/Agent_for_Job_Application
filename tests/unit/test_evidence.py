@@ -1,6 +1,6 @@
 import unittest
 
-from intern_rag.agent.evidence import EvidenceConfig, check_evidence
+from intern_rag.agent.evidence import EvidenceConfig, ScoreGateConfig, check_evidence
 from intern_rag.ingestion import Chunk
 from intern_rag.retrieval import RetrievalResult
 from intern_rag.routing import RouteDecision
@@ -65,6 +65,43 @@ class EvidenceTests(unittest.TestCase):
         )
         self.assertEqual(decision.status, "insufficient")
         self.assertEqual(decision.reason, "unanswerable_route")
+
+    def test_single_source_need_does_not_require_all_router_sources(self) -> None:
+        decision = check_evidence(
+            self.route, [_result("jd-1", "jd", 0.8)], retriever_name="adaptive",
+            retry_count=0, max_retries=1, config=EvidenceConfig(min_scores={}),
+            evidence_requirement={"need_type": "exact_fact"},
+            retrieval_trace={"strategy": "bm25"},
+        )
+        self.assertEqual(decision.status, "sufficient")
+
+    def test_disabled_unseparable_score_gate_uses_structure(self) -> None:
+        config = EvidenceConfig(
+            min_scores={}, config_version="gate-v2",
+            calibrated_scores={
+                "dense": ScoreGateConfig(False, None, "raw_score_not_separable")
+            },
+            require_source_coverage=False,
+        )
+        decision = check_evidence(
+            RouteDecision("interview_prep", ["interview"], []),
+            [_result("i-1", "interview", -9.0)], retriever_name="adaptive",
+            retry_count=0, max_retries=1, config=config,
+            evidence_requirement={"need_type": "semantic_explanation"},
+            retrieval_trace={"strategy": "dense"},
+        )
+        self.assertEqual(decision.status, "sufficient")
+        self.assertEqual(decision.threshold_status, "raw_score_not_separable")
+
+    def test_relation_need_requires_graph_path(self) -> None:
+        decision = check_evidence(
+            self.route, [_result("jd-1", "jd", 0.8)], retriever_name="adaptive",
+            retry_count=0, max_retries=1, config=EvidenceConfig(min_scores={}),
+            evidence_requirement={"need_type": "relation_reasoning"},
+            retrieval_trace={"strategy": "graph_hybrid"},
+        )
+        self.assertEqual(decision.status, "retryable")
+        self.assertEqual(decision.reason, "graph_evidence_missing")
 
 
 if __name__ == "__main__":

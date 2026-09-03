@@ -6,8 +6,10 @@ from intern_rag.retrieval.adaptive import (
     AdaptiveRetrieverConfig,
     EvidenceRequirement,
     QueryAnalyzer,
+    QueryAnalyzerConfig,
     QueryFeatures,
     RetrievalDecision,
+    StrategySelectionConfig,
 )
 from intern_rag.retrieval.bm25 import (
     BM25Index,
@@ -62,8 +64,10 @@ __all__ = [
     "AdaptiveRetrieverConfig",
     "EvidenceRequirement",
     "QueryAnalyzer",
+    "QueryAnalyzerConfig",
     "QueryFeatures",
     "RetrievalDecision",
+    "StrategySelectionConfig",
     "BM25Index",
     "BM25Retriever",
     "build_bm25_index",

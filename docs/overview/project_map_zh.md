@@ -126,18 +126,18 @@ PostgreSQL 是任务状态的真相来源；Redis 负责短期队列和最近会
 | BM25 | token overlap 没有词频、逆文档频率和长度归一 | 标准 BM25 公式，离线统计文档频率与平均长度，接口与其他 Retriever 一致 | 提供可解释稀疏检索基线；精确术语快，但同义召回弱 |
 | Dense Retrieval | BM25 依赖词面重叠 | `BAAI/bge-small-zh-v1.5` 离线编码 Chunk，查询时只编码 Query并计算余弦相似度 | 找回“参与智能问答开发”等语义改写，代价是更高 CPU 延迟 |
 | RRF Hybrid | BM25 与 Dense 原始分数不可直接相加 | Reciprocal Rank Fusion 只融合名次，去重后稳定排序 | v0.2 frozen 相比 Keyword，Recall@3 55.56% -> 68.33%，MRR 60.83% -> 66.78% |
-| Query Analyzer / Adaptive Retrieval | 固定策略无法同时适配精确事实、语义解释、多源综合和关系推理 | `Query Feature Extraction -> Evidence Need Classification -> Retriever Selection`：先识别精确术语、语义意图、实体类型和关系需求，再选择 BM25、Dense、Hybrid 或 Graph+Vector；检索后按候选置信度决定是否 CrossEncoder 重排 | Graph 不再由“跨文档”机械触发，而由实体关系推理需求触发；策略、特征、证据需求和重排原因均进入 Trace，便于按错误类型继续做同集消融 |
+| Query Analyzer / Adaptive Retrieval v2 | 固定策略无法同时适配精确事实、语义解释、多源综合和关系推理 | 少量强信号生成 `EvidenceRequirement`，再按版本化映射选择 BM25、Hybrid 或 Graph+Vector；不可回答选择 `none`，Graph 不可用才 fallback Hybrid；任意英文 token 不再自动等于 exact | dev 相比 v1：Recall@5 54.58% -> 55.42%，MRR 47.76% -> 49.88%；Graph 调用率 25%，但仍低于 always Graph 的 MRR 52.10% |
 | Job-Skill-Experience Graph | 向量相似不等于能连接“岗位要求-项目技能-个人经历” | 抽取 Job、Skill、Project、Experience、Technology、Company 节点和有向关系，全部回指 Chunk | v0.3 构建 3098 节点、2741 边，支持可解释多跳证据 |
 | Graph + Vector Retrieval | Graph-only 容易漏文本，Vector-only 缺关系路径 | 实体链接和有界多跳召回图证据，再用 RRF 与向量 Chunk 融合 | 80 条 frozen 上相对 BM25：Recall@5 46.67% -> 63.33%，MRR 35.19% -> 57.58%；P95 15.50 -> 1209.40 ms |
 | CrossEncoder Rerank Policy | 召回改善后仍可能存在前排噪声，但全量重排成本高 | 对同一 BM25+Dense+RRF 候选分别运行 never / always / low-confidence，用同一 MiniLM revision 控制变量 | v0.3 dev：always 将 MRR 44.31% -> 49.22%但 P95 1252 -> 2799 ms；按需调用率 18.12%、MRR 45.18%、P95 2175 ms，无 Pareto 最优 |
-| Evidence Gate | 检索有结果不等于证据足够生成 | 检查 route、结果数量、最高分和 required-source coverage；只允许一次扩源重试 | 将生成、重试、拒答变为可解释决策，避免弱证据直接进入模型 |
+| Evidence Gate v2 | 不同 Retriever 分数不可比，且不同问题需要的证据结构不同 | 按实际 BM25/Dense/Hybrid/Graph 策略加载 dev 校准门槛；普通题查数量，多来源查 source coverage，关系题查有效 Graph path；score 不可分时关闭该门槛 | 四种 raw score 均未同时满足 FAR<=5%、FRR<=25%，系统保留负结果并回退结构检查；test 拒答准确率 100%，但 FAR 25% |
 | Source-Balanced Context | 纯 rank 贪心容易被单一来源占满预算 | 在紧预算下优先保证 required sources，再按 rank 补充，且不截断单个 Chunk | 1200 字符预算下完整来源覆盖率 30.19% -> 54.72%，相关证据召回下降 0.94 pp |
 | Adaptive Context Engine / 分层记忆 | 固定 Recent、Summary 或 Memory 策略无法同时适配独立问题、追问和长会话 | `ContextSignalExtractor -> ContextPolicy -> ContextPlan -> ContextEngine`：以 History Token Pressure、指代/省略+BGE 语义连续性、Memory `similarity * importance` 动态决定各层；Engine 再按统一预算、优先级和跨层语义去重编排 Profile/History/Summary/Memory/Evidence | 60 组/300 turns dev 中保持 100% Follow-up Success；相对 Summary+Recent，Prompt Token 75.55 -> 60.68（-19.68%），History Redundancy 42.86% -> 0；该 Context-level 结果不等于自由生成答案准确率 |
 | Generator JSON Contract | 自由文本难以校验引用和拒答状态 | Prompt 约束只依据 Context，模型返回 answer/cited_chunk_ids/sufficient/reason；解析失败受控重试一次 | 生成结果可被程序验证，而不是把模型输出直接交给用户 |
 | Model Gateway | 外部模型有 timeout、429、5xx 和供应商故障 | Provider Protocol + 有界退避、并发 semaphore、熔断和 fallback，鉴权错误不盲重试 | 6 类 Fake 故障注入验证控制流，真实 DeepSeek primary smoke 通过；备用 Provider 未做真实 fallback |
 | Citation Validator | 模型可能返回不存在或重复的证据 ID | 校验 ID 存在性、去重和 sufficient/citation 组合，合法后才构造 Citation | 非法引用不能进入最终回答；Citation Validity 不等于事实支持度 |
 | AgentRuntime / Checkpoint / Replay | HTTP、CLI、Worker 各自编排会产生行为漂移，中断后也难恢复 | 统一 Runtime 创建 root run 和 spans；保存配置 fingerprint 与阶段 checkpoint；Fake replay 重放固定输入 | 三入口共享生命周期，能恢复或拒绝误用旧状态，并复现实验控制流 |
-| Trace / Regression / CI Gate | 指标下降只看均值难定位，已修问题可能复发 | 逐阶段记录 route、候选、attempt、reason、latency/token；失败分为 open/fixed case，CI 检查 reference 阈值 | 4 条 fixed regression 全部通过，失败能定位到具体 Case 和阶段 |
+| Trace / Regression / CI Gate v2 | 指标下降只看均值难定位，已修问题可能复发 | Trace 新增 features/need/strategy/rule/fallback/escalation/config；CI 真实运行 dev v1/v2，Recall@5/MRR 使用一条可答 Case 动态容差，NDCG 只报告，fixed regression 无条件阻塞 | 本次门禁通过；质量提升和尾延迟预算可追溯到逐 Case prediction，CI 不读取 test |
 | Semantic Key-Point / Claim Grounding | 字符串包含会漏判同义表达，“引用合法”也不代表事实受支持 | LLM grader 分别判断每个 expected point 和每条 factual claim，保存 verdict、evidence span、reason 与版本 | 结论可回查到要点、断言和证据；unknown 不被伪装成 supported |
 | FastAPI + PostgreSQL + Redis Worker | Query 和长耗时评测不能只靠脚本同步运行 | FastAPI 暴露稳定契约；PostgreSQL 保存状态；Redis 仅传 job_id；Worker 独立执行并落盘报告 | 支持 Query/Trace 查询和幂等异步评测，服务重启后任务状态仍可追踪 |
 
@@ -461,12 +461,12 @@ BM25 + Dense + RRF；P1-D7 已冻结的旧配置没有因本轮文档更新而�
 
 | 类别 | 特征 | 计算方法 | 作用 |
 |---|---|---|---|
-| 核心信号 | `needs_exact_match` | 技术词/英文缩写，或“是什么、职责、版本”等事实问法 | 需要保留精确词面匹配 |
+| 核心信号 | `needs_exact_match` | 配置中的强技术术语，或“是什么、职责、版本”等事实问法；任意英文 token 不再自动触发 | 需要保留精确词面匹配 |
 | 核心信号 | `needs_semantic_match` | “如何、为什么、概括、改写、优化”等语义问法 | 需要处理同义表达和概念解释 |
 | 核心信号 | `needs_multi_source` | Router 给出多个来源，或命中“结合、对比、综合、区别”等信号 | 需要融合多来源证据 |
 | 核心信号 | `requires_entity_reasoning` | 强关系表达；或弱关系表达同时涉及至少 3 类实体 | 需要显式实体关系路径 |
 | 上下文 | `entity_types` | 轻量词典识别 Job、Skill、Project、Experience、Company | 辅助关系需求判断和 Trace 解释 |
-| 边界 | `is_unanswerable_route` | Router 明确返回空 `source_types=set()` | 不调用 Retriever，直接进入证据不足分支 |
+| 边界 | `is_unanswerable_route` | Router 返回空来源，或命中版本化的明确越界/无库内证据信号 | 选择内部策略 `none`，不调用 Retriever |
 
 这些特征会完整写入 `RetrievalDecision.query_features`。其中实体识别是轻量类型词典，
 不是完整 NER（命名实体识别）；优点是低延迟和可复现，局限是新表达仍需要通过失败 Case 扩展。
@@ -498,8 +498,11 @@ BM25 + Dense + RRF；P1-D7 已冻结的旧配置没有因本轮文档更新而�
 | `graph_required=true` 且 Graph 可用 | Graph + Vector | 同时提供关系路径与可引用文本 |
 | `graph_required=true` 但 Graph 不可用 | Hybrid | 受控降级，不让 Pipeline 报错 |
 | 只需要 lexical | BM25 | 精确匹配且成本最低 |
-| 只需要 semantic | Dense | 处理同义表达和语义解释 |
+| 只需要 semantic | Hybrid（当前锁定） | dev 上 Dense/Hybrid Recall@5 同为 50%，但 Hybrid MRR 更高且 P95 更低；映射可版本化替换 |
 | lexical + semantic | Hybrid | 用 RRF 保留两路候选 |
+
+语义映射不是永久写死：只有 Dense 的 Recall@5、MRR 均不低于 Hybrid 超过“一条语义可答
+Case”的容差，且 P95 更低时才选择 Dense；本次条件不成立，因此锁定 Hybrid。
 
 `EvidenceRequirement` 还保存 `lexical_required / semantic_required / graph_required /
 multi_source_required / reason`。这样即使以后把特征提取替换成分类模型，Retriever Selection
@@ -597,14 +600,15 @@ confidence / rerank_invoked / reason / candidate_count / model version` 都会�
 | MRR | 第一条相关证据是否靠前 | 第一条 relevant 结果排名倒数的平均值 | Retrieval |
 | NDCG@5(折扣累计增益) | 多条相关证据的前排排序质量如何 | DCG@5 / 理想 DCG@5 | Retrieval / Rerank |
 | Citation Validity | 引用 ID 是否真实且允许使用 | 合法引用数 / 模型返回引用数 | Validation |
-| Abstention Accuracy | 可答和不可答时是否做对“回答/拒答”决策 | 决策与人工 answerable 标签一致的 Case 数 / 全部 Case 数 | Pipeline |
+| Abstention Accuracy | 人工标为不可回答的问题是否被正确拒答 | 正确拒答的不可回答 Case 数 / 全部不可回答 Case 数；另报 Unexpected Abstention 和 Should Abstain | Pipeline |
 | Key-Point Coverage | 回答覆盖了多少期望要点 | covered points / expected points；语义版保留 unknown | Answer Audit |
 | Claim-Level Grounding | 每条事实主张是否被引用证据支持 | 对 claim 输出 supported / unsupported / unknown 和证据片段 | Grounding Audit |
 | End-to-End Success | 路由、证据、回答、引用和拒答是否整体满足规则 | 满足协议全部条件的 Case 数 / 全部 Case 数 | Evaluation Harness |
 | P50 / P95 | 典型和尾部延迟如何 | 延迟分布的 50/95 分位数 | 各阶段与总链路 |
 
-Abstention 与重试不是一回事：重试是得到最终决策前的内部动作；Abstention Accuracy 只比较最终
-`answered/insufficient` 与人工标注的 `answerable=true/false` 是否一致。
+Abstention 与重试不是一回事：重试是得到最终决策前的内部动作；Abstention Accuracy 只统计
+`answerable=false` 中最终正确返回 `insufficient_evidence` 的比例。可回答却拒答和不可回答却作答
+分别记录为 Unexpected Abstention 与 Should Abstain，防止“全部拒答”得到虚假的高分。
 
 ## 关键取舍
 
