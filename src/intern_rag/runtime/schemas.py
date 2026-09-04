@@ -106,3 +106,23 @@ class ReplayResult:
     reason: str
     original: dict[str, object]
     replayed: dict[str, object] | None
+    stage_results: tuple["ReplayStageResult", ...] = ()
+    first_divergent_stage: str | None = None
+
+
+@dataclass(frozen=True)
+class ReplayDifference:
+    """一个稳定字段在原始 Trace 与 Replay Trace 间的差异。"""
+
+    path: str
+    original: object
+    replayed: object
+
+
+@dataclass(frozen=True)
+class ReplayStageResult:
+    """单个 Pipeline 阶段的确定性比较结果。"""
+
+    stage: str
+    matched: bool
+    differences: tuple[ReplayDifference, ...] = ()

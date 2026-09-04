@@ -29,6 +29,7 @@ class GenerationResult:
     cited_chunk_ids: list[str]
     sufficient: bool
     reason: str
+    raw_output: str = field(default="", repr=False, compare=False)
 
 
 class LlmClient(Protocol):
@@ -41,9 +42,12 @@ class LlmClient(Protocol):
 class GenerationParseError(ValueError):
     """模型输出不符合 GenerationResult 契约时的受控异常。"""
 
-    def __init__(self, error_type: GenerationErrorType, message: str) -> None:
+    def __init__(
+        self, error_type: GenerationErrorType, message: str, raw_output: str = ""
+    ) -> None:
         super().__init__(message)
         self.error_type = error_type
+        self.raw_output = raw_output
 
 
 class LlmClientError(RuntimeError):
@@ -292,12 +296,14 @@ def parse_generation_result(raw_output: str) -> GenerationResult:
         raise GenerationParseError(
             "invalid_json",
             "model output is not valid JSON",
+            raw_output,
         ) from error
 
     if not isinstance(payload, dict):
         raise GenerationParseError(
             "invalid_field_type",
             "model output root must be a JSON object",
+            raw_output,
         )
 
     required_fields = {"answer", "cited_chunk_ids", "sufficient", "reason"}
@@ -306,6 +312,7 @@ def parse_generation_result(raw_output: str) -> GenerationResult:
         raise GenerationParseError(
             "missing_field",
             f"model output misses fields: {', '.join(missing_fields)}",
+            raw_output,
         )
 
     answer = payload["answer"]
@@ -313,30 +320,34 @@ def parse_generation_result(raw_output: str) -> GenerationResult:
     sufficient = payload["sufficient"]
     reason = payload["reason"]
     if not isinstance(answer, str):
-        raise _field_type_error("answer", "string")
+        raise _field_type_error("answer", "string", raw_output)
     if not isinstance(cited_chunk_ids, list) or not all(
         isinstance(chunk_id, str) for chunk_id in cited_chunk_ids
     ):
-        raise _field_type_error("cited_chunk_ids", "list[string]")
+        raise _field_type_error("cited_chunk_ids", "list[string]", raw_output)
     if not isinstance(sufficient, bool):
-        raise _field_type_error("sufficient", "boolean")
+        raise _field_type_error("sufficient", "boolean", raw_output)
     if not isinstance(reason, str):
-        raise _field_type_error("reason", "string")
+        raise _field_type_error("reason", "string", raw_output)
 
     return GenerationResult(
         answer=answer,
         cited_chunk_ids=cited_chunk_ids,
         sufficient=sufficient,
         reason=reason,
+        raw_output=raw_output,
     )
 
 
-def _field_type_error(field_name: str, expected_type: str) -> GenerationParseError:
+def _field_type_error(
+    field_name: str, expected_type: str, raw_output: str
+) -> GenerationParseError:
     """构造统一的字段类型错误。"""
 
     return GenerationParseError(
         "invalid_field_type",
         f"{field_name} must be {expected_type}",
+        raw_output,
     )
 
 

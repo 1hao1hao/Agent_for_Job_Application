@@ -63,6 +63,7 @@ class AgentTrace:
     error_message: str = ""
     attempts: list[TraceDict] = field(default_factory=list)
     token_usage: TraceDict = field(default_factory=dict)
+    run_context: TraceDict = field(default_factory=dict)
 
     def to_dict(self) -> TraceDict:
         """转换成可写入 JSONL 的普通字典。"""
@@ -99,6 +100,7 @@ class AgentTrace:
             error_message=str(trace_data.get("error_message", "")),
             attempts=list(trace_data.get("attempts", [])),  # type: ignore[arg-type]
             token_usage=dict(trace_data.get("token_usage", {})),  # type: ignore[arg-type]
+            run_context=dict(trace_data.get("run_context", {})),  # type: ignore[arg-type]
         )
 
 
@@ -125,6 +127,7 @@ def build_agent_trace(
     error_message: str = "",
     attempts: list[TraceDict] | None = None,
     token_usage: TraceDict | None = None,
+    run_context: TraceDict | None = None,
 ) -> AgentTrace:
     """根据单轮 routing 和 retrieval 结果构造 AgentTrace。
 
@@ -157,6 +160,7 @@ def build_agent_trace(
         error_message=error_message,
         attempts=attempts or [],
         token_usage=token_usage or {},
+        run_context=run_context or {},
     )
 
 

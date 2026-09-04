@@ -60,6 +60,7 @@ class AgentRuntimeTests(unittest.TestCase):
         generation = next(span for span in execution.spans if span.name == "generation")
         self.assertEqual(generation.attributes["token_usage"]["input_tokens"], 12)
         self.assertEqual(generation.input_refs["request_id"], "request-1")
+        self.assertEqual(execution.trace.run_context["run_id"], "run-1")
 
     def test_fake_full_replay_and_external_generation_boundary(self) -> None:
         request = RagRequest("岗位要求是什么", request_id="request-1")

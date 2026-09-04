@@ -123,8 +123,15 @@ routing -> query_analysis -> retrieval -> rerank -> evidence
 
 Trace 保存 config version、attempt、候选 rank/reason、used/skipped evidence、latency、token 和
 error type。确认的失败进入 `open` regression；修复并跑完整 dev 后转为 `fixed`，由 executable
-regression 和 CI Gate 防止旧问题复发。Trace Replay 使用保存的配置与输入重放控制流，不用重新
-调用随机模型来挑更好的结果。
+regression 和 CI Gate 防止旧问题复发。Deterministic Trace Replay 恢复历史请求、版本配置与
+工件引用，真实重跑六个确定性阶段；生成阶段只注入 Trace 保存的历史模型输出，不再次访问外部
+模型。Replay 逐阶段比较稳定字段并输出 `first_divergent_stage` 和 structured diff，缺少快照、
+工件或模型输出时明确返回 unavailable。
+
+```bash
+PYTHONPATH=src python scripts/replay_trace.py --trace-id <trace_id>
+PYTHONPATH=src python scripts/replay_trace.py --trace-id <trace_id> --stage retrieval
+```
 
 ## 服务与持久化
 

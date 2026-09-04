@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from time import perf_counter
 from typing import Callable, Mapping, Protocol, Sequence
@@ -70,6 +70,10 @@ class AgentRuntime:
             raise RuntimeError("runtime executor is not configured")
         started = perf_counter()
         response, trace = self.executor.execute(request)
+        # Runtime 是唯一掌握完整版本上下文的层，把快照附到返回 Trace 供持久化 Replay。
+        from intern_rag.runtime.replay import build_run_context_snapshot
+
+        trace = replace(trace, run_context=build_run_context_snapshot(context))
         spans = _spans_from_trace(context, trace, (perf_counter() - started) * 1000)
         errors: list[str] = []
         for span in spans:

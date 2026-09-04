@@ -74,6 +74,14 @@ class PostgresRepository:
         from psycopg.types.json import Jsonb
 
         payload = {
+            "request": {
+                "query": request.query,
+                "request_id": request.request_id,
+                "top_k": request.top_k,
+                "retriever": request.retriever,
+                "user_id": request.user_id,
+                "session_id": request.session_id,
+            },
             "request_id": response.request_id,
             "trace_id": response.trace_id,
             "answer": response.answer,
@@ -127,6 +135,25 @@ class PostgresRepository:
             return None
         payload = row[0] if isinstance(row[0], dict) else json.loads(row[0])
         return AgentTrace.from_dict(payload)
+
+    def get_request_response(
+        self, trace_id: str
+    ) -> tuple[RagRequest, RagResponse] | None:
+        """恢复新版本保存的完整请求/响应；旧记录缺 request 时返回 None。"""
+
+        from intern_rag.runtime.replay import request_response_from_dict
+
+        with self._connect() as connection:
+            row = connection.execute(
+                "SELECT response_json FROM rag_requests WHERE trace_id=%s", (trace_id,)
+            ).fetchone()
+        if row is None:
+            return None
+        payload = row[0] if isinstance(row[0], dict) else json.loads(row[0])
+        request_payload = payload.pop("request", None)
+        if not isinstance(request_payload, dict):
+            return None
+        return request_response_from_dict(request_payload, payload)
 
     def create_job(
         self,

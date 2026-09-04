@@ -66,6 +66,8 @@ flowchart TD
     ENGINE -.-> TRACE
     GATEWAY -.-> TRACE
     VALID -.-> TRACE
+    TRACE --> SNAPSHOT["Replay Snapshot<br/>request / config / versions / artifact hash / model output"]
+    SNAPSHOT --> REPLAY["Deterministic Replay<br/>offline rerun + stage diff"]
 ```
 
 主链数据结构：

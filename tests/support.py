@@ -41,6 +41,14 @@ class InMemoryPersistenceRepository:
     def get_trace(self, trace_id: str) -> AgentTrace | None:
         return self.traces.get(trace_id)
 
+    def get_request_response(
+        self, trace_id: str
+    ) -> tuple[RagRequest, RagResponse] | None:
+        return next(
+            (item for item in self.requests.values() if item[1].trace_id == trace_id),
+            None,
+        )
+
     def create_job(
         self,
         *,

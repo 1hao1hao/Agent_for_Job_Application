@@ -136,7 +136,7 @@ PostgreSQL 是任务状态的真相来源；Redis 负责短期队列和最近会
 | Generator JSON Contract | 自由文本难以校验引用和拒答状态 | Prompt 约束只依据 Context，模型返回 answer/cited_chunk_ids/sufficient/reason；解析失败受控重试一次 | 生成结果可被程序验证，而不是把模型输出直接交给用户 |
 | Model Gateway | 外部模型有 timeout、429、5xx 和供应商故障 | Provider Protocol + 有界退避、并发 semaphore、熔断和 fallback，鉴权错误不盲重试 | 6 类 Fake 故障注入验证控制流，真实 DeepSeek primary smoke 通过；备用 Provider 未做真实 fallback |
 | Citation Validator | 模型可能返回不存在或重复的证据 ID | 校验 ID 存在性、去重和 sufficient/citation 组合，合法后才构造 Citation | 非法引用不能进入最终回答；Citation Validity 不等于事实支持度 |
-| AgentRuntime / Checkpoint / Replay | HTTP、CLI、Worker 各自编排会产生行为漂移，中断后也难恢复 | 统一 Runtime 创建 root run 和 spans；保存配置 fingerprint 与阶段 checkpoint；Fake replay 重放固定输入 | 三入口共享生命周期，能恢复或拒绝误用旧状态，并复现实验控制流 |
+| AgentRuntime / Checkpoint / Deterministic Replay | HTTP、CLI、Worker 各自编排会产生行为漂移，修改后只看最终答案也难定位最先变化的阶段 | Runtime 保存请求、版本配置、工件引用及 SHA-256；Replay 真实重跑 Router 至 Validator，LLM 只注入历史输出；逐阶段比较稳定字段并定位 `first_divergent_stage` | 可区分 Routing、Retrieval、Gate、Context、Generation、Validation 的首个行为漂移；工件或模型输出缺失时受控 unavailable，不伪造复现 |
 | Trace / Regression / CI Gate v2 | 指标下降只看均值难定位，已修问题可能复发 | Trace 新增 features/need/strategy/rule/fallback/escalation/config；CI 真实运行 dev v1/v2，Recall@5/MRR 使用一条可答 Case 动态容差，NDCG 只报告，fixed regression 无条件阻塞 | 本次门禁通过；质量提升和尾延迟预算可追溯到逐 Case prediction，CI 不读取 test |
 | Semantic Key-Point / Claim Grounding | 字符串包含会漏判同义表达，“引用合法”也不代表事实受支持 | LLM grader 分别判断每个 expected point 和每条 factual claim，保存 verdict、evidence span、reason 与版本 | 结论可回查到要点、断言和证据；unknown 不被伪装成 supported |
 | FastAPI + PostgreSQL + Redis Worker | Query 和长耗时评测不能只靠脚本同步运行 | FastAPI 暴露稳定契约；PostgreSQL 保存状态；Redis 仅传 job_id；Worker 独立执行并落盘报告 | 支持 Query/Trace 查询和幂等异步评测，服务重启后任务状态仍可追踪 |

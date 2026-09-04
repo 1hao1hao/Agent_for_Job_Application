@@ -32,7 +32,14 @@ from intern_rag.routing import route_query
 from intern_rag.serving.api import AppServices, create_app
 from intern_rag.serving.service import PipelineQueryService
 from intern_rag.worker import RedisJobQueue
-from intern_rag.runtime import AgentRuntime, JsonlSpanSink, PipelineRuntimeExecutor
+from intern_rag.runtime import (
+    AgentRuntime,
+    JsonlSpanSink,
+    PipelineRuntimeExecutor,
+    RunContext,
+    SavedRun,
+)
+from intern_rag.agent.generation import LlmClient
 
 
 class DeterministicDemoLlmClient:
@@ -170,12 +177,75 @@ def create_runtime_app():
         PipelineRuntimeExecutor(pipeline),
         span_sinks=(JsonlSpanSink(Path("traces/service/runtime_spans.jsonl")),),
     )
+    context_template = RunContext(
+        config={"retriever_config_path": str(project_root / "configs/retrieval/bm25_v0.2.json")},
+        artifact_refs={
+            "chunks": str(project_root / "data/processed/chunks" / f"{dataset_version}.jsonl"),
+            "retriever_config": str(project_root / "configs/retrieval/bm25_v0.2.json"),
+            "bm25_index": str(bm25_index_path),
+            **({"evidence_config": str(evidence_path)} if evidence_path.exists() else {}),
+        },
+        dataset_version=dataset_version,
+        index_version="bm25-v1",
+    )
     services = AppServices(
         query_service=PipelineQueryService(
-            pipeline, repository, memory_service, runtime=agent_runtime
+            pipeline,
+            repository,
+            memory_service,
+            runtime=agent_runtime,
+            run_context_template=context_template,
         ),
         repository=repository,
         queue=queue,
         query_timeout_seconds=float(os.environ.get("QUERY_TIMEOUT_SECONDS", "90")),
     )
     return create_app(services)
+
+
+def build_runtime_for_replay(
+    saved: SavedRun, llm_client: LlmClient
+) -> AgentRuntime:
+    """仅从历史 RunContext 和本地工件重建离线 Pipeline。
+
+    当前服务公开支持 rule router 与 keyword/BM25。若历史请求依赖会话记忆或
+    未保存的 adapter 配置，函数明确失败，不使用当前默认值猜测历史行为。
+    """
+
+    if saved.request.user_id is not None:
+        raise ValueError("session memory snapshot is unavailable for deterministic replay")
+    config = saved.context.config
+    if str(config.get("router", "rule")) != "rule":
+        raise ValueError("replay runtime currently supports persisted rule router only")
+    chunks_path = Path(saved.context.artifact_refs.get("chunks", ""))
+    chunks = load_chunks_jsonl(chunks_path)
+    retrievers = {"keyword": retrieve_top_k}
+    if saved.request.retriever == "bm25":
+        config_path = Path(saved.context.artifact_refs.get("retriever_config", ""))
+        retriever_config = json.loads(config_path.read_text(encoding="utf-8"))
+        retriever_config["bm25_index_path"] = saved.context.artifact_refs["bm25_index"]
+        retrievers["bm25"] = build_retriever_from_config(retriever_config)
+    evidence_path = saved.context.artifact_refs.get("evidence_config")
+    evidence = load_evidence_config(Path(evidence_path)) if evidence_path else None
+    pipeline = RagPipeline(
+        chunks,
+        llm_client,
+        PipelineConfig(
+            model=saved.context.model_version,
+            temperature=float(config.get("temperature", 0.0)),
+            prompt_version=saved.context.prompt_version,
+            context_max_chars=int(config.get("context_max_chars", 4000)),
+            context_strategy=str(config.get("context_strategy", "rank_prefix")),  # type: ignore[arg-type]
+            router_name="rule",
+            context_token_budget=int(config.get("context_token_budget", 1800)),
+            context_mode=str(config.get("context_mode", "recent_window")),  # type: ignore[arg-type]
+            max_source_retries=int(config.get("max_source_retries", 1)),
+            max_format_retries=int(config.get("max_format_retries", 1)),
+            **({"evidence": evidence} if evidence is not None else {}),
+        ),
+        trace_path=Path("/tmp/evalrag_replay_trace.jsonl"),
+        router=route_query,
+        retriever=retrieve_top_k,
+        retrievers=retrievers,
+    )
+    return AgentRuntime(PipelineRuntimeExecutor(pipeline))

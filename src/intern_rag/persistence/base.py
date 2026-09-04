@@ -26,6 +26,11 @@ class PersistenceRepository(Protocol):
     def get_trace(self, trace_id: str) -> AgentTrace | None:
         """按 trace id 查询完整 Trace。"""
 
+    def get_request_response(
+        self, trace_id: str
+    ) -> tuple[RagRequest, RagResponse] | None:
+        """按 trace id 恢复 Replay 所需的完整请求和响应。"""
+
     def create_job(
         self,
         *,

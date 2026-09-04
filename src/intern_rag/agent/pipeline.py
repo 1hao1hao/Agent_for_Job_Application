@@ -421,6 +421,7 @@ class RagPipeline:
                             "latency_ms": {"generation": generation_latency},
                             "token_usage": call_token_usage,
                             "model_gateway": gateway_trace,
+                            "model_output": generation_result.raw_output,
                         })
                         break
                     except GenerationParseError as error:
@@ -438,6 +439,7 @@ class RagPipeline:
                             "latency_ms": {"generation": generation_latency},
                             "token_usage": _read_token_usage(self.llm_client),
                             "model_gateway": _read_model_gateway_trace(self.llm_client),
+                            "model_output": error.raw_output,
                         })
                         if format_retry_count >= self.config.max_format_retries:
                             raise
@@ -665,13 +667,15 @@ def _elapsed_ms(started_at: float) -> float:
 
 
 def _generation_to_trace(result: GenerationResult) -> dict[str, object]:
-    """提取不包含模型原始输出的生成阶段 Trace。"""
+    """保存解析结果与原始输出，供离线 deterministic replay 注入。"""
 
     return {
         "status": "parsed",
         "sufficient": result.sufficient,
         "cited_chunk_ids": result.cited_chunk_ids,
         "reason": result.reason,
+        "answer": result.answer,
+        "model_output": result.raw_output,
     }
 
 
