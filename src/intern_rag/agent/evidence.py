@@ -12,17 +12,23 @@ from intern_rag.routing import RouteDecision
 EvidenceStatus = Literal["sufficient", "retryable", "insufficient"]
 EvidenceReason = Literal[
     "sufficient_evidence", "unanswerable_route", "empty_retrieval",
-    "weak_retrieval_score", "required_sources_missing", "graph_evidence_missing",
+    "weak_retrieval_score", "low_retrieval_confidence",
+    "required_sources_missing", "graph_evidence_missing",
 ]
 
 
 @dataclass(frozen=True)
 class ScoreGateConfig:
-    """某个底层 Retriever 经 dev 校准后的分数门槛。"""
+    """某个底层 Retriever 经 dev 校准后的分数配置。
+
+    ``threshold`` 仅保留旧配置兼容；v2.1 使用
+    ``low_confidence_retry_threshold`` 触发一次重试，不把 raw score 作为最终拒答条件。
+    """
 
     enabled: bool
     threshold: float | None
     status: str = "calibrated"
+    low_confidence_retry_threshold: float | None = None
 
 
 @dataclass(frozen=True)
@@ -62,6 +68,9 @@ class EvidenceDecision:
     effective_retriever: str = "unknown"
     threshold: float | None = None
     threshold_status: str = "legacy"
+    calibrated_retry_threshold: float | None = None
+    low_confidence: bool = False
+    low_confidence_after_retry: bool = False
     structural_checks: Mapping[str, bool] = field(default_factory=dict)
     config_version: str = "legacy"
 
@@ -75,6 +84,11 @@ def load_evidence_config(path: Path) -> EvidenceConfig:
             enabled=bool(value.get("enabled", False)),
             threshold=float(value["threshold"]) if value.get("threshold") is not None else None,
             status=str(value.get("status", "unknown")),
+            low_confidence_retry_threshold=(
+                float(value["low_confidence_retry_threshold"])
+                if value.get("low_confidence_retry_threshold") is not None
+                else None
+            ),
         )
         for name, value in dict(raw.get("retrievers", {})).items()
     }
@@ -100,11 +114,12 @@ def check_evidence(
     evidence_requirement: Mapping[str, object] | None = None,
     retrieval_trace: Mapping[str, object] | None = None,
 ) -> EvidenceDecision:
-    """按证据需求检查数量、校准分数、来源覆盖和图路径。
+    """按证据需求检查数量、来源覆盖、图路径和低置信重试信号。
 
     输入 Router、排序结果、EvidenceRequirement 和 Retriever Trace。函数识别实际
-    底层策略并应用 dev 校准门槛；多来源问题额外检查来源，关系问题额外检查图
-    路径。失败在剩余次数内返回 retryable，否则受控拒答。
+    底层策略；结构证据缺失时重试或拒答。结构条件满足但 raw top-1 score 低于
+    本 Retriever 的 dev 阈值时，首次仅触发一次扩源重试；重试后不再因分数偏低
+    拒答，而是在 Trace 中留下低置信标记。
     """
 
     requirement = dict(evidence_requirement or {})
@@ -137,26 +152,57 @@ def check_evidence(
     score_gate = config.calibrated_scores.get(effective)
     threshold = score_gate.threshold if score_gate and score_gate.enabled else None
     threshold_status = score_gate.status if score_gate else "legacy"
+    retry_threshold = (
+        score_gate.low_confidence_retry_threshold if score_gate else None
+    )
     if score_gate is None:
         threshold = config.min_scores.get(effective, config.min_scores.get(retriever_name))
+    low_confidence = bool(
+        retry_threshold is not None
+        and top_score is not None
+        and top_score < retry_threshold
+    )
 
     common = {
         "observed_sources": observed_sources, "missing_sources": missing_sources,
         "top_score": top_score, "retry_count": retry_count, "evidence_need": need,
         "effective_retriever": effective, "threshold": threshold,
-        "threshold_status": threshold_status, "structural_checks": structural_checks,
+        "threshold_status": threshold_status,
+        "calibrated_retry_threshold": retry_threshold,
+        "low_confidence": low_confidence,
+        "low_confidence_after_retry": low_confidence and retry_count >= max_retries,
+        "structural_checks": structural_checks,
         "config_version": config.config_version,
     }
     if need == "unanswerable" or route.intent == "unknown" or not route.routed_sources:
         return _decision("insufficient", "unanswerable_route", "知识库不支持该问题，不调用生成器。", common)
     if len(results) < min_results:
         return _retry_or_stop("empty_retrieval", "检索结果数量不足，扩展来源后最多重试一次。", retry_count, max_retries, common)
-    if threshold is not None and top_score is not None and top_score < threshold:
-        return _retry_or_stop("weak_retrieval_score", f"最高检索分数 {top_score:.6f} 低于校准门槛 {threshold:.6f}。", retry_count, max_retries, common)
     if needs_source_coverage and missing_sources:
         return _retry_or_stop("required_sources_missing", "多来源证据没有覆盖全部必要来源。", retry_count, max_retries, common)
     if need == "relation_reasoning" and not graph_path_valid:
         return _retry_or_stop("graph_evidence_missing", "关系问题缺少有效 Graph path 或关系边证据。", retry_count, max_retries, common)
+    if low_confidence and retry_count < max_retries:
+        return _decision(
+            "retryable", "low_retrieval_confidence",
+            f"结构证据满足，但最高分 {top_score:.6f} 低于本检索器重试阈值 {retry_threshold:.6f}。",
+            common,
+        )
+    if low_confidence:
+        return _decision(
+            "sufficient", "sufficient_evidence",
+            "结构证据满足；扩源后仍为低分，仅记录低置信，不据此拒答。",
+            common,
+        )
+    if threshold is not None and top_score is not None and top_score < threshold:
+        # 旧 min_scores 配置保持原行为；新 calibration 配置不会启用 hard gate。
+        return _retry_or_stop(
+            "weak_retrieval_score",
+            f"最高检索分数 {top_score:.6f} 低于旧配置门槛 {threshold:.6f}。",
+            retry_count,
+            max_retries,
+            common,
+        )
     return _decision("sufficient", "sufficient_evidence", "数量、可用门槛和结构证据均满足要求。", common)
 
 

@@ -166,6 +166,7 @@ class RagPipeline:
         validation_trace: dict[str, object] = {}
         evidence_trace: dict[str, object] = {}
         retrieval_decision_trace: dict[str, object] = {}
+        evidence_requirement_trace: dict[str, object] = {}
         attempts: list[dict[str, object]] = []
         citations: list[dict[str, object]] = []
         response = self._error_response(
@@ -212,6 +213,15 @@ class RagPipeline:
                     source_types=source_types,
                 )
                 retrieval_decision_trace = _retriever_trace(selected_retriever)
+                current_requirement = retrieval_decision_trace.get(
+                    "evidence_requirement"
+                )
+                if (
+                    not evidence_requirement_trace
+                    and isinstance(current_requirement, dict)
+                ):
+                    # 扩源只改变检索范围，不应悄悄改变首轮已经识别出的证据需求。
+                    evidence_requirement_trace = dict(current_requirement)
                 retrieval_latency = _elapsed_ms(stage_started_at)
                 latency_ms["retrieval"] += retrieval_latency
 
@@ -224,13 +234,7 @@ class RagPipeline:
                     retry_count=source_retry_count,
                     max_retries=self.config.max_source_retries,
                     config=self.config.evidence,
-                    evidence_requirement=(
-                        retrieval_decision_trace.get("evidence_requirement")
-                        if isinstance(
-                            retrieval_decision_trace.get("evidence_requirement"), dict
-                        )
-                        else None
-                    ),
+                    evidence_requirement=evidence_requirement_trace or None,
                     retrieval_trace=retrieval_decision_trace,
                 )
                 evidence_latency = _elapsed_ms(stage_started_at)

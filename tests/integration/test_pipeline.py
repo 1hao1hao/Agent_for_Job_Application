@@ -471,6 +471,56 @@ class PipelineIntegrationTests(unittest.TestCase):
         self.assertEqual(calls, [{"jd"}, None])
         self.assertEqual(len(trace.attempts), 3)
 
+    def test_low_confidence_retry_does_not_become_hard_reject(self) -> None:
+        class LowConfidenceRetriever:
+            def __init__(self) -> None:
+                self.calls = 0
+
+            def __call__(self, query, chunks, top_k=5, source_types=None):
+                del query, top_k, source_types
+                self.calls += 1
+                chunk = chunks[0]
+                return [RetrievalResult(chunk.id, 0.1, 1, chunk)]
+
+            def get_last_trace(self):
+                return {
+                    "selected_strategy": "bm25",
+                    "evidence_requirement": {"need_type": "exact_fact"},
+                }
+
+        retriever = LowConfidenceRetriever()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            trace_path = Path(temp_dir) / "low-confidence-retry.jsonl"
+            pipeline = RagPipeline(
+                chunks=_chunks(),
+                llm_client=FakeLlmClient([_raw_generation(
+                    answer="岗位要求熟悉 Python。", cited_chunk_ids=["jd-1"],
+                    sufficient=True, reason="结构证据可用。",
+                )]),
+                config=PipelineConfig(
+                    model="fake-model",
+                    evidence=EvidenceConfig(
+                        min_scores={}, config_version="gate-v2.1-test",
+                        calibrated_scores={
+                            "bm25": ScoreGateConfig(
+                                False, None, "retry_only", 1.0
+                            )
+                        },
+                    ),
+                ),
+                trace_path=trace_path,
+                retrievers={"adaptive": retriever},
+            )
+            response = pipeline.run(RagRequest(
+                query="分析岗位要求", retriever="adaptive"
+            ))
+            trace = read_traces_jsonl(trace_path)[0]
+
+        self.assertEqual(response.status, "answered")
+        self.assertEqual(retriever.calls, 2)
+        self.assertEqual(trace.attempts[0]["evidence"]["reason"], "low_retrieval_confidence")
+        self.assertTrue(trace.evidence["low_confidence_after_retry"])
+
     def test_timeout_returns_controlled_error_without_loop(self) -> None:
         class TimeoutClient:
             def generate(self, prompt, *, model, temperature):

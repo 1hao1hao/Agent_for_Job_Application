@@ -1,0 +1,44 @@
+{
+  "config_version": "evidence-gate-v2.1-low-confidence-retry-dev",
+  "dataset_version": "evalrag_v0.3",
+  "calibration_split": "dev",
+  "far_target": 0.05,
+  "max_frr_for_score_gate": 0.25,
+  "score_policy": "retry_only_never_hard_reject",
+  "adoption_status": "rejected_after_dev_ablation",
+  "min_results": 1,
+  "legacy_source_coverage": false,
+  "need_min_results": {
+    "exact_fact": 1,
+    "semantic_explanation": 1,
+    "balanced_retrieval": 1,
+    "multi_source_synthesis": 2,
+    "relation_reasoning": 1
+  },
+  "retrievers": {
+    "bm25": {
+      "enabled": false,
+      "threshold": null,
+      "low_confidence_retry_threshold": 60.43339603188398,
+      "status": "raw_score_not_separable_retry_only"
+    },
+    "dense": {
+      "enabled": false,
+      "threshold": null,
+      "low_confidence_retry_threshold": 0.6686330687426955,
+      "status": "raw_score_not_separable_retry_only"
+    },
+    "hybrid": {
+      "enabled": false,
+      "threshold": null,
+      "low_confidence_retry_threshold": 0.03278688526229508,
+      "status": "raw_score_not_separable_retry_only"
+    },
+    "graph_vector": {
+      "enabled": false,
+      "threshold": null,
+      "low_confidence_retry_threshold": 0.03278688526229508,
+      "status": "raw_score_not_separable_retry_only"
+    }
+  }
+}

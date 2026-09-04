@@ -477,3 +477,20 @@ CI Gate v2 真实运行 v1/v2 dev prediction：Recall@5/MRR 使用 `1/120` 动�
 E2E success 为 60%。该 split 曾用于历史实验，因此这里明确称为“锁定配置 release test”，
 不包装成全新盲测。正式工件位于
 `reports/releases/p1-adaptive-v2-v03-release-test-20260903-r1/`。
+
+## 11. Raw Score 仅触发重试的 Gate 实验（2026-09-04）
+
+在 `evalrag_v0.3/dev` 160 条 Case 上，使用相同 Adaptive v2 Retriever 对比结构
+Gate 与 `low_confidence_retry_threshold` 候选。候选阈值来自既有 calibration
+operating point，每种 Retriever 独立使用；低分只触发一次扩源，重试后不作为
+hard reject 条件。
+
+| Gate | FAR | FRR | 可回答接受率 | 重试率 | 重试成功率 | 证据恢复率 | E2E Success |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Structural v2 | 43.27% | 0.00% | 84.17% | 11.88% | 0.00% | 0.00% | 60.00% |
+| Retry v2.1 candidate | 32.74% | 0.00% | 70.00% | 65.00% | 30.77% | 0.00% | 54.38% |
+
+候选规则触发了 `104/160` 条重试，却没有把任何结构证据缺失 Case 恢复为
+Positive，失败数由 64 增至 73。FAR 下降来自更多拒绝而非证据恢复，且 E2E
+退化，因此不设为默认配置；正式 release 继续使用
+`configs/evidence/gate_calibrated_v0.3.json`。本实验未读取或重跑 test。
