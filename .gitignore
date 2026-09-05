@@ -37,6 +37,10 @@ reports/runs/p1-d1-stack-*/
 !reports/runs/p1-d1-stack-c108812d-8507-4ba4-a3dc-4991d1e22972/
 !reports/runs/p1-d1-stack-c108812d-8507-4ba4-a3dc-4991d1e22972/**
 
+# Locust 可复现报告保留 CSV；体积较大的 HTML 与服务访问日志不入库。
+reports/loadtest/**/*.html
+reports/loadtest/**/*.log
+
 # 本地 AI 协作、任务提示与个人学习记录
 AGENTS.md
 docs/development/

@@ -158,8 +158,8 @@ PYTHONPATH=src python -m unittest discover -s tests -p 'test_*.py'
 ```
 
 测试验证代码契约与确定性行为，不代表回答准确率；真实 LLM、PostgreSQL/Redis/Neo4j 和模型权重
-下载不进入默认离线单测。当前仓库在 2026-09-03 执行上述命令的结果为 237 tests run、
-233 passed、4 skipped、0 failed。
+下载不进入默认离线单测。当前仓库在 2026-09-04 执行上述命令的结果为 248 tests run、
+244 passed、4 skipped、0 failed。
 
 Docker 可用时启动服务：
 
@@ -201,6 +201,20 @@ PYTHONPATH=src python scripts/run_rag_smoke.py
   v0.3/dev 的 Adaptive v1/v2、动态单 Case 容差、P95 工程预算与 fixed regression；不读取 test。
 - [Persistent Retrieval Ablation](.github/workflows/p1-persistent-ablation.yml)：手动运行完整 v0.3/dev
   的文件精确扫描、pgvector exact/HNSW 和 Neo4j 对照，并上传版本化工件。
+
+## 本地 HTTP 压测
+
+Locust 使用 exact fact、semantic、multi-source 和 relation reasoning 四类 Query 压测真实
+FastAPI/QueryService/BM25 Pipeline，deterministic 模式只隔离外部 LLM 与 PostgreSQL/Redis。
+在 2026-09-04 的共享校园服务器、单 Uvicorn worker 实验中，20 并发为 183.18 RPS、P95
+21 ms；50 并发为 320.16 RPS、P95 120 ms，0 请求失败。该结果不包含真实数据库和 Dense/Graph
+检索，不是生产 SLA，完整环境、原始 CSV 和限制见
+[Locust 报告](reports/loadtest/p1-locust-local-20260904/report.md)。
+
+```bash
+python -m pip install -r requirements-loadtest.txt
+scripts/run_local_loadtest.sh
+```
 
 ## 代码导航
 
