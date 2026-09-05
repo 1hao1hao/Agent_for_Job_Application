@@ -278,6 +278,52 @@ class PostgresRepository:
             ).fetchall()
         return [str(row[0]) for row in rows]
 
+    def recover_interrupted_job(self, job_id: str) -> EvaluationJob:
+        """事务内恢复一条 stale pending 对应的 running job。
+
+        XAUTOCLAIM 已确认原 consumer 长时间未 ACK，因此这里按 attempt budget 将
+        running 转回 queued；预算耗尽则直接写 failed。其他状态保持不变。
+        """
+
+        with self._connect() as connection:
+            row = connection.execute(
+                "SELECT * FROM evaluation_jobs WHERE job_id=%s FOR UPDATE",
+                (job_id,),
+            ).fetchone()
+            if row is None:
+                raise ValueError("job does not exist")
+            job = _job_from_row(row)
+            if job.status != "running":
+                return job
+            if job.attempt_count > job.max_retries:
+                recovered = connection.execute(
+                    """
+                    UPDATE evaluation_jobs SET status='failed',
+                      error_type='retry_exhausted',
+                      error_message='worker crashed after retry budget was exhausted',
+                      completed_at=now(), updated_at=now()
+                    WHERE job_id=%s AND status='running' RETURNING *
+                    """,
+                    (job_id,),
+                ).fetchone()
+            else:
+                recovered = connection.execute(
+                    """
+                    UPDATE evaluation_jobs SET status='queued',
+                      error_type='worker_interrupted',
+                      error_message='stale pending message reclaimed after worker crash',
+                      completed_at=NULL, updated_at=now()
+                    WHERE job_id=%s AND status='running' RETURNING *
+                    """,
+                    (job_id,),
+                ).fetchone()
+        if recovered is None:
+            current = self.get_job(job_id)
+            if current is None:
+                raise ValueError("job does not exist")
+            return current
+        return _job_from_row(recovered)
+
     def save_run(self, run: EvaluationRunRecord) -> None:
         from psycopg.types.json import Jsonb
 

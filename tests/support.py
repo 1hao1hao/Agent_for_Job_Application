@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from dataclasses import replace
 from datetime import datetime, timezone
+from time import monotonic
 from uuid import uuid4
 
 from intern_rag.agent import RagRequest, RagResponse
 from intern_rag.agent.context_engine import ConversationMessage, MemoryItem, UserProfile
 from intern_rag.persistence import EvaluationJob, EvaluationRunRecord, SessionRecord
 from intern_rag.tracing import AgentTrace
+from intern_rag.worker.queue import QueueMessage, QueueUnavailable
 
 
 class InMemoryPersistenceRepository:
@@ -163,6 +165,31 @@ class InMemoryPersistenceRepository:
                 recovered.append(job_id)
         return recovered
 
+    def recover_interrupted_job(self, job_id: str) -> EvaluationJob:
+        job = self._require(job_id)
+        if job.status != "running":
+            return job
+        if job.attempt_count > job.max_retries:
+            job = replace(
+                job,
+                status="failed",
+                error_type="retry_exhausted",
+                error_message="worker crashed after retry budget was exhausted",
+                completed_at=_now(),
+                updated_at=_now(),
+            )
+        else:
+            job = replace(
+                job,
+                status="queued",
+                error_type="worker_interrupted",
+                error_message="stale pending message reclaimed after worker crash",
+                completed_at=None,
+                updated_at=_now(),
+            )
+        self.jobs[job_id] = job
+        return job
+
     def save_run(self, run: EvaluationRunRecord) -> None:
         self.runs[run.run_id] = run
 
@@ -241,17 +268,57 @@ class InMemoryPersistenceRepository:
 
 class InMemoryJobQueue:
     def __init__(self) -> None:
-        self.job_ids: list[str] = []
+        self.messages: list[QueueMessage] = []
+        self.pending: dict[str, tuple[QueueMessage, str, float]] = {}
+        self.acked_message_ids: list[str] = []
+        self._sequence = 0
         self.available = True
+
+    @property
+    def job_ids(self) -> list[str]:
+        """兼容 API 测试：返回尚未首次交付的 job id。"""
+
+        return [message.job_id for message in self.messages]
 
     def enqueue(self, job_id: str) -> None:
         if not self.available:
-            raise RuntimeError("queue unavailable")
-        self.job_ids.append(job_id)
+            raise QueueUnavailable("queue unavailable")
+        self._sequence += 1
+        self.messages.append(QueueMessage(f"{self._sequence}-0", job_id))
 
-    def dequeue(self, timeout_seconds: int = 5) -> str | None:
+    def dequeue(
+        self, consumer_name: str, timeout_seconds: int = 5
+    ) -> QueueMessage | None:
         del timeout_seconds
-        return self.job_ids.pop(0) if self.job_ids else None
+        if not self.available:
+            raise QueueUnavailable("queue unavailable")
+        if not self.messages:
+            return None
+        message = self.messages.pop(0)
+        self.pending[message.message_id] = (message, consumer_name, monotonic())
+        return message
+
+    def ack(self, message_id: str) -> None:
+        if not self.available:
+            raise QueueUnavailable("queue unavailable")
+        self.pending.pop(message_id, None)
+        self.acked_message_ids.append(message_id)
+
+    def reclaim_stale(
+        self, consumer_name: str, min_idle_ms: int, count: int = 1
+    ) -> list[QueueMessage]:
+        if not self.available:
+            raise QueueUnavailable("queue unavailable")
+        now = monotonic()
+        reclaimed: list[QueueMessage] = []
+        for message_id, (message, _, delivered_at) in list(self.pending.items()):
+            if (now - delivered_at) * 1000 < min_idle_ms:
+                continue
+            self.pending[message_id] = (message, consumer_name, now)
+            reclaimed.append(message)
+            if len(reclaimed) >= count:
+                break
+        return reclaimed
 
     def ping(self) -> bool:
         return self.available

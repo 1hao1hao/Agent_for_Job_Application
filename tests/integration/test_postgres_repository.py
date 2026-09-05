@@ -115,6 +115,24 @@ class PostgresRepositoryIntegrationTests(unittest.TestCase):
         self.assertEqual(restarted.list_memories(user_id)[0].content, "优先广州岗位")
         self.assertIsNone(restarted.get_session("other-user", session.session_id))
 
+    def test_single_stale_job_recovery_obeys_retry_budget(self) -> None:
+        job, _ = self.repository.create_job(
+            dataset_version="evalrag_v0.2",
+            split="dev",
+            run_config={"retriever_config_path": "configs/retrieval/bm25_v0.2.json"},
+            idempotency_key=f"recovery-{uuid4()}",
+            max_retries=1,
+        )
+        self.repository.mark_job_running(job.job_id)
+
+        recovered = self.repository.recover_interrupted_job(job.job_id)
+        self.assertEqual(recovered.status, "queued")
+
+        self.repository.mark_job_running(job.job_id)
+        exhausted = self.repository.recover_interrupted_job(job.job_id)
+        self.assertEqual(exhausted.status, "failed")
+        self.assertEqual(exhausted.error_type, "retry_exhausted")
+
 
 if __name__ == "__main__":
     unittest.main()

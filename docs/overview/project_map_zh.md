@@ -92,13 +92,16 @@ POST /v1/query
 
 POST /v1/evaluation-jobs
   -> PostgreSQL 幂等创建 queued Job
-  -> Redis Queue 只传递 job_id
+  -> Redis Stream XADD，只传递 job_id
+  -> Consumer Group 读取后进入 pending
   -> Evaluation Worker: queued -> running -> succeeded / failed
   -> 文件卷保存完整报告
   -> PostgreSQL 保存最终状态、摘要和 report_path
+  -> XACK pending message
 ```
 
-PostgreSQL 是任务状态的真相来源；Redis 负责短期队列和最近会话缓存；文件系统保存体积较大的
+PostgreSQL 是任务状态的真相来源；Redis Streams 负责 at-least-once 任务交付、pending/ACK、
+stale reclaim 和最近会话缓存；文件系统保存体积较大的
 实验工件。Docker Compose 统一启动 API、Worker、PostgreSQL 和 Redis。
 
 ## 主链数据结构
@@ -148,7 +151,7 @@ PostgreSQL 是任务状态的真相来源；Redis 负责短期队列和最近会
 | AgentRuntime / Checkpoint / Deterministic Replay | HTTP、CLI、Worker 各自编排会产生行为漂移，修改后只看最终答案也难定位最先变化的阶段 | Runtime 保存请求、版本配置、工件引用及 SHA-256；Replay 真实重跑 Router 至 Validator，LLM 只注入历史输出；逐阶段比较稳定字段并定位 `first_divergent_stage` | 可区分 Routing、Retrieval、Gate、Context、Generation、Validation 的首个行为漂移；工件或模型输出缺失时受控 unavailable，不伪造复现 |
 | Trace / Regression / CI Gate v2 | 指标下降只看均值难定位，已修问题可能复发 | Trace 保存 features/need/strategy/action/fallback/escalation/config；CI 真实运行 dev v1/v2，Recall@5/MRR 使用一条可答 Case 动态容差，NDCG 只报告，fixed regression 无条件阻塞 | 2026-09-05 本地 Gate 的质量项和 fixed regression 通过，但 P95 增长 26.4%、略超 25% 工程预算而阻塞；负结果保留，CI 不读取 test |
 | Semantic Key-Point / Claim Grounding | 字符串包含会漏判同义表达，“引用合法”也不代表事实受支持 | LLM grader 分别判断每个 expected point 和每条 factual claim，保存 verdict、evidence span、reason 与版本 | 结论可回查到要点、断言和证据；unknown 不被伪装成 supported |
-| FastAPI + PostgreSQL + Redis Worker | Query 和长耗时评测不能只靠脚本同步运行 | FastAPI 暴露稳定契约；PostgreSQL 保存状态；Redis 仅传 job_id；Worker 独立执行并落盘报告 | 支持 Query/Trace 查询和幂等异步评测，服务重启后任务状态仍可追踪 |
+| FastAPI + PostgreSQL + Redis Worker | Query 和长耗时评测不能只靠脚本同步运行，List 取出即删除还存在 crash 丢消息窗口 | FastAPI 暴露稳定契约；PostgreSQL 保存状态；Redis Streams 仅传 job_id 并提供 pending/ACK/reclaim；Worker 独立执行并在终态落库后 ACK | at-least-once 交付覆盖 Worker crash，PG 条件状态更新防止重复并发执行；恢复粒度仍是完整 Job |
 
 ## Hybrid + Feedback Router 详解
 

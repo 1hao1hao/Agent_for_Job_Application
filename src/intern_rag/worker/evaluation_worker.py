@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import socket
 from typing import Protocol
 
 from intern_rag.persistence import (
@@ -13,7 +14,7 @@ from intern_rag.persistence import (
     EvaluationRunRecord,
     PersistenceRepository,
 )
-from intern_rag.worker.queue import JobQueue
+from intern_rag.worker.queue import JobQueue, QueueMessage
 from intern_rag.runtime import AgentRuntime, RunContext
 
 
@@ -143,11 +144,11 @@ class SubprocessEvaluationExecutor:
 
 
 class EvaluationWorker:
-    """执行 `queue -> PostgreSQL claim -> Evaluation -> final status` 状态机。
+    """执行 Streams pending -> PostgreSQL 状态机 -> ACK 的可靠消费流程。
 
-    `run_once` 每次最多处理一个 job，便于测试和优雅退出。只有 PostgreSQL 成功把
-    queued 原子转换为 running 后才执行；超时或异常统一落为 failed。进程重启时
-    `recover_interrupted` 把未完成 job 恢复入队，重试次数仍受数据库预算约束。
+    ``run_once`` 先尝试 reclaim stale pending，再读取新消息。queued Job 只有在
+    PostgreSQL 条件更新成功后才执行；成功或失败终态持久化后才 ACK。Worker 在
+    任一 ACK 前 crash 时消息仍可重投，重复执行由数据库状态机和幂等 Run 写入约束。
     """
 
     def __init__(
@@ -156,26 +157,68 @@ class EvaluationWorker:
         queue: JobQueue,
         executor: EvaluationExecutor,
         runtime: AgentRuntime | None = None,
+        *,
+        consumer_name: str | None = None,
+        stale_min_idle_ms: int = 1_860_000,
     ) -> None:
+        if stale_min_idle_ms < 0:
+            raise ValueError("stale_min_idle_ms must not be negative")
         self.repository = repository
         self.queue = queue
         self.executor = executor
         self.runtime = runtime
-
-    def recover_interrupted(self) -> list[str]:
-        job_ids = self.repository.recover_interrupted_jobs()
-        for job_id in job_ids:
-            self.queue.enqueue(job_id)
-        return job_ids
+        self.consumer_name = consumer_name or f"{socket.gethostname()}-{os.getpid()}"
+        self.stale_min_idle_ms = stale_min_idle_ms
 
     def run_once(self, timeout_seconds: int = 5) -> bool:
-        job_id = self.queue.dequeue(timeout_seconds)
-        if job_id is None:
+        """恢复或读取一条消息，依据 PG 状态执行，终态落库后 ACK。
+
+        返回值只表示本轮是否取到消息。Redis/PG 异常向上抛出，使进程入口能够记录并
+        退避；异常发生在 ACK 前时 pending 消息保持可恢复。
+        """
+
+        reclaimed = self.queue.reclaim_stale(
+            self.consumer_name, self.stale_min_idle_ms, count=1
+        )
+        message = reclaimed[0] if reclaimed else self.queue.dequeue(
+            self.consumer_name, timeout_seconds
+        )
+        if message is None:
             return False
+        self._process_message(message, reclaimed=bool(reclaimed))
+        return True
+
+    def _process_message(self, message: QueueMessage, *, reclaimed: bool) -> None:
+        """按消息来源和数据库状态决定执行、恢复或安全 ACK。"""
+
+        job = self.repository.get_job(message.job_id)
+        if job is None:
+            # 不存在的 job 无法执行，ACK 防止坏消息永久占据 pending。
+            self.queue.ack(message.message_id)
+            return
+        if job.status in {"succeeded", "failed"}:
+            self.queue.ack(message.message_id)
+            return
+        if job.status == "running":
+            if not reclaimed:
+                # 同一 job 的另一条消息正在由健康 Worker 驱动，当前重复消息可安全 ACK。
+                self.queue.ack(message.message_id)
+                return
+            job = self.repository.recover_interrupted_job(job.job_id)
+            if job.status == "failed":
+                self.queue.ack(message.message_id)
+                return
+        if job.status != "queued":
+            return
         try:
-            job = self.repository.mark_job_running(job_id)
+            job = self.repository.mark_job_running(job.job_id)
         except ValueError:
-            return False
+            current = self.repository.get_job(message.job_id)
+            if current is not None and current.status in {
+                "running", "succeeded", "failed"
+            }:
+                self.queue.ack(message.message_id)
+            return
         try:
             if self.runtime is None:
                 result = self.executor.execute(job)
@@ -207,4 +250,5 @@ class EvaluationWorker:
             self.repository.mark_job_failed(
                 job.job_id, "worker_unexpected_error", str(error)
             )
-        return True
+        # ACK 失败时 PG 已是终态；消息保留 pending，后续 reclaim 会读取终态并补 ACK。
+        self.queue.ack(message.message_id)

@@ -210,11 +210,12 @@ flowchart LR
     API -->|GET /v1/traces/id| PG
 
     API -->|POST /v1/evaluation-jobs| PG
-    API -->|job_id| REDIS["Redis Queue"]
-    REDIS --> WORKER["Evaluation Worker"]
+    API -->|XADD job_id| REDIS["Redis Streams<br/>Consumer Group / Pending"]
+    REDIS -->|XREADGROUP / XAUTOCLAIM| WORKER["Evaluation Worker"]
     WORKER --> ERUN["Evaluation Runner"]
     ERUN --> FILES["Persistent Volume<br/>reports / cases / failures"]
     WORKER -->|running / succeeded / failed| PG
+    PG -->|终态持久化后 XACK| REDIS
 
     API --> CACHE["Redis Session Cache"]
     CACHE -->|miss / error| PG
@@ -222,7 +223,8 @@ flowchart LR
     RUNTIME --> NEO["Neo4j Graph"]
 ```
 
-PostgreSQL 是任务状态和运行元数据的真相来源；Redis 只承担短期队列与最近会话缓存；
+PostgreSQL 是任务状态和运行元数据的真相来源；Redis Streams 只承担消息交付、pending、ACK、
+stale reclaim 与最近会话缓存；
 pgvector/Neo4j 保存持久化检索结构；完整报告和逐 Case 工件保存在文件卷。Docker Compose
 编排 API、Worker、PostgreSQL、Redis 和 Neo4j，GitHub Actions 执行服务链与持久化验证。
 

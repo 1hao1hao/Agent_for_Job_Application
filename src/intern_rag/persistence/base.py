@@ -62,6 +62,9 @@ class PersistenceRepository(Protocol):
     def recover_interrupted_jobs(self) -> list[str]:
         """把进程中断遗留的 running job 恢复为 queued。"""
 
+    def recover_interrupted_job(self, job_id: str) -> EvaluationJob:
+        """按 pending 消息恢复一个 running job，或在预算耗尽时置为 failed。"""
+
     def save_run(self, run: EvaluationRunRecord) -> None:
         """保存 Run 配置、摘要和工件索引。"""
 

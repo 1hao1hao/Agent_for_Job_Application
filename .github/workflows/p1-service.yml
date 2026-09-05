@@ -76,6 +76,29 @@ jobs:
               raise TimeoutError('evaluation job did not finish')
           PY
 
+      - name: Validate Redis Streams pending reclaim and ACK
+        run: |
+          docker compose -f compose.yaml exec -T api python - <<'PY'
+          from uuid import uuid4
+          from intern_rag.worker import RedisJobQueue
+
+          suffix = str(uuid4())
+          stream = f'evalrag:ci:stream:{suffix}'
+          group = f'evalrag:ci:group:{suffix}'
+          queue = RedisJobQueue('redis://redis:6379/0', stream, group)
+          try:
+              queue.enqueue('ci-recovery-job')
+              message = queue.dequeue('crashed-worker', timeout_seconds=0)
+              assert message is not None
+              assert queue.client.xpending(stream, group)['pending'] == 1
+              reclaimed = queue.reclaim_stale('recovery-worker', min_idle_ms=0)
+              assert reclaimed and reclaimed[0].message_id == message.message_id
+              queue.ack(reclaimed[0].message_id)
+              assert queue.client.xpending(stream, group)['pending'] == 0
+          finally:
+              queue.client.delete(stream)
+          PY
+
       - name: Validate pgvector HNSW and Neo4j persistence
         run: |
           docker compose -f compose.yaml exec -T api \

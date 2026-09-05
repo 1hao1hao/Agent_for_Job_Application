@@ -103,13 +103,14 @@ Corpus + EvaluationCase + RunConfig
 Client -> FastAPI -> AgentRuntime -> PostgreSQL -> RagResponse + trace_id
 
 批量评测:
-Client -> FastAPI -> PostgreSQL queued Job -> Redis Queue
-       -> Evaluation Worker -> report files -> PostgreSQL final status
+Client -> FastAPI -> PostgreSQL queued Job -> Redis Stream pending
+       -> Evaluation Worker -> report files -> PostgreSQL final status -> XACK
 ```
 
 - **FastAPI**：把 Query、Trace 查询和 Evaluation Job 变成稳定 HTTP 接口。
 - **PostgreSQL**：保存请求、Trace、任务状态、Run 摘要和报告路径，是状态真相来源。
-- **Redis**：队列只存待执行 job ID，并缓存最近会话；不保存最终任务结果。
+- **Redis**：Stream 只传 job ID，并提供 pending、ACK 和 stale reclaim；同时缓存最近会话，
+  但不保存最终任务结果。
 - **Worker**：独立消费队列，执行耗时评测，把状态从 `queued` 推进到
   `running -> succeeded/failed`。
 - **pgvector / Neo4j**：分别保存用户长期语义 Memory/Dense 索引和版本化知识图。

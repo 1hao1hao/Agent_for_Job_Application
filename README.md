@@ -140,7 +140,7 @@ PYTHONPATH=src python scripts/replay_trace.py --trace-id <trace_id> --stage retr
 ## 服务与持久化
 
 FastAPI 提供 Query、Trace、Session 和 Evaluation Job 接口。PostgreSQL 保存请求、Run/Trace、
-Profile 与任务状态；Redis 承担最近会话缓存和异步 Job 队列；独立 Worker 执行批量评测并把
+Profile 与任务状态；Redis Streams Consumer Group 承担异步 Job 交付，独立 Worker 执行批量评测并把
 `queued -> running -> succeeded/failed` 状态写回 PostgreSQL；pgvector 和 Neo4j 分别承载
 持久化向量与图检索。Docker Compose 统一编排服务依赖和持久化卷。
 
@@ -152,11 +152,14 @@ Profile 与任务状态；Redis 承担最近会话缓存和异步 Job 队列；�
 
 ```text
 POST /v1/query -> AgentRuntime -> RagResponse + trace_id
-POST /v1/evaluation-jobs -> PostgreSQL queued -> Redis -> Worker -> report + final status
+POST /v1/evaluation-jobs -> PostgreSQL queued -> Redis Stream pending
+-> Worker -> report + PostgreSQL final status -> XACK
 ```
 
-同一 idempotency key 不会重复创建评测 Job。Worker 只对配置允许的瞬时故障做有上限重试；
-鉴权、业务错误或重试耗尽会受控落为 `failed` 并保留 error type。
+消息读取后不会立即删除，而是进入 Pending Entries List；Worker 只有确认 PostgreSQL 终态已持久化后
+才 ACK。Worker 中途宕机时，超过“评测执行超时 + 60 秒”的 pending 消息可由其他 consumer reclaim。
+系统采用 at-least-once delivery，同一 idempotency key、PostgreSQL 条件状态更新和幂等 Run 写入共同
+防止重复并发执行；恢复粒度是整个 Job，不是 case 级断点续跑。
 
 ## 运行与验证
 
@@ -168,8 +171,8 @@ PYTHONPATH=src python -m unittest discover -s tests -p 'test_*.py'
 ```
 
 测试验证代码契约与确定性行为，不代表回答准确率；真实 LLM、PostgreSQL/Redis/Neo4j 和模型权重
-下载不进入默认离线单测。当前仓库在 2026-09-05 执行上述命令的结果为 261 tests run、
-257 passed、4 skipped、0 failed。
+下载不进入默认离线单测。当前仓库在 2026-09-05 执行上述命令的结果为 271 tests run、
+265 passed、6 skipped、0 failed。
 
 Docker 可用时启动服务：
 

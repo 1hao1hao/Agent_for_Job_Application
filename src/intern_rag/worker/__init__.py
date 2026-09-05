@@ -5,12 +5,19 @@ from intern_rag.worker.evaluation_worker import (
     SubprocessEvaluationExecutor,
     WorkerExecutionError,
 )
-from intern_rag.worker.queue import JobQueue, RedisJobQueue
+from intern_rag.worker.queue import (
+    JobQueue,
+    QueueMessage,
+    QueueUnavailable,
+    RedisJobQueue,
+)
 
 __all__ = [
     "EvaluationWorker",
     "SubprocessEvaluationExecutor",
     "WorkerExecutionError",
     "JobQueue",
+    "QueueMessage",
+    "QueueUnavailable",
     "RedisJobQueue",
 ]

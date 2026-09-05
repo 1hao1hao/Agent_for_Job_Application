@@ -266,13 +266,16 @@ configured/effective retriever、配置版本和 fallback reason。
 ```text
 EvaluationJobRequest
 -> PostgreSQL idempotent queued Job
--> Redis Queue(job_id)
+-> Redis Stream XADD(job_id)
+-> Consumer Group XREADGROUP: message pending
 -> Worker: queued -> running -> succeeded | failed
+-> PostgreSQL 终态持久化后 XACK
 -> report volume + PostgreSQL summary/report_path
 ```
 
 - PostgreSQL：请求、Run/Trace、Job、Profile/Summary/Memory 元数据的真相来源。
-- Redis：短期 Job 队列和最近 Session History 缓存，不保存最终任务状态。
+- Redis：Streams Consumer Group 提供 Job 交付、pending、ACK 和 stale reclaim，并缓存最近
+  Session History；不保存完整配置或最终任务状态。
 - pgvector：持久化 Dense Index 与 user-scoped Semantic Memory。
 - Neo4j：版本化知识图、Chunk 引用与 provenance。
 - 文件卷：完整 report、case results、failures 和大体积工件。
@@ -283,6 +286,11 @@ EvaluationJobRequest
 Docker Compose 编排 API、Worker、PostgreSQL/pgvector、Redis 和 Neo4j。GitHub Actions 分为服务链
 集成、PR Evaluation Gate 和手动完整持久化消融；本地无 Docker 时不能用 adapter 单测冒充容器
 重启恢复验证。
+
+Evaluation Worker 使用 at-least-once delivery：消息可能在 ACK 失败或 Worker crash 后再次交付。
+PostgreSQL 的 `queued -> running` 条件更新保证同一 Job 同时只有一个 Worker claim；终态重复消息直接
+ACK，stale running 消息按 `attempt_count/max_retries` 做 Job 级重跑或落为 `retry_exhausted`。默认
+reclaim idle 阈值为 Evaluation timeout 加 60 秒，避免把仍在运行的长任务误判为宕机。
 
 ## 6. 当前证据边界
 
