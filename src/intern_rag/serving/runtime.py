@@ -326,7 +326,12 @@ def create_runtime_app():
         repository=repository,
         queue=queue,
         query_timeout_seconds=float(os.environ.get("QUERY_TIMEOUT_SECONDS", "90")),
-        default_query_retriever="adaptive",
+        # 轻量 Docker profile 显式加载 BM25 时，未指定策略的请求也应如实标记为 BM25。
+        default_query_retriever=(
+            "bm25"
+            if runtime_retriever.effective_name == "bm25"
+            else "adaptive"
+        ),
     )
     return create_app(services)
 

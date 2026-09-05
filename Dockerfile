@@ -16,6 +16,8 @@ COPY configs ./configs
 COPY migrations ./migrations
 COPY data/evaluation ./data/evaluation
 COPY data/processed/chunks ./data/processed/chunks
+COPY data/processed/indexes/evalrag_v0.2/bm25-v1 ./data/processed/indexes/evalrag_v0.2/bm25-v1
+COPY data/processed/indexes/evalrag_v0.3/bm25-v1 ./data/processed/indexes/evalrag_v0.3/bm25-v1
 
 RUN mkdir -p reports/runs traces/service data/processed/indexes
 

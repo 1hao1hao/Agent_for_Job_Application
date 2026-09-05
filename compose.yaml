@@ -56,6 +56,7 @@ services:
       EVALRAG_LLM_BACKEND: ${EVALRAG_LLM_BACKEND:-fake}
       EVALRAG_MODEL: ${EVALRAG_MODEL:-deterministic-demo}
       EVALRAG_GIT_COMMIT: ${EVALRAG_GIT_COMMIT:-container-build}
+      EVALRAG_RETRIEVER_CONFIG: /app/configs/retrieval/bm25_v0.3.json
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
       TRACE_PATH: /app/traces/service/agent_trace.jsonl
       NEO4J_URI: bolt://neo4j:7687
@@ -83,11 +84,6 @@ services:
       retries: 20
     volumes:
       - traces_data:/app/traces
-      - type: volume
-        source: indexes_data
-        target: /app/data/processed/indexes
-        volume:
-          nocopy: true
 
   worker:
     build: .
@@ -109,16 +105,10 @@ services:
         condition: service_healthy
     volumes:
       - reports_data:/app/reports
-      - type: volume
-        source: indexes_data
-        target: /app/data/processed/indexes
-        volume:
-          nocopy: true
 
 volumes:
   postgres_data:
   redis_data:
   reports_data:
   traces_data:
-  indexes_data:
   neo4j_data:

@@ -6,6 +6,13 @@ __pycache__
 .pytest_cache
 data/raw
 data/processed/indexes
+!data/processed/indexes/
+!data/processed/indexes/evalrag_v0.2/
+!data/processed/indexes/evalrag_v0.2/bm25-v1/
+!data/processed/indexes/evalrag_v0.2/bm25-v1/index.json
+!data/processed/indexes/evalrag_v0.3/
+!data/processed/indexes/evalrag_v0.3/bm25-v1/
+!data/processed/indexes/evalrag_v0.3/bm25-v1/index.json
 reports
 traces
 tests
