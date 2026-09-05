@@ -1,4 +1,4 @@
-# Docker 服务 profile 打包版本化 BM25 索引，只运行 BM25/API/Worker，不下载模型权重。
+# Docker 服务 profile 从版本化 Chunk 构建 BM25 索引，只运行 BM25/API/Worker，不下载模型权重。
 fastapi>=0.115,<1
 uvicorn>=0.30,<1
 psycopg[binary]>=3.2,<4

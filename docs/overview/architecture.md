@@ -262,8 +262,9 @@ GET  /v1/evaluation-jobs/{job_id}
 锁定的 Adaptive v2；显式传原有检索器时保持兼容。配置或本地模型/图工件不可用时默认
 fail-fast，只有提供 `EVALRAG_RETRIEVER_FALLBACK_CONFIG` 才允许降级，并在 Trace 保存
 configured/effective retriever、配置版本和 fallback reason。
-轻量 Docker/CI 服务 profile 显式固定为 `bm25_v0.3.json`，并随镜像打包 v0.2/v0.3
-BM25 离线索引；它用于验证 HTTP、队列和持久化链路，不冒充 Graph Adaptive 线上配置。
+轻量 Docker/CI 服务 profile 显式固定为 `bm25_v0.3.json`，并在镜像构建时从版本化
+Chunk 生成 v0.2/v0.3 BM25 索引；它用于验证 HTTP、队列和持久化链路，不冒充
+Graph Adaptive 线上配置。
 
 ```text
 EvaluationJobRequest
