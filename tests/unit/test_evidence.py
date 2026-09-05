@@ -161,6 +161,23 @@ class EvidenceTests(unittest.TestCase):
         )
         self.assertEqual(decision.status, "retryable")
         self.assertEqual(decision.reason, "graph_evidence_missing")
+        self.assertFalse(decision.relation_evidence_present)
+
+    def test_relation_evidence_flag_is_true_for_traceable_path(self) -> None:
+        result = _result("jd-1", "jd", 0.8)
+        result = RetrievalResult(
+            result.chunk_id, result.score, result.rank, result.chunk,
+            details={"path_valid": True, "graph_edge_ids": ["edge-1"]},
+        )
+        decision = check_evidence(
+            self.route, [result], retriever_name="adaptive",
+            retry_count=0, max_retries=1, config=EvidenceConfig(min_scores={}),
+            evidence_requirement={"need_type": "relation_reasoning"},
+            retrieval_trace={"strategy": "graph_hybrid"},
+        )
+
+        self.assertTrue(decision.relation_evidence_present)
+        self.assertEqual(decision.status, "sufficient")
 
 
 if __name__ == "__main__":

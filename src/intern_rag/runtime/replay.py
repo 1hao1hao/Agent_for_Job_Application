@@ -18,9 +18,12 @@ from intern_rag.tracing import AgentTrace
 
 
 ReplayStage = Literal[
-    "full", "routing", "retrieval", "evidence", "context", "generation", "validation"
+    "full", "routing", "retrieval", "evidence", "controller", "context",
+    "generation", "validation"
 ]
-STAGE_ORDER = ("routing", "retrieval", "evidence", "context", "generation", "validation")
+STAGE_ORDER = (
+    "routing", "retrieval", "evidence", "controller", "context", "generation", "validation"
+)
 RuntimeFactory = Callable[["SavedRun", "ReplayLlmClient"], AgentRuntime]
 
 
@@ -268,6 +271,8 @@ def _compare_stage(original: AgentTrace, replayed: AgentTrace, stage: str) -> Re
 
 
 def _stage_projection(trace: AgentTrace, stage: str) -> dict[str, object]:
+    if stage == "controller":
+        return _remove_volatile({"actions": trace.actions})  # type: ignore[return-value]
     value = dict(getattr(trace, stage, {}) or {})
     if stage == "retrieval":
         value.setdefault("chunk_ids", [item.get("chunk_id") for item in trace.retrieved_chunks])

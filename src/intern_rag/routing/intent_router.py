@@ -77,6 +77,9 @@ INTENT_KEYWORDS: dict[Intent, tuple[str, ...]] = {
     ),
 }
 
+# 这里只识别明确超出求职知识问答边界的主题，不包含任何 benchmark 原句。
+OUT_OF_DOMAIN_MARKERS = ("天气预报", "股票价格", "医疗诊断", "菜谱")
+
 
 @dataclass(frozen=True)
 class RouteDecision:
@@ -120,7 +123,19 @@ def route_query(query: str) -> RouteDecision:
             best_keywords = matched_keywords
 
     if not best_keywords:
-        return _build_decision("unknown", [])
+        decision = _build_decision("unknown", [])
+        if any(marker in normalized_query for marker in OUT_OF_DOMAIN_MARKERS):
+            return RouteDecision(
+                **{
+                    **decision.__dict__,
+                    "reason": "explicit_out_of_domain",
+                    "details": {
+                        **decision.details,
+                        "explicit_out_of_domain": True,
+                    },
+                }
+            )
+        return decision
     return _build_decision(best_intent, best_keywords)
 
 

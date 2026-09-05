@@ -33,14 +33,15 @@ EvalRAG 是一个面向中文求职知识推理的图增强、自适应 RAG Agen
 ```text
 RagRequest
   -> AgentRuntime 创建 root run / Trace
-  -> Feedback Hybrid Router
+  -> Rule Router（当前在线默认；Hybrid / Feedback 用于离线对照）
+  -> Bounded Agent Controller: choose retrieve(adaptive)
   -> Query Analyzer + Adaptive Retriever
        BM25 / Dense / RRF / Graph + Vector
        低置信复杂 Query -> 按需 CrossEncoder
   -> Evidence Gate
-       sufficient  -> Context Engine
-       retryable   -> 去掉 source filter，全库检索一次
-       insufficient -> 拒答
+  -> Bounded Agent Controller
+       observe state -> retrieve / expand_sources / generate / abstain
+       最多 4 个动作，不允许 LLM 自由生成工具名
   -> Context Engine
        system + query + profile + history + memory + evidence
        在 token budget 内去重、排序和完整证据选择
@@ -56,6 +57,12 @@ RagRequest
 
 - **扩源重试**解决“路由过滤过窄导致可能漏证据”，最多一次，并不是重复执行同一检索。
 - **格式修复重试**解决“模型答案 JSON 不符合契约”，最多一次，不改变检索证据。
+
+真实关系 Query“哪个项目能证明我符合 RAG 岗位要求？”的本地 deterministic 执行序列为
+`retrieve(graph_hybrid) -> expand_sources -> abstain`：Graph 遍历产生了候选路径，但两次检索的最终
+top-5 均未保留带有效边 ID 的关系证据，
+`relation_evidence_present=false`，Controller 因而没有调用 LLM。该动作序列也进入 deterministic
+Replay 的 `controller` 阶段比较。
 
 ### 3. 离线评测与回归
 
@@ -104,6 +111,7 @@ PostgreSQL 是任务状态的真相来源；Redis 负责短期队列和最近会
 | `RouteDecision` | intent、目标 sources、置信度和匹配依据 | Router -> Retriever / Gate |
 | `RetrievalResult` | Chunk、score、rank 和策略解释 | Retriever -> Gate / Context |
 | `EvidenceDecision` | sufficient / retryable / insufficient 及原因 | Gate -> Pipeline |
+| `AgentState` / `AgentAction` | 当前路由、检索、门控和重试状态，以及四类有限动作 | Pipeline <-> Controller |
 | `ContextSignals` | 历史 token 压力、Follow-up 前文依赖度、Memory 最高相关度及其分解信号 | ContextSignalExtractor -> ContextPolicy |
 | `ContextPlan` | 是否使用 Profile/Summary，以及 Recent History/Memory 数量和决策原因 | ContextPolicy -> ContextEngine |
 | `ManagedContext` / `BuiltContext` | 在预算内选出的模型输入证据和记忆 | Context Engine -> Generator |
@@ -126,18 +134,19 @@ PostgreSQL 是任务状态的真相来源；Redis 负责短期队列和最近会
 | BM25 | token overlap 没有词频、逆文档频率和长度归一 | 标准 BM25 公式，离线统计文档频率与平均长度，接口与其他 Retriever 一致 | 提供可解释稀疏检索基线；精确术语快，但同义召回弱 |
 | Dense Retrieval | BM25 依赖词面重叠 | `BAAI/bge-small-zh-v1.5` 离线编码 Chunk，查询时只编码 Query并计算余弦相似度 | 找回“参与智能问答开发”等语义改写，代价是更高 CPU 延迟 |
 | RRF Hybrid | BM25 与 Dense 原始分数不可直接相加 | Reciprocal Rank Fusion 只融合名次，去重后稳定排序 | v0.2 frozen 相比 Keyword，Recall@3 55.56% -> 68.33%，MRR 60.83% -> 66.78% |
-| Query Analyzer / Adaptive Retrieval v2 | 固定策略无法同时适配精确事实、语义解释、多源综合和关系推理 | 少量强信号生成 `EvidenceRequirement`，再按版本化映射选择 BM25、Hybrid 或 Graph+Vector；不可回答选择 `none`，Graph 不可用才 fallback Hybrid；任意英文 token 不再自动等于 exact | dev 相比 v1：Recall@5 54.58% -> 55.42%，MRR 47.76% -> 49.88%；Graph 调用率 25%，但仍低于 always Graph 的 MRR 52.10% |
+| Query Analyzer / Adaptive Retrieval v2 | 固定策略无法同时适配精确事实、语义解释、多源综合和关系推理 | 少量强信号生成 `EvidenceRequirement`，再按版本化映射选择 BM25、Hybrid 或 Graph+Vector；Analyzer 不根据 benchmark 原句猜“是否有答案”，普通未知问题也先检索再交 Gate；任意英文 token 不再自动等于 exact | dev 相比 v1：Recall@5 54.58% -> 55.42%，MRR 47.76% -> 49.88%；Graph 调用率 25%，但仍低于 always Graph 的 MRR 52.10% |
+| Bounded Agent Controller | 原 Pipeline 虽有动态分支，但“下一步为什么发生”散落在 while/if 中，也缺少统一动作上限 | `AgentState -> AgentController.choose() -> AgentAction`；动作仅限 retrieve、expand_sources、generate、abstain，总计最多 4 步，每步保存 reason/state/config version | 不改变原检索和生成算法，却让扩源、拒答和格式修复成为可 Trace、可 Replay、可单测的明确 Agent 决策 |
 | Job-Skill-Experience Graph | 向量相似不等于能连接“岗位要求-项目技能-个人经历” | 抽取 Job、Skill、Project、Experience、Technology、Company 节点和有向关系，全部回指 Chunk | v0.3 构建 3098 节点、2741 边，支持可解释多跳证据 |
 | Graph + Vector Retrieval | Graph-only 容易漏文本，Vector-only 缺关系路径 | 实体链接和有界多跳召回图证据，再用 RRF 与向量 Chunk 融合 | 80 条 frozen 上相对 BM25：Recall@5 46.67% -> 63.33%，MRR 35.19% -> 57.58%；P95 15.50 -> 1209.40 ms |
 | CrossEncoder Rerank Policy | 召回改善后仍可能存在前排噪声，但全量重排成本高 | 对同一 BM25+Dense+RRF 候选分别运行 never / always / low-confidence，用同一 MiniLM revision 控制变量 | v0.3 dev：always 将 MRR 44.31% -> 49.22%但 P95 1252 -> 2799 ms；按需调用率 18.12%、MRR 45.18%、P95 2175 ms，无 Pareto 最优 |
-| Evidence Gate v2 | 不同 Retriever 分数不可比，且不同问题需要的证据结构不同 | 按实际 BM25/Dense/Hybrid/Graph 策略加载 dev 校准门槛；普通题查数量，多来源查 source coverage，关系题查有效 Graph path；score 不可分时关闭该门槛 | 四种 raw score 均未同时满足 FAR<=5%、FRR<=25%，系统保留负结果并回退结构检查；test 拒答准确率 100%，但 FAR 25% |
+| Evidence Gate v2 | 不同 Retriever 分数不可比，且不同问题需要的证据结构不同 | 按实际 BM25/Dense/Hybrid/Graph 策略加载 dev 校准门槛；普通题查数量，多来源查 source coverage，关系题读取 Retriever 给出的有效 path/edge 并输出 `relation_evidence_present`，不在 Gate 重走图；score 不可分时关闭该门槛 | 四种 raw score 均未同时满足 FAR<=5%、FRR<=25%，系统保留负结果并回退结构检查；test 拒答准确率 100%，但 FAR 25% |
 | Source-Balanced Context | 纯 rank 贪心容易被单一来源占满预算 | 在紧预算下优先保证 required sources，再按 rank 补充，且不截断单个 Chunk | 1200 字符预算下完整来源覆盖率 30.19% -> 54.72%，相关证据召回下降 0.94 pp |
 | Adaptive Context Engine / 分层记忆 | 固定 Recent、Summary 或 Memory 策略无法同时适配独立问题、追问和长会话 | `ContextSignalExtractor -> ContextPolicy -> ContextPlan -> ContextEngine`：以 History Token Pressure、指代/省略+BGE 语义连续性、Memory `similarity * importance` 动态决定各层；Engine 再按统一预算、优先级和跨层语义去重编排 Profile/History/Summary/Memory/Evidence | 60 组/300 turns dev 中保持 100% Follow-up Success；相对 Summary+Recent，Prompt Token 75.55 -> 60.68（-19.68%），History Redundancy 42.86% -> 0；该 Context-level 结果不等于自由生成答案准确率 |
 | Generator JSON Contract | 自由文本难以校验引用和拒答状态 | Prompt 约束只依据 Context，模型返回 answer/cited_chunk_ids/sufficient/reason；解析失败受控重试一次 | 生成结果可被程序验证，而不是把模型输出直接交给用户 |
 | Model Gateway | 外部模型有 timeout、429、5xx 和供应商故障 | Provider Protocol + 有界退避、并发 semaphore、熔断和 fallback，鉴权错误不盲重试 | 6 类 Fake 故障注入验证控制流，真实 DeepSeek primary smoke 通过；备用 Provider 未做真实 fallback |
 | Citation Validator | 模型可能返回不存在或重复的证据 ID | 校验 ID 存在性、去重和 sufficient/citation 组合，合法后才构造 Citation | 非法引用不能进入最终回答；Citation Validity 不等于事实支持度 |
 | AgentRuntime / Checkpoint / Deterministic Replay | HTTP、CLI、Worker 各自编排会产生行为漂移，修改后只看最终答案也难定位最先变化的阶段 | Runtime 保存请求、版本配置、工件引用及 SHA-256；Replay 真实重跑 Router 至 Validator，LLM 只注入历史输出；逐阶段比较稳定字段并定位 `first_divergent_stage` | 可区分 Routing、Retrieval、Gate、Context、Generation、Validation 的首个行为漂移；工件或模型输出缺失时受控 unavailable，不伪造复现 |
-| Trace / Regression / CI Gate v2 | 指标下降只看均值难定位，已修问题可能复发 | Trace 新增 features/need/strategy/rule/fallback/escalation/config；CI 真实运行 dev v1/v2，Recall@5/MRR 使用一条可答 Case 动态容差，NDCG 只报告，fixed regression 无条件阻塞 | 本次门禁通过；质量提升和尾延迟预算可追溯到逐 Case prediction，CI 不读取 test |
+| Trace / Regression / CI Gate v2 | 指标下降只看均值难定位，已修问题可能复发 | Trace 保存 features/need/strategy/action/fallback/escalation/config；CI 真实运行 dev v1/v2，Recall@5/MRR 使用一条可答 Case 动态容差，NDCG 只报告，fixed regression 无条件阻塞 | 2026-09-05 本地 Gate 的质量项和 fixed regression 通过，但 P95 增长 26.4%、略超 25% 工程预算而阻塞；负结果保留，CI 不读取 test |
 | Semantic Key-Point / Claim Grounding | 字符串包含会漏判同义表达，“引用合法”也不代表事实受支持 | LLM grader 分别判断每个 expected point 和每条 factual claim，保存 verdict、evidence span、reason 与版本 | 结论可回查到要点、断言和证据；unknown 不被伪装成 supported |
 | FastAPI + PostgreSQL + Redis Worker | Query 和长耗时评测不能只靠脚本同步运行 | FastAPI 暴露稳定契约；PostgreSQL 保存状态；Redis 仅传 job_id；Worker 独立执行并落盘报告 | 支持 Query/Trace 查询和幂等异步评测，服务重启后任务状态仍可追踪 |
 
@@ -466,7 +475,7 @@ BM25 + Dense + RRF；P1-D7 已冻结的旧配置没有因本轮文档更新而�
 | 核心信号 | `needs_multi_source` | Router 给出多个来源，或命中“结合、对比、综合、区别”等信号 | 需要融合多来源证据 |
 | 核心信号 | `requires_entity_reasoning` | 强关系表达；或弱关系表达同时涉及至少 3 类实体 | 需要显式实体关系路径 |
 | 上下文 | `entity_types` | 轻量词典识别 Job、Skill、Project、Experience、Company | 辅助关系需求判断和 Trace 解释 |
-| 边界 | `is_unanswerable_route` | Router 返回空来源，或命中版本化的明确越界/无库内证据信号 | 选择内部策略 `none`，不调用 Retriever |
+| 边界 | `is_unanswerable_route` | 仅由上游显式提供不可回答判断；当前 Analyzer 不再用 benchmark 原句或 Router 空来源猜测答案是否存在 | 显式 OOD 且无来源时选择内部策略 `none`；普通 unknown 仍做全库检索 |
 
 这些特征会完整写入 `RetrievalDecision.query_features`。其中实体识别是轻量类型词典，
 不是完整 NER（命名实体识别）；优点是低延迟和可复现，局限是新表达仍需要通过失败 Case 扩展。

@@ -82,6 +82,12 @@ class PipelineQueryService:
             "context_mode": getattr(self.pipeline.config, "context_mode", "recent_window"),
             "max_source_retries": getattr(self.pipeline.config, "max_source_retries", 1),
             "max_format_retries": getattr(self.pipeline.config, "max_format_retries", 1),
+            "max_action_steps": getattr(self.pipeline.config, "max_action_steps", 4),
+            "agent_controller_version": getattr(
+                self.pipeline.config,
+                "agent_controller_version",
+                "bounded-agent-controller-v1",
+            ),
         }
         return RunContext(
             request_id=request.request_id,

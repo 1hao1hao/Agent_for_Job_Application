@@ -494,3 +494,14 @@ hard reject 条件。
 Positive，失败数由 64 增至 73。FAR 下降来自更多拒绝而非证据恢复，且 E2E
 退化，因此不设为默认配置；正式 release 继续使用
 `configs/evidence/gate_calibrated_v0.3.json`。本实验未读取或重跑 test。
+
+## 12. Bounded Agent 架构收口验证（2026-09-05）
+
+本轮只将检索、扩源、生成和拒答显式收束为最多 4 步的 Controller，并移除 Analyzer 对
+benchmark 原句的不可回答捷径；未修改数据标签、Retriever 算法或 frozen test。全量测试
+`261 run / 257 passed / 4 skipped / 0 failed`，fixed regression `1/1` 通过。
+
+v0.3/dev CI Gate 的 Recall@5、MRR、NDCG@5 分别为 55.42%、49.88%、48.78%，质量项没有
+变化；但本机 candidate/reference P95 为 1770.79/1400.81 ms，增长 26.4%，略超 25% 工程预算，
+因此本次 Gate 总体为 failed。该负结果保留在 `reports/ci/evaluation-gate-v2/`，没有重跑挑选
+更好延迟，也没有读取或重新运行 frozen test。

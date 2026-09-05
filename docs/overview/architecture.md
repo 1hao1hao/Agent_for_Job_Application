@@ -81,6 +81,8 @@ RouteDecision(intent, routed_sources, confidence, reason, details)
 - Feedback：只消费已确认、通过 shadow/dev gate 的短意图锚点；在线请求不直接学习。
 
 Router 负责缩小知识来源，不负责决定 BM25/Dense/Graph；后者由 Query Analyzer 处理。
+当前 HTTP Runtime 默认使用可解释的 Rule Router；Semantic、Hybrid 和 Feedback Router 保留为
+离线对照与可配置能力，不能把实验实现表述成在线默认行为。
 
 ### Query Analyzer 与 Adaptive Retriever
 
@@ -96,13 +98,14 @@ query + routed_sources
 ```
 
 `QueryFeatures` 只保留四个核心证据信号：精确词面、语义、多来源、实体关系；实体类型和
-`is_unanswerable_route` 是辅助上下文。`EvidenceRequirement` 描述需要 lexical、semantic、
+`is_unanswerable_route` 是兼容字段，不再由 benchmark/synthetic 关键词触发。
+`EvidenceRequirement` 描述需要 lexical、semantic、
 graph 或 multi-source 能力，策略映射为：
 
 | 证据需求 | Retriever |
 |---|---|
 | 精确事实 | BM25 |
-| 语义解释/改写 | Dense |
+| 语义解释/改写 | dev 锁定为 BM25 + Dense RRF Hybrid |
 | 多源综合或不确定 | BM25 + Dense RRF Hybrid |
 | 实体关系推理 | Graph + Vector |
 | Graph 不可用 | 受控降级到 Hybrid |
@@ -110,6 +113,16 @@ graph 或 multi-source 能力，策略映射为：
 首次检索后，数量、首位 margin、required source coverage 和双路一致性组合成置信度。
 `rerank_policy=low_confidence` 时只对低置信候选运行一次 CrossEncoder，并用加权 RRF 保留原排序；
 它不能找回未进入候选集的 Chunk。策略、特征、证据需求、置信度、重排原因和模型版本进入 Trace。
+
+### Bounded Agent Controller
+
+Pipeline 将动态分支收束为 `AgentState -> AgentController -> AgentAction`。动作空间固定为
+`retrieve(strategy)`、`expand_sources`、`generate`、`abstain`，最多执行 4 步；Controller
+不执行能力，也不接受 LLM 生成任意 tool name。每个 Action 的 step、reason、state summary 和
+config version 进入 Trace，因此一次请求可以解释为“观察状态、选择有限动作、执行能力、再次观察”。
+
+Analyzer 不再通过特定 Query 字符串预测语料中是否有答案。明确域外且 Router 无来源的问题可在
+检索前拒答；其他正常领域问题即使 Router 未识别，也会进入检索，再由 Gate 根据实际证据决定。
 
 ### Graph + Vector
 
@@ -122,7 +135,9 @@ Graph 没有链接到实体时返回空路，由 Vector 候选兜底。Graph-onl
 
 ### Evidence Gate 与两类重试
 
-Evidence Gate 检查 route、结果数量、最高分和 required-source coverage，输出：
+Evidence Gate 检查 route、结果数量和 required-source coverage；关系题读取 Retriever 已返回的
+`path_valid + graph_edge_ids` 并输出 `relation_evidence_present`，但不重新遍历图。raw score
+hard gate 已被 dev 校准否定，不再恢复。Gate 输出：
 
 ```text
 sufficient   -> 构建 Context 并生成
@@ -243,6 +258,11 @@ GET  /v1/evaluation-jobs/{job_id}
 
 在线 Query 同步调用 Runtime；批量 Evaluation 只快速创建 Job，不阻塞 HTTP：
 
+`POST /v1/query` 未显式传 `retriever` 时，Runtime 从 `EVALRAG_RETRIEVER_CONFIG` 构造
+锁定的 Adaptive v2；显式传原有检索器时保持兼容。配置或本地模型/图工件不可用时默认
+fail-fast，只有提供 `EVALRAG_RETRIEVER_FALLBACK_CONFIG` 才允许降级，并在 Trace 保存
+configured/effective retriever、配置版本和 fallback reason。
+
 ```text
 EvaluationJobRequest
 -> PostgreSQL idempotent queued Job
@@ -256,6 +276,9 @@ EvaluationJobRequest
 - pgvector：持久化 Dense Index 与 user-scoped Semantic Memory。
 - Neo4j：版本化知识图、Chunk 引用与 provenance。
 - 文件卷：完整 report、case results、failures 和大体积工件。
+
+`user_id/session_id` 是可信上游传入的身份边界，用于 Profile/History/Memory 隔离；当前原型不实现
+注册、登录、JWT 和通用 AuthN/AuthZ，不能部署到不可信公网后直接依赖客户端自报 user_id。
 
 Docker Compose 编排 API、Worker、PostgreSQL/pgvector、Redis 和 Neo4j。GitHub Actions 分为服务链
 集成、PR Evaluation Gate 和手动完整持久化消融；本地无 Docker 时不能用 adapter 单测冒充容器

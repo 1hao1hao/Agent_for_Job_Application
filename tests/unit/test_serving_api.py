@@ -15,8 +15,10 @@ class FakeQueryService:
     def __init__(self, status: str = "answered", delay: float = 0.0) -> None:
         self.status = status
         self.delay = delay
+        self.requests: list[RagRequest] = []
 
     def execute(self, request: RagRequest) -> RagResponse:
+        self.requests.append(request)
         if self.delay:
             time.sleep(self.delay)
         return RagResponse(
@@ -61,6 +63,21 @@ class ServingApiTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["status"], "answered")
         self.assertEqual(response.json()["citations"][0]["chunk_id"], "chunk-1")
+
+    def test_service_default_retriever_applies_only_when_field_is_omitted(self) -> None:
+        service = FakeQueryService()
+        client = TestClient(create_app(AppServices(
+            service, self.repository, self.queue,
+            default_query_retriever="adaptive",
+        )))
+
+        self.assertEqual(client.post("/v1/query", json={"query": "分析岗位"}).status_code, 200)
+        self.assertEqual(client.post(
+            "/v1/query", json={"query": "分析岗位", "retriever": "bm25"}
+        ).status_code, 200)
+
+        self.assertEqual(service.requests[0].retriever, "adaptive")
+        self.assertEqual(service.requests[1].retriever, "bm25")
 
     def test_validation_timeout_and_pipeline_error_mapping(self) -> None:
         self.assertEqual(self.client.post("/v1/query", json={"query": ""}).status_code, 422)

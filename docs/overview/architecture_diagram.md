@@ -30,28 +30,30 @@ flowchart LR
 ```mermaid
 flowchart TD
     REQ["RagRequest<br/>query / user_id / session_id / config"] --> RUNTIME["AgentRuntime<br/>root Run + checkpoint"]
-    RUNTIME --> ROUTER["Feedback Hybrid Router<br/>Rule + Semantic + approved anchors"]
+    RUNTIME --> ROUTER["Rule Router（在线默认）<br/>Hybrid / Feedback 用于离线对照"]
     ROUTER -->|RouteDecision| ANALYZER["Query Analyzer<br/>QueryFeatures -> EvidenceRequirement"]
-    ANALYZER --> SELECT["Adaptive Retriever<br/>BM25 / Dense / RRF / Graph+Vector"]
+    ANALYZER --> CTRL["Bounded Agent Controller<br/>4 actions / max 4 steps"]
+    CTRL -->|retrieve| SELECT["Adaptive Retriever<br/>BM25 / Dense / RRF / Graph+Vector"]
     SELECT --> CONF["候选置信度"]
     CONF -->|低置信且策略允许| RERANK["CrossEncoder Rerank<br/>最多一次"]
     CONF -->|无需重排| RESULTS["ranked RetrievalResult"]
     RERANK --> RESULTS
-    RESULTS --> GATE["EvidenceRequirement-aware Gate<br/>need / actual retriever / calibrated score / structure"]
-    GATE -->|retryable, max once| BROADEN["去掉 source filter<br/>扩源检索一次"]
+    RESULTS --> GATE["EvidenceRequirement-aware Gate<br/>count / source coverage / relation evidence"]
+    GATE --> CTRL
+    CTRL -->|expand_sources, max once| BROADEN["去掉 source filter<br/>扩源检索一次"]
     BROADEN --> SELECT
-    GATE -->|insufficient| ABSTAIN["RagResponse<br/>insufficient_evidence"]
+    CTRL -->|abstain| ABSTAIN["RagResponse<br/>insufficient_evidence"]
 
     REQ --> MEMORY["SessionMemoryService"]
     MEMORY --> STORE["History: Redis -> PostgreSQL<br/>Profile/Summary: PostgreSQL<br/>Memory: pgvector"]
     STORE --> SIGNAL["ContextSignalExtractor<br/>token pressure / follow-up / memory score"]
     SIGNAL --> POLICY["ContextPolicy -> ContextPlan"]
-    GATE -->|sufficient| ENGINE["ContextEngine<br/>预算、优先级、跨层去重"]
+    CTRL -->|generate| ENGINE["ContextEngine<br/>预算、优先级、跨层去重"]
     POLICY --> ENGINE
     ENGINE -->|ManagedContext| GEN["Generator<br/>结构化 Prompt / JSON contract"]
     GEN --> GATEWAY["Model Gateway<br/>timeout / retry / circuit breaker / fallback"]
-    GATEWAY -->|非法 JSON, max once| REPAIR["格式修复生成一次"]
-    REPAIR --> GATEWAY
+    GATEWAY -->|非法 JSON observation| CTRL
+    CTRL -->|repair generate, max once| GATEWAY
     GATEWAY --> PARSED["GenerationResult"]
     PARSED --> VALID["Citation Validator<br/>存在 / 重复 / 状态组合"]
     VALID -->|valid| RESP["RagResponse<br/>answer + citations + trace_id"]
@@ -63,6 +65,7 @@ flowchart TD
     SELECT -.-> TRACE
     RERANK -.-> TRACE
     GATE -.-> TRACE
+    CTRL -.-> TRACE
     ENGINE -.-> TRACE
     GATEWAY -.-> TRACE
     VALID -.-> TRACE
@@ -78,6 +81,7 @@ RagRequest
 -> QueryFeatures -> EvidenceRequirement
 -> list[RetrievalResult] + RetrievalDecision
 -> EvidenceDecision
+-> AgentState -> AgentAction
 -> ContextPlan -> ManagedContext
 -> GenerationResult
 -> ValidationResult

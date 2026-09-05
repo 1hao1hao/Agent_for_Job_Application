@@ -7,7 +7,7 @@ from typing import Annotated
 from fastapi import FastAPI, Header, Response
 from fastapi.responses import JSONResponse
 
-from intern_rag.agent import RagRequest
+from intern_rag.agent import RagRequest, RetrieverName
 from intern_rag.persistence import PersistenceRepository
 from intern_rag.serving.schemas import (
     ErrorBody,
@@ -33,6 +33,7 @@ class AppServices:
     repository: PersistenceRepository
     queue: JobQueue
     query_timeout_seconds: float = 90.0
+    default_query_retriever: RetrieverName = "bm25"
 
 
 def create_app(services: AppServices) -> FastAPI:
@@ -61,7 +62,12 @@ def create_app(services: AppServices) -> FastAPI:
         request_kwargs: dict[str, object] = {
             "query": body.query,
             "top_k": body.top_k,
-            "retriever": body.retriever,
+            # 保持 HTTP schema 不变；仅当调用方未显式传 retriever 时使用服务锁定配置。
+            "retriever": (
+                body.retriever
+                if "retriever" in body.model_fields_set
+                else services.default_query_retriever
+            ),
         }
         if body.request_id is not None:
             request_kwargs["request_id"] = body.request_id

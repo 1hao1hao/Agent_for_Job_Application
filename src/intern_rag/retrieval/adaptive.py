@@ -62,9 +62,6 @@ class QueryAnalyzerConfig:
         "bm25", "rrf", "redis stream", "pgvector", "neo4j", "crossencoder",
         "cross-encoder", "fastapi", "docker compose", "citation", "trace id",
     )
-    unanswerable_markers: tuple[str, ...] = (
-        "unpublished-", "内部薪资审批名单", "量子芯片驱动的十亿节点生产图",
-    )
     latin_token_is_exact: bool = False
     entity_markers: Mapping[str, tuple[str, ...]] = field(default_factory=lambda: {
         "job": ("岗位", "职位", "jd", "招聘"),
@@ -205,10 +202,9 @@ class QueryAnalyzer:
             needs_multi_source=needs_multi_source,
             requires_entity_reasoning=requires_entity_reasoning,
             entity_types=entity_types,
-            is_unanswerable_route=(
-                (source_types is not None and not source_types)
-                or any(marker in normalized for marker in self.config.unanswerable_markers)
-            ),
+            # Analyzer 只描述证据需求，不根据 benchmark 文本猜知识库有没有答案。
+            # 是否属于明确域外问题由 Router 标记；普通空路由仍应进入检索与 Gate。
+            is_unanswerable_route=False,
             has_conflicting_signals=needs_exact_match and needs_semantic_match,
         )
 

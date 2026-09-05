@@ -440,6 +440,10 @@ class PipelineIntegrationTests(unittest.TestCase):
         ]
         self.assertEqual(len(generation_attempts), 2)
         self.assertEqual(generation_attempts[1]["type"], "format_repair")
+        self.assertEqual(
+            [item["action"] for item in trace.actions],
+            ["retrieve", "generate", "generate"],
+        )
 
     def test_source_expansion_is_retried_only_once(self) -> None:
         calls = []
@@ -470,6 +474,10 @@ class PipelineIntegrationTests(unittest.TestCase):
         self.assertEqual(response.status, "answered")
         self.assertEqual(calls, [{"jd"}, None])
         self.assertEqual(len(trace.attempts), 3)
+        self.assertEqual(
+            [item["action"] for item in trace.actions],
+            ["retrieve", "expand_sources", "generate"],
+        )
 
     def test_low_confidence_retry_does_not_become_hard_reject(self) -> None:
         class LowConfidenceRetriever:
@@ -577,6 +585,61 @@ class PipelineIntegrationTests(unittest.TestCase):
         self.assertIsNone(response.error_type)
         self.assertEqual(client.prompts, [])
         self.assertEqual(trace.evidence["reason"], "unanswerable_route")
+        self.assertEqual(
+            [item["action"] for item in trace.actions],
+            ["retrieve", "abstain"],
+        )
+
+    def test_explicit_out_of_domain_abstains_before_retrieval(self) -> None:
+        calls = []
+
+        def tracking_retriever(query, chunks, top_k=5, source_types=None):
+            del query, chunks, top_k, source_types
+            calls.append(True)
+            return []
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            pipeline = RagPipeline(
+                chunks=_chunks(), llm_client=FakeLlmClient([]),
+                config=PipelineConfig(model="fake-model"),
+                trace_path=Path(temp_dir) / "out-of-domain.jsonl",
+                retriever=tracking_retriever,
+            )
+            response = pipeline.run(RagRequest(query="请查询今天的天气预报"))
+            trace = read_traces_jsonl(pipeline.trace_path)[0]
+
+        self.assertEqual(response.status, "insufficient_evidence")
+        self.assertEqual(calls, [])
+        self.assertEqual([item["action"] for item in trace.actions], ["abstain"])
+
+    def test_unknown_in_domain_query_searches_full_corpus_before_gate(self) -> None:
+        calls = []
+
+        def full_corpus_retriever(query, chunks, top_k=5, source_types=None):
+            del query, top_k
+            calls.append(source_types)
+            chunk = chunks[0]
+            return [RetrievalResult(chunk.id, 0.9, 1, chunk)]
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            pipeline = RagPipeline(
+                chunks=_chunks(),
+                llm_client=FakeLlmClient([_raw_generation(
+                    answer="RRF 是一种排序融合方法。", cited_chunk_ids=["jd-1"],
+                    sufficient=True, reason="全库证据可用",
+                )]),
+                config=PipelineConfig(model="fake-model"),
+                trace_path=Path(temp_dir) / "unknown-search.jsonl",
+                retriever=full_corpus_retriever,
+            )
+            response = pipeline.run(RagRequest(query="RRF 的计算方式是什么"))
+            trace = read_traces_jsonl(pipeline.trace_path)[0]
+
+        self.assertEqual(calls, [None])
+        self.assertEqual(response.status, "answered")
+        self.assertEqual(
+            [item["action"] for item in trace.actions], ["retrieve", "generate"]
+        )
 
     def test_invalid_citation_cannot_return_answered(self) -> None:
         response, traces = self._run_pipeline(

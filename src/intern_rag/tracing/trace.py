@@ -62,6 +62,7 @@ class AgentTrace:
     response_status: str = ""
     error_message: str = ""
     attempts: list[TraceDict] = field(default_factory=list)
+    actions: list[TraceDict] = field(default_factory=list)
     token_usage: TraceDict = field(default_factory=dict)
     run_context: TraceDict = field(default_factory=dict)
 
@@ -99,6 +100,7 @@ class AgentTrace:
             response_status=str(trace_data.get("response_status", "")),
             error_message=str(trace_data.get("error_message", "")),
             attempts=list(trace_data.get("attempts", [])),  # type: ignore[arg-type]
+            actions=list(trace_data.get("actions", [])),  # type: ignore[arg-type]
             token_usage=dict(trace_data.get("token_usage", {})),  # type: ignore[arg-type]
             run_context=dict(trace_data.get("run_context", {})),  # type: ignore[arg-type]
         )
@@ -126,6 +128,7 @@ def build_agent_trace(
     response_status: str = "",
     error_message: str = "",
     attempts: list[TraceDict] | None = None,
+    actions: list[TraceDict] | None = None,
     token_usage: TraceDict | None = None,
     run_context: TraceDict | None = None,
 ) -> AgentTrace:
@@ -159,6 +162,7 @@ def build_agent_trace(
         response_status=response_status,
         error_message=error_message,
         attempts=attempts or [],
+        actions=actions or [],
         token_usage=token_usage or {},
         run_context=run_context or {},
     )

@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import re
+from typing import Mapping
 
 from intern_rag.agent import (
     ContextEngine,
@@ -15,6 +16,7 @@ from intern_rag.agent import (
 )
 from intern_rag.agent.generation import DeepSeekChatClient
 from intern_rag.evaluation import load_chunks_jsonl
+from intern_rag.ingestion import Chunk
 from intern_rag.persistence import (
     DenseMemoryEmbeddingProvider,
     PostgresRepository,
@@ -22,11 +24,11 @@ from intern_rag.persistence import (
     SessionMemoryService,
 )
 from intern_rag.retrieval import (
-    build_bm25_index,
+    RetrievalResult,
+    Retriever,
     build_retriever_from_config,
     load_dense_index,
     retrieve_top_k,
-    save_bm25_index,
 )
 from intern_rag.routing import route_query
 from intern_rag.serving.api import AppServices, create_app
@@ -66,6 +68,121 @@ class DeterministicDemoLlmClient:
                 "reason": "使用排名最高的完整证据",
             }
         return json.dumps(payload, ensure_ascii=False)
+
+
+class RuntimeRetrieverBinding:
+    """为在线 Retriever 补充实际配置和受控降级信息。"""
+
+    def __init__(
+        self,
+        retriever: Retriever,
+        *,
+        configured_name: str,
+        effective_name: str,
+        config_version: str,
+        config_path: Path,
+        fallback_reason: str | None = None,
+    ) -> None:
+        self.retriever = retriever
+        self.configured_name = configured_name
+        self.effective_name = effective_name
+        self.config_version = config_version
+        self.config_path = config_path
+        self.fallback_reason = fallback_reason
+
+    def __call__(
+        self,
+        query: str,
+        chunks: list[Chunk],
+        top_k: int = 5,
+        source_types: set[str] | None = None,
+    ) -> list[RetrievalResult]:
+        return self.retriever(query, chunks, top_k=top_k, source_types=source_types)
+
+    def get_last_trace(self) -> dict[str, object]:
+        """合并底层策略决策与在线配置身份，避免静默降级。"""
+
+        getter = getattr(self.retriever, "get_last_trace", None)
+        inner = dict(getter()) if callable(getter) else {}
+        return {
+            **inner,
+            "runtime_configured_retriever": self.configured_name,
+            "runtime_effective_retriever": self.effective_name,
+            "runtime_config_version": self.config_version,
+            "runtime_config_path": str(self.config_path),
+            "runtime_fallback_reason": self.fallback_reason,
+        }
+
+
+def load_runtime_retriever(
+    project_root: Path,
+    config_path: Path | None = None,
+) -> tuple[RuntimeRetrieverBinding, dict[str, object]]:
+    """加载在线锁定 Retriever；失败时只接受显式 fallback。
+
+    相对工件路径统一基于项目根目录解析。默认使用 Adaptive v2；若模型、Dense
+    或 Graph 工件缺失会 fail-fast。设置 `EVALRAG_RETRIEVER_FALLBACK_CONFIG`
+    后才允许降级，并在返回 adapter 的 Trace 中保存原因。
+    """
+
+    selected_path = config_path or Path(
+        os.environ.get(
+            "EVALRAG_RETRIEVER_CONFIG",
+            str(project_root / "configs/retrieval/adaptive_v2_v0.3.json"),
+        )
+    )
+    selected_path = _absolute_path(project_root, selected_path)
+    configured = _load_retriever_config(project_root, selected_path)
+    configured_name = str(configured.get("retriever_name", "unknown"))
+    try:
+        retriever = build_retriever_from_config(configured)
+        return RuntimeRetrieverBinding(
+            retriever,
+            configured_name=configured_name,
+            effective_name=configured_name,
+            config_version=str(configured.get("config_version", "unversioned")),
+            config_path=selected_path,
+        ), configured
+    except Exception as error:
+        fallback_value = os.environ.get("EVALRAG_RETRIEVER_FALLBACK_CONFIG", "").strip()
+        if not fallback_value:
+            raise RuntimeError(
+                f"failed to build configured retriever '{configured_name}' from {selected_path}"
+            ) from error
+        fallback_path = _absolute_path(project_root, Path(fallback_value))
+        fallback = _load_retriever_config(project_root, fallback_path)
+        effective_name = str(fallback.get("retriever_name", "unknown"))
+        fallback_retriever = build_retriever_from_config(fallback)
+        reason = f"{type(error).__name__}: configured retriever unavailable"
+        return RuntimeRetrieverBinding(
+            fallback_retriever,
+            configured_name=configured_name,
+            effective_name=effective_name,
+            config_version=str(fallback.get("config_version", "unversioned")),
+            config_path=fallback_path,
+            fallback_reason=reason,
+        ), fallback
+
+
+def _load_retriever_config(project_root: Path, path: Path) -> dict[str, object]:
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    for key in ("bm25_index_path", "index_dir", "graph_index_path"):
+        value = raw.get(key)
+        if isinstance(value, str) and value:
+            raw[key] = str(_absolute_path(project_root, Path(value)))
+    return raw
+
+
+def _absolute_path(project_root: Path, path: Path) -> Path:
+    return path if path.is_absolute() else project_root / path
+
+
+def _retriever_artifact_refs(config: Mapping[str, object]) -> dict[str, str]:
+    return {
+        key: str(config[key])
+        for key in ("bm25_index_path", "index_dir", "graph_index_path")
+        if config.get(key)
+    }
 
 
 def create_runtime_app():
@@ -114,23 +231,20 @@ def create_runtime_app():
             history_source=value.history_source,
         )
 
-    dataset_version = os.environ.get("EVALRAG_DATASET_VERSION", "evalrag_v0.2")
+    runtime_retriever, retrieval_config = load_runtime_retriever(project_root)
+    configured_dataset = str(
+        retrieval_config.get("dataset_version", "evalrag_v0.3")
+    )
+    dataset_version = os.environ.get("EVALRAG_DATASET_VERSION", configured_dataset)
+    if dataset_version != configured_dataset:
+        raise ValueError(
+            "EVALRAG_DATASET_VERSION must match the configured retriever dataset"
+        )
     chunks = load_chunks_jsonl(
         project_root / "data/processed/chunks" / f"{dataset_version}.jsonl"
     )
-    bm25_index_path = (
-        project_root / "data/processed/indexes" / dataset_version / "bm25-v1/index.json"
-    )
-    if not bm25_index_path.exists():
-        save_bm25_index(
-            build_bm25_index(chunks, dataset_version), bm25_index_path
-        )
-    bm25_config = json.loads(
-        (project_root / "configs/retrieval/bm25_v0.2.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    bm25_config["bm25_index_path"] = str(bm25_index_path)
+    bm25_config_path = project_root / "configs/retrieval/bm25_v0.3.json"
+    bm25_config = _load_retriever_config(project_root, bm25_config_path)
     bm25 = build_retriever_from_config(bm25_config)
 
     llm_backend = os.environ.get("EVALRAG_LLM_BACKEND", "fake")
@@ -160,12 +274,21 @@ def create_runtime_app():
             ),
             context_token_budget=int(os.environ.get("EVALRAG_CONTEXT_TOKEN_BUDGET", "1800")),
             context_mode=os.environ.get("EVALRAG_CONTEXT_MODE", "adaptive"),  # type: ignore[arg-type]
+            config_versions={
+                "retriever": str(
+                    retrieval_config.get("config_version", "unversioned")
+                )
+            },
             **({"evidence": evidence_config} if evidence_config is not None else {}),
         ),
         trace_path=trace_path,
         router=route_query,
         retriever=retrieve_top_k,
-        retrievers={"keyword": retrieve_top_k, "bm25": bm25},
+        retrievers={
+            "keyword": retrieve_top_k,
+            "bm25": bm25,
+            "adaptive": runtime_retriever,
+        },
         trace_sink=repository.save_trace,
         context_engine=ContextEngine(
             semantic_similarity=context_signal_extractor.similarities
@@ -178,15 +301,19 @@ def create_runtime_app():
         span_sinks=(JsonlSpanSink(Path("traces/service/runtime_spans.jsonl")),),
     )
     context_template = RunContext(
-        config={"retriever_config_path": str(project_root / "configs/retrieval/bm25_v0.2.json")},
+        config={
+            "retriever_config_path": str(runtime_retriever.config_path),
+            "retriever_config_version": runtime_retriever.config_version,
+            "retriever_fallback_reason": runtime_retriever.fallback_reason,
+        },
         artifact_refs={
             "chunks": str(project_root / "data/processed/chunks" / f"{dataset_version}.jsonl"),
-            "retriever_config": str(project_root / "configs/retrieval/bm25_v0.2.json"),
-            "bm25_index": str(bm25_index_path),
+            "retriever_config": str(runtime_retriever.config_path),
+            **_retriever_artifact_refs(retrieval_config),
             **({"evidence_config": str(evidence_path)} if evidence_path.exists() else {}),
         },
         dataset_version=dataset_version,
-        index_version="bm25-v1",
+        index_version=runtime_retriever.config_version,
     )
     services = AppServices(
         query_service=PipelineQueryService(
@@ -199,6 +326,7 @@ def create_runtime_app():
         repository=repository,
         queue=queue,
         query_timeout_seconds=float(os.environ.get("QUERY_TIMEOUT_SECONDS", "90")),
+        default_query_retriever="adaptive",
     )
     return create_app(services)
 
@@ -208,7 +336,7 @@ def build_runtime_for_replay(
 ) -> AgentRuntime:
     """仅从历史 RunContext 和本地工件重建离线 Pipeline。
 
-    当前服务公开支持 rule router 与 keyword/BM25。若历史请求依赖会话记忆或
+    当前服务公开支持 rule router 与版本化 Retriever 配置。若历史请求依赖会话记忆或
     未保存的 adapter 配置，函数明确失败，不使用当前默认值猜测历史行为。
     """
 
@@ -219,12 +347,19 @@ def build_runtime_for_replay(
         raise ValueError("replay runtime currently supports persisted rule router only")
     chunks_path = Path(saved.context.artifact_refs.get("chunks", ""))
     chunks = load_chunks_jsonl(chunks_path)
-    retrievers = {"keyword": retrieve_top_k}
-    if saved.request.retriever == "bm25":
+    retrievers: dict[str, Retriever] = {"keyword": retrieve_top_k}
+    if saved.request.retriever != "keyword":
         config_path = Path(saved.context.artifact_refs.get("retriever_config", ""))
         retriever_config = json.loads(config_path.read_text(encoding="utf-8"))
-        retriever_config["bm25_index_path"] = saved.context.artifact_refs["bm25_index"]
-        retrievers["bm25"] = build_retriever_from_config(retriever_config)
+        legacy_bm25 = saved.context.artifact_refs.get("bm25_index")
+        if legacy_bm25:
+            retriever_config["bm25_index_path"] = legacy_bm25
+        for key in ("bm25_index_path", "index_dir", "graph_index_path"):
+            if saved.context.artifact_refs.get(key):
+                retriever_config[key] = saved.context.artifact_refs[key]
+        retrievers[saved.request.retriever] = build_retriever_from_config(
+            retriever_config
+        )
     evidence_path = saved.context.artifact_refs.get("evidence_config")
     evidence = load_evidence_config(Path(evidence_path)) if evidence_path else None
     pipeline = RagPipeline(
@@ -241,6 +376,10 @@ def build_runtime_for_replay(
             context_mode=str(config.get("context_mode", "recent_window")),  # type: ignore[arg-type]
             max_source_retries=int(config.get("max_source_retries", 1)),
             max_format_retries=int(config.get("max_format_retries", 1)),
+            max_action_steps=int(config.get("max_action_steps", 4)),
+            agent_controller_version=str(
+                config.get("agent_controller_version", "bounded-agent-controller-v1")
+            ),
             **({"evidence": evidence} if evidence is not None else {}),
         ),
         trace_path=Path("/tmp/evalrag_replay_trace.jsonl"),

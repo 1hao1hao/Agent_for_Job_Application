@@ -255,6 +255,16 @@ def _spans_from_trace(
                 error_type=str(attempt.get("reason")) if attempt.get("status") in {"error", "timeout"} else None,
             )
         )
+    for action in trace.actions:
+        spans.append(
+            SpanEvent(
+                str(uuid4()), context.run_id,
+                f"action.{action.get('action', 'unknown')}", "succeeded",
+                now, now, 0.0, parent_span_id=root_id,
+                attempt=int(action.get("step", 1)),
+                attributes=dict(action),
+            )
+        )
     return spans
 
 

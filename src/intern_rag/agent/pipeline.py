@@ -19,6 +19,11 @@ from intern_rag.agent.context_policy import (
     ContextSignalExtractor,
     rank_memories,
 )
+from intern_rag.agent.controller import (
+    AgentController,
+    AgentControllerConfig,
+    AgentState,
+)
 from intern_rag.agent.evidence import EvidenceConfig, check_evidence
 from intern_rag.agent.generation import (
     GenerationParseError,
@@ -60,6 +65,8 @@ class PipelineConfig:
     evidence: EvidenceConfig = field(default_factory=EvidenceConfig)
     max_source_retries: int = 1
     max_format_retries: int = 1
+    max_action_steps: int = 4
+    agent_controller_version: str = "bounded-agent-controller-v1"
     context_token_budget: int = 1800
     context_mode: ContextMode = "recent_window"
     system_prompt: str = "仅依据提供的证据回答；证据不足时明确拒答。"
@@ -91,6 +98,11 @@ class PipelineConfig:
             raise ValueError("max_source_retries must be 0 or 1")
         if self.max_format_retries not in {0, 1}:
             raise ValueError("max_format_retries must be 0 or 1")
+        minimum_steps = 2 + self.max_source_retries + self.max_format_retries
+        if self.max_action_steps < minimum_steps:
+            raise ValueError(
+                "max_action_steps must cover retrieve, generate and configured retries"
+            )
 
 
 class RagPipeline:
@@ -116,6 +128,7 @@ class RagPipeline:
         context_provider: Callable[[RagRequest], ContextInputs] | None = None,
         context_signal_extractor: ContextSignalExtractor | None = None,
         context_policy: ContextPolicy | None = None,
+        agent_controller: AgentController | None = None,
     ) -> None:
         self.chunks = list(chunks)
         self.llm_client = llm_client
@@ -136,6 +149,14 @@ class RagPipeline:
             estimator=context_engine.estimator if context_engine is not None else None
         )
         self.context_policy = context_policy or ContextPolicy()
+        self.agent_controller = agent_controller or AgentController(
+            AgentControllerConfig(
+                version=config.agent_controller_version,
+                max_action_steps=config.max_action_steps,
+                max_source_retries=config.max_source_retries,
+                max_format_retries=config.max_format_retries,
+            )
+        )
         self.last_trace: AgentTrace | None = None
         self.last_trace_persistence_errors: list[str] = []
 
@@ -168,6 +189,7 @@ class RagPipeline:
         retrieval_decision_trace: dict[str, object] = {}
         evidence_requirement_trace: dict[str, object] = {}
         attempts: list[dict[str, object]] = []
+        actions: list[dict[str, object]] = []
         citations: list[dict[str, object]] = []
         response = self._error_response(
             request=request,
@@ -198,12 +220,25 @@ class RagPipeline:
             route_decision = selected_router(request.query)
             latency_ms["routing"] = _elapsed_ms(stage_started_at)
 
-            while True:
+            agent_state = AgentState(
+                requested_retriever=request.retriever,
+                route_intent=route_decision.intent,
+                routed_sources=tuple(route_decision.routed_sources),
+                explicit_out_of_domain=bool(
+                    route_decision.details.get("explicit_out_of_domain", False)
+                ),
+            )
+            next_action = self.agent_controller.choose(agent_state)
+            actions.append(next_action.to_trace())
+
+            while next_action.action in {"retrieve", "expand_sources"}:
+                if next_action.action == "expand_sources":
+                    source_retry_count += 1
                 current_stage = "retrieval"
                 stage_started_at = perf_counter()
                 source_types = (
                     set(route_decision.routed_sources)
-                    if source_retry_count == 0
+                    if source_retry_count == 0 and route_decision.routed_sources
                     else None
                 )
                 retrieved_results = selected_retriever(
@@ -258,11 +293,31 @@ class RagPipeline:
                         "evidence": evidence_latency,
                     },
                 })
-                if evidence_decision.status != "retryable":
-                    break
-                source_retry_count += 1
+                agent_state = replace(
+                    agent_state,
+                    evidence_status=evidence_decision.status,
+                    evidence_reason=evidence_decision.reason,
+                    evidence_requirement=dict(evidence_requirement_trace),
+                    retrieval_decision=dict(retrieval_decision_trace),
+                    source_retry_count=source_retry_count,
+                    step=next_action.step,
+                )
+                next_action = self.agent_controller.choose(agent_state)
+                actions.append(next_action.to_trace())
 
-            if evidence_decision.status != "sufficient":
+            if next_action.action == "abstain" and agent_state.evidence_status is None:
+                # 仅明确域外且 Router 无来源时允许在检索前拒答。
+                evidence_decision = check_evidence(
+                    route_decision,
+                    [],
+                    retriever_name=request.retriever,
+                    retry_count=0,
+                    max_retries=self.config.max_source_retries,
+                    config=self.config.evidence,
+                )
+                evidence_trace = asdict(evidence_decision)
+
+            if next_action.action != "generate":
                 is_normal_unanswerable = (
                     evidence_decision.reason == "unanswerable_route"
                 )
@@ -392,6 +447,13 @@ class RagPipeline:
                         )
 
                 while True:
+                    agent_state = replace(
+                        agent_state,
+                        generation_started=True,
+                        generation_format_error=False,
+                        format_retry_count=format_retry_count,
+                        step=next_action.step,
+                    )
                     current_stage = "generation"
                     stage_started_at = perf_counter()
                     try:
@@ -442,6 +504,16 @@ class RagPipeline:
                             "model_output": error.raw_output,
                         })
                         if format_retry_count >= self.config.max_format_retries:
+                            raise
+                        agent_state = replace(
+                            agent_state,
+                            generation_format_error=True,
+                            format_retry_count=format_retry_count,
+                            step=next_action.step,
+                        )
+                        next_action = self.agent_controller.choose(agent_state)
+                        actions.append(next_action.to_trace())
+                        if next_action.action != "generate":
                             raise
                         format_retry_count += 1
 
@@ -604,6 +676,8 @@ class RagPipeline:
                 "router_name": self.config.router_name,
                 "max_source_retries": self.config.max_source_retries,
                 "max_format_retries": self.config.max_format_retries,
+                "max_action_steps": self.config.max_action_steps,
+                "agent_controller_version": self.config.agent_controller_version,
                 "config_versions": dict(self.config.config_versions),
                 "evidence_config_version": self.config.evidence.config_version,
             },
@@ -611,6 +685,7 @@ class RagPipeline:
             response_status=response.status,
             error_message=error_message,
             attempts=attempts,
+            actions=actions,
             token_usage={
                 "attempts": [
                     item.get("token_usage")

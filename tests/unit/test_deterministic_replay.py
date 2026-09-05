@@ -96,7 +96,8 @@ class DeterministicReplayTests(unittest.TestCase):
             self.assertTrue(result.matched)
             self.assertIsNone(result.first_divergent_stage)
             self.assertEqual([item.stage for item in result.stage_results], list((
-                "routing", "retrieval", "evidence", "context", "generation", "validation"
+                "routing", "retrieval", "evidence", "controller", "context",
+                "generation", "validation"
             )))
             self.assertEqual(len(received_clients[0].prompts), 1)
 

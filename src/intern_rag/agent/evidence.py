@@ -71,6 +71,7 @@ class EvidenceDecision:
     calibrated_retry_threshold: float | None = None
     low_confidence: bool = False
     low_confidence_after_retry: bool = False
+    relation_evidence_present: bool = False
     structural_checks: Mapping[str, bool] = field(default_factory=dict)
     config_version: str = "legacy"
 
@@ -171,10 +172,13 @@ def check_evidence(
         "calibrated_retry_threshold": retry_threshold,
         "low_confidence": low_confidence,
         "low_confidence_after_retry": low_confidence and retry_count >= max_retries,
+        "relation_evidence_present": graph_path_valid,
         "structural_checks": structural_checks,
         "config_version": config.config_version,
     }
-    if need == "unanswerable" or route.intent == "unknown" or not route.routed_sources:
+    if need == "unanswerable" or (
+        (route.intent == "unknown" or not route.routed_sources) and not results
+    ):
         return _decision("insufficient", "unanswerable_route", "知识库不支持该问题，不调用生成器。", common)
     if len(results) < min_results:
         return _retry_or_stop("empty_retrieval", "检索结果数量不足，扩展来源后最多重试一次。", retry_count, max_retries, common)

@@ -11,7 +11,7 @@
     "mrr": 0.4776388888888889,
     "ndcg_at_5": 0.47007814453936453,
     "path_validity": 1.0,
-    "p95_ms": 1721.3955204933882
+    "p95_ms": 1400.8103348314762
   },
   "candidate": {
     "recall_at_3": 0.5041666666666667,
@@ -19,7 +19,7 @@
     "mrr": 0.49875,
     "ndcg_at_5": 0.4877864220401281,
     "path_validity": 1.0,
-    "p95_ms": 1887.9672195762396
+    "p95_ms": 1770.7922328263521
   },
   "regression": {
     "case_results": [
@@ -132,7 +132,7 @@
     "fixed_pass_rate": 1.0
   },
   "gate": {
-    "passed": true,
+    "passed": false,
     "checks": [
       {
         "metric": "recall_at_5",
@@ -160,15 +160,15 @@
       },
       {
         "metric": "p95_ms",
-        "reference": 1721.3955204933882,
-        "candidate": 1887.9672195762396,
-        "passed": true,
+        "reference": 1400.8103348314762,
+        "candidate": 1770.7922328263521,
+        "passed": false,
         "blocking": true,
         "case_count": 160,
         "answerable_case_count": 120,
         "tolerance": 0.0,
-        "delta": 166.5716990828514,
-        "reason": ""
+        "delta": 369.9818979948759,
+        "reason": "p95_ms increased from 1400.810335 to 1770.792233"
       },
       {
         "metric": "ndcg_at_5",
@@ -196,7 +196,9 @@
       }
     ],
     "failed_case_ids": [],
-    "reasons": []
+    "reasons": [
+      "p95_ms increased from 1400.810335 to 1770.792233"
+    ]
   },
   "p95_scope": "dev engineering budget; not a statistical threshold or online SLA"
 }

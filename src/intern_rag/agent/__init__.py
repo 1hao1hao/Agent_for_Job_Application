@@ -32,6 +32,13 @@ from intern_rag.agent.context_policy import (
     ContextSignals,
     rank_memories,
 )
+from intern_rag.agent.controller import (
+    AgentAction,
+    AgentActionName,
+    AgentController,
+    AgentControllerConfig,
+    AgentState,
+)
 from intern_rag.agent.evidence import (
     EvidenceConfig,
     EvidenceDecision,
@@ -77,6 +84,11 @@ from intern_rag.agent.validation import (
 
 __all__ = [
     "AnswerResult",
+    "AgentAction",
+    "AgentActionName",
+    "AgentController",
+    "AgentControllerConfig",
+    "AgentState",
     "BuiltContext",
     "Citation",
     "ContextItem",

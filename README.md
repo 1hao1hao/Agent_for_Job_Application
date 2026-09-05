@@ -17,14 +17,16 @@ Context、结构化生成与引用校验回答问题；同时用 Run/Span Trace�
 ```mermaid
 flowchart LR
     Q[RagRequest] --> RT[AgentRuntime]
-    RT --> R[Feedback Hybrid Router]
+    RT --> R[Rule Router<br/>Hybrid / Feedback 可用于离线对照]
     R --> QA[QueryFeatures -> EvidenceRequirement]
-    QA --> RET[Adaptive BM25 / Dense / RRF / Graph+Vector]
+    QA --> CTRL[Bounded Agent Controller]
+    CTRL -->|retrieve| RET[Adaptive BM25 / Dense / RRF / Graph+Vector]
     RET --> RR[Optional CrossEncoder]
     RR --> G[Evidence Gate]
-    G -->|retry once| RET
-    G -->|insufficient| A[Abstain]
-    G -->|sufficient| CP[ContextPolicy -> ContextPlan]
+    G --> CTRL
+    CTRL -->|expand_sources, max once| RET
+    CTRL -->|abstain| A[Abstain]
+    CTRL -->|generate| CP[ContextPolicy -> ContextPlan]
     CP --> CE[ContextEngine + Layered Memory]
     CE --> GW[Generator / Model Gateway]
     GW --> V[Citation Validator]
@@ -34,7 +36,9 @@ flowchart LR
 
 Query Analyzer 先提取精确词面、语义、多来源和实体关系四类核心证据信号，再生成
 `EvidenceRequirement` 并选择 Retriever；检索后只在策略允许且候选低置信时触发一次
-CrossEncoder。Evidence Gate 决定生成、扩源一次或拒答；ContextPolicy 决定本轮需要哪些
+CrossEncoder。Controller 以 `observe state -> choose bounded action -> execute capability` 串联
+`retrieve / expand_sources / generate / abstain`，最多 4 个动作；Evidence Gate 提供证据观察结果。
+ContextPolicy 决定本轮需要哪些
 Profile/History/Summary/Memory，ContextEngine 再在统一 token budget 下执行去重、裁剪和 Evidence
 编排。Model Gateway 负责 timeout、瞬时错误有界重试、并发限制、熔断和 Provider fallback。
 
@@ -140,6 +144,12 @@ Profile 与任务状态；Redis 承担最近会话缓存和异步 Job 队列；�
 `queued -> running -> succeeded/failed` 状态写回 PostgreSQL；pgvector 和 Neo4j 分别承载
 持久化向量与图检索。Docker Compose 统一编排服务依赖和持久化卷。
 
+`/v1/query` 未显式传 `retriever` 时，服务从 `EVALRAG_RETRIEVER_CONFIG` 加载锁定的
+`adaptive_v2_v0.3.json`；显式传原有 BM25 等选项仍保持兼容。缺少 Dense、Graph、CrossEncoder
+工件时默认启动失败；只有设置 `EVALRAG_RETRIEVER_FALLBACK_CONFIG` 才允许降级，实际策略、
+配置版本和 fallback 原因都会进入 Trace。`user_id/session_id` 由可信上游传入，本原型不实现
+注册、登录、JWT 或租户鉴权。
+
 ```text
 POST /v1/query -> AgentRuntime -> RagResponse + trace_id
 POST /v1/evaluation-jobs -> PostgreSQL queued -> Redis -> Worker -> report + final status
@@ -158,8 +168,8 @@ PYTHONPATH=src python -m unittest discover -s tests -p 'test_*.py'
 ```
 
 测试验证代码契约与确定性行为，不代表回答准确率；真实 LLM、PostgreSQL/Redis/Neo4j 和模型权重
-下载不进入默认离线单测。当前仓库在 2026-09-04 执行上述命令的结果为 248 tests run、
-244 passed、4 skipped、0 failed。
+下载不进入默认离线单测。当前仓库在 2026-09-05 执行上述命令的结果为 261 tests run、
+257 passed、4 skipped、0 failed。
 
 Docker 可用时启动服务：
 

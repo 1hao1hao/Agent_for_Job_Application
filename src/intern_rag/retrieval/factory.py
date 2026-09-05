@@ -225,7 +225,6 @@ def _build_query_analyzer(config: dict[str, object]) -> QueryAnalyzer:
             weak_relation_markers=tuple(analyzer_data.get("weak_relation_markers", defaults.weak_relation_markers)),
             exact_fact_markers=tuple(analyzer_data.get("exact_fact_markers", defaults.exact_fact_markers)),
             exact_terms=tuple(analyzer_data.get("exact_terms", defaults.exact_terms)),
-            unanswerable_markers=tuple(analyzer_data.get("unanswerable_markers", defaults.unanswerable_markers)),
             latin_token_is_exact=bool(analyzer_data.get("latin_token_is_exact", False)),
             entity_markers=defaults.entity_markers,
         ),

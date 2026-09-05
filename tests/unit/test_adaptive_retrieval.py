@@ -73,11 +73,26 @@ class AdaptiveRetrieverTests(unittest.TestCase):
             "semantic_explanation",
         )
 
-    def test_unanswerable_route_selects_none(self) -> None:
+    def test_empty_route_does_not_predict_corpus_unanswerable(self) -> None:
         analyzer = QueryAnalyzer()
         features = analyzer.analyze("数据库里没有的问题", set())
 
-        self.assertEqual(analyzer.choose_strategy(features)[0], "none")
+        self.assertFalse(features.is_unanswerable_route)
+        self.assertEqual(
+            analyzer.classify_evidence_need(features).need_type,
+            "balanced_retrieval",
+        )
+
+    def test_benchmark_like_text_is_not_an_unanswerable_shortcut(self) -> None:
+        analyzer = QueryAnalyzer()
+        features = analyzer.analyze(
+            "是否部署量子芯片驱动的十亿节点生产图？", {"project_logs"}
+        )
+
+        self.assertFalse(features.is_unanswerable_route)
+        self.assertNotEqual(
+            analyzer.classify_evidence_need(features).need_type, "unanswerable"
+        )
 
     def test_relation_reasoning_not_cross_document_count_triggers_graph(self) -> None:
         analyzer = QueryAnalyzer()
@@ -192,17 +207,17 @@ class AdaptiveRetrieverTests(unittest.TestCase):
         self.assertEqual(len(scorer.calls), 1)
         self.assertEqual(results[0].details["original_rank"], 2)
 
-    def test_empty_source_route_returns_without_calling_any_retriever(self) -> None:
+    def test_empty_source_route_still_executes_retrieval_before_gate(self) -> None:
         retrievers = self._retrievers()
         scorer = FakeRerankScorer({})
         retriever = AdaptiveRetriever(retrievers, scorer)
 
         results = retriever("未知问题", [], source_types=set())
 
-        self.assertEqual(results, [])
-        self.assertEqual(sum(len(item.calls) for item in retrievers.values()), 0)
-        self.assertEqual(retriever.get_last_trace()["candidate_count"], 0)
-        self.assertEqual(retriever.get_last_trace()["strategy"], "none")
+        self.assertEqual(len(results), 3)
+        self.assertEqual(sum(len(item.calls) for item in retrievers.values()), 1)
+        self.assertEqual(retrievers["hybrid"].calls[0][1], set())
+        self.assertEqual(retriever.get_last_trace()["strategy"], "hybrid")
         self.assertEqual(
             retriever.get_last_trace()["config_version"],
             "query-analyzer-v2.0/strategy-map-v2.0",
