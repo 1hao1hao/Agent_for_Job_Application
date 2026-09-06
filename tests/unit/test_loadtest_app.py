@@ -14,14 +14,22 @@ class LoadTestAppTests(unittest.TestCase):
             {str(item["name"]) for item in QUERY_CASES},
             {"exact_fact", "semantic", "multi_source", "relation_reasoning"},
         )
-        self.assertTrue(all(item["retriever"] == "bm25" for item in QUERY_CASES))
+        self.assertGreaterEqual(len(QUERY_CASES), 12)
+        self.assertTrue(all("retriever" not in item for item in QUERY_CASES))
 
     def test_deterministic_app_runs_real_pipeline_without_external_llm(self) -> None:
         client = TestClient(create_loadtest_app())
 
         response = client.post(
             "/v1/query",
-            json={key: value for key, value in QUERY_CASES[0].items() if key != "name"},
+            json={
+                **{
+                    key: value
+                    for key, value in QUERY_CASES[0].items()
+                    if key != "name"
+                },
+                "retriever": "bm25",
+            },
         )
 
         self.assertEqual(response.status_code, 200)

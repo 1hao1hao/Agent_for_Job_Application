@@ -1,0 +1,82 @@
+{
+  "config_version": "evidence-gate-v2.0-dev-locked",
+  "dataset_version": "evalrag_v0.3",
+  "calibration_split": "dev",
+  "far_target": 0.05,
+  "max_frr_for_score_gate": 0.25,
+  "min_results": 1,
+  "legacy_source_coverage": false,
+  "need_min_results": {
+    "exact_fact": 1,
+    "semantic_explanation": 1,
+    "balanced_retrieval": 1,
+    "multi_source_synthesis": 2,
+    "relation_reasoning": 1
+  },
+  "retrievers": {
+    "bm25": {
+      "enabled": false,
+      "threshold": null,
+      "status": "raw_score_not_separable",
+      "operating_point": {
+        "threshold": 60.43339603188398,
+        "true_accept": 20,
+        "true_reject": 124,
+        "false_accept": 6,
+        "false_reject": 10,
+        "far": 0.046153846153846156,
+        "frr": 0.3333333333333333,
+        "precision": 0.7692307692307693,
+        "recall": 0.6666666666666666
+      }
+    },
+    "dense": {
+      "enabled": false,
+      "threshold": null,
+      "status": "raw_score_not_separable",
+      "operating_point": {
+        "threshold": 0.6686330687426955,
+        "true_accept": 22,
+        "true_reject": 110,
+        "false_accept": 5,
+        "false_reject": 23,
+        "far": 0.043478260869565216,
+        "frr": 0.5111111111111111,
+        "precision": 0.8148148148148148,
+        "recall": 0.4888888888888889
+      }
+    },
+    "hybrid": {
+      "enabled": false,
+      "threshold": null,
+      "status": "raw_score_not_separable",
+      "operating_point": {
+        "threshold": 0.03278688526229508,
+        "true_accept": 0,
+        "true_reject": 112,
+        "false_accept": 0,
+        "false_reject": 48,
+        "far": 0.0,
+        "frr": 1.0,
+        "precision": 0.0,
+        "recall": 0.0
+      }
+    },
+    "graph_vector": {
+      "enabled": false,
+      "threshold": null,
+      "status": "raw_score_not_separable",
+      "operating_point": {
+        "threshold": 0.03278688526229508,
+        "true_accept": 0,
+        "true_reject": 115,
+        "false_accept": 0,
+        "false_reject": 45,
+        "far": 0.0,
+        "frr": 1.0,
+        "precision": 0.0,
+        "recall": 0.0
+      }
+    }
+  }
+}

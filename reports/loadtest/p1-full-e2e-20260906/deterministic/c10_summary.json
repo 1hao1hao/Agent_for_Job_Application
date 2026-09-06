@@ -1,0 +1,37 @@
+{
+  "mode": "deterministic",
+  "concurrency": 10,
+  "request_count": 0,
+  "generation_requests": 0,
+  "generation_calls": 0,
+  "rps": 0.0,
+  "p50_ms": 0.0,
+  "p95_ms": 0.0,
+  "p99_ms": 0.0,
+  "failure_rate": 1.0,
+  "generation_request_p50_ms": null,
+  "generation_request_p95_ms": null,
+  "generation_stage_p50_ms": null,
+  "generation_stage_p95_ms": null,
+  "status_counts": {},
+  "case_type_counts": {},
+  "strategy_counts": {},
+  "rerank_count": 0,
+  "provider_error_counts": {},
+  "token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
+  },
+  "stage_latency_ms": {},
+  "session_request_ratio": 0.0,
+  "resource_summary": {
+    "sample_count": 16,
+    "cpu_peak_percent": 802.8,
+    "rss_peak_mb": 1697.4921875,
+    "threads_peak": 976,
+    "postgres_connections_peak": 6,
+    "redis_ping_p95_ms": 187.67297826707363,
+    "neo4j_ping_p95_ms": 111.8162963539362
+  }
+}

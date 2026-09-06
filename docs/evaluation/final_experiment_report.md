@@ -435,8 +435,9 @@ AI/RAG 岗位无关的宽领域 JD；部分 Query 依赖文件标题或 `unknown
 corpus-grounded AI-assisted 而非完整人工审核。Adaptive selector 的 Recall@5 略升但 MRR
 退化，Evidence Gate 对新关系型 Query 仍有过度拒答，Grounding Judge 与 Generator 属于
 同模型家族且存在 unknown。FastAPI、PostgreSQL、Redis Worker 和 Docker Compose 已实现；
-校园服务器没有 Docker Engine，真实多容器持久化验证主要依赖 GitHub Actions。可视化前端和
-高并发压测未实现，也不作为当前项目亮点。
+校园服务器没有 Docker Engine，真实多容器持久化验证主要依赖 GitHub Actions。可视化前端
+未实现；Full E2E 压测已在单 Uvicorn worker、真实 PostgreSQL/Redis 和 DeepSeek 下执行，
+但只代表共享校园服务器环境，不作为生产 SLA。
 
 ## 10. Adaptive Retrieval v2 与 Evidence Gate 收敛（2026-09-03）
 
@@ -505,3 +506,36 @@ v0.3/dev CI Gate 的 Recall@5、MRR、NDCG@5 分别为 55.42%、49.88%、48.78%�
 变化；但本机 candidate/reference P95 为 1770.79/1400.81 ms，增长 26.4%，略超 25% 工程预算，
 因此本次 Gate 总体为 failed。该负结果保留在 `reports/ci/evaluation-gate-v2/`，没有重跑挑选
 更好延迟，也没有读取或重新运行 frozen test。
+
+## 13. Full E2E 容量验证（2026-09-06）
+
+本轮使用 12 条固定 Query 覆盖 exact fact、semantic、multi-source 和 relation reasoning，
+其中约 30% 请求携带 Session。正式链路包含 FastAPI、Adaptive Retrieval、Evidence Gate、
+Context Engine、Generator/Validator、请求级 Trace、真实 PostgreSQL 与 Redis；真实模型档使用
+DeepSeek。PostgreSQL、Redis、Neo4j 和 pgvector 均通过真实连接预检，但锁定 Retriever 的逐请求
+Dense/Graph 召回仍使用版本化本地 exact index/graph artifact，因此不能声称本轮使用了
+pgvector/Neo4j 执行在线检索。
+
+| Mode / concurrency | Requests | RPS | P95 | Failure |
+|---|---:|---:|---:|---:|
+| Deterministic / 1 | 10 | 0.36 | 4.73 s | 0.00% |
+| Deterministic / 5 | 2 | 0.08 | 25.68 s | 0.00% |
+| Real DeepSeek / 1 | 35 | 0.20 | 7.44 s | 8.57% |
+| Real DeepSeek / 2 | 33 | 0.19 | 17.01 s | 6.06% |
+| Real DeepSeek / 5 | 26 | 0.14 | 51.90 s | 3.85% |
+| Real DeepSeek / 10 | 25 | 0.13 | 90.32 s | 28.00% |
+
+真实模型阶段完成 72 次 Generation 调用，Provider 返回 input/output/total tokens 为
+106,220/14,101/120,321；配置未固化官方单价，因此成本不作推算。并发 10 出现 6 次 90 秒
+请求超时且没有 Provider 429，Trace 中 Retrieval P95 79.90 秒、Generation P95 15.70 秒，
+线程峰值 916，说明当前主要瓶颈是共享 CPU 上的检索模型推理线程过度订阅和排队。真实模型
+软拐点为并发 2；完整逐档结果和资源采样见
+[`p1-full-e2e-20260906`](../../reports/loadtest/p1-full-e2e-20260906/report.md)。
+
+基于上述线程峰值，保持 Retriever、Gate 和数据不变，仅设置
+`OMP/MKL/OPENBLAS_NUM_THREADS=1` 进行 deterministic 对照：并发 5 从 0.08 RPS、P95
+25.68 秒改善为 7.02 RPS、P95 0.94 秒；并发 10 达到 7.07 RPS、P95 1.87 秒，线程峰值
+由原始档的 976 降至 18。优化后并发 20 为软拐点，并发 50 仍无失败但吞吐回落至 5.91 RPS。
+真实 DeepSeek 档未在该优化后重跑，因此不把 deterministic 改善幅度外推为真实 Provider 容量。
+本次固定 Query 的 Reranker 调用数为 0，CrossEncoder 的 Full E2E 容量路径为 **NOT TESTED**；
+现有 CrossEncoder 结论仍只来自 dev 消融和自动化测试。

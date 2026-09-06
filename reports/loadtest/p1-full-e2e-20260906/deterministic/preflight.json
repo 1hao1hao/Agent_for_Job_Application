@@ -1,0 +1,34 @@
+{
+  "status": "passed",
+  "mode": "deterministic",
+  "retriever_name": "graph_adaptive",
+  "retriever_config_version": "adaptive-retrieval-v2.0",
+  "retriever_config_path": "configs/retrieval/adaptive_v2_v0.3.json",
+  "fallback_disabled": true,
+  "postgres": {
+    "connected": true,
+    "version": "16.4"
+  },
+  "pgvector": {
+    "connected": true,
+    "row_count": 4208,
+    "used_by_locked_retriever": false,
+    "reason": "locked Adaptive v2 uses versioned local exact dense index"
+  },
+  "redis": {
+    "connected": true,
+    "version": "7.4.11"
+  },
+  "neo4j": {
+    "connected": true,
+    "version": "5.26.0",
+    "node_count": 3098,
+    "used_by_locked_retriever": false,
+    "reason": "locked Adaptive v2 loads the versioned graph artifact into memory"
+  },
+  "deepseek": {
+    "configured": false,
+    "called": false,
+    "total_generation_calls": 0
+  }
+}

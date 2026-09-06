@@ -1,0 +1,12 @@
+{
+  "platform": "Linux-4.18.0-372.32.1.el8_6.x86_64-x86_64-with-glibc2.28",
+  "python": "3.11.7",
+  "cpu_logical": 64,
+  "cpu_physical": 64,
+  "memory_total_gib": 503.36,
+  "shared_host": true,
+  "database_url_configured": true,
+  "redis_url_configured": true,
+  "neo4j_uri_configured": true,
+  "deepseek_key_configured": false
+}

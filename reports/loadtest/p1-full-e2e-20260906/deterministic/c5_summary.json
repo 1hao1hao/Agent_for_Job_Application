@@ -1,0 +1,94 @@
+{
+  "mode": "deterministic",
+  "concurrency": 5,
+  "request_count": 2,
+  "generation_requests": 2,
+  "generation_calls": 2,
+  "rps": 0.07787796262138015,
+  "p50_ms": 25172.504238784313,
+  "p95_ms": 25676.274864003062,
+  "p99_ms": 25676.274864003062,
+  "failure_rate": 0.0,
+  "generation_request_p50_ms": 25172.504238784313,
+  "generation_request_p95_ms": 25676.274864003062,
+  "generation_stage_p50_ms": 0.1141764223575592,
+  "generation_stage_p95_ms": 0.12770295143127441,
+  "status_counts": {
+    "answered": 2
+  },
+  "case_type_counts": {
+    "semantic": 2
+  },
+  "strategy_counts": {
+    "hybrid": 2
+  },
+  "rerank_count": 0,
+  "provider_error_counts": {},
+  "token_usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0
+  },
+  "stage_latency_ms": {
+    "routing": {
+      "average": 0.022310763597488403,
+      "p50": 0.021670013666152954,
+      "p95": 0.022951513528823853
+    },
+    "retrieval": {
+      "average": 23333.305899053812,
+      "p50": 23043.494069948792,
+      "p95": 23623.11772815883
+    },
+    "evidence": {
+      "average": 0.04564505070447922,
+      "p50": 0.033272430300712585,
+      "p95": 0.05801767110824585
+    },
+    "context": {
+      "average": 0.7530925795435905,
+      "p50": 0.6262380629777908,
+      "p95": 0.8799470961093903
+    },
+    "generation": {
+      "average": 0.12093968689441681,
+      "p50": 0.1141764223575592,
+      "p95": 0.12770295143127441
+    },
+    "validation": {
+      "average": 0.023116357624530792,
+      "p50": 0.013880431652069092,
+      "p95": 0.03235228359699249
+    },
+    "total": {
+      "average": 23334.48060322553,
+      "p50": 23044.841358438134,
+      "p95": 23624.119848012924
+    },
+    "persistence_http_overhead": {
+      "average": 2089.9089481681585,
+      "p50": 1548.384390771389,
+      "p95": 2631.433505564928
+    },
+    "query_analysis": {
+      "average": 0.025616027414798737,
+      "p50": 0.023633241653442383,
+      "p95": 0.02759881317615509
+    },
+    "rerank": {
+      "average": 0.0,
+      "p50": 0.0,
+      "p95": 0.0
+    }
+  },
+  "session_request_ratio": 0.0,
+  "resource_summary": {
+    "sample_count": 17,
+    "cpu_peak_percent": 811.2,
+    "rss_peak_mb": 1472.41015625,
+    "threads_peak": 400,
+    "postgres_connections_peak": 7,
+    "redis_ping_p95_ms": 104.90444116294384,
+    "neo4j_ping_p95_ms": 104.55435700714588
+  }
+}

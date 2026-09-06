@@ -1,0 +1,427 @@
+{
+  "mode": "real",
+  "tiers": [
+    {
+      "mode": "real",
+      "concurrency": 1,
+      "request_count": 35,
+      "generation_requests": 21,
+      "generation_calls": 21,
+      "rps": 0.19583647310102853,
+      "p50_ms": 5351.561203598976,
+      "p95_ms": 7441.12061150372,
+      "p99_ms": 10176.502356305718,
+      "failure_rate": 0.08571428571428572,
+      "generation_request_p50_ms": 4584.197051823139,
+      "generation_request_p95_ms": 7441.12061150372,
+      "generation_stage_p50_ms": 2337.97643519938,
+      "generation_stage_p95_ms": 2886.5390457212925,
+      "status_counts": {
+        "insufficient_evidence": 23,
+        "answered": 9,
+        "error": 3
+      },
+      "error_type_counts": {
+        "retrieval_miss": 14,
+        "citation_invalid": 3
+      },
+      "case_type_counts": {
+        "exact_fact": 9,
+        "semantic": 9,
+        "multi_source": 9,
+        "relation_reasoning": 8
+      },
+      "strategy_counts": {
+        "bm25": 9,
+        "hybrid": 12,
+        "graph_hybrid": 14
+      },
+      "rerank_count": 0,
+      "provider_error_counts": {},
+      "token_usage": {
+        "input_tokens": 30931,
+        "output_tokens": 4292,
+        "total_tokens": 35223
+      },
+      "stage_latency_ms": {
+        "routing": {
+          "average": 0.04084285880838122,
+          "p50": 0.03886967897415161,
+          "p95": 0.057091936469078064
+        },
+        "retrieval": {
+          "average": 3118.019530656082,
+          "p50": 3352.7158331125975,
+          "p95": 6415.464740246534
+        },
+        "evidence": {
+          "average": 0.08334458938666753,
+          "p50": 0.08157454431056976,
+          "p95": 0.16045011579990387
+        },
+        "context": {
+          "average": 397.0702152699232,
+          "p50": 0.7230676710605621,
+          "p95": 3425.0177275389433
+        },
+        "generation": {
+          "average": 1344.0098524625812,
+          "p50": 1664.036113768816,
+          "p95": 2886.5390457212925
+        },
+        "validation": {
+          "average": 0.017208073820386614,
+          "p50": 0.014666467905044556,
+          "p95": 0.048179179430007935
+        },
+        "total": {
+          "average": 4861.778346768448,
+          "p50": 5187.769481912255,
+          "p95": 7283.421225845814
+        },
+        "persistence_http_overhead": {
+          "average": 145.7607498658555,
+          "p50": 142.0192737132311,
+          "p95": 170.67591100931168
+        },
+        "query_analysis": {
+          "average": 0.04834468875612531,
+          "p50": 0.04449114203453064,
+          "p95": 0.07257238030433655
+        },
+        "rerank": {
+          "average": 0.0,
+          "p50": 0.0,
+          "p95": 0.0
+        }
+      },
+      "session_request_ratio": 0.34285714285714286,
+      "resource_summary": {
+        "sample_count": 127,
+        "cpu_peak_percent": 846.9,
+        "rss_peak_mb": 1308.421875,
+        "threads_peak": 81,
+        "postgres_connections_peak": 7,
+        "redis_ping_p95_ms": 75.13738051056862,
+        "neo4j_ping_p95_ms": 83.9377511292696
+      }
+    },
+    {
+      "mode": "real",
+      "concurrency": 2,
+      "request_count": 33,
+      "generation_requests": 21,
+      "generation_calls": 21,
+      "rps": 0.19262301694081413,
+      "p50_ms": 11157.997099682689,
+      "p95_ms": 17006.958240643144,
+      "p99_ms": 22311.275754123926,
+      "failure_rate": 0.06060606060606061,
+      "generation_request_p50_ms": 8311.912510544062,
+      "generation_request_p95_ms": 14519.326092675328,
+      "generation_stage_p50_ms": 2167.719703167677,
+      "generation_stage_p95_ms": 3395.6921696662903,
+      "status_counts": {
+        "insufficient_evidence": 22,
+        "answered": 9,
+        "error": 2
+      },
+      "error_type_counts": {
+        "retrieval_miss": 12,
+        "citation_invalid": 2
+      },
+      "case_type_counts": {
+        "exact_fact": 9,
+        "semantic": 9,
+        "multi_source": 9,
+        "relation_reasoning": 6
+      },
+      "strategy_counts": {
+        "bm25": 9,
+        "hybrid": 12,
+        "graph_hybrid": 12
+      },
+      "rerank_count": 0,
+      "provider_error_counts": {},
+      "token_usage": {
+        "input_tokens": 30931,
+        "output_tokens": 4102,
+        "total_tokens": 35033
+      },
+      "stage_latency_ms": {
+        "routing": {
+          "average": 0.03462871818831473,
+          "p50": 0.03369338810443878,
+          "p95": 0.04268437623977661
+        },
+        "retrieval": {
+          "average": 6578.648725637432,
+          "p50": 6350.866068154573,
+          "p95": 15730.665519833565
+        },
+        "evidence": {
+          "average": 0.07371017427155466,
+          "p50": 0.050265341997146606,
+          "p95": 0.15294179320335388
+        },
+        "context": {
+          "average": 1637.1711370055423,
+          "p50": 0.705227255821228,
+          "p95": 11095.622599124908
+        },
+        "generation": {
+          "average": 1385.6805067960963,
+          "p50": 1579.4074479490519,
+          "p95": 3395.6921696662903
+        },
+        "validation": {
+          "average": 0.022865210970242817,
+          "p50": 0.01687556505203247,
+          "p95": 0.06619654595851898
+        },
+        "total": {
+          "average": 9604.674369266088,
+          "p50": 10329.591294750571,
+          "p95": 16194.417541846633
+        },
+        "persistence_http_overhead": {
+          "average": 614.8111460109552,
+          "p50": 692.3736222088337,
+          "p95": 1221.0190575569868
+        },
+        "query_analysis": {
+          "average": 0.045739904497608994,
+          "p50": 0.039050355553627014,
+          "p95": 0.07307343184947968
+        },
+        "rerank": {
+          "average": 0.0,
+          "p50": 0.0,
+          "p95": 0.0
+        }
+      },
+      "session_request_ratio": 0.36363636363636365,
+      "resource_summary": {
+        "sample_count": 108,
+        "cpu_peak_percent": 816.2,
+        "rss_peak_mb": 1631.7109375,
+        "threads_peak": 146,
+        "postgres_connections_peak": 6,
+        "redis_ping_p95_ms": 83.9331429451704,
+        "neo4j_ping_p95_ms": 97.14744426310062
+      }
+    },
+    {
+      "mode": "real",
+      "concurrency": 5,
+      "request_count": 26,
+      "generation_requests": 17,
+      "generation_calls": 17,
+      "rps": 0.13981499684460358,
+      "p50_ms": 30098.083529621363,
+      "p95_ms": 51902.918895706534,
+      "p99_ms": 53615.4742334038,
+      "failure_rate": 0.038461538461538464,
+      "generation_request_p50_ms": 26794.429617002606,
+      "generation_request_p95_ms": 53615.4742334038,
+      "generation_stage_p50_ms": 2586.38815023005,
+      "generation_stage_p95_ms": 4175.204722210765,
+      "status_counts": {
+        "answered": 6,
+        "insufficient_evidence": 19,
+        "error": 1
+      },
+      "error_type_counts": {
+        "retrieval_miss": 9,
+        "citation_invalid": 1
+      },
+      "case_type_counts": {
+        "semantic": 6,
+        "exact_fact": 9,
+        "multi_source": 6,
+        "relation_reasoning": 5
+      },
+      "strategy_counts": {
+        "hybrid": 8,
+        "bm25": 9,
+        "graph_hybrid": 9
+      },
+      "rerank_count": 0,
+      "provider_error_counts": {},
+      "token_usage": {
+        "input_tokens": 25140,
+        "output_tokens": 3030,
+        "total_tokens": 28170
+      },
+      "stage_latency_ms": {
+        "routing": {
+          "average": 0.04105914670687456,
+          "p50": 0.034557655453681946,
+          "p95": 0.07578358054161072
+        },
+        "retrieval": {
+          "average": 21530.28524079575,
+          "p50": 22609.101256355643,
+          "p95": 46492.905819788575
+        },
+        "evidence": {
+          "average": 0.06970569777947205,
+          "p50": 0.04609115421772003,
+          "p95": 0.14999881386756897
+        },
+        "context": {
+          "average": 6961.985798695912,
+          "p50": 0.8186995983123779,
+          "p95": 46434.16844308376
+        },
+        "generation": {
+          "average": 1725.411855830596,
+          "p50": 1990.5191771686077,
+          "p95": 3811.830325052142
+        },
+        "validation": {
+          "average": 0.024635488024124734,
+          "p50": 0.012284144759178162,
+          "p95": 0.1370105892419815
+        },
+        "total": {
+          "average": 30233.161510326543,
+          "p50": 27783.512031659484,
+          "p95": 48131.9498475641
+        },
+        "persistence_http_overhead": {
+          "average": 2301.718097180128,
+          "p50": 2125.837905332446,
+          "p95": 4493.025133386254
+        },
+        "query_analysis": {
+          "average": 3.296039568690153,
+          "p50": 0.04277750849723816,
+          "p95": 0.20712055265903473
+        },
+        "rerank": {
+          "average": 0.0,
+          "p50": 0.0,
+          "p95": 0.0
+        }
+      },
+      "session_request_ratio": 0.34615384615384615,
+      "resource_summary": {
+        "sample_count": 93,
+        "cpu_peak_percent": 828.5,
+        "rss_peak_mb": 2160.4921875,
+        "threads_peak": 340,
+        "postgres_connections_peak": 7,
+        "redis_ping_p95_ms": 90.42575024068356,
+        "neo4j_ping_p95_ms": 103.12621481716633
+      }
+    },
+    {
+      "mode": "real",
+      "concurrency": 10,
+      "request_count": 25,
+      "generation_requests": 13,
+      "generation_calls": 13,
+      "rps": 0.12962842631804358,
+      "p50_ms": 61423.7656109035,
+      "p95_ms": 90318.39326955378,
+      "p99_ms": 95206.61853440106,
+      "failure_rate": 0.28,
+      "generation_request_p50_ms": 55315.87038189173,
+      "generation_request_p95_ms": 61423.7656109035,
+      "generation_stage_p50_ms": 4297.160904854536,
+      "generation_stage_p95_ms": 15703.724322840571,
+      "status_counts": {
+        "error": 1,
+        "answered": 6,
+        "insufficient_evidence": 12,
+        "None": 6
+      },
+      "error_type_counts": {
+        "citation_invalid": 1,
+        "retrieval_miss": 6,
+        "request_timeout": 6
+      },
+      "case_type_counts": {
+        "multi_source": 6,
+        "semantic": 6,
+        "exact_fact": 9,
+        "relation_reasoning": 4
+      },
+      "strategy_counts": {
+        "hybrid": 8,
+        "bm25": 5,
+        "graph_hybrid": 6
+      },
+      "rerank_count": 0,
+      "provider_error_counts": {},
+      "token_usage": {
+        "input_tokens": 19218,
+        "output_tokens": 2677,
+        "total_tokens": 21895
+      },
+      "stage_latency_ms": {
+        "routing": {
+          "average": 0.030550321466044375,
+          "p50": 0.029316172003746033,
+          "p95": 0.04657916724681854
+        },
+        "retrieval": {
+          "average": 43700.894069220674,
+          "p50": 46010.43665036559,
+          "p95": 79900.77000297606
+        },
+        "evidence": {
+          "average": 0.056983706982512226,
+          "p50": 0.04279986023902893,
+          "p95": 0.10750442743301392
+        },
+        "context": {
+          "average": 24.367599012820346,
+          "p50": 0.6820764392614365,
+          "p95": 192.32250563800335
+        },
+        "generation": {
+          "average": 3718.62843309186,
+          "p50": 4003.2040402293205,
+          "p95": 15703.724322840571
+        },
+        "validation": {
+          "average": 0.026186928153038025,
+          "p50": 0.017112120985984802,
+          "p95": 0.1525525003671646
+        },
+        "total": {
+          "average": 47448.12981362798,
+          "p50": 50399.519983679056,
+          "p95": 79901.22468397021
+        },
+        "persistence_http_overhead": {
+          "average": 8276.728291260568,
+          "p50": 8814.603358507156,
+          "p95": 17118.809286504984
+        },
+        "query_analysis": {
+          "average": 0.034853619964499226,
+          "p50": 0.03361888229846954,
+          "p95": 0.0532735139131546
+        },
+        "rerank": {
+          "average": 0.0,
+          "p50": 0.0,
+          "p95": 0.0
+        }
+      },
+      "session_request_ratio": 0.32,
+      "resource_summary": {
+        "sample_count": 88,
+        "cpu_peak_percent": 820.6,
+        "rss_peak_mb": 3329.6015625,
+        "threads_peak": 916,
+        "postgres_connections_peak": 8,
+        "redis_ping_p95_ms": 96.681023016572,
+        "neo4j_ping_p95_ms": 206.82591199874878
+      }
+    }
+  ]
+}

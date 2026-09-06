@@ -3,6 +3,7 @@ from __future__ import annotations
 from contextvars import ContextVar
 from dataclasses import asdict, dataclass, field
 import re
+from time import perf_counter
 from typing import Literal, Mapping
 
 from intern_rag.ingestion import Chunk
@@ -110,6 +111,8 @@ class RetrievalDecision:
     config_version: str = "legacy"
     fallback_reason: str | None = None
     escalation_reason: str | None = None
+    query_analysis_latency_ms: float = 0.0
+    rerank_latency_ms: float = 0.0
 
     def to_trace(self) -> dict[str, object]:
         """转换为可写入 AgentTrace/评测工件的普通字典。"""
@@ -315,11 +318,13 @@ class AdaptiveRetriever:
     ) -> list[RetrievalResult]:
         """执行策略选择、置信度判断和最多一次 CrossEncoder 重排。"""
 
+        analysis_started_at = perf_counter()
         features = self.analyzer.analyze(query, source_types)
         evidence_requirement = self.analyzer.classify_evidence_need(features)
         strategy, strategy_reason = self.analyzer.choose_strategy(
             evidence_requirement, graph_enabled=self.graph_retriever is not None
         )
+        query_analysis_latency_ms = (perf_counter() - analysis_started_at) * 1000
         if self.config.force_strategy is not None:
             strategy = self.config.force_strategy
             strategy_reason = f"forced {strategy} for controlled ablation"
@@ -344,6 +349,7 @@ class AdaptiveRetriever:
                     f"{self.analyzer.strategy_config.version}"
                 ),
                 fallback_reason=fallback_reason,
+                query_analysis_latency_ms=query_analysis_latency_ms,
             )
             self._last_decision.set(decision)
             self._last_stage_trace.set({})
@@ -375,8 +381,11 @@ class AdaptiveRetriever:
         )
         ranked = candidates
         rerank_applied = False
+        rerank_latency_ms = 0.0
         if should_rerank:
+            rerank_started_at = perf_counter()
             ranked = self._rerank(query, candidates)
+            rerank_latency_ms = (perf_counter() - rerank_started_at) * 1000
             rerank_applied = [item.chunk_id for item in ranked] != [
                 item.chunk_id for item in candidates
             ]
@@ -409,6 +418,8 @@ class AdaptiveRetriever:
                 "retrieval confidence below rerank threshold"
                 if should_rerank else None
             ),
+            query_analysis_latency_ms=query_analysis_latency_ms,
+            rerank_latency_ms=rerank_latency_ms,
         )
         self._last_decision.set(decision)
         self._last_stage_trace.set(stage_trace)

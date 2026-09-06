@@ -1,0 +1,4 @@
+Method,Name,Error,Occurrences,First Seen,Last Seen
+POST,POST /v1/query [multi_source],CatchResponseError('HTTP 502'),1,2026-09-06T03:56:51Z,2026-09-06T03:56:51Z
+POST,POST /v1/query [exact_fact],CatchResponseError('HTTP 504'),4,2026-09-06T03:57:26Z,2026-09-06T03:58:25Z
+POST,POST /v1/query [relation_reasoning],CatchResponseError('HTTP 504'),2,2026-09-06T03:57:25Z,2026-09-06T03:58:25Z

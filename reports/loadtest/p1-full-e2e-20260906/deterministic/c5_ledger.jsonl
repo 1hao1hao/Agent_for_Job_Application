@@ -1,0 +1,2 @@
+{"request_id": "ec09a3fd-c78c-4a9d-8e64-fdbf1534c243", "trace_id": "13127e83-9d93-4204-82ae-48fcc35c67ed", "case_type": "semantic", "session_request": false, "http_status": 200, "response_status": "answered", "latency_ms": 25172.504238784313, "error_type": null}
+{"request_id": "f4fea20c-9f43-4c93-a719-e7ebeb9f2342", "trace_id": "89511d90-0ec1-4d9a-94ee-f5df8d2c83d2", "case_type": "semantic", "session_request": false, "http_status": 200, "response_status": "answered", "latency_ms": 25676.274864003062, "error_type": null}

@@ -215,18 +215,21 @@ PYTHONPATH=src python scripts/run_rag_smoke.py
 - [Persistent Retrieval Ablation](.github/workflows/p1-persistent-ablation.yml)：手动运行完整 v0.3/dev
   的文件精确扫描、pgvector exact/HNSW 和 Neo4j 对照，并上传版本化工件。
 
-## 本地 HTTP 压测
+## Full E2E 压测
 
-Locust 使用 exact fact、semantic、multi-source 和 relation reasoning 四类 Query 压测真实
-FastAPI/QueryService/BM25 Pipeline，deterministic 模式只隔离外部 LLM 与 PostgreSQL/Redis。
-在 2026-09-04 的共享校园服务器、单 Uvicorn worker 实验中，20 并发为 183.18 RPS、P95
-21 ms；50 并发为 320.16 RPS、P95 120 ms，0 请求失败。该结果不包含真实数据库和 Dense/Graph
-检索，不是生产 SLA，完整环境、原始 CSV 和限制见
-[Locust 报告](reports/loadtest/p1-locust-local-20260904/report.md)。
+Locust 使用 exact fact、semantic、multi-source 和 relation reasoning 四类 Query，覆盖正式
+FastAPI、Adaptive Retrieval、Evidence/Context、PostgreSQL、Redis 与 30% Session 请求。
+2026-09-06 在共享校园服务器、单 Uvicorn worker 下，资源采样定位到 CPU 推理线程过度订阅；
+限制 BLAS/OpenMP 线程后，deterministic LLM 模式并发 10 实测 7.07 RPS、P95 1.87 s，软拐点
+位于并发 20。优化前的真实 DeepSeek 模式并发 1 为 0.20 RPS、P95 7.44 s，并发 10 出现 6 次
+90 s 请求超时，且没有 Provider 429；该真实模型档没有在优化后重跑，因此不外推收益。旧的
+320.16 RPS 仅是隔离数据库、Retriever 和 LLM 的组件基线，不能代表完整系统容量。环境、
+逐档结果、资源采样和边界见
+[Full E2E 报告](reports/loadtest/p1-full-e2e-20260906/report.md)。
 
 ```bash
 python -m pip install -r requirements-loadtest.txt
-scripts/run_local_loadtest.sh
+PYTHONPATH=src:. python scripts/run_full_e2e_loadtest.py --help
 ```
 
 ## 代码导航

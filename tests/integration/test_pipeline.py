@@ -1,5 +1,7 @@
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import json
+from threading import Barrier
 import tempfile
 import unittest
 
@@ -21,7 +23,7 @@ from intern_rag.agent import (
 )
 from intern_rag.agent.generation import LlmTimeoutError
 from intern_rag.ingestion import Chunk
-from intern_rag.tracing import read_traces_jsonl
+from intern_rag.tracing import AgentTrace, read_traces_jsonl
 from intern_rag.retrieval import RetrievalResult
 
 
@@ -175,6 +177,37 @@ class PipelineIntegrationTests(unittest.TestCase):
 
             self.assertEqual(response.status, "answered")
             self.assertIn("sink:OSError", pipeline.last_trace_persistence_errors[0])
+
+    def test_last_trace_is_isolated_between_concurrent_requests(self) -> None:
+        """并发执行上下文必须读取各自 Trace，不能被其他请求覆盖。"""
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            pipeline = RagPipeline(
+                chunks=_chunks(),
+                llm_client=FakeLlmClient([]),
+                config=PipelineConfig(model="fake-model"),
+                trace_path=Path(temp_dir) / "trace.jsonl",
+            )
+            traces = [
+                AgentTrace(
+                    request_id=f"request-{index}", query="test", intent="unknown",
+                    routed_sources=[], retrieved_chunks=[], latency_ms={},
+                    trace_id=f"trace-{index}",
+                )
+                for index in range(2)
+            ]
+            barrier = Barrier(2)
+
+            def store_and_read(index: int) -> str:
+                pipeline.last_trace = traces[index]
+                barrier.wait(timeout=2)
+                assert pipeline.last_trace is not None
+                return pipeline.last_trace.trace_id
+
+            with ThreadPoolExecutor(max_workers=2) as executor:
+                actual = list(executor.map(store_and_read, range(2)))
+
+        self.assertEqual(actual, ["trace-0", "trace-1"])
 
     def test_managed_context_records_budget_profile_and_memory_decisions(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

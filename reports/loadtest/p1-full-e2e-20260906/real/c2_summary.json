@@ -1,0 +1,105 @@
+{
+  "mode": "real",
+  "concurrency": 2,
+  "request_count": 33,
+  "generation_requests": 21,
+  "generation_calls": 21,
+  "rps": 0.19262301694081413,
+  "p50_ms": 11157.997099682689,
+  "p95_ms": 17006.958240643144,
+  "p99_ms": 22311.275754123926,
+  "failure_rate": 0.06060606060606061,
+  "generation_request_p50_ms": 8311.912510544062,
+  "generation_request_p95_ms": 14519.326092675328,
+  "generation_stage_p50_ms": 2167.719703167677,
+  "generation_stage_p95_ms": 3395.6921696662903,
+  "status_counts": {
+    "insufficient_evidence": 22,
+    "answered": 9,
+    "error": 2
+  },
+  "error_type_counts": {
+    "retrieval_miss": 12,
+    "citation_invalid": 2
+  },
+  "case_type_counts": {
+    "exact_fact": 9,
+    "semantic": 9,
+    "multi_source": 9,
+    "relation_reasoning": 6
+  },
+  "strategy_counts": {
+    "bm25": 9,
+    "hybrid": 12,
+    "graph_hybrid": 12
+  },
+  "rerank_count": 0,
+  "provider_error_counts": {},
+  "token_usage": {
+    "input_tokens": 30931,
+    "output_tokens": 4102,
+    "total_tokens": 35033
+  },
+  "stage_latency_ms": {
+    "routing": {
+      "average": 0.03462871818831473,
+      "p50": 0.03369338810443878,
+      "p95": 0.04268437623977661
+    },
+    "retrieval": {
+      "average": 6578.648725637432,
+      "p50": 6350.866068154573,
+      "p95": 15730.665519833565
+    },
+    "evidence": {
+      "average": 0.07371017427155466,
+      "p50": 0.050265341997146606,
+      "p95": 0.15294179320335388
+    },
+    "context": {
+      "average": 1637.1711370055423,
+      "p50": 0.705227255821228,
+      "p95": 11095.622599124908
+    },
+    "generation": {
+      "average": 1385.6805067960963,
+      "p50": 1579.4074479490519,
+      "p95": 3395.6921696662903
+    },
+    "validation": {
+      "average": 0.022865210970242817,
+      "p50": 0.01687556505203247,
+      "p95": 0.06619654595851898
+    },
+    "total": {
+      "average": 9604.674369266088,
+      "p50": 10329.591294750571,
+      "p95": 16194.417541846633
+    },
+    "persistence_http_overhead": {
+      "average": 614.8111460109552,
+      "p50": 692.3736222088337,
+      "p95": 1221.0190575569868
+    },
+    "query_analysis": {
+      "average": 0.045739904497608994,
+      "p50": 0.039050355553627014,
+      "p95": 0.07307343184947968
+    },
+    "rerank": {
+      "average": 0.0,
+      "p50": 0.0,
+      "p95": 0.0
+    }
+  },
+  "session_request_ratio": 0.36363636363636365,
+  "resource_summary": {
+    "sample_count": 108,
+    "cpu_peak_percent": 816.2,
+    "rss_peak_mb": 1631.7109375,
+    "threads_peak": 146,
+    "postgres_connections_peak": 6,
+    "redis_ping_p95_ms": 83.9331429451704,
+    "neo4j_ping_p95_ms": 97.14744426310062
+  }
+}

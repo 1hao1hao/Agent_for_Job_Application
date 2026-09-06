@@ -14,7 +14,7 @@ from intern_rag.agent import (
     RagPipeline,
     load_evidence_config,
 )
-from intern_rag.agent.generation import DeepSeekChatClient
+from intern_rag.agent.model_gateway import build_model_gateway_from_config
 from intern_rag.evaluation import load_chunks_jsonl
 from intern_rag.ingestion import Chunk
 from intern_rag.persistence import (
@@ -248,13 +248,16 @@ def create_runtime_app():
     bm25 = build_retriever_from_config(bm25_config)
 
     llm_backend = os.environ.get("EVALRAG_LLM_BACKEND", "fake")
-    llm_client = (
-        DeepSeekChatClient(
-            timeout_seconds=float(os.environ.get("LLM_TIMEOUT_SECONDS", "60"))
+    if llm_backend == "deepseek":
+        gateway_path = Path(
+            os.environ.get(
+                "EVALRAG_MODEL_GATEWAY_CONFIG",
+                str(project_root / "configs/model_gateway/gateway_v0.1.json"),
+            )
         )
-        if llm_backend == "deepseek"
-        else DeterministicDemoLlmClient()
-    )
+        llm_client = build_model_gateway_from_config(gateway_path)
+    else:
+        llm_client = DeterministicDemoLlmClient()
     trace_path = Path(os.environ.get("TRACE_PATH", "traces/service/agent_trace.jsonl"))
     evidence_path = Path(
         os.environ.get(

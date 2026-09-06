@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextvars import ContextVar
 from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
 from time import perf_counter
@@ -68,6 +69,7 @@ class PipelineConfig:
     max_action_steps: int = 4
     agent_controller_version: str = "bounded-agent-controller-v1"
     context_token_budget: int = 1800
+    context_prompt_safety_tokens: int = 128
     context_mode: ContextMode = "recent_window"
     system_prompt: str = "仅依据提供的证据回答；证据不足时明确拒答。"
     config_versions: Mapping[str, str] = field(default_factory=dict)
@@ -87,6 +89,8 @@ class PipelineConfig:
             raise ValueError("unknown context_strategy")
         if self.context_token_budget <= 0:
             raise ValueError("context_token_budget must be greater than 0")
+        if not 0 <= self.context_prompt_safety_tokens < self.context_token_budget:
+            raise ValueError("context_prompt_safety_tokens must be within token budget")
         if self.context_mode not in {
             "no_memory", "full_history", "recent_window", "summary_recent", "semantic_memory",
             "adaptive",
@@ -157,8 +161,32 @@ class RagPipeline:
                 max_format_retries=config.max_format_retries,
             )
         )
-        self.last_trace: AgentTrace | None = None
-        self.last_trace_persistence_errors: list[str] = []
+        self._last_trace: ContextVar[AgentTrace | None] = ContextVar(
+            f"rag_pipeline_last_trace_{id(self)}", default=None
+        )
+        self._last_trace_persistence_errors: ContextVar[tuple[str, ...]] = ContextVar(
+            f"rag_pipeline_trace_errors_{id(self)}", default=()
+        )
+
+    @property
+    def last_trace(self) -> AgentTrace | None:
+        """返回当前请求执行上下文的 Trace，避免并发请求互相覆盖。"""
+
+        return self._last_trace.get()
+
+    @last_trace.setter
+    def last_trace(self, value: AgentTrace | None) -> None:
+        self._last_trace.set(value)
+
+    @property
+    def last_trace_persistence_errors(self) -> list[str]:
+        """返回当前请求 Trace 落盘错误的副本。"""
+
+        return list(self._last_trace_persistence_errors.get())
+
+    @last_trace_persistence_errors.setter
+    def last_trace_persistence_errors(self, value: list[str]) -> None:
+        self._last_trace_persistence_errors.set(tuple(value))
 
     def run(self, request: RagRequest) -> RagResponse:
         """执行门控与有限重试，并始终只追加一条请求级 Trace。"""
@@ -383,7 +411,7 @@ class RagPipeline:
                         build_generation_prompt(
                             request.query, empty_context, self.config.prompt_version
                         )
-                    )
+                    ) + self.config.context_prompt_safety_tokens
                     managed_context = self.context_engine.build(
                         query=request.query,
                         system_prompt=self.config.system_prompt,
@@ -410,7 +438,10 @@ class RagPipeline:
                         )
                     )
                     if actual_prompt_tokens > self.config.context_token_budget:
-                        raise ContextBudgetError("formatted generation prompt exceeds token budget")
+                        raise ContextBudgetError(
+                            "formatted generation prompt exceeds token budget: "
+                            f"actual={actual_prompt_tokens}, budget={self.config.context_token_budget}"
+                        )
                 latency_ms["context"] = _elapsed_ms(stage_started_at)
                 context_trace = {
                     "used_chunk_ids": built_context.used_chunk_ids,
@@ -672,6 +703,8 @@ class RagPipeline:
                 "model": self.config.model,
                 "temperature": self.config.temperature,
                 "context_max_chars": self.config.context_max_chars,
+                "context_token_budget": self.config.context_token_budget,
+                "context_prompt_safety_tokens": self.config.context_prompt_safety_tokens,
                 "context_strategy": self.config.context_strategy,
                 "router_name": self.config.router_name,
                 "max_source_retries": self.config.max_source_retries,
@@ -700,16 +733,18 @@ class RagPipeline:
         try:
             write_trace_jsonl(trace, self.trace_path)
         except Exception as error:
-            self.last_trace_persistence_errors.append(
-                f"jsonl:{type(error).__name__}: {error}"
-            )
+            self.last_trace_persistence_errors = [
+                *self.last_trace_persistence_errors,
+                f"jsonl:{type(error).__name__}: {error}",
+            ]
         if self.trace_sink is not None:
             try:
                 self.trace_sink(trace)
             except Exception as error:
-                self.last_trace_persistence_errors.append(
-                    f"sink:{type(error).__name__}: {error}"
-                )
+                self.last_trace_persistence_errors = [
+                    *self.last_trace_persistence_errors,
+                    f"sink:{type(error).__name__}: {error}",
+                ]
         return response
 
     @staticmethod
