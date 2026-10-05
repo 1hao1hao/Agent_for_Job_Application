@@ -539,3 +539,31 @@ pgvector/Neo4j 执行在线检索。
 真实 DeepSeek 档未在该优化后重跑，因此不把 deterministic 改善幅度外推为真实 Provider 容量。
 本次固定 Query 的 Reranker 调用数为 0，CrossEncoder 的 Full E2E 容量路径为 **NOT TESTED**；
 现有 CrossEncoder 结论仍只来自 dev 消融和自动化测试。
+
+## 14. E2E 过度拒答收敛（2026-10-05）
+
+本轮保持 `evalrag_v0.3` 标签、Adaptive v2 Retriever 和 HTTP 契约不变，先在 160 条 dev
+（120 可答、40 不可答）运行真实 Feedback Hybrid Router、Retriever、Evidence Gate、
+Adaptive Context、DeepSeek 与 Citation Validator，并用 Trace 把每条 Case 分类到首次决定最终
+结果的阶段。严格的 Answerable E2E Success 要求最终回答、引用合法且 Context 含 gold Chunk，
+因此不是单纯回答率。
+
+| Dev metric | Baseline | Final | 变化 |
+|---|---:|---:|---:|
+| Answerable E2E Success | 11.67% | 30.83% | +19.17 pp |
+| Unexpected Abstention Rate | 75.00% | 66.67% | -8.33 pp |
+| Unanswerable Abstention Accuracy | 92.50% | 100.00% | +7.50 pp |
+| Citation Validity（answered） | 100.00% | 100.00% | 0 pp |
+| Error count | 17 | 0 | -17 |
+
+主要修复有三类：Gate 只把 Query 明确点名的来源视为必需来源，不再把 Router 候选范围全部
+解释为回答约束；Context 将必要 freshness metadata 与 Graph path 传给 Generator，并保持检索
+rank 装箱、同步真实 Citation 白名单；模型已明确 `sufficient=false` 却附带非法 Citation 时，
+Validator 问题仍写入 Trace，但 Pipeline 丢弃引用并保留安全拒答，不再升级成系统错误。
+
+最终 dev 可答题失败漏斗为 retrieval miss 45、Gate reject 19、Generator abstain 14、Context
+drop 2。最大剩余问题已经回到 Retriever，而不是继续放宽 Gate。配置及 SHA-256 锁定后，仅运行
+一次 80 条 release test：可答题严格 E2E Success 38.33%、Unexpected Abstention 60%、不可答题
+拒答准确率 100%、已回答 Citation Validity 100%、error 0。test 结果未用于继续调参。正式报告与
+逐 Case 工件位于 `reports/ablations/p1-e2e-abstention-v03-20261005/`，锁定配置位于
+`configs/final/e2e_abstention_release_v0.3.json`。

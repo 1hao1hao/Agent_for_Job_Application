@@ -1,0 +1,62 @@
+{
+  "case_count": 160,
+  "answerable_case_count": 120,
+  "unanswerable_case_count": 40,
+  "terminal_stage_counts": {
+    "retrieval_miss": 48,
+    "answered": 16,
+    "citation_invalid": 16,
+    "generator_abstain": 46,
+    "model_error": 1,
+    "gate_reject": 33
+  },
+  "answerable_terminal_stage_counts": {
+    "retrieval_miss": 48,
+    "answered": 16,
+    "citation_invalid": 13,
+    "generator_abstain": 23,
+    "model_error": 1,
+    "gate_reject": 19
+  },
+  "answerable_e2e_success": 0.11666666666666667,
+  "unexpected_abstention_rate": 0.75,
+  "unanswerable_abstention_accuracy": 0.925,
+  "citation_validity_answered": 1.0,
+  "error_count": 17,
+  "answered_count": 16,
+  "mean_latency_ms": 3778.7362400908023,
+  "metric_definitions": {
+    "answerable_e2e_success": "answerable 且 answered、引用合法、Context 含 gold evidence / answerable cases",
+    "unexpected_abstention_rate": "answerable 但 insufficient_evidence / answerable cases",
+    "unanswerable_abstention_accuracy": "unanswerable 且 insufficient_evidence / unanswerable cases",
+    "citation_validity_answered": "answered 且所有 citation id 均存在于 Context / answered cases"
+  },
+  "run_id": "p1-e2e-abstention-v03-dev-baseline-20261005-rerun",
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "retriever_config": "configs/retrieval/adaptive_v2_v0.3.json",
+  "retriever_config_version": "adaptive-retrieval-v2.0",
+  "evidence_config": "configs/evidence/gate_calibrated_v0.3.json",
+  "evidence_config_version": "evidence-gate-v2.0-dev-locked",
+  "prompt_version": "p1-e2e-funnel-v1",
+  "category_counts": {
+    "single_source": 20,
+    "cross_source": 20,
+    "semantic_paraphrase": 20,
+    "hard_negative": 20,
+    "unanswerable": 20,
+    "freshness_conflict": 20,
+    "two_hop": 20,
+    "three_hop": 20
+  },
+  "model_gateway": {
+    "generation_calls": 109,
+    "provider_attempts": 110,
+    "tokens": {
+      "input_tokens": 145009,
+      "output_tokens": 18004,
+      "total_tokens": 163013
+    },
+    "estimated_cost_usd": 0.0
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "dataset": "data/evaluation/evalrag_v0.3.jsonl",
+  "chunks": "data/processed/chunks/evalrag_v0.3.jsonl",
+  "split": "dev",
+  "top_k": 5,
+  "router": "configs/routing/router_registry_v0.1.json",
+  "retriever": "configs/retrieval/adaptive_v2_v0.3.json",
+  "evidence": "configs/evidence/gate_calibrated_v0.3.json",
+  "gateway": "configs/model_gateway/gateway_v0.1.json",
+  "prompt_version": "p1-e2e-funnel-v1",
+  "temperature": 0.0,
+  "context_strategy": "source_balanced",
+  "context_mode": "adaptive",
+  "context_token_budget": 1800
+}

@@ -433,6 +433,42 @@ class PipelineIntegrationTests(unittest.TestCase):
         self.assertEqual(traces[0].response_status, "insufficient_evidence")
         self.assertEqual(traces[0].error_type, "retrieval_miss")
 
+    def test_insufficient_with_citations_is_normalized_to_safe_abstention(self) -> None:
+        response, traces = self._run_pipeline(
+            "分析这个岗位的 Python 要求",
+            _raw_generation(
+                answer="证据只能支持部分结论，因此拒绝回答。",
+                cited_chunk_ids=["jd-1"],
+                sufficient=False,
+                reason="缺少另一来源证据",
+            ),
+        )
+
+        self.assertEqual(response.status, "insufficient_evidence")
+        self.assertEqual(response.citations, [])
+        self.assertIsNone(response.error_type)
+        self.assertTrue(traces[0].validation["normalized_safe_abstention"])
+        self.assertEqual(traces[0].error_type, "none")
+
+    def test_insufficient_with_unknown_citation_still_abstains_safely(self) -> None:
+        response, traces = self._run_pipeline(
+            "分析这个岗位的 Python 要求",
+            _raw_generation(
+                answer="证据不足，拒绝回答。",
+                cited_chunk_ids=["not-in-context"],
+                sufficient=False,
+                reason="引用不可用",
+            ),
+        )
+
+        self.assertEqual(response.status, "insufficient_evidence")
+        self.assertEqual(response.citations, [])
+        self.assertTrue(traces[0].validation["normalized_safe_abstention"])
+        self.assertEqual(
+            {issue["error_type"] for issue in traces[0].validation["issues"]},
+            {"insufficient_with_citations", "citation_not_found"},
+        )
+
     def test_invalid_json_returns_error_and_still_writes_one_trace(self) -> None:
         response, traces = self._run_pipeline(
             "分析这个岗位要求",

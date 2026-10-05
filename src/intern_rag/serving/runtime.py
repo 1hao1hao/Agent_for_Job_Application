@@ -262,7 +262,7 @@ def create_runtime_app():
     evidence_path = Path(
         os.environ.get(
             "EVALRAG_EVIDENCE_CONFIG",
-            str(project_root / "configs/evidence/gate_calibrated_v0.3.json"),
+            str(project_root / "configs/evidence/gate_e2e_v0.3.json"),
         )
     )
     evidence_config = load_evidence_config(evidence_path) if evidence_path.exists() else None

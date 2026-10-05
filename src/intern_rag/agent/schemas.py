@@ -75,6 +75,8 @@ class ContextItem:
     text: str
     rank: int
     score: float
+    metadata: dict[str, object] = field(default_factory=dict)
+    retrieval_details: dict[str, object] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)

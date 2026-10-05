@@ -97,6 +97,11 @@ from intern_rag.evaluation.calibration import (
     calibrate_score_gate,
     is_structurally_positive,
 )
+from intern_rag.evaluation.failure_funnel import (
+    FailureFunnelCase,
+    classify_failure_stage,
+    summarize_failure_funnel,
+)
 from intern_rag.evaluation.graph_dataset import (
     GraphChallengeCase,
     GraphDatasetValidation,
@@ -122,6 +127,7 @@ __all__ = [
     "EvaluationGateResult",
     "CalibrationResult",
     "ThresholdPoint",
+    "FailureFunnelCase",
     "EndToEndRunConfig",
     "EndToEndRunResult",
     "LiveLlmRunConfig",
@@ -159,6 +165,7 @@ __all__ = [
     "calculate_router_accuracy",
     "calculate_citation_validity",
     "calculate_key_point_coverage",
+    "classify_failure_stage",
     "build_corpus",
     "evaluate_cases",
     "evaluate_ci_gate",
@@ -178,6 +185,7 @@ __all__ = [
     "run_saved_prediction_audit",
     "save_run_artifacts",
     "save_end_to_end_artifacts",
+    "summarize_failure_funnel",
     "save_semantic_audit_artifacts",
     "save_graph_run",
     "summarize_end_to_end_results",

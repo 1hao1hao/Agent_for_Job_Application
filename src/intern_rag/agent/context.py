@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from typing import Literal, Sequence
 
 from intern_rag.agent.schemas import BuiltContext, ContextItem
@@ -168,21 +169,59 @@ def context_item_from_result(result: RetrievalResult) -> ContextItem:
         text=result.chunk.text,
         rank=result.rank,
         score=result.score,
+        metadata=dict(result.chunk.metadata),
+        retrieval_details=dict(result.details),
     )
 
 
-def format_context_item(item: ContextItem) -> str:
+def format_context_item(item: ContextItem, *, text: str | None = None) -> str:
     """把一条结构化证据格式化为模型可读文本。
 
     chunk id 与来源字段和原文一起进入上下文，后续模型才能返回可由程序
     校验的 cited_chunk_ids。
     """
 
+    metadata = _relevant_metadata(item.metadata)
+    relation = _relevant_relation_details(item.retrieval_details)
+    extra_lines = ""
+    if metadata:
+        extra_lines += "\nmetadata: " + json.dumps(
+            metadata, ensure_ascii=False, sort_keys=True
+        )
+    if relation:
+        extra_lines += "\nrelation_evidence: " + json.dumps(
+            relation, ensure_ascii=False, sort_keys=True
+        )
     return (
         f"chunk_id: {item.chunk_id}\n"
         f"source_type: {item.source_type}\n"
         f"source_path: {item.source_path}\n"
         f"title: {item.title}\n"
-        f"rank: {item.rank}\n"
-        f"text:\n{item.text.strip()}"
+        f"rank: {item.rank}"
+        f"{extra_lines}\n"
+        f"text:\n{(item.text if text is None else text).strip()}"
     )
+
+
+def _relevant_metadata(metadata: dict[str, object]) -> dict[str, object]:
+    """仅暴露回答时效/岗位事实所需的紧凑 metadata，避免 Prompt 膨胀。"""
+
+    keys = (
+        "company", "job_title", "city", "status", "published_at", "collected_at",
+        "first_seen_at", "last_seen_at", "source_platform", "source_url", "version",
+    )
+    return {
+        key: metadata[key]
+        for key in keys
+        if key in metadata and metadata[key] is not None and metadata[key] != ""
+    }
+
+
+def _relevant_relation_details(details: dict[str, object]) -> dict[str, object]:
+    """把 Graph Retriever 已验证的路径与边交给 Generator。"""
+
+    return {
+        key: details[key]
+        for key in ("graph_path", "graph_edge_ids", "path_valid")
+        if key in details and details[key] is not None and details[key] not in ("", False)
+    }

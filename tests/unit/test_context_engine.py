@@ -73,6 +73,34 @@ class ContextEngineTests(unittest.TestCase):
         self.assertEqual(context.evidence.used_chunk_ids, ["c1"])
         self.assertLessEqual(context.token_count, context.token_budget)
 
+    def test_tight_budget_keeps_higher_rank_evidence_before_chunk_id_order(self) -> None:
+        engine = ContextEngine()
+        results = [
+            _result("z-rank-1", "排名第一的关键证据", rank=1),
+            _result("a-rank-2", "排名第二的干扰证据", rank=2),
+        ]
+        full = engine.build(
+            query="哪个证据优先？",
+            system_prompt="仅根据证据回答。",
+            retrieved_results=results,
+            config=ContextEngineConfig(token_budget=300, mode="no_memory"),
+        )
+        budget = sum(
+            segment.token_count
+            for segment in full.segments
+            if segment.segment_id in {"system", "query", "z-rank-1"}
+        )
+
+        context = engine.build(
+            query="哪个证据优先？",
+            system_prompt="仅根据证据回答。",
+            retrieved_results=results,
+            config=ContextEngineConfig(token_budget=budget, mode="no_memory"),
+        )
+
+        self.assertEqual(context.evidence.used_chunk_ids, ["z-rank-1"])
+        self.assertIn("a-rank-2", context.evidence.skipped_chunk_ids)
+
     def test_summary_recent_and_compression_failure_have_controlled_fallback(self) -> None:
         engine = ContextEngine(
             summarizer=FakeSummarizer(), evidence_compressor=FailingCompressor()

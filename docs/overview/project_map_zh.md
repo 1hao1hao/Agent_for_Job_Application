@@ -142,8 +142,8 @@ stale reclaim 和最近会话缓存；文件系统保存体积较大的
 | Job-Skill-Experience Graph | 向量相似不等于能连接“岗位要求-项目技能-个人经历” | 抽取 Job、Skill、Project、Experience、Technology、Company 节点和有向关系，全部回指 Chunk | v0.3 构建 3098 节点、2741 边，支持可解释多跳证据 |
 | Graph + Vector Retrieval | Graph-only 容易漏文本，Vector-only 缺关系路径 | 实体链接和有界多跳召回图证据，再用 RRF 与向量 Chunk 融合 | 80 条 frozen 上相对 BM25：Recall@5 46.67% -> 63.33%，MRR 35.19% -> 57.58%；P95 15.50 -> 1209.40 ms |
 | CrossEncoder Rerank Policy | 召回改善后仍可能存在前排噪声，但全量重排成本高 | 对同一 BM25+Dense+RRF 候选分别运行 never / always / low-confidence，用同一 MiniLM revision 控制变量 | v0.3 dev：always 将 MRR 44.31% -> 49.22%但 P95 1252 -> 2799 ms；按需调用率 18.12%、MRR 45.18%、P95 2175 ms，无 Pareto 最优 |
-| Evidence Gate v2 | 不同 Retriever 分数不可比，且不同问题需要的证据结构不同 | 按实际 BM25/Dense/Hybrid/Graph 策略加载 dev 校准门槛；普通题查数量，多来源查 source coverage，关系题读取 Retriever 给出的有效 path/edge 并输出 `relation_evidence_present`，不在 Gate 重走图；score 不可分时关闭该门槛 | 四种 raw score 均未同时满足 FAR<=5%、FRR<=25%，系统保留负结果并回退结构检查；test 拒答准确率 100%，但 FAR 25% |
-| Source-Balanced Context | 纯 rank 贪心容易被单一来源占满预算 | 在紧预算下优先保证 required sources，再按 rank 补充，且不截断单个 Chunk | 1200 字符预算下完整来源覆盖率 30.19% -> 54.72%，相关证据召回下降 0.94 pp |
+| Evidence Gate v2 | 不同 Retriever 分数不可比，且 Router 的候选范围不能误当成回答必须覆盖的来源 | 按实际 BM25/Dense/Hybrid/Graph 策略加载 dev 校准门槛；普通题查数量，只有 Query 明确要求多来源时才查 `required_source_types`，关系题读取有效 path/edge；score 不可分时关闭该门槛 | 四种 raw score 均未同时满足 FAR<=5%、FRR<=25%，因此锁定配置使用结构检查；E2E release test 的不可答题拒答准确率 100%，但可答题仍有 12 条 Gate reject |
+| Source-Balanced Context | 纯 rank 贪心容易被单一来源占满预算，同优先级再按 hash ID 排序还会把高 rank 证据挤出 | 在紧预算下优先保证明确 required sources，再按检索 rank 稳定装箱；注入必要 provenance/Graph path，并让 Citation 白名单只包含真正进入 Prompt 的完整 Chunk | 修复“证据已召回但 Context 丢失”和 Context 外引用；dev 仍有 2 条预算丢证据，保留为后续 query-aware packing 问题 |
 | Adaptive Context Engine / 分层记忆 | 固定 Recent、Summary 或 Memory 策略无法同时适配独立问题、追问和长会话 | `ContextSignalExtractor -> ContextPolicy -> ContextPlan -> ContextEngine`：以 History Token Pressure、指代/省略+BGE 语义连续性、Memory `similarity * importance` 动态决定各层；Engine 再按统一预算、优先级和跨层语义去重编排 Profile/History/Summary/Memory/Evidence | 60 组/300 turns dev 中保持 100% Follow-up Success；相对 Summary+Recent，Prompt Token 75.55 -> 60.68（-19.68%），History Redundancy 42.86% -> 0；该 Context-level 结果不等于自由生成答案准确率 |
 | Generator JSON Contract | 自由文本难以校验引用和拒答状态 | Prompt 约束只依据 Context，模型返回 answer/cited_chunk_ids/sufficient/reason；解析失败受控重试一次 | 生成结果可被程序验证，而不是把模型输出直接交给用户 |
 | Model Gateway | 外部模型有 timeout、429、5xx 和供应商故障 | Provider Protocol + 有界退避、并发 semaphore、熔断和 fallback，鉴权错误不盲重试 | 6 类 Fake 故障注入验证控制流，真实 DeepSeek primary smoke 通过；备用 Provider 未做真实 fallback |
@@ -629,8 +629,11 @@ Abstention 与重试不是一回事：重试是得到最终决策前的内部动
 2. **Reranker 的结论依赖候选和触发策略**：v0.3 同集控制实验中，Always 提高前排
    排序但显著增加 P95，按需策略只得到小幅 MRR 改善并伴随 Recall@5 退化；不宣称
    存在同时最优质量和延迟的策略。
-3. **当前端到端仍有明确缺口**：v0.3 frozen E2E 为 8 answered / 69 insufficient / 3 error，
-   主要是旧 Router/Evidence Gate 对新关系问题过度拒答；不能把检索提升夸大成答案准确率提升。
+3. **当前端到端仍有明确缺口**：完成 E2E 拒答收敛后，锁定配置的 v0.3 release test 为
+   24 answered / 56 insufficient / 0 error；可答题严格 E2E Success 为 38.33%，不可答题拒答准确率
+   与已回答 Citation Validity 均为 100%。dev 最大剩余失败是 45 条 retrieval miss，其次为
+   19 条 Gate reject、14 条 Generator abstain 和 2 条 Context drop；不能把检索或拒答指标
+   夸大成答案准确率。完整漏斗见 `reports/ablations/p1-e2e-abstention-v03-20261005/`。
 
 ## 最短阅读顺序
 

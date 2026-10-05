@@ -1,0 +1,198 @@
+{
+  "dataset_version": "evalrag_v0.3",
+  "dev_case_count": 160,
+  "release_test_case_count": 80,
+  "baseline": {
+    "case_count": 160,
+    "answerable_case_count": 120,
+    "unanswerable_case_count": 40,
+    "terminal_stage_counts": {
+      "retrieval_miss": 48,
+      "answered": 16,
+      "citation_invalid": 16,
+      "generator_abstain": 46,
+      "model_error": 1,
+      "gate_reject": 33
+    },
+    "answerable_terminal_stage_counts": {
+      "retrieval_miss": 48,
+      "answered": 16,
+      "citation_invalid": 13,
+      "generator_abstain": 23,
+      "model_error": 1,
+      "gate_reject": 19
+    },
+    "answerable_e2e_success": 0.11666666666666667,
+    "unexpected_abstention_rate": 0.75,
+    "unanswerable_abstention_accuracy": 0.925,
+    "citation_validity_answered": 1.0,
+    "error_count": 17,
+    "answered_count": 16,
+    "mean_latency_ms": 3778.7362400908023,
+    "metric_definitions": {
+      "answerable_e2e_success": "answerable 且 answered、引用合法、Context 含 gold evidence / answerable cases",
+      "unexpected_abstention_rate": "answerable 但 insufficient_evidence / answerable cases",
+      "unanswerable_abstention_accuracy": "unanswerable 且 insufficient_evidence / unanswerable cases",
+      "citation_validity_answered": "answered 且所有 citation id 均存在于 Context / answered cases"
+    },
+    "run_id": "p1-e2e-abstention-v03-dev-baseline-20261005-rerun",
+    "dataset_version": "evalrag_v0.3",
+    "split": "dev",
+    "retriever_config": "configs/retrieval/adaptive_v2_v0.3.json",
+    "retriever_config_version": "adaptive-retrieval-v2.0",
+    "evidence_config": "configs/evidence/gate_calibrated_v0.3.json",
+    "evidence_config_version": "evidence-gate-v2.0-dev-locked",
+    "prompt_version": "p1-e2e-funnel-v1",
+    "category_counts": {
+      "single_source": 20,
+      "cross_source": 20,
+      "semantic_paraphrase": 20,
+      "hard_negative": 20,
+      "unanswerable": 20,
+      "freshness_conflict": 20,
+      "two_hop": 20,
+      "three_hop": 20
+    },
+    "model_gateway": {
+      "generation_calls": 109,
+      "provider_attempts": 110,
+      "tokens": {
+        "input_tokens": 145009,
+        "output_tokens": 18004,
+        "total_tokens": 163013
+      },
+      "estimated_cost_usd": 0.0
+    }
+  },
+  "final_dev": {
+    "case_count": 160,
+    "answerable_case_count": 120,
+    "unanswerable_case_count": 40,
+    "terminal_stage_counts": {
+      "retrieval_miss": 45,
+      "answered": 40,
+      "generator_abstain": 40,
+      "context_evidence_dropped": 2,
+      "gate_reject": 33
+    },
+    "answerable_terminal_stage_counts": {
+      "retrieval_miss": 45,
+      "answered": 40,
+      "generator_abstain": 14,
+      "context_evidence_dropped": 2,
+      "gate_reject": 19
+    },
+    "answerable_e2e_success": 0.30833333333333335,
+    "unexpected_abstention_rate": 0.6666666666666666,
+    "unanswerable_abstention_accuracy": 1.0,
+    "citation_validity_answered": 1.0,
+    "error_count": 0,
+    "answered_count": 40,
+    "mean_latency_ms": 3093.1329948594794,
+    "metric_definitions": {
+      "answerable_e2e_success": "answerable 且 answered、引用合法、Context 含 gold evidence / answerable cases",
+      "unexpected_abstention_rate": "answerable 但 insufficient_evidence / answerable cases",
+      "unanswerable_abstention_accuracy": "unanswerable 且 insufficient_evidence / unanswerable cases",
+      "citation_validity_answered": "answered 且所有 citation id 均存在于 Context / answered cases"
+    },
+    "run_id": "p1-e2e-abstention-v03-dev-final-20261005",
+    "dataset_version": "evalrag_v0.3",
+    "split": "dev",
+    "retriever_config": "configs/retrieval/adaptive_v2_v0.3.json",
+    "retriever_config_version": "adaptive-retrieval-v2.0",
+    "evidence_config": "configs/evidence/gate_e2e_v0.3.json",
+    "evidence_config_version": "evidence-gate-v2.1-e2e-locked",
+    "prompt_version": "p1-e2e-funnel-v2",
+    "category_counts": {
+      "single_source": 20,
+      "cross_source": 20,
+      "semantic_paraphrase": 20,
+      "hard_negative": 20,
+      "unanswerable": 20,
+      "freshness_conflict": 20,
+      "two_hop": 20,
+      "three_hop": 20
+    },
+    "model_gateway": {
+      "generation_calls": 109,
+      "provider_attempts": 111,
+      "tokens": {
+        "input_tokens": 149147,
+        "output_tokens": 19659,
+        "total_tokens": 168806
+      },
+      "estimated_cost_usd": 0.0
+    },
+    "source_prediction_run": "p1-e2e-abstention-v03-dev-release-candidate-20261005",
+    "deterministic_validation_replay": true,
+    "replayed_case_ids": [
+      "v03_hard_negative_007"
+    ]
+  },
+  "release_test": {
+    "case_count": 80,
+    "answerable_case_count": 60,
+    "unanswerable_case_count": 20,
+    "terminal_stage_counts": {
+      "answered": 24,
+      "retrieval_miss": 19,
+      "context_evidence_dropped": 1,
+      "generator_abstain": 18,
+      "gate_reject": 18
+    },
+    "answerable_terminal_stage_counts": {
+      "answered": 24,
+      "retrieval_miss": 19,
+      "context_evidence_dropped": 1,
+      "generator_abstain": 4,
+      "gate_reject": 12
+    },
+    "answerable_e2e_success": 0.38333333333333336,
+    "unexpected_abstention_rate": 0.6,
+    "unanswerable_abstention_accuracy": 1.0,
+    "citation_validity_answered": 1.0,
+    "error_count": 0,
+    "answered_count": 24,
+    "mean_latency_ms": 3203.0055040493608,
+    "metric_definitions": {
+      "answerable_e2e_success": "answerable 且 answered、引用合法、Context 含 gold evidence / answerable cases",
+      "unexpected_abstention_rate": "answerable 但 insufficient_evidence / answerable cases",
+      "unanswerable_abstention_accuracy": "unanswerable 且 insufficient_evidence / unanswerable cases",
+      "citation_validity_answered": "answered 且所有 citation id 均存在于 Context / answered cases"
+    },
+    "run_id": "p1-e2e-abstention-v03-release-test-20261005",
+    "dataset_version": "evalrag_v0.3",
+    "split": "test",
+    "retriever_config": "configs/retrieval/adaptive_v2_v0.3.json",
+    "retriever_config_version": "adaptive-retrieval-v2.0",
+    "evidence_config": "configs/evidence/gate_e2e_v0.3.json",
+    "evidence_config_version": "evidence-gate-v2.1-e2e-locked",
+    "prompt_version": "p1-e2e-funnel-v2",
+    "category_counts": {
+      "single_source": 10,
+      "cross_source": 10,
+      "semantic_paraphrase": 10,
+      "hard_negative": 10,
+      "unanswerable": 10,
+      "freshness_conflict": 10,
+      "two_hop": 10,
+      "three_hop": 10
+    },
+    "model_gateway": {
+      "generation_calls": 53,
+      "provider_attempts": 53,
+      "tokens": {
+        "input_tokens": 72688,
+        "output_tokens": 10165,
+        "total_tokens": 82853
+      },
+      "estimated_cost_usd": 0.0
+    }
+  },
+  "delta": {
+    "answerable_e2e_success": 0.19166666666666668,
+    "unexpected_abstention_rate": -0.08333333333333337,
+    "unanswerable_abstention_accuracy": 0.07499999999999996,
+    "error_count": -17
+  }
+}

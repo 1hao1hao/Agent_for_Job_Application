@@ -1,0 +1,26 @@
+{
+  "release_config_version": "e2e-abstention-release-v0.3",
+  "dataset_version": "evalrag_v0.3",
+  "dev_report": "reports/ablations/p1-e2e-abstention-v03-20261005/report.md",
+  "release_test_run": "reports/runs/p1-e2e-abstention-v03-release-test-20261005",
+  "router_config": "configs/routing/router_registry_v0.1.json",
+  "retrieval_config": "configs/retrieval/adaptive_v2_v0.3.json",
+  "evidence_config": "configs/evidence/gate_e2e_v0.3.json",
+  "model_gateway_config": "configs/model_gateway/gateway_v0.1.json",
+  "prompt_version": "p1-e2e-funnel-v2",
+  "context_mode": "adaptive",
+  "context_strategy": "source_balanced",
+  "context_token_budget": 1800,
+  "temperature": 0.0,
+  "sha256": {
+    "data/evaluation/evalrag_v0.3.jsonl": "151ef8b56a84c3c0ffdb62026c705053f68e44002b7c8bde922f0a0154d4acd7",
+    "data/processed/chunks/evalrag_v0.3.jsonl": "40ca3b5bfac78922ae0fcce97836981b096c39260a4eb4295958a3d8720968d6",
+    "configs/retrieval/adaptive_v2_v0.3.json": "dbbbdbee6fbfd6ecce3852e46a92b21ff93291778f4374bcb232412d65af273a",
+    "configs/routing/router_registry_v0.1.json": "236173aefbc7fb557af641aef55bdf87f91c0c1a1b3613d0635677de3546d369",
+    "configs/evidence/gate_e2e_v0.3.json": "87a3df505c8c9813492471b420a8e3277c3e8eb2fbf111fa870ebd6c041ea44b",
+    "configs/model_gateway/gateway_v0.1.json": "c5f5a7749fb9a146bdc57b45d374119ba77bc0b413ed4926921aa309501aa3a4",
+    "src/intern_rag/agent/generation.py": "7ccbd5f371ad6f069b605393c342b823185a3d61aa9e13c83c34055f8d0bde85",
+    "src/intern_rag/agent/pipeline.py": "d77e2f2fbee1751cf64ccb2090f2b99f1ee6c8703d119af1af25e6bf9c3de65d"
+  },
+  "policy": "dev fixes and configuration are immutable after the one-time release test"
+}

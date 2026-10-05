@@ -45,12 +45,17 @@ class EvidenceConfig:
     calibrated_scores: Mapping[str, ScoreGateConfig] = field(default_factory=dict)
     need_min_results: Mapping[str, int] = field(default_factory=dict)
     max_frr_for_score_gate: float = 0.25
+    source_requirement_policy: Literal["route_all", "evidence_requirement"] = (
+        "evidence_requirement"
+    )
 
     def __post_init__(self) -> None:
         if self.min_results <= 0:
             raise ValueError("min_results must be greater than 0")
         if not 0.0 <= self.max_frr_for_score_gate <= 1.0:
             raise ValueError("max_frr_for_score_gate must be between 0 and 1")
+        if self.source_requirement_policy not in {"route_all", "evidence_requirement"}:
+            raise ValueError("unknown source requirement policy")
 
 
 @dataclass(frozen=True)
@@ -101,6 +106,9 @@ def load_evidence_config(path: Path) -> EvidenceConfig:
         calibrated_scores=calibrated,
         need_min_results={str(k): int(v) for k, v in dict(raw.get("need_min_results", {})).items()},
         max_frr_for_score_gate=float(raw.get("max_frr_for_score_gate", 0.25)),
+        source_requirement_policy=str(
+            raw.get("source_requirement_policy", "route_all")
+        ),  # type: ignore[arg-type]
     )
 
 
@@ -132,7 +140,18 @@ def check_evidence(
     effective = str(trace.get("selected_strategy", trace.get("strategy", retriever_name)))
     effective = {"graph_hybrid": "graph_vector", "adaptive": retriever_name}.get(effective, effective)
     observed_sources = sorted({result.chunk.source_type for result in results})
-    required_sources = set(route.routed_sources)
+    explicit_required_sources = requirement.get("required_source_types", ())
+    required_sources = (
+        set(route.routed_sources)
+        if config.source_requirement_policy == "route_all"
+        else {
+            str(source)
+            for source in explicit_required_sources
+            if str(source).strip()
+        }
+    )
+    if need == "legacy":
+        required_sources = set(route.routed_sources)
     missing_sources = sorted(required_sources - set(observed_sources))
     top_score = results[0].score if results else None
     min_results = int(config.need_min_results.get(need, config.min_results))
@@ -141,8 +160,11 @@ def check_evidence(
         for result in results
     )
     needs_source_coverage = (
-        need == "multi_source_synthesis"
-        or bool(requirement.get("multi_source_required", False))
+        bool(required_sources)
+        and (
+            need == "multi_source_synthesis"
+            or bool(requirement.get("multi_source_required", False))
+        )
         or (need == "legacy" and config.require_source_coverage)
     )
     structural_checks = {

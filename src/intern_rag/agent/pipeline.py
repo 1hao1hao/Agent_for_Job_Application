@@ -366,13 +366,16 @@ class RagPipeline:
                 current_stage = "context"
                 stage_started_at = perf_counter()
                 managed_context = None
+                required_context_sources = _required_context_sources(
+                    route_decision, evidence_requirement_trace
+                )
                 if self.context_engine is None:
                     built_context = build_context(
                         request.query,
                         retrieved_results,
                         max_chars=self.config.context_max_chars,
                         strategy=self.config.context_strategy,
-                        required_source_types=route_decision.routed_sources,
+                        required_source_types=required_context_sources,
                     )
                 else:
                     inputs = (
@@ -423,7 +426,7 @@ class RagPipeline:
                             evidence_strategy=self.config.context_strategy,
                             reserved_token_count=reserved_tokens,
                         ),
-                        required_source_types=route_decision.routed_sources,
+                        required_source_types=required_context_sources,
                         profile=inputs.profile,
                         history=inputs.history,
                         memories=inputs.memories,
@@ -557,7 +560,23 @@ class RagPipeline:
                 latency_ms["validation"] = _elapsed_ms(stage_started_at)
                 validation_trace = _validation_to_trace(validation_result)
 
-                if not validation_result.is_valid:
+                safe_abstention_with_citations = (
+                    not generation_result.sufficient
+                    and bool(validation_result.issues)
+                )
+                if safe_abstention_with_citations:
+                    # 模型已明确拒答时，丢弃违规引用比把安全拒答升级成系统错误更稳妥。
+                    validation_trace["normalized_safe_abstention"] = True
+                    response = RagResponse(
+                        request_id=request.request_id,
+                        trace_id=trace_id,
+                        answer=generation_result.answer.strip() or INSUFFICIENT_ANSWER,
+                        citations=[],
+                        routed_sources=route_decision.routed_sources,
+                        status="insufficient_evidence",
+                        latency_ms=0.0,
+                    )
+                elif not validation_result.is_valid:
                     error_type = "citation_invalid"
                     error_message = "; ".join(
                         issue.message for issue in validation_result.issues
@@ -768,6 +787,17 @@ class RagPipeline:
             latency_ms=latency_ms,
             error_type=error_type,
         )
+
+
+def _required_context_sources(
+    route: RouteDecision,
+    requirement: Mapping[str, object],
+) -> list[str]:
+    """优先使用 Query 明确要求的来源，单来源问题回退 Router 范围。"""
+
+    explicit = requirement.get("required_source_types", ())
+    sources = [str(source) for source in explicit if str(source).strip()]
+    return list(dict.fromkeys(sources or route.routed_sources))
 
 
 def _elapsed_ms(started_at: float) -> float:

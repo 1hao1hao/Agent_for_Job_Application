@@ -62,6 +62,23 @@ class AdaptiveRetrieverTests(unittest.TestCase):
         self.assertEqual(analyzer.choose_strategy(semantic)[0], "hybrid")
         self.assertEqual(analyzer.choose_strategy(synthesis)[0], "hybrid")
         self.assertEqual(synthesis.need_type, "multi_source_synthesis")
+        self.assertEqual(synthesis.required_source_types, ("jd", "resume"))
+
+    def test_explicit_source_names_override_incomplete_router_scope(self) -> None:
+        analyzer = QueryAnalyzer()
+
+        requirement = analyzer.classify_evidence_need(
+            analyzer.analyze(
+                "interview 与 project_logs 分别如何描述证据门控？",
+                {"interview"},
+            )
+        )
+
+        self.assertEqual(requirement.need_type, "multi_source_synthesis")
+        self.assertEqual(
+            requirement.required_source_types,
+            ("interview", "project_logs"),
+        )
 
     def test_arbitrary_english_token_is_not_exact_signal(self) -> None:
         analyzer = QueryAnalyzer()

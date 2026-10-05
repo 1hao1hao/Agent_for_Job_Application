@@ -34,6 +34,7 @@ class QueryFeatures:
     entity_types: tuple[str, ...]
     is_unanswerable_route: bool
     has_conflicting_signals: bool = False
+    required_source_types: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -71,6 +72,13 @@ class QueryAnalyzerConfig:
         "experience": ("经历", "简历", "经验", "候选人", "个人背景"),
         "company": ("公司", "企业", "部门"),
     })
+    source_markers: Mapping[str, tuple[str, ...]] = field(default_factory=lambda: {
+        "jd": ("jd", "岗位描述", "招聘信息"),
+        "interview": ("interview", "面经", "面试资料"),
+        "project_logs": ("project_logs", "项目日志", "项目资料"),
+        "resume": ("resume", "简历"),
+        "user_profile": ("user_profile", "用户画像", "个人画像"),
+    })
 
 
 @dataclass(frozen=True)
@@ -91,6 +99,7 @@ class EvidenceRequirement:
     graph_required: bool
     multi_source_required: bool
     reason: str
+    required_source_types: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -181,6 +190,11 @@ class QueryAnalyzer:
         weak_relations = tuple(
             marker for marker in self.config.weak_relation_markers if marker in normalized
         )
+        explicit_sources = tuple(
+            source_type
+            for source_type, markers in self.config.source_markers.items()
+            if any(marker in normalized for marker in markers)
+        )
         needs_exact_match = (
             any(term in normalized for term in self.config.exact_terms)
             or any(marker in normalized for marker in self.config.exact_fact_markers)
@@ -193,7 +207,8 @@ class QueryAnalyzer:
             marker in normalized for marker in self.config.semantic_markers
         )
         needs_multi_source = (
-            len(sources) >= 2
+            len(explicit_sources) >= 2
+            or len(sources) >= 2
             or any(marker in normalized for marker in self.config.multi_source_markers)
         )
         requires_entity_reasoning = bool(strong_relations) or (
@@ -209,6 +224,11 @@ class QueryAnalyzer:
             # 是否属于明确域外问题由 Router 标记；普通空路由仍应进入检索与 Gate。
             is_unanswerable_route=False,
             has_conflicting_signals=needs_exact_match and needs_semantic_match,
+            required_source_types=(
+                explicit_sources
+                if explicit_sources
+                else tuple(sorted(sources)) if len(sources) >= 2 else ()
+            ),
         )
 
     def classify_evidence_need(
@@ -220,32 +240,37 @@ class QueryAnalyzer:
         if features.is_unanswerable_route:
             return EvidenceRequirement(
                 "unanswerable", False, False, False, False,
-                "router returned no searchable sources",
+                "router returned no searchable sources", (),
             )
         if features.requires_entity_reasoning:
             return EvidenceRequirement(
                 "relation_reasoning", True, True, True,
                 features.needs_multi_source or len(features.entity_types) >= 2,
                 "query needs an explicit relation path between entities",
+                features.required_source_types,
             )
         if features.needs_multi_source:
             return EvidenceRequirement(
                 "multi_source_synthesis", True, True, False, True,
                 "query needs evidence synthesis or comparison across sources",
+                features.required_source_types,
             )
         if features.needs_semantic_match:
             return EvidenceRequirement(
                 "semantic_explanation", False, True, False, False,
                 "query asks for semantic explanation or paraphrased evidence",
+                features.required_source_types,
             )
         if features.needs_exact_match:
             return EvidenceRequirement(
                 "exact_fact", True, False, False, False,
                 "query asks for an exact term or literal fact",
+                features.required_source_types,
             )
         return EvidenceRequirement(
             "balanced_retrieval", True, True, False, False,
             "evidence need is ambiguous, so lexical and semantic recall are retained",
+            features.required_source_types,
         )
 
     def choose_strategy(

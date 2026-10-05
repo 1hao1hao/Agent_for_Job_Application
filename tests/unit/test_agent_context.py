@@ -108,6 +108,36 @@ class AgentContextTests(unittest.TestCase):
         self.assertLessEqual(context.char_count, context.max_chars)
         self.assertFalse(context.is_truncated)
 
+    def test_context_exposes_compact_freshness_and_graph_evidence(self) -> None:
+        chunk = Chunk(
+            id="jd-fresh",
+            source_type="jd",
+            source_path="data/raw/jd/fresh.md",
+            title="测试岗位",
+            text="岗位职责正文。",
+            metadata={
+                "source_type": "jd",
+                "status": "active",
+                "collected_at": "2026-10-05",
+                "content_hash": "must-not-enter-prompt",
+            },
+        )
+        result = RetrievalResult(
+            "jd-fresh", 0.9, 1, chunk,
+            details={
+                "path_valid": True,
+                "graph_path": "岗位 -[requires]-> Python",
+                "graph_edge_ids": "edge-1",
+            },
+        )
+
+        context = build_context("岗位状态和关系", [result], max_chars=1000)
+
+        self.assertIn('"status": "active"', context.text)
+        self.assertIn('"collected_at": "2026-10-05"', context.text)
+        self.assertIn("岗位 -[requires]-> Python", context.text)
+        self.assertNotIn("must-not-enter-prompt", context.text)
+
     def test_build_context_returns_empty_context_for_empty_results(self) -> None:
         context = build_context("分析岗位", [], max_chars=100)
 

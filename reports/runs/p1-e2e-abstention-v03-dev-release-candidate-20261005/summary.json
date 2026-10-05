@@ -1,0 +1,61 @@
+{
+  "case_count": 160,
+  "answerable_case_count": 120,
+  "unanswerable_case_count": 40,
+  "terminal_stage_counts": {
+    "retrieval_miss": 45,
+    "answered": 40,
+    "generator_abstain": 39,
+    "context_evidence_dropped": 2,
+    "gate_reject": 33,
+    "citation_invalid": 1
+  },
+  "answerable_terminal_stage_counts": {
+    "retrieval_miss": 45,
+    "answered": 40,
+    "generator_abstain": 14,
+    "context_evidence_dropped": 2,
+    "gate_reject": 19
+  },
+  "answerable_e2e_success": 0.30833333333333335,
+  "unexpected_abstention_rate": 0.6666666666666666,
+  "unanswerable_abstention_accuracy": 0.975,
+  "citation_validity_answered": 1.0,
+  "error_count": 1,
+  "answered_count": 40,
+  "mean_latency_ms": 3093.1329948594794,
+  "metric_definitions": {
+    "answerable_e2e_success": "answerable 且 answered、引用合法、Context 含 gold evidence / answerable cases",
+    "unexpected_abstention_rate": "answerable 但 insufficient_evidence / answerable cases",
+    "unanswerable_abstention_accuracy": "unanswerable 且 insufficient_evidence / unanswerable cases",
+    "citation_validity_answered": "answered 且所有 citation id 均存在于 Context / answered cases"
+  },
+  "run_id": "p1-e2e-abstention-v03-dev-release-candidate-20261005",
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "retriever_config": "configs/retrieval/adaptive_v2_v0.3.json",
+  "retriever_config_version": "adaptive-retrieval-v2.0",
+  "evidence_config": "configs/evidence/gate_e2e_v0.3.json",
+  "evidence_config_version": "evidence-gate-v2.1-e2e-dev",
+  "prompt_version": "p1-e2e-funnel-v2",
+  "category_counts": {
+    "single_source": 20,
+    "cross_source": 20,
+    "semantic_paraphrase": 20,
+    "hard_negative": 20,
+    "unanswerable": 20,
+    "freshness_conflict": 20,
+    "two_hop": 20,
+    "three_hop": 20
+  },
+  "model_gateway": {
+    "generation_calls": 109,
+    "provider_attempts": 111,
+    "tokens": {
+      "input_tokens": 149147,
+      "output_tokens": 19659,
+      "total_tokens": 168806
+    },
+    "estimated_cost_usd": 0.0
+  }
+}

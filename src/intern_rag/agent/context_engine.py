@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 import re
 from typing import TYPE_CHECKING, Callable, Literal, Protocol, Sequence
 
-from intern_rag.agent.context import build_context
+from intern_rag.agent.context import build_context, format_context_item
 from intern_rag.agent.schemas import BuiltContext
 from intern_rag.retrieval import RetrievalResult
 
@@ -342,23 +342,25 @@ class ContextEngine:
                 except Exception:
                     fallbacks.append(f"evidence:{item.chunk_id}:compression_error")
             # 压缩器只处理正文，citation 所需的结构化头始终由 Engine 重建。
-            text = (
-                f"chunk_id: {item.chunk_id}\nsource_type: {item.source_type}\n"
-                f"title: {item.title}\nrank: {item.rank}\nscore: {item.score:.6f}\n"
-                f"text:\n{evidence_body}"
-            )
+            text = format_context_item(item, text=evidence_body)
             candidates.append(
                 self._segment("evidence", item.chunk_id, text, 70, f"rank={item.rank},score={item.score:.6f}")
             )
 
         kept = list(fixed)
         used_tokens = fixed_tokens
-        for segment in sorted(candidates, key=lambda item: (-item.priority, item.segment_id)):
+        # Python 排序稳定：同一层保持 Context Builder 已确定的 rank/source 顺序。
+        # 不能再按随机化 chunk id 排序，否则高排名 gold evidence 可能被预算挤出。
+        for segment in sorted(candidates, key=lambda item: -item.priority):
             if used_tokens + segment.token_count > managed_budget:
                 dropped.append({"segment_id": segment.segment_id, "reason": "token_budget"})
                 continue
             kept.append(segment)
             used_tokens += segment.token_count
+        kept_evidence_ids = {
+            segment.segment_id for segment in kept if segment.kind == "evidence"
+        }
+        evidence = _filter_evidence_context(evidence, kept_evidence_ids)
         text = "\n\n".join(_format_segment(segment) for segment in kept)
         return ManagedContext(
             query=query,
@@ -449,6 +451,34 @@ def _deduplicate_results(results: Sequence[RetrievalResult]) -> list[RetrievalRe
         texts.add(normalized)
         output.append(result)
     return output
+
+
+def _filter_evidence_context(
+    context: BuiltContext,
+    kept_ids: set[str],
+) -> BuiltContext:
+    """让 Citation 白名单与真正进入最终 Prompt 的 Evidence 保持一致。"""
+
+    items = [item for item in context.items if item.chunk_id in kept_ids]
+    used_ids = [item.chunk_id for item in items]
+    skipped_ids = list(dict.fromkeys([
+        *context.skipped_chunk_ids,
+        *(chunk_id for chunk_id in context.used_chunk_ids if chunk_id not in kept_ids),
+    ]))
+    covered = sorted({item.source_type for item in items})
+    required = [*context.covered_source_types, *context.missing_source_types]
+    return BuiltContext(
+        query=context.query,
+        text=context.text,
+        items=items,
+        used_chunk_ids=used_ids,
+        skipped_chunk_ids=skipped_ids,
+        char_count=context.char_count,
+        max_chars=context.max_chars,
+        selection_strategy=context.selection_strategy,
+        covered_source_types=covered,
+        missing_source_types=[source for source in required if source not in covered],
+    )
 
 
 def _format_segment(segment: ContextSegment) -> str:

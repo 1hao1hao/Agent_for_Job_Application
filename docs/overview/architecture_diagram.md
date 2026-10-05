@@ -30,7 +30,7 @@ flowchart LR
 ```mermaid
 flowchart TD
     REQ["RagRequest<br/>query / user_id / session_id / config"] --> RUNTIME["AgentRuntime<br/>root Run + checkpoint"]
-    RUNTIME --> ROUTER["Rule Router（在线默认）<br/>Hybrid / Feedback 用于离线对照"]
+    RUNTIME --> ROUTER["Router<br/>服务默认 Rule / release 评测使用 Feedback Hybrid"]
     ROUTER -->|RouteDecision| ANALYZER["Query Analyzer<br/>QueryFeatures -> EvidenceRequirement"]
     ANALYZER --> CTRL["Bounded Agent Controller<br/>4 actions / max 4 steps"]
     CTRL -->|retrieve| SELECT["Adaptive Retriever<br/>BM25 / Dense / RRF / Graph+Vector"]
@@ -38,7 +38,7 @@ flowchart TD
     CONF -->|低置信且策略允许| RERANK["CrossEncoder Rerank<br/>最多一次"]
     CONF -->|无需重排| RESULTS["ranked RetrievalResult"]
     RERANK --> RESULTS
-    RESULTS --> GATE["EvidenceRequirement-aware Gate<br/>count / source coverage / relation evidence"]
+    RESULTS --> GATE["EvidenceRequirement-aware Gate<br/>count / 显式 required sources / relation path"]
     GATE --> CTRL
     CTRL -->|expand_sources, max once| BROADEN["去掉 source filter<br/>扩源检索一次"]
     BROADEN --> SELECT
@@ -48,7 +48,7 @@ flowchart TD
     MEMORY --> STORE["History: Redis -> PostgreSQL<br/>Profile/Summary: PostgreSQL<br/>Memory: pgvector"]
     STORE --> SIGNAL["ContextSignalExtractor<br/>token pressure / follow-up / memory score"]
     SIGNAL --> POLICY["ContextPolicy -> ContextPlan"]
-    CTRL -->|generate| ENGINE["ContextEngine<br/>预算、优先级、跨层去重"]
+    CTRL -->|generate| ENGINE["ContextEngine<br/>预算、rank、provenance/path、引用白名单"]
     POLICY --> ENGINE
     ENGINE -->|ManagedContext| GEN["Generator<br/>结构化 Prompt / JSON contract"]
     GEN --> GATEWAY["Model Gateway<br/>timeout / retry / circuit breaker / fallback"]

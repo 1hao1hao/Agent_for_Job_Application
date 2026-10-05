@@ -117,6 +117,25 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(decision.status, "retryable")
         self.assertEqual(decision.missing_sources, ["resume"])
 
+    def test_explicit_evidence_sources_replace_broader_router_scope(self) -> None:
+        decision = check_evidence(
+            self.route,
+            [_result("jd-1", "jd", 0.8)],
+            retriever_name="adaptive",
+            retry_count=0,
+            max_retries=1,
+            config=EvidenceConfig(min_scores={}),
+            evidence_requirement={
+                "need_type": "multi_source_synthesis",
+                "multi_source_required": True,
+                "required_source_types": ["jd", "interview"],
+            },
+            retrieval_trace={"strategy": "hybrid"},
+        )
+
+        self.assertEqual(decision.status, "retryable")
+        self.assertEqual(decision.missing_sources, ["interview"])
+
     def test_unknown_route_is_normal_unanswerable(self) -> None:
         decision = check_evidence(
             RouteDecision("unknown", [], []), [], retriever_name="keyword",
