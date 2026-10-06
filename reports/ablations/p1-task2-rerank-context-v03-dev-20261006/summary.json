@@ -1,0 +1,1598 @@
+{
+  "run_id": "p1-task2-rerank-context-v03-dev-20261006",
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "case_count": 160,
+  "answerable_case_count": 120,
+  "candidate_k": 20,
+  "variants": {
+    "never": {
+      "metrics": {
+        "recall_at_5": 0.5833333333333334,
+        "mrr": 0.5211111111111111,
+        "ndcg_at_5": 0.5121403462361528
+      },
+      "rerank_invocation_count": 0,
+      "rerank_invocation_rate": 0.0,
+      "latency_ms": {
+        "p50": 425.0501934438944,
+        "p95": 1217.5530269742012
+      },
+      "strategy_distribution": {
+        "bm25": 39,
+        "hybrid": 61,
+        "graph_hybrid": 60
+      },
+      "evidence_need_distribution": {
+        "exact_fact": 39,
+        "semantic_explanation": 21,
+        "multi_source_synthesis": 20,
+        "relation_reasoning": 60,
+        "balanced_retrieval": 20
+      }
+    },
+    "always": {
+      "metrics": {
+        "recall_at_5": 0.6041666666666666,
+        "mrr": 0.5620833333333334,
+        "ndcg_at_5": 0.5507177497468915
+      },
+      "rerank_invocation_count": 100,
+      "rerank_invocation_rate": 0.625,
+      "latency_ms": {
+        "p50": 2295.8313953131437,
+        "p95": 4497.263869270682
+      },
+      "strategy_distribution": {
+        "bm25": 39,
+        "hybrid": 61,
+        "graph_hybrid": 60
+      },
+      "evidence_need_distribution": {
+        "exact_fact": 39,
+        "semantic_explanation": 21,
+        "multi_source_synthesis": 20,
+        "relation_reasoning": 60,
+        "balanced_retrieval": 20
+      }
+    },
+    "low_confidence": {
+      "metrics": {
+        "recall_at_5": 0.5833333333333334,
+        "mrr": 0.5211111111111111,
+        "ndcg_at_5": 0.5121403462361528
+      },
+      "rerank_invocation_count": 3,
+      "rerank_invocation_rate": 0.01875,
+      "latency_ms": {
+        "p50": 411.0015910118818,
+        "p95": 1514.1527820378542
+      },
+      "strategy_distribution": {
+        "bm25": 39,
+        "hybrid": 61,
+        "graph_hybrid": 60
+      },
+      "evidence_need_distribution": {
+        "exact_fact": 39,
+        "semantic_explanation": 21,
+        "multi_source_synthesis": 20,
+        "relation_reasoning": 60,
+        "balanced_retrieval": 20
+      }
+    },
+    "evidence_need": {
+      "metrics": {
+        "recall_at_5": 0.6041666666666666,
+        "mrr": 0.5620833333333334,
+        "ndcg_at_5": 0.5507177497468915
+      },
+      "rerank_invocation_count": 80,
+      "rerank_invocation_rate": 0.5,
+      "latency_ms": {
+        "p50": 1689.691212028265,
+        "p95": 3604.300731793046
+      },
+      "strategy_distribution": {
+        "bm25": 39,
+        "hybrid": 61,
+        "graph_hybrid": 60
+      },
+      "evidence_need_distribution": {
+        "exact_fact": 39,
+        "semantic_explanation": 21,
+        "multi_source_synthesis": 20,
+        "relation_reasoning": 60,
+        "balanced_retrieval": 20
+      }
+    }
+  },
+  "evidence_need_decisions": {
+    "exact_fact": {
+      "case_count": 39,
+      "never": {
+        "recall_at_5": 0.5641025641025641,
+        "mrr": 0.5064102564102564,
+        "ndcg_at_5": 0.5211145081740453
+      },
+      "always": {
+        "recall_at_5": 0.6153846153846154,
+        "mrr": 0.5598290598290598,
+        "ndcg_at_5": 0.5741740836080609
+      },
+      "recovered": 2,
+      "regressed": 0,
+      "one_case_tolerance": 0.02564102564102564,
+      "selected": true
+    },
+    "semantic_explanation": {
+      "case_count": 21,
+      "never": {
+        "recall_at_5": 0.6190476190476191,
+        "mrr": 0.5396825396825397,
+        "ndcg_at_5": 0.5600885479591864
+      },
+      "always": {
+        "recall_at_5": 0.6190476190476191,
+        "mrr": 0.5952380952380952,
+        "ndcg_at_5": 0.6014728454081646
+      },
+      "recovered": 0,
+      "regressed": 0,
+      "one_case_tolerance": 0.047619047619047616,
+      "selected": true
+    },
+    "multi_source_synthesis": {
+      "case_count": 20,
+      "never": {
+        "recall_at_5": 0.775,
+        "mrr": 0.6666666666666666,
+        "ndcg_at_5": 0.6468555646647255
+      },
+      "always": {
+        "recall_at_5": 0.8,
+        "mrr": 0.75,
+        "ndcg_at_5": 0.7314003013114003
+      },
+      "recovered": 0,
+      "regressed": 0,
+      "one_case_tolerance": 0.05,
+      "selected": true
+    },
+    "balanced_retrieval": {
+      "case_count": 0,
+      "never": {
+        "recall_at_5": 0.0,
+        "mrr": 0.0,
+        "ndcg_at_5": 0.0
+      },
+      "always": {
+        "recall_at_5": 0.0,
+        "mrr": 0.0,
+        "ndcg_at_5": 0.0
+      },
+      "recovered": 0,
+      "regressed": 0,
+      "one_case_tolerance": 0.0,
+      "selected": false
+    },
+    "relation_reasoning": {
+      "selected": false,
+      "reason": "graph_hybrid candidates are intentionally not CrossEncoder-reranked"
+    },
+    "global_latency_context": {
+      "never_p95_ms": 1217.5530269742012,
+      "always_p95_ms": 4497.263869270682,
+      "note": "Final policy reports its own measured P95; no invocation-rate target is used."
+    }
+  },
+  "selected_rerank_need_types": [
+    "exact_fact",
+    "semantic_explanation",
+    "multi_source_synthesis"
+  ],
+  "historical_retrieval_miss_analysis": {
+    "source": "p1-e2e-abstention-v03-20261005 retrieval_miss cases",
+    "case_count": 45,
+    "ranking_miss_count": 21,
+    "recall_miss_count": 24,
+    "ranking_miss_recovered": {
+      "never": 5,
+      "always": 6,
+      "low_confidence": 5,
+      "evidence_need": 6
+    },
+    "classification_rule": "ranking_miss iff any labeled relevant chunk appears in the selected strategy top-20 pre-rerank candidate pool",
+    "representative_cases": [
+      {
+        "case_id": "v03_single_source_001",
+        "query": "根据《RAGFlow MCP Client Examples》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "project_logs-doc-00500b13c11a6c78-0-c65cd6668a9d"
+        ],
+        "candidate_hit_ids": [
+          "project_logs-doc-00500b13c11a6c78-0-c65cd6668a9d"
+        ],
+        "candidate_ranks": {
+          "project_logs-doc-00500b13c11a6c78-0-c65cd6668a9d": 1
+        },
+        "policy_top5_hit": {
+          "never": true,
+          "always": true,
+          "low_confidence": true,
+          "evidence_need": true
+        }
+      },
+      {
+        "case_id": "v03_single_source_010",
+        "query": "根据《02. Agent 长短期记忆如何分层?》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "semantic_explanation",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "interview-doc-07bf92fc58761f21-0-2d67840b490c"
+        ],
+        "candidate_hit_ids": [
+          "interview-doc-07bf92fc58761f21-0-2d67840b490c"
+        ],
+        "candidate_ranks": {
+          "interview-doc-07bf92fc58761f21-0-2d67840b490c": 1
+        },
+        "policy_top5_hit": {
+          "never": true,
+          "always": true,
+          "low_confidence": true,
+          "evidence_need": true
+        }
+      },
+      {
+        "case_id": "v03_single_source_014",
+        "query": "根据《Deploy Local Models》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "project_logs-doc-08c9b64d8b16013c-0-30e3e29edb54"
+        ],
+        "candidate_hit_ids": [
+          "project_logs-doc-08c9b64d8b16013c-0-30e3e29edb54"
+        ],
+        "candidate_ranks": {
+          "project_logs-doc-08c9b64d8b16013c-0-30e3e29edb54": 4
+        },
+        "policy_top5_hit": {
+          "never": true,
+          "always": true,
+          "low_confidence": true,
+          "evidence_need": true
+        }
+      },
+      {
+        "case_id": "v03_single_source_002",
+        "query": "根据《v02_07_jd》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-00692e65b54a109f-0-59f2e7ecda6b"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_single_source_004",
+        "query": "根据《search_algorithm_intern》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-01d8f80a7f24335e-0-9f2ec154a0ba"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_single_source_007",
+        "query": "根据《v02_07_interview》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "interview-doc-05d581bdedb02ed6-0-7d0af47366f4"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      }
+    ],
+    "cases": [
+      {
+        "case_id": "v03_single_source_001",
+        "query": "根据《RAGFlow MCP Client Examples》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "project_logs-doc-00500b13c11a6c78-0-c65cd6668a9d"
+        ],
+        "candidate_hit_ids": [
+          "project_logs-doc-00500b13c11a6c78-0-c65cd6668a9d"
+        ],
+        "candidate_ranks": {
+          "project_logs-doc-00500b13c11a6c78-0-c65cd6668a9d": 1
+        },
+        "policy_top5_hit": {
+          "never": true,
+          "always": true,
+          "low_confidence": true,
+          "evidence_need": true
+        }
+      },
+      {
+        "case_id": "v03_single_source_002",
+        "query": "根据《v02_07_jd》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-00692e65b54a109f-0-59f2e7ecda6b"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_single_source_004",
+        "query": "根据《search_algorithm_intern》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-01d8f80a7f24335e-0-9f2ec154a0ba"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_single_source_007",
+        "query": "根据《v02_07_interview》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "interview-doc-05d581bdedb02ed6-0-7d0af47366f4"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_single_source_010",
+        "query": "根据《02. Agent 长短期记忆如何分层?》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "semantic_explanation",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "interview-doc-07bf92fc58761f21-0-2d67840b490c"
+        ],
+        "candidate_hit_ids": [
+          "interview-doc-07bf92fc58761f21-0-2d67840b490c"
+        ],
+        "candidate_ranks": {
+          "interview-doc-07bf92fc58761f21-0-2d67840b490c": 1
+        },
+        "policy_top5_hit": {
+          "never": true,
+          "always": true,
+          "low_confidence": true,
+          "evidence_need": true
+        }
+      },
+      {
+        "case_id": "v03_single_source_013",
+        "query": "根据《*Deep*Doc》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "project_logs-doc-088040a3e9257199-0-faf9ff1ed75d"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_single_source_014",
+        "query": "根据《Deploy Local Models》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "project_logs-doc-08c9b64d8b16013c-0-30e3e29edb54"
+        ],
+        "candidate_hit_ids": [
+          "project_logs-doc-08c9b64d8b16013c-0-30e3e29edb54"
+        ],
+        "candidate_ranks": {
+          "project_logs-doc-08c9b64d8b16013c-0-30e3e29edb54": 4
+        },
+        "policy_top5_hit": {
+          "never": true,
+          "always": true,
+          "low_confidence": true,
+          "evidence_need": true
+        }
+      },
+      {
+        "case_id": "v03_single_source_016",
+        "query": "根据《Basic Component》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "project_logs-doc-09e13ffd96c97bfe-0-ec73e5501cea"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_single_source_017",
+        "query": "根据《建筑工程管理》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-0a3e99448918ab22-0-3323f967947c"
+        ],
+        "candidate_hit_ids": [
+          "jd-doc-0a3e99448918ab22-0-3323f967947c"
+        ],
+        "candidate_ranks": {
+          "jd-doc-0a3e99448918ab22-0-3323f967947c": 16
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_single_source_019",
+        "query": "根据《Invite Members》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "project_logs-doc-0c06acd9b4291e73-0-dfed7794954e"
+        ],
+        "candidate_hit_ids": [
+          "project_logs-doc-0c06acd9b4291e73-0-dfed7794954e"
+        ],
+        "candidate_ranks": {
+          "project_logs-doc-0c06acd9b4291e73-0-dfed7794954e": 8
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": true,
+          "low_confidence": false,
+          "evidence_need": true
+        }
+      },
+      {
+        "case_id": "v03_single_source_020",
+        "query": "根据《v02_04_project_logs》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "project_logs-doc-0cde1b4b06dfbad3-0-df9704518234"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_single_source_023",
+        "query": "根据《产品管理》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-0d6730060c1e65f2-0-d322dfa76d49"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_single_source_025",
+        "query": "根据《generation_validation_iteration》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "project_logs-doc-0e8a9cc91e8f1b59-0-9de1d47b9d8a"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_single_source_026",
+        "query": "根据《Qwen-Agent Overview》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "project_logs-doc-0ee11a4fe8ff0e64-0-e3d549c70e9e"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_single_source_028",
+        "query": "根据《v02_02_interview》说明这份资料的核心要求或结论。",
+        "category": "single_source",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "interview-doc-117fb62e85c11227-0-256c352444c0"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_cross_source_022",
+        "query": "interview 与 project_logs 分别如何描述“关键词检索”，它们能提供哪些互补证据？",
+        "category": "cross_source",
+        "evidence_need": "multi_source_synthesis",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "interview-doc-35ef3335dd6f6b36-0-58ac0c241996",
+          "project_logs-doc-964d597ccb502d71-2-03aafd6cdd43"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_cross_source_023",
+        "query": "interview 与 resume 分别如何描述“关键词检索”，它们能提供哪些互补证据？",
+        "category": "cross_source",
+        "evidence_need": "multi_source_synthesis",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "interview-doc-35ef3335dd6f6b36-0-58ac0c241996",
+          "resume-doc-c0d075a84054b1af-0-6e65b1b78666"
+        ],
+        "candidate_hit_ids": [
+          "resume-doc-c0d075a84054b1af-0-6e65b1b78666"
+        ],
+        "candidate_ranks": {
+          "resume-doc-c0d075a84054b1af-0-6e65b1b78666": 18
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_cross_source_025",
+        "query": "jd 与 resume 分别如何描述“关键词检索”，它们能提供哪些互补证据？",
+        "category": "cross_source",
+        "evidence_need": "multi_source_synthesis",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-01d8f80a7f24335e-0-9f2ec154a0ba",
+          "resume-doc-c0d075a84054b1af-0-6e65b1b78666"
+        ],
+        "candidate_hit_ids": [
+          "resume-doc-c0d075a84054b1af-0-6e65b1b78666"
+        ],
+        "candidate_ranks": {
+          "resume-doc-c0d075a84054b1af-0-6e65b1b78666": 9
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_semantic_paraphrase_004",
+        "query": "不使用原文标题措辞，概括《search_algorithm_intern》主要解决的实际问题。",
+        "category": "semantic_paraphrase",
+        "evidence_need": "semantic_explanation",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-01d8f80a7f24335e-0-9f2ec154a0ba"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_semantic_paraphrase_007",
+        "query": "不使用原文标题措辞，概括《v02_07_interview》主要解决的实际问题。",
+        "category": "semantic_paraphrase",
+        "evidence_need": "semantic_explanation",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "interview-doc-05d581bdedb02ed6-0-7d0af47366f4"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_semantic_paraphrase_011",
+        "query": "不使用原文标题措辞，概括《文员(J10243)》主要解决的实际问题。",
+        "category": "semantic_paraphrase",
+        "evidence_need": "semantic_explanation",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-07cfc0ff8063d41b-0-d0bfb751b3c6"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_semantic_paraphrase_016",
+        "query": "不使用原文标题措辞，概括《Basic Component》主要解决的实际问题。",
+        "category": "semantic_paraphrase",
+        "evidence_need": "semantic_explanation",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "project_logs-doc-09e13ffd96c97bfe-0-ec73e5501cea"
+        ],
+        "candidate_hit_ids": [
+          "project_logs-doc-09e13ffd96c97bfe-0-ec73e5501cea"
+        ],
+        "candidate_ranks": {
+          "project_logs-doc-09e13ffd96c97bfe-0-ec73e5501cea": 14
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_semantic_paraphrase_023",
+        "query": "不使用原文标题措辞，概括《产品管理》主要解决的实际问题。",
+        "category": "semantic_paraphrase",
+        "evidence_need": "semantic_explanation",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-0d6730060c1e65f2-0-d322dfa76d49"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_semantic_paraphrase_028",
+        "query": "不使用原文标题措辞，概括《v02_02_interview》主要解决的实际问题。",
+        "category": "semantic_paraphrase",
+        "evidence_need": "semantic_explanation",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "interview-doc-117fb62e85c11227-0-256c352444c0"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_freshness_conflict_007",
+        "query": "《文员(J10243)》这条岗位资料的状态、发布时间或采集时间是什么？",
+        "category": "freshness_conflict",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-07cfc0ff8063d41b-0-d0bfb751b3c6"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_freshness_conflict_011",
+        "query": "《产品管理》这条岗位资料的状态、发布时间或采集时间是什么？",
+        "category": "freshness_conflict",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-0d6730060c1e65f2-0-d322dfa76d49"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_freshness_conflict_017",
+        "query": "《backend_intern》这条岗位资料的状态、发布时间或采集时间是什么？",
+        "category": "freshness_conflict",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-199efcaebeb3cc61-0-117f0feba239"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_freshness_conflict_029",
+        "query": "《v02_08_jd》这条岗位资料的状态、发布时间或采集时间是什么？",
+        "category": "freshness_conflict",
+        "evidence_need": "exact_fact",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-2507fada3d287fc4-0-2110ef98c31f"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_two_hop_001",
+        "query": "请沿知识关系说明“示例平台公司”与“请求追踪”之间的2跳联系（路径1）。",
+        "category": "two_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_hit_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_ranks": {
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0": 12
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_two_hop_002",
+        "query": "请沿知识关系说明“示例平台公司”与“Python”之间的2跳联系（路径2）。",
+        "category": "two_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_hit_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_ranks": {
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0": 4
+        },
+        "policy_top5_hit": {
+          "never": true,
+          "always": true,
+          "low_confidence": true,
+          "evidence_need": true
+        }
+      },
+      {
+        "case_id": "v03_two_hop_007",
+        "query": "请沿知识关系说明“示例平台公司”与“请求追踪”之间的2跳联系（路径7）。",
+        "category": "two_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_hit_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_ranks": {
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0": 14
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_two_hop_008",
+        "query": "请沿知识关系说明“示例平台公司”与“Python”之间的2跳联系（路径8）。",
+        "category": "two_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_hit_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_ranks": {
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0": 3
+        },
+        "policy_top5_hit": {
+          "never": true,
+          "always": true,
+          "low_confidence": true,
+          "evidence_need": true
+        }
+      },
+      {
+        "case_id": "v03_two_hop_022",
+        "query": "请沿知识关系说明“示例软件公司”与“PostgreSQL”之间的2跳联系（路径22）。",
+        "category": "two_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585"
+        ],
+        "candidate_hit_ids": [
+          "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585"
+        ],
+        "candidate_ranks": {
+          "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585": 12
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_two_hop_023",
+        "query": "请沿知识关系说明“示例软件公司”与“Git”之间的2跳联系（路径23）。",
+        "category": "two_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_two_hop_026",
+        "query": "请沿知识关系说明“示例软件公司”与“Linux”之间的2跳联系（路径26）。",
+        "category": "two_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585"
+        ],
+        "candidate_hit_ids": [
+          "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585"
+        ],
+        "candidate_ranks": {
+          "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585": 12
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_two_hop_028",
+        "query": "请沿知识关系说明“示例软件公司”与“Git”之间的2跳联系（路径28）。",
+        "category": "two_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_two_hop_029",
+        "query": "请沿知识关系说明“示例软件公司”与“Python”之间的2跳联系（路径29）。",
+        "category": "two_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_three_hop_008",
+        "query": "请沿知识关系说明“示例平台公司”与“评估方式”之间的3跳联系（路径8）。",
+        "category": "three_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+          "jd-doc-b0e7bd8da4865e60-2-a69c9f3638d4"
+        ],
+        "candidate_hit_ids": [
+          "jd-doc-b0e7bd8da4865e60-2-a69c9f3638d4",
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_ranks": {
+          "jd-doc-b0e7bd8da4865e60-2-a69c9f3638d4": 7,
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0": 17
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_three_hop_011",
+        "query": "请沿知识关系说明“示例平台公司”与“下一实验”之间的3跳联系（路径11）。",
+        "category": "three_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+          "project_logs-doc-ac0c3b2e42bd86ec-3-42308bfb963f"
+        ],
+        "candidate_hit_ids": [
+          "project_logs-doc-ac0c3b2e42bd86ec-3-42308bfb963f",
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_ranks": {
+          "project_logs-doc-ac0c3b2e42bd86ec-3-42308bfb963f": 7,
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0": 17
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_three_hop_014",
+        "query": "请沿知识关系说明“示例平台公司”与“结果证据”之间的3跳联系（路径14）。",
+        "category": "three_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+          "resume-doc-f5910f509bf392ad-2-f04c377123da"
+        ],
+        "candidate_hit_ids": [
+          "resume-doc-f5910f509bf392ad-2-f04c377123da",
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_ranks": {
+          "resume-doc-f5910f509bf392ad-2-f04c377123da": 12,
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0": 15
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_three_hop_017",
+        "query": "请沿知识关系说明“示例平台公司”与“能力边界”之间的3跳联系（路径17）。",
+        "category": "three_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+          "resume-doc-f5910f509bf392ad-3-3fff1cd7003f"
+        ],
+        "candidate_hit_ids": [
+          "resume-doc-f5910f509bf392ad-3-3fff1cd7003f",
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_ranks": {
+          "resume-doc-f5910f509bf392ad-3-3fff1cd7003f": 8,
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0": 15
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_three_hop_019",
+        "query": "请沿知识关系说明“示例平台公司”与“实现记录”之间的3跳联系（路径19）。",
+        "category": "three_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+          "project_logs-doc-ac0c3b2e42bd86ec-1-8c1b7c75c12f"
+        ],
+        "candidate_hit_ids": [
+          "project_logs-doc-ac0c3b2e42bd86ec-1-8c1b7c75c12f",
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_ranks": {
+          "project_logs-doc-ac0c3b2e42bd86ec-1-8c1b7c75c12f": 8,
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0": 16
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_three_hop_023",
+        "query": "请沿知识关系说明“示例平台公司”与“当前短板”之间的3跳联系（路径23）。",
+        "category": "three_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+          "user_profile-doc-7778232d62dbc95c-2-f9a76074166c"
+        ],
+        "candidate_hit_ids": [
+          "user_profile-doc-7778232d62dbc95c-2-f9a76074166c",
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_ranks": {
+          "user_profile-doc-7778232d62dbc95c-2-f9a76074166c": 6,
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0": 15
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_three_hop_025",
+        "query": "请沿知识关系说明“示例平台公司”与“边界条件”之间的3跳联系（路径25）。",
+        "category": "three_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "ranking_miss",
+        "relevant_chunk_ids": [
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+          "jd-doc-b0e7bd8da4865e60-3-41d0df903052"
+        ],
+        "candidate_hit_ids": [
+          "jd-doc-b0e7bd8da4865e60-3-41d0df903052",
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_ranks": {
+          "jd-doc-b0e7bd8da4865e60-3-41d0df903052": 6,
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0": 17
+        },
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      },
+      {
+        "case_id": "v03_three_hop_028",
+        "query": "请沿知识关系说明“示例平台公司”与“Git”之间的3跳联系（路径28）。",
+        "category": "three_hop",
+        "evidence_need": "relation_reasoning",
+        "miss_type": "recall_miss",
+        "relevant_chunk_ids": [
+          "interview-doc-9e4cc341b0e505d5-0-2a11a19f4768",
+          "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+        ],
+        "candidate_hit_ids": [],
+        "candidate_ranks": {},
+        "policy_top5_hit": {
+          "never": false,
+          "always": false,
+          "low_confidence": false,
+          "evidence_need": false
+        }
+      }
+    ]
+  },
+  "query_rewrite": {
+    "decision": "NOT_JUSTIFIED",
+    "retrieval_miss_followup_count": 0,
+    "retrieval_miss_followup_cases": [],
+    "context_reference_or_ellipsis_cases": 16,
+    "reason": "The 45 real E2E retrieval misses contain no explicit pronoun/ellipsis follow-up. The context benchmark contains follow-ups but has no raw-query retrieval gold comparison, so it cannot prove rewrite recovery.",
+    "implementation": "not added"
+  },
+  "representative_differences": [
+    {
+      "case_id": "v03_single_source_014",
+      "query": "根据《Deploy Local Models》说明这份资料的核心要求或结论。",
+      "evidence_need": "exact_fact",
+      "metrics": {
+        "never": {
+          "recall_at_5": 1.0,
+          "mrr": 0.25,
+          "ndcg_at_5": 0.43067655807339306
+        },
+        "always": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 1.0
+        },
+        "low_confidence": {
+          "recall_at_5": 1.0,
+          "mrr": 0.25,
+          "ndcg_at_5": 0.43067655807339306
+        },
+        "evidence_need": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 1.0
+        }
+      },
+      "spread": 0.75
+    },
+    {
+      "case_id": "v03_cross_source_010",
+      "query": "resume 与 user_profile 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+      "evidence_need": "multi_source_synthesis",
+      "metrics": {
+        "never": {
+          "recall_at_5": 0.5,
+          "mrr": 0.3333333333333333,
+          "ndcg_at_5": 0.3065735963827292
+        },
+        "always": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 0.8503449055347546
+        },
+        "low_confidence": {
+          "recall_at_5": 0.5,
+          "mrr": 0.3333333333333333,
+          "ndcg_at_5": 0.3065735963827292
+        },
+        "evidence_need": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 0.8503449055347546
+        }
+      },
+      "spread": 0.6666666666666667
+    },
+    {
+      "case_id": "v03_cross_source_001",
+      "query": "interview 与 jd 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+      "evidence_need": "multi_source_synthesis",
+      "metrics": {
+        "never": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 0.8772153153380493
+        },
+        "always": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6934264036172708
+        },
+        "low_confidence": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 0.8772153153380493
+        },
+        "evidence_need": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6934264036172708
+        }
+      },
+      "spread": 0.5
+    },
+    {
+      "case_id": "v03_cross_source_002",
+      "query": "interview 与 project_logs 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+      "evidence_need": "multi_source_synthesis",
+      "metrics": {
+        "never": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6934264036172708
+        },
+        "always": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 1.0
+        },
+        "low_confidence": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6934264036172708
+        },
+        "evidence_need": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 1.0
+        }
+      },
+      "spread": 0.5
+    },
+    {
+      "case_id": "v03_cross_source_004",
+      "query": "interview 与 user_profile 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+      "evidence_need": "multi_source_synthesis",
+      "metrics": {
+        "never": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6240505200038379
+        },
+        "always": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 1.0
+        },
+        "low_confidence": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6240505200038379
+        },
+        "evidence_need": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 1.0
+        }
+      },
+      "spread": 0.5
+    },
+    {
+      "case_id": "v03_cross_source_017",
+      "query": "jd 与 user_profile 分别如何描述“证据门控”，它们能提供哪些互补证据？",
+      "evidence_need": "multi_source_synthesis",
+      "metrics": {
+        "never": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6934264036172708
+        },
+        "always": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 0.9197207891481876
+        },
+        "low_confidence": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6934264036172708
+        },
+        "evidence_need": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 0.9197207891481876
+        }
+      },
+      "spread": 0.5
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_010",
+      "query": "不使用原文标题措辞，概括《02. Agent 长短期记忆如何分层?》主要解决的实际问题。",
+      "evidence_need": "semantic_explanation",
+      "metrics": {
+        "never": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6309297535714575
+        },
+        "always": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 1.0
+        },
+        "low_confidence": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6309297535714575
+        },
+        "evidence_need": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 1.0
+        }
+      },
+      "spread": 0.5
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_017",
+      "query": "不使用原文标题措辞，概括《建筑工程管理》主要解决的实际问题。",
+      "evidence_need": "semantic_explanation",
+      "metrics": {
+        "never": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6309297535714575
+        },
+        "always": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 1.0
+        },
+        "low_confidence": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6309297535714575
+        },
+        "evidence_need": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 1.0
+        }
+      },
+      "spread": 0.5
+    },
+    {
+      "case_id": "v03_single_source_011",
+      "query": "根据《文员(J10243)》说明这份资料的核心要求或结论。",
+      "evidence_need": "exact_fact",
+      "metrics": {
+        "never": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6309297535714575
+        },
+        "always": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 1.0
+        },
+        "low_confidence": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6309297535714575
+        },
+        "evidence_need": {
+          "recall_at_5": 1.0,
+          "mrr": 1.0,
+          "ndcg_at_5": 1.0
+        }
+      },
+      "spread": 0.5
+    },
+    {
+      "case_id": "v03_single_source_019",
+      "query": "根据《Invite Members》说明这份资料的核心要求或结论。",
+      "evidence_need": "exact_fact",
+      "metrics": {
+        "never": {
+          "recall_at_5": 0.0,
+          "mrr": 0.0,
+          "ndcg_at_5": 0.0
+        },
+        "always": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6309297535714575
+        },
+        "low_confidence": {
+          "recall_at_5": 0.0,
+          "mrr": 0.0,
+          "ndcg_at_5": 0.0
+        },
+        "evidence_need": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6309297535714575
+        }
+      },
+      "spread": 0.5
+    },
+    {
+      "case_id": "v03_freshness_conflict_001",
+      "query": "《v02_07_jd》这条岗位资料的状态、发布时间或采集时间是什么？",
+      "evidence_need": "exact_fact",
+      "metrics": {
+        "never": {
+          "recall_at_5": 0.0,
+          "mrr": 0.0,
+          "ndcg_at_5": 0.0
+        },
+        "always": {
+          "recall_at_5": 1.0,
+          "mrr": 0.3333333333333333,
+          "ndcg_at_5": 0.5
+        },
+        "low_confidence": {
+          "recall_at_5": 0.0,
+          "mrr": 0.0,
+          "ndcg_at_5": 0.0
+        },
+        "evidence_need": {
+          "recall_at_5": 1.0,
+          "mrr": 0.3333333333333333,
+          "ndcg_at_5": 0.5
+        }
+      },
+      "spread": 0.3333333333333333
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_026",
+      "query": "不使用原文标题措辞，概括《Qwen-Agent Overview》主要解决的实际问题。",
+      "evidence_need": "semantic_explanation",
+      "metrics": {
+        "never": {
+          "recall_at_5": 1.0,
+          "mrr": 0.3333333333333333,
+          "ndcg_at_5": 0.5
+        },
+        "always": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6309297535714575
+        },
+        "low_confidence": {
+          "recall_at_5": 1.0,
+          "mrr": 0.3333333333333333,
+          "ndcg_at_5": 0.5
+        },
+        "evidence_need": {
+          "recall_at_5": 1.0,
+          "mrr": 0.5,
+          "ndcg_at_5": 0.6309297535714575
+        }
+      },
+      "spread": 0.16666666666666669
+    }
+  ],
+  "locked_config": "configs/retrieval/adaptive_evidence_rerank_v0.3.json",
+  "boundary": "dev-only selection; evalrag_v0.3/test was not read or run"
+}

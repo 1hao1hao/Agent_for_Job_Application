@@ -141,10 +141,10 @@ stale reclaim 和最近会话缓存；文件系统保存体积较大的
 | Bounded Agent Controller | 原 Pipeline 虽有动态分支，但“下一步为什么发生”散落在 while/if 中，也缺少统一动作上限 | `AgentState -> AgentController.choose() -> AgentAction`；动作仅限 retrieve、expand_sources、generate、abstain，总计最多 4 步，每步保存 reason/state/config version | 不改变原检索和生成算法，却让扩源、拒答和格式修复成为可 Trace、可 Replay、可单测的明确 Agent 决策 |
 | Job-Skill-Experience Graph | 向量相似不等于能连接“岗位要求-项目技能-个人经历” | 抽取 Job、Skill、Project、Experience、Technology、Company 节点和有向关系，全部回指 Chunk | v0.3 构建 3098 节点、2741 边，支持可解释多跳证据 |
 | Graph + Vector Retrieval | Graph-only 容易漏文本，Vector-only 缺关系路径 | 实体链接和有界多跳召回图证据，再用 RRF 与向量 Chunk 融合 | 80 条 frozen 上相对 BM25：Recall@5 46.67% -> 63.33%，MRR 35.19% -> 57.58%；P95 15.50 -> 1209.40 ms |
-| CrossEncoder Rerank Policy | 召回改善后仍可能存在前排噪声，但全量重排成本高 | 对同一 BM25+Dense+RRF 候选分别运行 never / always / low-confidence，用同一 MiniLM revision 控制变量 | v0.3 dev：always 将 MRR 44.31% -> 49.22%但 P95 1252 -> 2799 ms；按需调用率 18.12%、MRR 45.18%、P95 2175 ms，无 Pareto 最优 |
+| CrossEncoder Rerank Policy | 召回改善后仍可能存在前排噪声，但全量重排成本高；数量和来源覆盖属于 Gate 信号，不应决定排序 | 对 top-20 候选运行固定 MiniLM CrossEncoder；按 dev 分组收益，只对 exact fact、semantic explanation、multi-source synthesis 开启，Graph 关系题不重复重排 | v0.3 dev 相比 Never：Recall@5 58.33% -> 60.42%、MRR 52.11% -> 56.21%；质量与 Always 相同，调用率 62.5% -> 50%、P95 4497 -> 3604 ms。45 条历史 retrieval miss 中 21 条为 ranking miss、24 条为 recall miss |
 | Evidence Gate v2 | 不同 Retriever 分数不可比，且 Router 的候选范围不能误当成回答必须覆盖的来源 | 按实际 BM25/Dense/Hybrid/Graph 策略加载 dev 校准门槛；普通题查数量，只有 Query 明确要求多来源时才查 `required_source_types`，关系题读取有效 path/edge；score 不可分时关闭该门槛 | 四种 raw score 均未同时满足 FAR<=5%、FRR<=25%，因此锁定配置使用结构检查；E2E release test 的不可答题拒答准确率 100%，但可答题仍有 12 条 Gate reject |
-| Source-Balanced Context | 纯 rank 贪心容易被单一来源占满预算，同优先级再按 hash ID 排序还会把高 rank 证据挤出 | 在紧预算下优先保证明确 required sources，再按检索 rank 稳定装箱；注入必要 provenance/Graph path，并让 Citation 白名单只包含真正进入 Prompt 的完整 Chunk | 修复“证据已召回但 Context 丢失”和 Context 外引用；dev 仍有 2 条预算丢证据，保留为后续 query-aware packing 问题 |
-| Adaptive Context Engine / 分层记忆 | 固定 Recent、Summary 或 Memory 策略无法同时适配独立问题、追问和长会话 | `ContextSignalExtractor -> ContextPolicy -> ContextPlan -> ContextEngine`：以 History Token Pressure、指代/省略+BGE 语义连续性、Memory `similarity * importance` 动态决定各层；Engine 再按统一预算、优先级和跨层语义去重编排 Profile/History/Summary/Memory/Evidence | 60 组/300 turns dev 中保持 100% Follow-up Success；相对 Summary+Recent，Prompt Token 75.55 -> 60.68（-19.68%），History Redundancy 42.86% -> 0；该 Context-level 结果不等于自由生成答案准确率 |
+| Evidence-first / Source-Balanced Context | 纯 rank 或 Profile-first 装箱会让回答证据被记忆、单一来源或前排噪声挤出 | 固定 System/Query 后，Evidence 优先于 Profile/Memory/Summary/History；Evidence 内优先 required-source 和有效 Graph path，再保持 rank 稳定装箱；Citation 白名单只包含实际进入 Prompt 的完整 Chunk | 相同候选与预算回放使原 2 条跨源 drop 从 2 -> 0；真实 dev E2E 中一条恢复回答、一条在上游被 Rerank 挤出。关系题仍新增 4 条 path-level Context drop，不能声称 Context drop 已清零 |
+| Adaptive Context Engine / 分层记忆 | 固定 Recent、Summary 或 Memory 策略无法同时适配独立问题、追问和长会话 | `ContextSignalExtractor -> ContextPolicy -> ContextPlan -> ContextEngine`：以 History Token Pressure、指代/省略+BGE 语义连续性、Memory `similarity * importance` 动态决定各层；Engine 再按统一预算、优先级和跨层语义去重编排 Profile/History/Summary/Memory/Evidence | Evidence-first 后 60 组/300 turns dev 仍保持 100% Follow-up Success、Citation Validity 100%；平均 Prompt Token 60.68 -> 60.92（+0.23），History Redundancy 仍为 0。该 Context-level 结果不等于自由生成答案准确率 |
 | Generator JSON Contract | 自由文本难以校验引用和拒答状态 | Prompt 约束只依据 Context，模型返回 answer/cited_chunk_ids/sufficient/reason；解析失败受控重试一次 | 生成结果可被程序验证，而不是把模型输出直接交给用户 |
 | Model Gateway | 外部模型有 timeout、429、5xx 和供应商故障 | Provider Protocol + 有界退避、并发 semaphore、熔断和 fallback，鉴权错误不盲重试 | 6 类 Fake 故障注入验证控制流，真实 DeepSeek primary smoke 通过；备用 Provider 未做真实 fallback |
 | Citation Validator | 模型可能返回不存在或重复的证据 ID | 校验 ID 存在性、去重和 sufficient/citation 组合，合法后才构造 Citation | 非法引用不能进入最终回答；Citation Validity 不等于事实支持度 |
@@ -576,6 +576,7 @@ Router 要求的来源，且首位只被单路召回，置信度就会低于门�
 | `never` | 不调用 CrossEncoder，用于 baseline/消融 |
 | `always` | 只要有候选就重排，用于评估质量上限和延迟代价 |
 | `low_confidence` | `confidence < threshold` 时重排，是按需模式 |
+| `evidence_need` | 只对 dev 同集证明排序稳定受益的 EvidenceRequirement 重排；当前锁定 exact/semantic/multi-source |
 
 Graph + Vector 结果当前不再进入 CrossEncoder；只对 BM25、Dense 或 Hybrid 候选执行
 重排。CrossEncoder 也不直接覆盖原排名，而是用下式做保守融合：
@@ -598,8 +599,9 @@ confidence / rerank_invoked / reason / candidate_count / model version` 都会�
   Case 上，新版 Recall@5 为 48.75%，略高于旧版 48.33%；MRR 为 39.01%，低于旧版
   42.21%，说明关系召回覆盖略升但前排排序仍需改进。完整失败修复与策略分布见
   `reports/ablations/p1-query-evidence-adaptive-v03-dev-20260825-fixed/`。
-- Always Rerank 把 MRR 从 44.31% 提高到 49.22%，但 P95 从 1252 ms 增加到
-  2799 ms；按需重排调用率 18.12%，但没有同时取得最优质量和延迟。
+- Task 2 统一 top-20 候选后的 Never/Always/Evidence-Need MRR 分别为 52.11%/56.21%/56.21%；
+  Evidence-Need 将 Always 的调用率从 62.5% 降到 50%，P95 从 4497 ms 降到 3604 ms，
+  但仍显著慢于 Never 的 1218 ms。旧 low-confidence 仅调用 1.88%，质量与 Never 相同。
 - 所以该模块的价值是把问题理解、证据需求、检索执行和低置信补救分层，并保留逐 Case
   审计能力；它仍是可解释规则版 Query Understanding，不包装成训练得到的 Policy Model。
 

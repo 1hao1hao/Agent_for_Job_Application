@@ -120,15 +120,18 @@ def load_runtime_retriever(
 ) -> tuple[RuntimeRetrieverBinding, dict[str, object]]:
     """加载在线锁定 Retriever；失败时只接受显式 fallback。
 
-    相对工件路径统一基于项目根目录解析。默认使用 Adaptive v2；若模型、Dense
-    或 Graph 工件缺失会 fail-fast。设置 `EVALRAG_RETRIEVER_FALLBACK_CONFIG`
-    后才允许降级，并在返回 adapter 的 Trace 中保存原因。
+    相对工件路径统一基于项目根目录解析。默认使用 dev 锁定的 Adaptive v2.1
+    Evidence-Need Rerank；若模型、Dense 或 Graph 工件缺失会 fail-fast。设置
+    `EVALRAG_RETRIEVER_FALLBACK_CONFIG` 后才允许降级，并在 Trace 中保存原因。
     """
 
     selected_path = config_path or Path(
         os.environ.get(
             "EVALRAG_RETRIEVER_CONFIG",
-            str(project_root / "configs/retrieval/adaptive_v2_v0.3.json"),
+            str(
+                project_root
+                / "configs/retrieval/adaptive_evidence_rerank_v0.3.json"
+            ),
         )
     )
     selected_path = _absolute_path(project_root, selected_path)

@@ -1,0 +1,8 @@
+{
+  "decision": "NOT_JUSTIFIED",
+  "retrieval_miss_followup_count": 0,
+  "retrieval_miss_followup_cases": [],
+  "context_reference_or_ellipsis_cases": 16,
+  "reason": "The 45 real E2E retrieval misses contain no explicit pronoun/ellipsis follow-up. The context benchmark contains follow-ups but has no raw-query retrieval gold comparison, so it cannot prove rewrite recovery.",
+  "implementation": "not added"
+}

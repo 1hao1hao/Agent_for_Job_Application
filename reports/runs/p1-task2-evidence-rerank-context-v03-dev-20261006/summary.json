@@ -1,0 +1,62 @@
+{
+  "case_count": 160,
+  "answerable_case_count": 120,
+  "unanswerable_case_count": 40,
+  "terminal_stage_counts": {
+    "retrieval_miss": 45,
+    "answered": 47,
+    "generator_abstain": 29,
+    "gate_reject": 34,
+    "citation_invalid": 1,
+    "context_evidence_dropped": 4
+  },
+  "answerable_terminal_stage_counts": {
+    "retrieval_miss": 45,
+    "answered": 47,
+    "generator_abstain": 2,
+    "gate_reject": 21,
+    "citation_invalid": 1,
+    "context_evidence_dropped": 4
+  },
+  "answerable_e2e_success": 0.38333333333333336,
+  "unexpected_abstention_rate": 0.6,
+  "unanswerable_abstention_accuracy": 1.0,
+  "citation_validity_answered": 1.0,
+  "error_count": 1,
+  "answered_count": 47,
+  "mean_latency_ms": 3221.9477005302906,
+  "metric_definitions": {
+    "answerable_e2e_success": "answerable 且 answered、引用合法、Context 含 gold evidence / answerable cases",
+    "unexpected_abstention_rate": "answerable 但 insufficient_evidence / answerable cases",
+    "unanswerable_abstention_accuracy": "unanswerable 且 insufficient_evidence / unanswerable cases",
+    "citation_validity_answered": "answered 且所有 citation id 均存在于 Context / answered cases"
+  },
+  "run_id": "p1-task2-evidence-rerank-context-v03-dev-20261006",
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "retriever_config": "configs/retrieval/adaptive_evidence_rerank_v0.3.json",
+  "retriever_config_version": "adaptive-retrieval-v2.1-evidence-rerank-dev-locked",
+  "evidence_config": "configs/evidence/gate_e2e_v0.3.json",
+  "evidence_config_version": "evidence-gate-v2.1-e2e-locked",
+  "prompt_version": "p1-e2e-funnel-v2",
+  "category_counts": {
+    "single_source": 20,
+    "cross_source": 20,
+    "semantic_paraphrase": 20,
+    "hard_negative": 20,
+    "unanswerable": 20,
+    "freshness_conflict": 20,
+    "two_hop": 20,
+    "three_hop": 20
+  },
+  "model_gateway": {
+    "generation_calls": 110,
+    "provider_attempts": 111,
+    "tokens": {
+      "input_tokens": 149721,
+      "output_tokens": 20640,
+      "total_tokens": 170361
+    },
+    "estimated_cost_usd": 0.0
+  }
+}

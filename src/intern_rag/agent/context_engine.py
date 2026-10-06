@@ -191,6 +191,7 @@ class ContextEngineConfig:
     mode: ContextMode = "recent_window"
     evidence_strategy: str = "source_balanced"
     compress_evidence: bool = False
+    evidence_first: bool = True
     reserved_token_count: int = 0
 
     def __post_init__(self) -> None:
@@ -344,7 +345,17 @@ class ContextEngine:
             # 压缩器只处理正文，citation 所需的结构化头始终由 Engine 重建。
             text = format_context_item(item, text=evidence_body)
             candidates.append(
-                self._segment("evidence", item.chunk_id, text, 70, f"rank={item.rank},score={item.score:.6f}")
+                self._segment(
+                    "evidence",
+                    item.chunk_id,
+                    text,
+                    _evidence_priority(
+                        item,
+                        required_source_types,
+                        evidence_first=config.evidence_first,
+                    ),
+                    f"rank={item.rank},score={item.score:.6f}",
+                )
             )
 
         kept = list(fixed)
@@ -479,6 +490,26 @@ def _filter_evidence_context(
         covered_source_types=covered,
         missing_source_types=[source for source in required if source not in covered],
     )
+
+
+def _evidence_priority(
+    item: object,
+    required_source_types: Sequence[str],
+    *,
+    evidence_first: bool,
+) -> int:
+    """在 Evidence-first 模式下优先保留必需来源与有效图路径证据。"""
+
+    if not evidence_first:
+        return 70
+    source_type = str(getattr(item, "source_type", ""))
+    details = dict(getattr(item, "retrieval_details", {}))
+    priority = 95
+    if source_type in set(required_source_types):
+        priority += 3
+    if details.get("path_valid") and details.get("graph_edge_ids"):
+        priority += 2
+    return min(priority, 99)
 
 
 def _format_segment(segment: ContextSegment) -> str:

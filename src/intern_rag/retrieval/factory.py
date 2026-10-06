@@ -176,6 +176,10 @@ def build_retriever_from_config(config: dict[str, object]) -> Retriever:
                 rerank_policy=str(
                     config.get("adaptive_rerank_policy", "low_confidence")
                 ),  # type: ignore[arg-type]
+                rerank_need_types=tuple(
+                    str(item)
+                    for item in config.get("adaptive_rerank_need_types", [])
+                ),  # type: ignore[arg-type]
                 force_strategy=(
                     str(config["adaptive_force_strategy"])  # type: ignore[arg-type]
                     if config.get("adaptive_force_strategy") is not None

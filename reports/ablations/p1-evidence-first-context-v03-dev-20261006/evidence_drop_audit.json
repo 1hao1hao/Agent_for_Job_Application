@@ -1,0 +1,89 @@
+{
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "source_trace": "reports/runs/p1-e2e-abstention-v03-dev-release-candidate-20261005/traces.jsonl",
+  "case_count": 2,
+  "before_drop_count": 2,
+  "after_drop_count": 0,
+  "citation_whitelist_rule": "only evidence chunks actually kept in ManagedContext",
+  "cases": [
+    {
+      "case_id": "v03_cross_source_010",
+      "query": "resume 与 user_profile 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+      "required_sources": [
+        "resume",
+        "user_profile"
+      ],
+      "before": {
+        "evidence_first": false,
+        "used_chunk_ids": [
+          "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+          "project_logs-doc-72c5aefe9b70bfdc-0-e253f43c23e0",
+          "interview-doc-05d581bdedb02ed6-0-7d0af47366f4"
+        ],
+        "covered_sources": [
+          "interview",
+          "jd",
+          "project_logs"
+        ],
+        "required_sources_covered": false,
+        "token_count": 1790,
+        "token_budget": 1800
+      },
+      "after": {
+        "evidence_first": true,
+        "used_chunk_ids": [
+          "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+          "user_profile-doc-6fa32d642bfc3ca6-0-72590cc783b4",
+          "resume-doc-86e266628270c337-2-03549db70f33"
+        ],
+        "covered_sources": [
+          "jd",
+          "resume",
+          "user_profile"
+        ],
+        "required_sources_covered": true,
+        "token_count": 1773,
+        "token_budget": 1800
+      }
+    },
+    {
+      "case_id": "v03_cross_source_026",
+      "query": "project_logs 与 resume 分别如何描述“关键词检索”，它们能提供哪些互补证据？",
+      "required_sources": [
+        "project_logs",
+        "resume"
+      ],
+      "before": {
+        "evidence_first": false,
+        "used_chunk_ids": [
+          "interview-doc-d41173267aaa5bd3-0-e8f968fdcf99",
+          "interview-doc-b98b0bcc69bc0dde-0-1832c6bb42f8",
+          "project_logs-doc-f4f56d89bdf97de0-0-0df8955d820a"
+        ],
+        "covered_sources": [
+          "interview",
+          "project_logs"
+        ],
+        "required_sources_covered": false,
+        "token_count": 1608,
+        "token_budget": 1800
+      },
+      "after": {
+        "evidence_first": true,
+        "used_chunk_ids": [
+          "project_logs-doc-f4f56d89bdf97de0-0-0df8955d820a",
+          "project_logs-doc-f4f56d89bdf97de0-1-13d6d828e86b",
+          "resume-doc-c0d075a84054b1af-0-6e65b1b78666"
+        ],
+        "covered_sources": [
+          "project_logs",
+          "resume"
+        ],
+        "required_sources_covered": true,
+        "token_count": 1664,
+        "token_budget": 1800
+      }
+    }
+  ]
+}

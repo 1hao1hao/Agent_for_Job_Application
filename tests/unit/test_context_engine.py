@@ -40,8 +40,13 @@ class ShortCompressor:
         return "需要 Python"
 
 
-def _result(chunk_id: str, text: str, rank: int = 1) -> RetrievalResult:
-    chunk = Chunk(chunk_id, "jd", "data/jd.md", "岗位", text, {})
+def _result(
+    chunk_id: str,
+    text: str,
+    rank: int = 1,
+    source_type: str = "jd",
+) -> RetrievalResult:
+    chunk = Chunk(chunk_id, source_type, "data/jd.md", "岗位", text, {})
     return RetrievalResult(chunk_id, 1.0 / rank, rank, chunk, "fixture")
 
 
@@ -100,6 +105,75 @@ class ContextEngineTests(unittest.TestCase):
 
         self.assertEqual(context.evidence.used_chunk_ids, ["z-rank-1"])
         self.assertIn("a-rank-2", context.evidence.skipped_chunk_ids)
+
+    def test_evidence_first_keeps_required_evidence_before_profile_and_memory(self) -> None:
+        engine = ContextEngine()
+        result = _result("required-evidence", "岗位要求 Python", rank=1)
+        profile = UserProfile(
+            user_id="u1",
+            version=1,
+            facts=(ProfileFact("偏好", "一段很长的用户画像" * 8, "test", True),),
+            updated_at=self.now.isoformat(),
+        )
+        baseline = engine.build(
+            query="岗位要求是什么？",
+            system_prompt="仅根据证据回答。",
+            retrieved_results=[result],
+            config=ContextEngineConfig(
+                token_budget=100, mode="no_memory", evidence_first=False
+            ),
+            required_source_types=("jd",),
+            profile=profile,
+        )
+        evidence_first = engine.build(
+            query="岗位要求是什么？",
+            system_prompt="仅根据证据回答。",
+            retrieved_results=[result],
+            config=ContextEngineConfig(
+                token_budget=100, mode="no_memory", evidence_first=True
+            ),
+            required_source_types=("jd",),
+            profile=profile,
+        )
+
+        self.assertNotIn("required-evidence", baseline.evidence.used_chunk_ids)
+        self.assertIn("required-evidence", evidence_first.evidence.used_chunk_ids)
+        self.assertNotIn("profile:1", evidence_first.kept_ids)
+
+    def test_evidence_first_prioritizes_required_source_within_evidence(self) -> None:
+        engine = ContextEngine()
+        results = [
+            _result("noise-1", "无关来源证据" * 8, 1, "interview"),
+            _result("noise-2", "另一条无关证据" * 8, 2, "project_logs"),
+            _result("required", "简历中的必要证据" * 8, 3, "resume"),
+        ]
+        full = engine.build(
+            query="简历如何证明匹配？",
+            system_prompt="仅根据证据回答。",
+            retrieved_results=results,
+            config=ContextEngineConfig(token_budget=400, mode="no_memory"),
+            required_source_types=("resume",),
+        )
+        required_segment = next(
+            item for item in full.segments if item.segment_id == "required"
+        )
+        fixed_tokens = sum(
+            item.token_count
+            for item in full.segments
+            if item.segment_id in {"system", "query"}
+        )
+        context = engine.build(
+            query="简历如何证明匹配？",
+            system_prompt="仅根据证据回答。",
+            retrieved_results=results,
+            config=ContextEngineConfig(
+                token_budget=fixed_tokens + required_segment.token_count,
+                mode="no_memory",
+            ),
+            required_source_types=("resume",),
+        )
+
+        self.assertEqual(context.evidence.used_chunk_ids, ["required"])
 
     def test_summary_recent_and_compression_failure_have_controlled_fallback(self) -> None:
         engine = ContextEngine(

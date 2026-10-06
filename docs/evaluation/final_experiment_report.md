@@ -567,3 +567,48 @@ drop 2。最大剩余问题已经回到 Retriever，而不是继续放宽 Gate�
 拒答准确率 100%、已回答 Citation Validity 100%、error 0。test 结果未用于继续调参。正式报告与
 逐 Case 工件位于 `reports/ablations/p1-e2e-abstention-v03-20261005/`，锁定配置位于
 `configs/final/e2e_abstention_release_v0.3.json`。
+
+## 15. Evidence-Need Rerank 与 Evidence-first Context（2026-10-06）
+
+本轮只使用 `evalrag_v0.3/dev` 选择策略，没有读取或重跑 test。先将上一轮 45 条
+`retrieval_miss` 按 top-20 预重排候选池分类：21 条为 relevant Chunk 已进入候选池的
+`ranking_miss`，24 条为候选池完全漏召回的 `recall_miss`。后者无法由 Reranker 修复。
+
+| Rerank policy | Recall@5 | MRR | NDCG@5 | 调用率 | P95 |
+|---|---:|---:|---:|---:|---:|
+| Never | 58.33% | 52.11% | 51.21% | 0% | 1217.55 ms |
+| Always | 60.42% | 56.21% | 55.07% | 62.50% | 4497.26 ms |
+| 旧 low-confidence | 58.33% | 52.11% | 51.21% | 1.88% | 1514.15 ms |
+| Evidence-Need | 60.42% | 56.21% | 55.07% | 50.00% | 3604.30 ms |
+
+按 EvidenceRequirement 分组后，exact fact、semantic explanation、multi-source synthesis 的
+MRR/NDCG 均改善，且 Recall@5 不超过一条 Case 容差，因此锁定这些类型；relation reasoning
+继续使用 Graph+Vector，不再附加 CrossEncoder。Evidence-Need 达到与 Always 相同的整体质量，
+少调用 20%，P95 低 19.85%，但相对 Never 仍有明显 CPU 延迟成本。21 条历史 ranking miss 中，
+top-20 候选扩展本身恢复 5 条，CrossEncoder 再多恢复 1 条，说明主要剩余瓶颈仍是召回而非排序。
+
+Context 在相同候选和 1800 token 预算下回放两个旧 drop：required-source coverage 从 0/2
+提升到 2/2。60 组/300 turns 多轮基准仍为 100% Follow-up Success、100% Citation Validity，
+Adaptive Policy 平均 Prompt Token 从 60.68 轻微增加到 60.92。真实 DeepSeek dev E2E 结果如下：
+
+| Dev metric | 上一锁定版 | Task 2 | 变化 |
+|---|---:|---:|---:|
+| Answerable E2E Success | 30.83% | 38.33% | +7.50 pp |
+| Unexpected Abstention | 66.67% | 60.00% | -6.67 pp |
+| Unanswerable Abstention Accuracy | 100.00% | 100.00% | 0 pp |
+| Citation Validity（answered） | 100.00% | 100.00% | 0 pp |
+
+新漏斗为 retrieval miss 45、Gate reject 21、Context drop 4、Generator abstain 2、Citation
+invalid 1、answered 47。原两条跨源 Context drop 在 Context 层均修复，但其中一条被新的上游
+排序挤出；新增 4 条 drop 均为 two-hop 关系题，暴露当前优先级只有 source/path 标志、还没有
+按完整 gold Graph path 编排多条关系证据。该负结果保留，不再根据 dev Case 添加特例。
+
+Query Rewrite 审计结论为 `NOT_JUSTIFIED`：45 条真实 retrieval miss 中没有指代或省略式
+follow-up；现有 context benchmark 虽有 16 条 reference/ellipsis Case，却没有 Raw Query
+Retrieval 的 gold 对照，不能证明 Rewrite 能恢复召回，因此本轮没有增加额外 LLM 调用。
+
+检索策略、逐 Case 差异和 miss 分类位于
+`reports/ablations/p1-task2-rerank-context-v03-dev-20261006/`；Context 回放与 60 组消融位于
+`reports/ablations/p1-evidence-first-context-v03-dev-20261006/`；真实 E2E 工件位于
+`reports/runs/p1-task2-evidence-rerank-context-v03-dev-20261006/`。锁定配置为
+`configs/retrieval/adaptive_evidence_rerank_v0.3.json`。

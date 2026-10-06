@@ -12,7 +12,7 @@ from intern_rag.retrieval.rerank import RerankScorer
 
 
 RetrievalStrategy = Literal["none", "bm25", "dense", "hybrid", "graph_hybrid"]
-RerankPolicy = Literal["never", "always", "low_confidence"]
+RerankPolicy = Literal["never", "always", "low_confidence", "evidence_need"]
 EvidenceNeedType = Literal[
     "unanswerable",
     "exact_fact",
@@ -141,6 +141,7 @@ class AdaptiveRetrieverConfig:
     original_rank_weight: float = 2.0
     rerank_rank_weight: float = 1.0
     rerank_policy: RerankPolicy = "low_confidence"
+    rerank_need_types: tuple[EvidenceNeedType, ...] = ()
     force_strategy: RetrievalStrategy | None = None
 
     def __post_init__(self) -> None:
@@ -150,8 +151,16 @@ class AdaptiveRetrieverConfig:
             raise ValueError("candidate_k and rerank_rrf_k must be positive")
         if self.original_rank_weight <= 0 or self.rerank_rank_weight <= 0:
             raise ValueError("rerank weights must be positive")
-        if self.rerank_policy not in {"never", "always", "low_confidence"}:
+        if self.rerank_policy not in {
+            "never", "always", "low_confidence", "evidence_need"
+        }:
             raise ValueError(f"unknown rerank policy: {self.rerank_policy}")
+        unknown_needs = set(self.rerank_need_types) - {
+            "unanswerable", "exact_fact", "semantic_explanation",
+            "relation_reasoning", "multi_source_synthesis", "balanced_retrieval",
+        }
+        if unknown_needs:
+            raise ValueError(f"unknown rerank evidence needs: {sorted(unknown_needs)}")
 
 
 class QueryAnalyzer:
@@ -300,12 +309,12 @@ class QueryAnalyzer:
 
 
 class AdaptiveRetriever:
-    """按 Query 特征选择召回策略，并仅在低置信度时执行一次保守重排。
+    """按 Query 证据需求选择召回策略，并按策略执行至多一次重排。
 
     输入与其他 Retriever 一致。先由 QueryAnalyzer 选择 BM25、Dense 或 Hybrid，
-    再根据结果数量、首位 margin、来源覆盖和 Hybrid 双路一致性计算置信度。
-    低置信度候选只调用一次 scorer，并用加权 RRF 融合原始 rank 与 rerank rank，
-    避免直接用 CrossEncoder 分数覆盖已验证的召回排序。输出仍是
+    `low_confidence` 保留为历史对照；锁定配置可改用 `evidence_need`，仅对 dev
+    实验证明确实受益的问题类型调用 scorer。重排使用加权 RRF 融合原始 rank 与
+    rerank rank，避免直接用 CrossEncoder 分数覆盖已验证的召回排序。输出仍是
     `list[RetrievalResult]`，每条结果附带决策信息；空结果的决策可由
     `get_last_trace()` 读取。
     """
@@ -395,6 +404,13 @@ class AdaptiveRetriever:
             query, chunks, top_k=candidate_k, source_types=source_types
         )
         stage_trace = _read_retriever_trace(selected_retriever)
+        stage_trace = {
+            **stage_trace,
+            "candidate_chunk_ids": [item.chunk_id for item in candidates],
+            "candidate_ranks": {
+                item.chunk_id: item.rank for item in candidates
+            },
+        }
         confidence = _retrieval_confidence(candidates, top_k, source_types, strategy)
         can_rerank = bool(candidates) and strategy != "graph_hybrid"
         should_rerank = can_rerank and (
@@ -402,6 +418,10 @@ class AdaptiveRetriever:
             or (
                 self.config.rerank_policy == "low_confidence"
                 and confidence < self.config.confidence_threshold
+            )
+            or (
+                self.config.rerank_policy == "evidence_need"
+                and evidence_requirement.need_type in self.config.rerank_need_types
             )
         )
         ranked = candidates
@@ -440,8 +460,13 @@ class AdaptiveRetriever:
             ),
             fallback_reason=fallback_reason,
             escalation_reason=(
-                "retrieval confidence below rerank threshold"
-                if should_rerank else None
+                (
+                    f"evidence need {evidence_requirement.need_type} enabled rerank"
+                    if self.config.rerank_policy == "evidence_need"
+                    else "retrieval confidence below rerank threshold"
+                )
+                if should_rerank
+                else None
             ),
             query_analysis_latency_ms=query_analysis_latency_ms,
             rerank_latency_ms=rerank_latency_ms,

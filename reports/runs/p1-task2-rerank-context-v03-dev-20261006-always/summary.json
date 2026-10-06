@@ -1,0 +1,25 @@
+{
+  "metrics": {
+    "recall_at_5": 0.6041666666666666,
+    "mrr": 0.5620833333333334,
+    "ndcg_at_5": 0.5507177497468915
+  },
+  "rerank_invocation_count": 100,
+  "rerank_invocation_rate": 0.625,
+  "latency_ms": {
+    "p50": 2295.8313953131437,
+    "p95": 4497.263869270682
+  },
+  "strategy_distribution": {
+    "bm25": 39,
+    "hybrid": 61,
+    "graph_hybrid": 60
+  },
+  "evidence_need_distribution": {
+    "exact_fact": 39,
+    "semantic_explanation": 21,
+    "multi_source_synthesis": 20,
+    "relation_reasoning": 60,
+    "balanced_retrieval": 20
+  }
+}

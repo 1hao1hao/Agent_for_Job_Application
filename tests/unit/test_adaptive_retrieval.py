@@ -299,6 +299,43 @@ class AdaptiveRetrieverTests(unittest.TestCase):
         retriever("任意问题", [], top_k=1, source_types={"jd"})
 
         self.assertTrue(retriever.get_last_trace()["rerank_invoked"])
+
+    def test_evidence_need_policy_only_reranks_configured_need(self) -> None:
+        scorer = FakeRerankScorer({"语义候选": 1.0})
+        retriever = AdaptiveRetriever(
+            {
+                "bm25": FixedRetriever([
+                    RetrievalResult("b1", 0.9, 1, _chunk("b1"))
+                ]),
+                "dense": FixedRetriever([
+                    RetrievalResult("d1", 0.9, 1, _chunk("d1"))
+                ]),
+                "hybrid": FixedRetriever([
+                    RetrievalResult(
+                        "h1", 0.9, 1,
+                        Chunk("h1", "jd", "data/h1.md", "h1", "语义候选", {}),
+                    )
+                ]),
+            },
+            scorer,
+            config=AdaptiveRetrieverConfig(
+                rerank_policy="evidence_need",
+                rerank_need_types=("semantic_explanation",),
+            ),
+        )
+
+        retriever("如何解释召回偏差", [], top_k=1)
+        semantic_trace = retriever.get_last_trace()
+        retriever("BM25 是什么", [], top_k=1)
+        exact_trace = retriever.get_last_trace()
+
+        self.assertTrue(semantic_trace["rerank_invoked"])
+        self.assertEqual(
+            semantic_trace["escalation_reason"],
+            "evidence need semantic_explanation enabled rerank",
+        )
+        self.assertFalse(exact_trace["rerank_invoked"])
+        self.assertEqual(semantic_trace["candidate_chunk_ids"], ["h1"])
         self.assertEqual(len(scorer.calls), 1)
 
 
