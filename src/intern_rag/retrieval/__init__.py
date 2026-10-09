@@ -37,6 +37,13 @@ from intern_rag.retrieval.graph import (
     GraphRetrievalTrace,
     GraphVectorRetriever,
 )
+from intern_rag.retrieval.evidence_gap import (
+    EvidenceGapAssessment,
+    EvidenceGapConfig,
+    EvidenceGapGuidedRetriever,
+    assess_evidence_gap,
+    fuse_retrieval_routes,
+)
 from intern_rag.retrieval.rerank import (
     CrossEncoderRerankScorer,
     ChineseTokenOverlapScorer,
@@ -84,6 +91,11 @@ __all__ = [
     "GraphRetriever",
     "GraphRetrievalTrace",
     "GraphVectorRetriever",
+    "EvidenceGapAssessment",
+    "EvidenceGapConfig",
+    "EvidenceGapGuidedRetriever",
+    "assess_evidence_gap",
+    "fuse_retrieval_routes",
     "CrossEncoderRerankScorer",
     "ChineseTokenOverlapScorer",
     "FakeRerankScorer",

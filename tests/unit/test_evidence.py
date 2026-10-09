@@ -198,6 +198,29 @@ class EvidenceTests(unittest.TestCase):
         self.assertTrue(decision.relation_evidence_present)
         self.assertEqual(decision.status, "sufficient")
 
+    def test_observable_evidence_gap_triggers_only_one_retry(self) -> None:
+        trace = {
+            "selected_strategy": "bm25",
+            "evidence_gaps": ["exact_anchor_missing"],
+        }
+        first = check_evidence(
+            self.route, [_result("jd-1", "jd", 0.8)], retriever_name="adaptive",
+            retry_count=0, max_retries=1, config=EvidenceConfig(min_scores={}),
+            evidence_requirement={"need_type": "exact_fact"},
+            retrieval_trace=trace,
+        )
+        final = check_evidence(
+            self.route, [_result("jd-1", "jd", 0.8)], retriever_name="adaptive",
+            retry_count=1, max_retries=1, config=EvidenceConfig(min_scores={}),
+            evidence_requirement={"need_type": "exact_fact"},
+            retrieval_trace=trace,
+        )
+
+        self.assertEqual(first.status, "retryable")
+        self.assertEqual(first.reason, "evidence_gap_detected")
+        self.assertEqual(final.status, "insufficient")
+        self.assertEqual(final.reason, "evidence_gap_detected")
+
 
 if __name__ == "__main__":
     unittest.main()

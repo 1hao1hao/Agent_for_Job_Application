@@ -175,6 +175,61 @@ class ContextEngineTests(unittest.TestCase):
 
         self.assertEqual(context.evidence.used_chunk_ids, ["required"])
 
+    def test_graph_path_group_is_kept_or_dropped_atomically(self) -> None:
+        chunks = [
+            _result("path-a", "岗位要求 Python", 1, "jd"),
+            _result("path-b", "项目使用 Python", 2, "project_logs"),
+        ]
+        results = [
+            RetrievalResult(
+                item.chunk_id, item.score, item.rank, item.chunk, item.reason,
+                {
+                    "path_group_id": "path-1",
+                    "path_group_size": 2,
+                    "path_valid": 1,
+                    "graph_edge_ids": "edge-1|edge-2",
+                },
+            )
+            for item in chunks
+        ]
+        full = ContextEngine().build(
+            query="项目如何证明岗位匹配？",
+            system_prompt="仅根据证据回答。",
+            retrieved_results=results,
+            config=ContextEngineConfig(token_budget=300, mode="no_memory"),
+        )
+        fixed_tokens = sum(
+            item.token_count for item in full.segments
+            if item.segment_id in {"system", "query"}
+        )
+        first_tokens = next(
+            item.token_count for item in full.segments if item.segment_id == "path-a"
+        )
+
+        tight = ContextEngine().build(
+            query="项目如何证明岗位匹配？",
+            system_prompt="仅根据证据回答。",
+            retrieved_results=results,
+            config=ContextEngineConfig(
+                token_budget=fixed_tokens + first_tokens, mode="no_memory"
+            ),
+        )
+
+        self.assertEqual(full.evidence.used_chunk_ids, ["path-a", "path-b"])
+        self.assertEqual(tight.evidence.used_chunk_ids, [])
+        self.assertTrue(all(
+            item["reason"].startswith("path_group_token_budget")
+            for item in tight.dropped if item["segment_id"].startswith("path-")
+        ))
+        incomplete = ContextEngine().build(
+            query="项目如何证明岗位匹配？",
+            system_prompt="仅根据证据回答。",
+            retrieved_results=results[:1],
+            config=ContextEngineConfig(token_budget=300, mode="no_memory"),
+        )
+        self.assertEqual(incomplete.evidence.used_chunk_ids, [])
+        self.assertIn("incomplete_path_group", [item["reason"] for item in incomplete.dropped])
+
     def test_summary_recent_and_compression_failure_have_controlled_fallback(self) -> None:
         engine = ContextEngine(
             summarizer=FakeSummarizer(), evidence_compressor=FailingCompressor()

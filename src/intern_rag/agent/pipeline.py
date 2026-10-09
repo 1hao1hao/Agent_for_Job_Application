@@ -260,8 +260,10 @@ class RagPipeline:
             actions.append(next_action.to_trace())
 
             while next_action.action in {"retrieve", "expand_sources"}:
+                attempt_type = "initial_retrieval"
                 if next_action.action == "expand_sources":
                     source_retry_count += 1
+                    attempt_type = "source_expansion"
                 current_stage = "retrieval"
                 stage_started_at = perf_counter()
                 source_types = (
@@ -269,12 +271,24 @@ class RagPipeline:
                     if source_retry_count == 0 and route_decision.routed_sources
                     else None
                 )
-                retrieved_results = selected_retriever(
-                    request.query,
-                    self.chunks,
-                    top_k=request.top_k,
-                    source_types=source_types,
-                )
+                rescue = getattr(selected_retriever, "rescue", None)
+                if next_action.action == "expand_sources" and callable(rescue):
+                    attempt_type = "evidence_gap_rescue"
+                    retrieved_results = rescue(
+                        request.query,
+                        self.chunks,
+                        initial_results=retrieved_results,
+                        top_k=request.top_k,
+                        evidence_requirement=evidence_requirement_trace,
+                        initial_trace=retrieval_decision_trace,
+                    )
+                else:
+                    retrieved_results = selected_retriever(
+                        request.query,
+                        self.chunks,
+                        top_k=request.top_k,
+                        source_types=source_types,
+                    )
                 retrieval_decision_trace = _retriever_trace(selected_retriever)
                 current_requirement = retrieval_decision_trace.get(
                     "evidence_requirement"
@@ -305,11 +319,7 @@ class RagPipeline:
                 evidence_trace = asdict(evidence_decision)
                 attempts.append({
                     "attempt": len(attempts) + 1,
-                    "type": (
-                        "initial_retrieval"
-                        if source_retry_count == 0
-                        else "source_expansion"
-                    ),
+                    "type": attempt_type,
                     "source_filter": sorted(source_types) if source_types else None,
                     "retrieved_chunk_ids": [
                         result.chunk_id for result in retrieved_results

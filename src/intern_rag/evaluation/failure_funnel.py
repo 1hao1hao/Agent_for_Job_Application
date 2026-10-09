@@ -66,7 +66,9 @@ def classify_failure_stage(
     attempt_ids = {
         str(chunk_id)
         for attempt in trace.attempts
-        if str(attempt.get("type", "")) in {"initial_retrieval", "source_expansion"}
+        if str(attempt.get("type", "")) in {
+            "initial_retrieval", "source_expansion", "evidence_gap_rescue"
+        }
         for chunk_id in attempt.get("retrieved_chunk_ids", [])
     }
     final_ids = {

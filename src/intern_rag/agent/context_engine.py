@@ -142,6 +142,7 @@ class ContextSegment:
     token_count: int
     priority: int
     reason: str
+    group_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -355,6 +356,11 @@ class ContextEngine:
                         evidence_first=config.evidence_first,
                     ),
                     f"rank={item.rank},score={item.score:.6f}",
+                    group_id=(
+                        str(item.retrieval_details["path_group_id"])
+                        if item.retrieval_details.get("path_group_id")
+                        else None
+                    ),
                 )
             )
 
@@ -362,7 +368,41 @@ class ContextEngine:
         used_tokens = fixed_tokens
         # Python 排序稳定：同一层保持 Context Builder 已确定的 rank/source 顺序。
         # 不能再按随机化 chunk id 排序，否则高排名 gold evidence 可能被预算挤出。
-        for segment in sorted(candidates, key=lambda item: -item.priority):
+        ordered_candidates = sorted(candidates, key=lambda item: -item.priority)
+        path_groups: dict[str, list[ContextSegment]] = {}
+        for segment in ordered_candidates:
+            if segment.kind == "evidence" and segment.group_id:
+                path_groups.setdefault(segment.group_id, []).append(segment)
+        expected_group_sizes = {
+            str(item.details["path_group_id"]): int(item.details.get("path_group_size", 1))
+            for item in retrieved_results if item.details.get("path_group_id")
+        }
+        handled_groups: set[str] = set()
+        for segment in ordered_candidates:
+            if segment.group_id:
+                if segment.group_id in handled_groups:
+                    continue
+                handled_groups.add(segment.group_id)
+                group = path_groups[segment.group_id]
+                if len(group) < expected_group_sizes.get(segment.group_id, len(group)):
+                    dropped.extend(
+                        {"segment_id": item.segment_id, "reason": "incomplete_path_group"}
+                        for item in group
+                    )
+                    continue
+                group_tokens = sum(item.token_count for item in group)
+                if used_tokens + group_tokens > managed_budget:
+                    dropped.extend(
+                        {
+                            "segment_id": item.segment_id,
+                            "reason": f"path_group_token_budget:{segment.group_id}",
+                        }
+                        for item in group
+                    )
+                    continue
+                kept.extend(group)
+                used_tokens += group_tokens
+                continue
             if used_tokens + segment.token_count > managed_budget:
                 dropped.append({"segment_id": segment.segment_id, "reason": "token_budget"})
                 continue
@@ -443,9 +483,25 @@ class ContextEngine:
         )
         return output
 
-    def _segment(self, kind: SegmentKind, segment_id: str, text: str, priority: int, reason: str) -> ContextSegment:
+    def _segment(
+        self,
+        kind: SegmentKind,
+        segment_id: str,
+        text: str,
+        priority: int,
+        reason: str,
+        group_id: str | None = None,
+    ) -> ContextSegment:
         normalized = text.strip()
-        return ContextSegment(segment_id, kind, normalized, self.estimator.count(normalized), priority, reason)
+        return ContextSegment(
+            segment_id,
+            kind,
+            normalized,
+            self.estimator.count(normalized),
+            priority,
+            reason,
+            group_id,
+        )
 
 
 def _deduplicate_results(results: Sequence[RetrievalResult]) -> list[RetrievalResult]:

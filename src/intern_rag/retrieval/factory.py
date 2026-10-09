@@ -15,6 +15,10 @@ from intern_rag.retrieval.adaptive import (
 from intern_rag.retrieval.base import Retriever
 from intern_rag.retrieval.bm25 import BM25Retriever, load_bm25_index
 from intern_rag.retrieval.dense import DenseRetriever, load_dense_index
+from intern_rag.retrieval.evidence_gap import (
+    EvidenceGapConfig,
+    EvidenceGapGuidedRetriever,
+)
 from intern_rag.retrieval.hybrid import HybridRetriever
 from intern_rag.retrieval.graph import GraphRetriever, GraphVectorRetriever
 from intern_rag.retrieval.keyword import retrieve_top_k
@@ -157,7 +161,7 @@ def build_retriever_from_config(config: dict[str, object]) -> Retriever:
             if graph_retriever is not None
             else None
         )
-        return AdaptiveRetriever(
+        adaptive = AdaptiveRetriever(
             {"bm25": bm25, "dense": dense, "hybrid": hybrid},
             scorer,
             analyzer=_build_query_analyzer(config),
@@ -188,6 +192,22 @@ def build_retriever_from_config(config: dict[str, object]) -> Retriever:
             ),
             graph_retriever=graph_vector,
         )
+        if bool(config.get("evidence_gap_rescue_enabled", False)):
+            return EvidenceGapGuidedRetriever(
+                adaptive,
+                {"bm25": bm25, "dense": dense},
+                graph_retriever=graph_retriever,
+                config=EvidenceGapConfig(
+                    version=str(config.get(
+                        "evidence_gap_config_version", "evidence-gap-rescue-v1"
+                    )),
+                    enabled=True,
+                    candidate_k=int(config.get("evidence_gap_candidate_k", 20)),
+                    rrf_k=int(config.get("evidence_gap_rrf_k", 60)),
+                    max_paths=int(config.get("evidence_gap_max_paths", 2)),
+                ),
+            )
+        return adaptive
     return RerankRetriever(
         hybrid,
         scorer,

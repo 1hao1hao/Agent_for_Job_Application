@@ -306,3 +306,12 @@ reclaim idle 阈值为 Evaluation timeout 加 60 秒，避免把仍在运行的�
 - v0.3 frozen E2E 暴露过度拒答，因此不能用局部检索提升声称端到端质量已经提升。
 
 详细数字、run ID 和失败 Case 见 [最终实验报告](../evaluation/final_experiment_report.md)。
+
+## Evidence-Gap 候选扩展（2026-10-09）
+
+`EvidenceGapGuidedRetriever` 包装现有 Adaptive，首轮结果附加可观测覆盖状态。
+Pipeline 的一次检索重试优先调用其 `rescue()` 能力，按缺口补 BM25/Dense/linked-path Graph，
+保留 RRF 各路 rank、路径与 provenance。输入中没有 benchmark gold ID。
+路径搜索限制实体数、hop、node 与 path 数；Context 依据 path group 整组装箱，
+候选缺项或预算不足时不注入半条路径。旧 Retriever 与 HTTP 契约继续兼容。
+完整 dev 检索对照已运行，真实 LLM E2E 因网络连接错误中断；配置保持 opt-in。

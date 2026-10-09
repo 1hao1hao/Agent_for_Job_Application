@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections import deque
 from contextvars import ContextVar
 from dataclasses import asdict, dataclass
+from hashlib import sha1
 from time import perf_counter
 
 from intern_rag.graph import KnowledgeGraph, QueryDecomposer
@@ -186,6 +187,110 @@ class GraphRetriever:
         trace = self._last_trace.get()
         return trace.to_dict() if trace is not None else {}
 
+    def retrieve_linked_paths(
+        self,
+        query: str,
+        chunks: list[Chunk],
+        top_k: int = 20,
+        source_types: set[str] | None = None,
+        max_paths: int = 2,
+    ) -> list[RetrievalResult]:
+        """召回 Query 已链接实体之间的完整有界路径证据组。
+
+        普通 BFS 会把每个实体附近的高频邻居混在一起，不能保证结果来自“起点到
+        终点”的同一条路径。本方法只在 Evidence Gate 发现关系证据缺口时调用：
+        对已链接实体两两寻找不超过 ``max_hops`` 的最短路径，收集路径边和两端
+        节点回指的 Chunk，并为同一路径写入稳定 ``path_group_id``。Context Engine
+        可以据此整组保留或整组丢弃，避免只装入半条关系链。
+        """
+
+        decomposition = self.decomposer.decompose(query, self.graph)
+        linked = tuple(dict.fromkeys(decomposition.entity_node_ids))[:6]
+        if top_k <= 0 or len(linked) < 2:
+            self._set_trace(
+                decomposition.to_trace(), linked, 0, 0,
+                "linked path rescue requires at least two entities",
+            )
+            return []
+        chunk_by_id = {
+            chunk.id: chunk
+            for chunk in chunks
+            if source_types is None or chunk.source_type in source_types
+        }
+        node_by_id = self.graph.node_by_id()
+        adjacency = _build_adjacency(self.graph.edges)
+        paths: list[tuple[tuple[str, ...], tuple[GraphEdge, ...]]] = []
+        visited_nodes: set[str] = set()
+        for index, source_id in enumerate(linked):
+            for target_id in linked[index + 1:]:
+                if len(paths) >= max_paths:
+                    break
+                path = _shortest_edge_path(
+                    source_id,
+                    target_id,
+                    adjacency,
+                    max_hops=self.max_hops,
+                    max_nodes=self.max_nodes,
+                )
+                if path is not None:
+                    node_ids, edges = path
+                    paths.append((node_ids, edges))
+                    visited_nodes.update(node_ids)
+            if len(paths) >= max_paths:
+                break
+
+        candidates: dict[str, tuple[float, str, tuple[str, ...], str, int]] = {}
+        for path_index, (node_ids, edges) in enumerate(paths, 1):
+            edge_ids = tuple(edge.edge_id for edge in edges)
+            group_id = "path-" + sha1("|".join(edge_ids).encode("utf-8")).hexdigest()[:12]
+            names = [node_by_id[node_id].name for node_id in node_ids]
+            path_text = names[0]
+            for edge, name in zip(edges, names[1:]):
+                path_text += f" -[{edge.edge_type}]-> {name}"
+            chunk_ids: list[str] = []
+            # 边和查询两端最能解释关系；不把高连接度中间节点的全部文档塞进证据组。
+            for edge in edges:
+                chunk_ids.extend(edge.chunk_ids)
+            chunk_ids.extend(node_by_id[node_ids[0]].chunk_ids)
+            chunk_ids.extend(node_by_id[node_ids[-1]].chunk_ids)
+            valid_ids = tuple(dict.fromkeys(
+                chunk_id for chunk_id in chunk_ids if chunk_id in chunk_by_id
+            ))
+            group_size = len(valid_ids)
+            for position, chunk_id in enumerate(valid_ids):
+                score = 2.0 / (1 + len(edges)) + 0.01 / (1 + position)
+                current = candidates.get(chunk_id)
+                value = (score, path_text, edge_ids, group_id, group_size)
+                if current is None or value[0] > current[0]:
+                    candidates[chunk_id] = value
+
+        ordered = sorted(candidates.items(), key=lambda item: (-item[1][0], item[0]))
+        results = [
+            RetrievalResult(
+                chunk_id=chunk_id,
+                score=value[0],
+                rank=rank,
+                chunk=chunk_by_id[chunk_id],
+                reason=f"linked_graph_path group={value[3]} path={value[1]}",
+                details={
+                    "graph_score": value[0],
+                    "graph_hops": len(value[2]),
+                    "graph_path": value[1],
+                    "graph_edge_ids": "|".join(value[2]),
+                    "path_valid": 1,
+                    "path_group_id": value[3],
+                    "path_group_size": value[4],
+                    "linked_path_rescue": 1,
+                },
+            )
+            for rank, (chunk_id, value) in enumerate(ordered[:top_k], 1)
+        ]
+        self._set_trace(
+            decomposition.to_trace(), linked, len(visited_nodes), len(paths),
+            None if paths else "no bounded path connects linked entities",
+        )
+        return results
+
     def _set_trace(
         self,
         decomposition: dict[str, object],
@@ -342,6 +447,36 @@ def _build_adjacency(
     for values in adjacency.values():
         values.sort(key=lambda item: (item[0].edge_type, item[1]))
     return adjacency
+
+
+def _shortest_edge_path(
+    source_id: str,
+    target_id: str,
+    adjacency: dict[str, list[tuple[GraphEdge, str]]],
+    *,
+    max_hops: int,
+    max_nodes: int,
+) -> tuple[tuple[str, ...], tuple[GraphEdge, ...]] | None:
+    """在有界无向邻接表中寻找两个已链接实体间的稳定最短路径。"""
+
+    queue = deque([(source_id, (source_id,), ())])
+    expanded = 0
+    while queue and expanded < max_nodes:
+        node_id, node_path, edge_path = queue.popleft()
+        expanded += 1
+        if node_id == target_id and edge_path:
+            return node_path, edge_path
+        if len(edge_path) >= max_hops:
+            continue
+        for edge, next_node_id in adjacency.get(node_id, []):
+            if next_node_id in node_path:
+                continue
+            queue.append((
+                next_node_id,
+                (*node_path, next_node_id),
+                (*edge_path, edge),
+            ))
+    return None
 
 
 def _collect_chunk_candidates(

@@ -53,6 +53,15 @@ def _trace(*, retrieved: list[str], context: list[str], evidence: str, generatio
 
 
 class FailureFunnelTests(unittest.TestCase):
+    def test_rescue_attempt_is_included_in_failure_classification(self) -> None:
+        trace = _trace(retrieved=["gold-1"], context=[], evidence="insufficient")
+        trace.attempts[0]["type"] = "evidence_gap_rescue"
+        row = classify_failure_stage(
+            _case(), _response("insufficient_evidence"), trace
+        )
+        self.assertEqual(row.terminal_stage, "gate_reject")
+        self.assertEqual(row.ever_retrieved_relevant_ids, ("gold-1",))
+
     def test_distinguishes_retrieval_miss_from_gate_reject(self) -> None:
         miss = classify_failure_stage(
             _case(), _response("insufficient_evidence"),

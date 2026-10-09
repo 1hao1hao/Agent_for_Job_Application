@@ -1,0 +1,678 @@
+{
+  "run_id": "p1-evidence-gap-v03-dev-20261009",
+  "created_at": "2026-10-09T08:30:51.877211+00:00",
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "case_count": 160,
+  "answerable_case_count": 120,
+  "base_config": "configs/retrieval/adaptive_evidence_rerank_v0.3.json",
+  "rescue_config": "configs/retrieval/adaptive_evidence_gap_v0.3.json",
+  "gate_config": "configs/evidence/gate_e2e_v0.3.json",
+  "historical_retrieval_miss_count": 45,
+  "strategies": {
+    "current_adaptive": {
+      "metrics": {
+        "recall_at_5": 0.5125,
+        "mrr": 0.5106944444444445,
+        "ndcg_at_5": 0.4811136463941089,
+        "path_completeness": 0.0
+      },
+      "latency_ms": {
+        "p50": 1998.682064935565,
+        "p95": 4800.033675506711
+      },
+      "extra_retrieval_call_rate": 0.0,
+      "mean_extra_retrieval_calls": 0,
+      "historical_miss_recovered_count": 0,
+      "historical_miss_recovered_ids": [],
+      "rescue_path_counts": {}
+    },
+    "fixed_multi_route": {
+      "metrics": {
+        "recall_at_5": 0.6708333333333333,
+        "mrr": 0.6118055555555556,
+        "ndcg_at_5": 0.589548317107747,
+        "path_completeness": 0.575
+      },
+      "latency_ms": {
+        "p50": 4104.531217366457,
+        "p95": 5508.033756166697
+      },
+      "extra_retrieval_call_rate": 1.0,
+      "mean_extra_retrieval_calls": 3,
+      "historical_miss_recovered_count": 21,
+      "historical_miss_recovered_ids": [
+        "v03_cross_source_026",
+        "v03_freshness_conflict_007",
+        "v03_freshness_conflict_011",
+        "v03_single_source_001",
+        "v03_single_source_010",
+        "v03_single_source_013",
+        "v03_single_source_017",
+        "v03_single_source_026",
+        "v03_three_hop_008",
+        "v03_three_hop_011",
+        "v03_three_hop_014",
+        "v03_three_hop_017",
+        "v03_three_hop_019",
+        "v03_three_hop_023",
+        "v03_three_hop_025",
+        "v03_three_hop_028",
+        "v03_two_hop_001",
+        "v03_two_hop_023",
+        "v03_two_hop_026",
+        "v03_two_hop_028",
+        "v03_two_hop_029"
+      ],
+      "rescue_path_counts": {
+        "bm25": 160,
+        "dense": 160,
+        "graph_path": 160
+      }
+    },
+    "on_demand_rescue": {
+      "metrics": {
+        "recall_at_5": 0.6875,
+        "mrr": 0.675,
+        "ndcg_at_5": 0.6361432562212074,
+        "path_completeness": 0.5
+      },
+      "latency_ms": {
+        "p50": 2481.6683996468782,
+        "p95": 6530.657762661576
+      },
+      "extra_retrieval_call_rate": 0.64375,
+      "mean_extra_retrieval_calls": 1.2625,
+      "historical_miss_recovered_count": 23,
+      "historical_miss_recovered_ids": [
+        "v03_cross_source_023",
+        "v03_cross_source_025",
+        "v03_cross_source_026",
+        "v03_freshness_conflict_007",
+        "v03_freshness_conflict_011",
+        "v03_semantic_paraphrase_028",
+        "v03_single_source_001",
+        "v03_single_source_010",
+        "v03_single_source_013",
+        "v03_single_source_014",
+        "v03_single_source_017",
+        "v03_single_source_019",
+        "v03_single_source_023",
+        "v03_single_source_026",
+        "v03_single_source_028",
+        "v03_three_hop_019",
+        "v03_three_hop_028",
+        "v03_two_hop_001",
+        "v03_two_hop_007",
+        "v03_two_hop_023",
+        "v03_two_hop_026",
+        "v03_two_hop_028",
+        "v03_two_hop_029"
+      ],
+      "rescue_path_counts": {
+        "bm25": 101,
+        "dense": 53,
+        "graph_path": 48
+      }
+    }
+  },
+  "differences": [
+    {
+      "case_id": "v03_cross_source_002",
+      "category": "cross_source",
+      "query": "interview 与 project_logs 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+        "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+        "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+        "jd-doc-00692e65b54a109f-3-58b0908cb3fe",
+        "jd-doc-d6e4fe4e1d7b9df8-0-1cfce777d1f4"
+      ],
+      "rescue_ids": [
+        "project_logs-doc-72c5aefe9b70bfdc-0-e253f43c23e0",
+        "interview-doc-05d581bdedb02ed6-0-7d0af47366f4",
+        "project_logs-doc-72c5aefe9b70bfdc-1-e79f4604b01b",
+        "project_logs-doc-72c5aefe9b70bfdc-3-0a336654a13f",
+        "interview-doc-9e4cc341b0e505d5-0-2a11a19f4768"
+      ]
+    },
+    {
+      "case_id": "v03_cross_source_004",
+      "category": "cross_source",
+      "query": "interview 与 user_profile 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+        "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+        "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+        "jd-doc-00692e65b54a109f-3-58b0908cb3fe",
+        "jd-doc-d6e4fe4e1d7b9df8-0-1cfce777d1f4"
+      ],
+      "rescue_ids": [
+        "interview-doc-05d581bdedb02ed6-0-7d0af47366f4",
+        "user_profile-doc-6fa32d642bfc3ca6-0-72590cc783b4",
+        "user_profile-doc-6fa32d642bfc3ca6-1-c27ab1df464e",
+        "interview-doc-05d581bdedb02ed6-3-3c0eb044d929",
+        "user_profile-doc-6fa32d642bfc3ca6-2-ac041a3ffcc4"
+      ]
+    },
+    {
+      "case_id": "v03_cross_source_008",
+      "category": "cross_source",
+      "query": "project_logs 与 resume 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+        "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+        "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+        "jd-doc-8dae5cfe2e5b184f-0-e0ebf7232103",
+        "jd-doc-00692e65b54a109f-3-58b0908cb3fe"
+      ],
+      "rescue_ids": [
+        "project_logs-doc-72c5aefe9b70bfdc-0-e253f43c23e0",
+        "project_logs-doc-72c5aefe9b70bfdc-1-e79f4604b01b",
+        "resume-doc-86e266628270c337-0-5571fb30a82d",
+        "resume-doc-86e266628270c337-2-03549db70f33",
+        "resume-doc-86e266628270c337-3-0f8dbaaecffb"
+      ]
+    },
+    {
+      "case_id": "v03_cross_source_010",
+      "category": "cross_source",
+      "query": "resume 与 user_profile 分别如何描述“岗位时效”，它们能提供哪些互补证据？",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+        "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+        "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+        "jd-doc-8dae5cfe2e5b184f-0-e0ebf7232103",
+        "jd-doc-00692e65b54a109f-3-58b0908cb3fe"
+      ],
+      "rescue_ids": [
+        "user_profile-doc-6fa32d642bfc3ca6-0-72590cc783b4",
+        "resume-doc-86e266628270c337-2-03549db70f33",
+        "resume-doc-86e266628270c337-0-5571fb30a82d",
+        "user_profile-doc-6fa32d642bfc3ca6-1-c27ab1df464e",
+        "user_profile-doc-6fa32d642bfc3ca6-3-175bdefcbceb"
+      ]
+    },
+    {
+      "case_id": "v03_freshness_conflict_007",
+      "category": "freshness_conflict",
+      "query": "《文员(J10243)》这条岗位资料的状态、发布时间或采集时间是什么？",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+        "jd-doc-d6e4fe4e1d7b9df8-0-1cfce777d1f4",
+        "jd-doc-00692e65b54a109f-3-58b0908cb3fe",
+        "jd-doc-7193ac6eb82c0d51-0-4456a2495dbb",
+        "jd-doc-835d455f89a73d56-0-0040a7a88d33"
+      ],
+      "rescue_ids": [
+        "jd-doc-07cfc0ff8063d41b-0-d0bfb751b3c6",
+        "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+        "interview-doc-be138373676d0bb5-1-8a726d663fa5",
+        "jd-doc-87f51c3b61fd2db0-0-1e4432b30b04",
+        "jd-doc-d6e4fe4e1d7b9df8-0-1cfce777d1f4"
+      ]
+    },
+    {
+      "case_id": "v03_freshness_conflict_011",
+      "category": "freshness_conflict",
+      "query": "《产品管理》这条岗位资料的状态、发布时间或采集时间是什么？",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+        "jd-doc-57021dc0af1f08be-0-1114a80fd1b2",
+        "jd-doc-58bcd8544375992c-0-b83a251454de",
+        "jd-doc-ac06aa51cc6ce887-0-cd049fb08c69",
+        "jd-doc-6790a4d4a4ba3b59-0-f76203f2e955"
+      ],
+      "rescue_ids": [
+        "jd-doc-0d6730060c1e65f2-0-d322dfa76d49",
+        "jd-doc-57021dc0af1f08be-0-1114a80fd1b2",
+        "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+        "jd-doc-631cca798796e540-0-02a73344ec12",
+        "jd-doc-58bcd8544375992c-0-b83a251454de"
+      ]
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_008",
+      "category": "semantic_paraphrase",
+      "query": "不使用原文标题措辞，概括《行业咨询规划岗实习生(002090)》主要解决的实际问题。",
+      "recall_at_5_delta": -1.0,
+      "mrr_delta": -1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [
+        "exact_anchor_missing",
+        "required_sources_missing"
+      ],
+      "base_ids": [
+        "jd-doc-06a3c49ce17a1782-0-c89c6583434b",
+        "jd-doc-8fc7e4a1723ad543-0-dda0d6058063",
+        "jd-doc-39e6de215f31dd77-0-46e23daa2073",
+        "jd-doc-bd48aee75abc5dc1-0-bae3f8eb814a",
+        "jd-doc-3558e03c18fcac06-0-f695eac84483"
+      ],
+      "rescue_ids": [
+        "resume-doc-6282ed7245c0ab09-0-81dddcdf4943",
+        "user_profile-doc-7778232d62dbc95c-3-ac9ac656e21d",
+        "user_profile-doc-9567ab564b4e31f4-3-3658816638d2",
+        "user_profile-doc-c20c71e818f2c15f-0-c01ce164cefb",
+        "user_profile-doc-528affd9cf4dc7d2-3-f8a39e153ef5"
+      ]
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_028",
+      "category": "semantic_paraphrase",
+      "query": "不使用原文标题措辞，概括《v02_02_interview》主要解决的实际问题。",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "project_logs-doc-d03fe2edc533fdd5-0-658a10b5bbe7",
+        "project_logs-doc-d03fe2edc533fdd5-3-3225bfa44698",
+        "project_logs-doc-2ea5a4b4f0f92079-6-c768cdfc6bfc",
+        "project_logs-doc-088040a3e9257199-3-a9a4fcc95822",
+        "project_logs-doc-8a7e8853180d2e12-0-5e1c24ebcb74"
+      ],
+      "rescue_ids": [
+        "interview-doc-117fb62e85c11227-0-256c352444c0",
+        "interview-doc-a5e7866879f48698-0-cf4907fb9fca",
+        "interview-doc-916b74ce78da6ce2-0-1d261ae08171",
+        "interview-doc-9742ff1c423e411a-0-60166749b154",
+        "interview-doc-d65d77736d3710b6-1-5749d61eff82"
+      ]
+    },
+    {
+      "case_id": "v03_single_source_001",
+      "category": "single_source",
+      "query": "根据《RAGFlow MCP Client Examples》说明这份资料的核心要求或结论。",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-d6e4fe4e1d7b9df8-1-f0691dd00717",
+        "jd-doc-cdd063bb823d55d5-1-bea35745e596",
+        "jd-doc-87f51c3b61fd2db0-1-fb0dd9423f79",
+        "jd-doc-8dae5cfe2e5b184f-1-10074893952b",
+        "jd-doc-00692e65b54a109f-1-8f928affcc5c"
+      ],
+      "rescue_ids": [
+        "project_logs-doc-00500b13c11a6c78-0-c65cd6668a9d",
+        "jd-doc-87f51c3b61fd2db0-1-fb0dd9423f79",
+        "jd-doc-8dae5cfe2e5b184f-1-10074893952b",
+        "jd-doc-7accb719ef3c89c4-1-a1b6d547de73",
+        "jd-doc-a288962ff647b599-1-cbad7e6bde27"
+      ]
+    },
+    {
+      "case_id": "v03_single_source_010",
+      "category": "single_source",
+      "query": "根据《02. Agent 长短期记忆如何分层?》说明这份资料的核心要求或结论。",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-b0e7bd8da4865e60-1-739149d88785",
+        "jd-doc-b0e7bd8da4865e60-0-e3ae1fcdbe28",
+        "jd-doc-8dae5cfe2e5b184f-1-10074893952b",
+        "jd-doc-b0e7bd8da4865e60-2-a69c9f3638d4",
+        "jd-doc-d6e4fe4e1d7b9df8-1-f0691dd00717"
+      ],
+      "rescue_ids": [
+        "interview-doc-07bf92fc58761f21-0-2d67840b490c",
+        "interview-doc-07bf92fc58761f21-1-91684f8cf1e7",
+        "interview-doc-ef50dacdf9f0b284-0-8482b90ef90b",
+        "jd-doc-b0e7bd8da4865e60-1-739149d88785",
+        "jd-doc-b0e7bd8da4865e60-2-a69c9f3638d4"
+      ]
+    },
+    {
+      "case_id": "v03_single_source_014",
+      "category": "single_source",
+      "query": "根据《Deploy Local Models》说明这份资料的核心要求或结论。",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-87f51c3b61fd2db0-1-fb0dd9423f79",
+        "jd-doc-d6e4fe4e1d7b9df8-1-f0691dd00717",
+        "jd-doc-8dae5cfe2e5b184f-1-10074893952b",
+        "jd-doc-cdd063bb823d55d5-1-bea35745e596",
+        "jd-doc-b0e7bd8da4865e60-1-739149d88785"
+      ],
+      "rescue_ids": [
+        "project_logs-doc-08c9b64d8b16013c-0-30e3e29edb54",
+        "jd-doc-87f51c3b61fd2db0-1-fb0dd9423f79",
+        "jd-doc-d6e4fe4e1d7b9df8-1-f0691dd00717",
+        "jd-doc-cdd063bb823d55d5-1-bea35745e596",
+        "jd-doc-8dae5cfe2e5b184f-1-10074893952b"
+      ]
+    },
+    {
+      "case_id": "v03_single_source_017",
+      "category": "single_source",
+      "query": "根据《建筑工程管理》说明这份资料的核心要求或结论。",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-7fd01a1f3b0cd560-0-00794fd05f03",
+        "jd-doc-4a9f365297b5db0b-0-ace8141b8920",
+        "jd-doc-aca34158ab146554-0-2b7b0d6d1707",
+        "jd-doc-b0473ab894187a33-0-70b81877ef21",
+        "jd-doc-8c2ca9e67a52a3d7-0-94567ec27834"
+      ],
+      "rescue_ids": [
+        "jd-doc-0a3e99448918ab22-0-3323f967947c",
+        "jd-doc-4a9f365297b5db0b-0-ace8141b8920",
+        "jd-doc-3f32d80149cb7ee7-0-fbcb47603f72",
+        "jd-doc-961157ea287d3263-0-c09f0daad412",
+        "jd-doc-aca34158ab146554-0-2b7b0d6d1707"
+      ]
+    },
+    {
+      "case_id": "v03_single_source_019",
+      "category": "single_source",
+      "query": "根据《Invite Members》说明这份资料的核心要求或结论。",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-7accb719ef3c89c4-1-a1b6d547de73",
+        "jd-doc-d6e4fe4e1d7b9df8-1-f0691dd00717",
+        "jd-doc-8dae5cfe2e5b184f-1-10074893952b",
+        "jd-doc-cdd063bb823d55d5-1-bea35745e596",
+        "jd-doc-87f51c3b61fd2db0-1-fb0dd9423f79"
+      ],
+      "rescue_ids": [
+        "project_logs-doc-0c06acd9b4291e73-0-dfed7794954e",
+        "jd-doc-87f51c3b61fd2db0-1-fb0dd9423f79",
+        "jd-doc-8dae5cfe2e5b184f-1-10074893952b",
+        "jd-doc-d6e4fe4e1d7b9df8-1-f0691dd00717",
+        "jd-doc-cdd063bb823d55d5-1-bea35745e596"
+      ]
+    },
+    {
+      "case_id": "v03_single_source_023",
+      "category": "single_source",
+      "query": "根据《产品管理》说明这份资料的核心要求或结论。",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-2012398b32dc363c-0-088d7c9c0e5d",
+        "jd-doc-2c614aa6be1b9679-0-7e741308d8fe",
+        "jd-doc-57021dc0af1f08be-0-1114a80fd1b2",
+        "jd-doc-76ae2e59b54d83de-0-878fc2b6f4dd",
+        "jd-doc-31a8faacf4a3f125-0-f6053f1a8b67"
+      ],
+      "rescue_ids": [
+        "jd-doc-0d6730060c1e65f2-0-d322dfa76d49",
+        "jd-doc-87f51c3b61fd2db0-1-fb0dd9423f79",
+        "jd-doc-631cca798796e540-0-02a73344ec12",
+        "jd-doc-2012398b32dc363c-0-088d7c9c0e5d",
+        "jd-doc-2c614aa6be1b9679-0-7e741308d8fe"
+      ]
+    },
+    {
+      "case_id": "v03_single_source_026",
+      "category": "single_source",
+      "query": "根据《Qwen-Agent Overview》说明这份资料的核心要求或结论。",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-b0e7bd8da4865e60-1-739149d88785",
+        "jd-doc-d6e4fe4e1d7b9df8-1-f0691dd00717",
+        "jd-doc-cdd063bb823d55d5-1-bea35745e596",
+        "jd-doc-87f51c3b61fd2db0-1-fb0dd9423f79",
+        "jd-doc-8dae5cfe2e5b184f-1-10074893952b"
+      ],
+      "rescue_ids": [
+        "project_logs-doc-0ee11a4fe8ff0e64-0-e3d549c70e9e",
+        "jd-doc-b0e7bd8da4865e60-1-739149d88785",
+        "jd-doc-87f51c3b61fd2db0-1-fb0dd9423f79",
+        "jd-doc-cdd063bb823d55d5-1-bea35745e596",
+        "jd-doc-8dae5cfe2e5b184f-1-10074893952b"
+      ]
+    },
+    {
+      "case_id": "v03_single_source_028",
+      "category": "single_source",
+      "query": "根据《v02_02_interview》说明这份资料的核心要求或结论。",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "jd-doc-87f51c3b61fd2db0-1-fb0dd9423f79",
+        "jd-doc-d6e4fe4e1d7b9df8-1-f0691dd00717",
+        "jd-doc-cdd063bb823d55d5-1-bea35745e596",
+        "jd-doc-8dae5cfe2e5b184f-1-10074893952b",
+        "jd-doc-4ecc5a12bf311de7-1-c4d03eb53c60"
+      ],
+      "rescue_ids": [
+        "interview-doc-117fb62e85c11227-0-256c352444c0",
+        "interview-doc-117fb62e85c11227-3-232303741eda",
+        "interview-doc-117fb62e85c11227-1-bc72fbbed117",
+        "interview-doc-726eb385cabbf509-0-cae87a99dcfd",
+        "interview-doc-a5e7866879f48698-0-cf4907fb9fca"
+      ]
+    },
+    {
+      "case_id": "v03_three_hop_005",
+      "category": "three_hop",
+      "query": "请沿知识关系说明“示例平台公司”与“04. Agent 系统哪些模块最易出问题?”之间的3跳联系（路径5）。",
+      "recall_at_5_delta": 1.0,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "graph_path",
+        "bm25"
+      ],
+      "evidence_gaps": [
+        "exact_anchor_missing",
+        "semantic_channel_missing",
+        "required_sources_missing"
+      ],
+      "base_ids": [
+        "project_logs-doc-09e13ffd96c97bfe-18-caad14b0157f",
+        "project_logs-doc-09e13ffd96c97bfe-13-d7d409ca98e1",
+        "project_logs-doc-3d577bee02b26e4c-18-676c3f747e25",
+        "project_logs-doc-25bf05d80e3d797c-0-b03a648c39e4",
+        "project_logs-doc-09e13ffd96c97bfe-23-981ae277e6e2"
+      ],
+      "rescue_ids": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+        "resume-doc-ce76b08b7a13d2dd-2-ea694a4a3c10",
+        "interview-doc-9e4cc341b0e505d5-0-2a11a19f4768",
+        "resume-doc-ce76b08b7a13d2dd-0-1fa6e7df3116",
+        "jd-doc-199efcaebeb3cc61-0-117f0feba239"
+      ]
+    },
+    {
+      "case_id": "v03_two_hop_019",
+      "category": "two_hop",
+      "query": "请沿知识关系说明“示例搜索公司”与“北京”之间的2跳联系（路径19）。",
+      "recall_at_5_delta": -1.0,
+      "mrr_delta": -1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [
+        "exact_anchor_missing"
+      ],
+      "base_ids": [
+        "jd-doc-01d8f80a7f24335e-0-9f2ec154a0ba",
+        "jd-doc-50464dbb53bb66d1-0-7672122907db",
+        "interview-doc-f8baa9c3daadc280-0-4bd5d4822a82",
+        "interview-doc-829123f3496ff981-0-6805cf905434",
+        "interview-doc-2fbd3718e971610d-0-e26f5423781d"
+      ],
+      "rescue_ids": [
+        "interview-doc-829123f3496ff981-0-6805cf905434",
+        "jd-doc-50464dbb53bb66d1-0-7672122907db",
+        "project_logs-doc-827123a4b5b987c4-5-539a1cb6aa0d",
+        "jd-doc-38cd396030a09476-0-56ecba86a877",
+        "project_logs-doc-50eb8341ba5aee9d-1-6631783a1e79"
+      ]
+    },
+    {
+      "case_id": "v03_cross_source_023",
+      "category": "cross_source",
+      "query": "interview 与 resume 分别如何描述“关键词检索”，它们能提供哪些互补证据？",
+      "recall_at_5_delta": 0.5,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [],
+      "base_ids": [
+        "interview-doc-d41173267aaa5bd3-0-e8f968fdcf99",
+        "resume-doc-2a6613012c978ced-2-2128b7372ad5",
+        "resume-doc-ebfaea8b6e22a262-2-f8e49b1ecd67",
+        "resume-doc-ce76b08b7a13d2dd-2-ea694a4a3c10",
+        "resume-doc-cd94e242ad0452da-2-7e40833e82fe"
+      ],
+      "rescue_ids": [
+        "resume-doc-c0d075a84054b1af-0-6e65b1b78666",
+        "interview-doc-d41173267aaa5bd3-0-e8f968fdcf99",
+        "resume-doc-cd94e242ad0452da-2-7e40833e82fe",
+        "resume-doc-2a6613012c978ced-2-2128b7372ad5",
+        "resume-doc-ebfaea8b6e22a262-2-f8e49b1ecd67"
+      ]
+    },
+    {
+      "case_id": "v03_cross_source_025",
+      "category": "cross_source",
+      "query": "jd 与 resume 分别如何描述“关键词检索”，它们能提供哪些互补证据？",
+      "recall_at_5_delta": 0.5,
+      "mrr_delta": 1.0,
+      "rescue_invoked": true,
+      "rescue_paths": [
+        "bm25",
+        "dense"
+      ],
+      "evidence_gaps": [
+        "required_sources_missing"
+      ],
+      "base_ids": [
+        "jd-doc-7193ac6eb82c0d51-1-c1b96efbb17c",
+        "jd-doc-7193ac6eb82c0d51-2-db496807155c",
+        "jd-doc-8dae5cfe2e5b184f-1-10074893952b",
+        "jd-doc-8dae5cfe2e5b184f-2-7fff80d902d3",
+        "jd-doc-8dae5cfe2e5b184f-3-4b76c7f9036d"
+      ],
+      "rescue_ids": [
+        "resume-doc-c0d075a84054b1af-0-6e65b1b78666",
+        "resume-doc-2a6613012c978ced-2-2128b7372ad5",
+        "resume-doc-cd94e242ad0452da-2-7e40833e82fe",
+        "resume-doc-ce76b08b7a13d2dd-2-ea694a4a3c10",
+        "resume-doc-a07204ad4b08a81b-2-fdb816e55072"
+      ]
+    }
+  ],
+  "decision": {
+    "worth_real_e2e": true,
+    "selected": "on_demand_rescue",
+    "reason": "deterministic dev retrieval/path metric improved"
+  },
+  "boundary": "dev-only deterministic retrieval ablation; no LLM and no frozen test; gold ids are used only after prediction for metrics"
+}

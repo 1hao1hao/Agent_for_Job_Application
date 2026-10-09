@@ -1,0 +1,11 @@
+{
+  "status": "INTERRUPTED_CONNECTION_ERRORS",
+  "completed_cases": 14,
+  "planned_cases": 160,
+  "generation_calls": 10,
+  "successful_provider_calls": 2,
+  "reported_total_tokens": 3256,
+  "reason": "Repeated provider connection_error and circuit opening; stopped without rerunning predictions.",
+  "complete_e2e_comparison": "NOT TESTED",
+  "configuration": "pre-r2 candidate; partial results cannot validate final candidate"
+}

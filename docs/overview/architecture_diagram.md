@@ -40,15 +40,16 @@ flowchart TD
     RERANK --> RESULTS
     RESULTS --> GATE["EvidenceRequirement-aware Gate<br/>count / 显式 required sources / relation path"]
     GATE --> CTRL
-    CTRL -->|expand_sources, max once| BROADEN["去掉 source filter<br/>扩源检索一次"]
-    BROADEN --> SELECT
+    CTRL -->|expand_sources, max once| BROADEN["旧配置: 去掉 source filter<br/>候选配置: Evidence-Gap 互补检索"]
+    BROADEN --> RESCUE["BM25 / Dense / linked-entity Graph path<br/>按缺口选路、RRF 去重、provenance"]
+    RESCUE --> RESULTS
     CTRL -->|abstain| ABSTAIN["RagResponse<br/>insufficient_evidence"]
 
     REQ --> MEMORY["SessionMemoryService"]
     MEMORY --> STORE["History: Redis -> PostgreSQL<br/>Profile/Summary: PostgreSQL<br/>Memory: pgvector"]
     STORE --> SIGNAL["ContextSignalExtractor<br/>token pressure / follow-up / memory score"]
     SIGNAL --> POLICY["ContextPolicy -> ContextPlan"]
-    CTRL -->|generate| ENGINE["ContextEngine<br/>预算、rank、provenance/path、引用白名单"]
+    CTRL -->|generate| ENGINE["ContextEngine<br/>预算、rank、完整 path group、引用白名单"]
     POLICY --> ENGINE
     ENGINE -->|ManagedContext| GEN["Generator<br/>结构化 Prompt / JSON contract"]
     GEN --> GATEWAY["Model Gateway<br/>timeout / retry / circuit breaker / fallback"]

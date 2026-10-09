@@ -110,6 +110,32 @@ class GraphRetrievalTests(unittest.TestCase):
         self.assertTrue(all(item.details["path_valid"] == 1 for item in results))
         self.assertEqual(retriever.get_last_trace()["graph_version"], "test-v1")
 
+    def test_linked_path_rescue_returns_complete_two_hop_group(self) -> None:
+        graph = KnowledgeGraph(
+            version="path-v1",
+            dataset_version="test-data",
+            config_hash="path",
+            nodes=(
+                GraphNode("job", "job", "目标岗位", (), ("jd-1",)),
+                GraphNode("skill", "skill", "中间技能", (), ("jd-1", "project-1")),
+                GraphNode("project", "project", "目标项目", (), ("project-1",)),
+            ),
+            edges=(
+                GraphEdge("requires", "requires", "job", "skill", ("jd-1",)),
+                GraphEdge("shows", "demonstrates", "project", "skill", ("project-1",)),
+            ),
+        )
+        retriever = GraphRetriever(graph, max_hops=2)
+
+        results = retriever.retrieve_linked_paths(
+            "目标项目如何证明符合目标岗位？", self.chunks, top_k=5
+        )
+
+        self.assertEqual({item.chunk_id for item in results}, {"jd-1", "project-1"})
+        self.assertEqual(len({item.details["path_group_id"] for item in results}), 1)
+        self.assertTrue(all(item.details["path_group_size"] == 2 for item in results))
+        self.assertTrue(all(item.details["graph_edge_ids"] for item in results))
+
     def test_graph_vector_deduplicates_and_falls_back_without_entity(self) -> None:
         vector_results = [
             RetrievalResult("jd-1", 0.9, 1, self.chunks[0]),

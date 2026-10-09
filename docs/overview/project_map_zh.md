@@ -33,7 +33,7 @@ EvalRAG 是一个面向中文求职知识推理的图增强、自适应 RAG Agen
 ```text
 RagRequest
   -> AgentRuntime 创建 root run / Trace
-  -> Rule Router（当前在线默认；Hybrid / Feedback 用于离线对照）
+  -> Router（本轮 dev 使用 Feedback Hybrid；服务以加载的配置为准）
   -> Bounded Agent Controller: choose retrieve(adaptive)
   -> Query Analyzer + Adaptive Retriever
        BM25 / Dense / RRF / Graph + Vector
@@ -55,14 +55,25 @@ RagRequest
 
 两类重试解决不同问题：
 
-- **扩源重试**解决“路由过滤过窄导致可能漏证据”，最多一次，并不是重复执行同一检索。
+- **检索重试**最多一次。旧配置去掉来源过滤；Evidence-Gap 候选配置按显式标题、
+  词面/语义通道、必要来源和图路径缺口，选择互补 BM25、Dense 或 linked-path Graph，
+  再以 RRF 合并候选，保留每路 rank 与 provenance。
 - **格式修复重试**解决“模型答案 JSON 不符合契约”，最多一次，不改变检索证据。
 
 真实关系 Query“哪个项目能证明我符合 RAG 岗位要求？”的本地 deterministic 执行序列为
 `retrieve(graph_hybrid) -> expand_sources -> abstain`：Graph 遍历产生了候选路径，但两次检索的最终
 top-5 均未保留带有效边 ID 的关系证据，
 `relation_evidence_present=false`，Controller 因而没有调用 LLM。该动作序列也进入 deterministic
-Replay 的 `controller` 阶段比较。
+ Replay 的 `controller` 阶段比较。
+
+Evidence-Gap 候选增加 `EvidenceGapAssessment -> rescue() -> ranked RetrievalResult`：
+线上判断只读取 Query、EvidenceRequirement 与当前结果。离线 gold 仅用于计算指标。
+Graph 补救最多链接 6 个实体、返回 2 条路径，并沿用 hop/node 预算；结果包含
+`path_group_id/path_group_size`，Context Engine 在预算内整组保留，缺项或超预算整组丢弃。
+目前仅作为可配置候选，完整 LLM 链路验证尚未完成。
+同条件 dev 首轮/救援 Recall@5 为 51.25%/72.92%，MRR 为 51.07%/67.57%；
+P95 为 4.80s/7.21s。证据见
+[Evidence-Gap 消融](../../reports/ablations/p1-evidence-gap-v03-dev-20261009-r2/report.md)。
 
 ### 3. 离线评测与回归
 

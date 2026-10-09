@@ -1,0 +1,605 @@
+{
+  "source_run": "reports/runs/p1-task2-evidence-rerank-context-v03-dev-20261006",
+  "retrieval_miss_count": 45,
+  "cause_counts": {
+    "route_source_filter_mismatch": 11,
+    "candidate_pool_miss": 12,
+    "ranking_or_single_route_insufficient": 7,
+    "graph_path_missing": 15
+  },
+  "gold_absent_from_top20_count": 27,
+  "corpus_or_label_missing_count": 0,
+  "boundary": "gold labels are used offline only and never enter online selection",
+  "cases": [
+    {
+      "case_id": "v03_single_source_001",
+      "category": "single_source",
+      "query": "根据《RAGFlow MCP Client Examples》说明这份资料的核心要求或结论。",
+      "cause": "route_source_filter_mismatch",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "project_logs"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_002",
+      "category": "single_source",
+      "query": "根据《v02_07_jd》说明这份资料的核心要求或结论。",
+      "cause": "candidate_pool_miss",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_004",
+      "category": "single_source",
+      "query": "根据《search_algorithm_intern》说明这份资料的核心要求或结论。",
+      "cause": "candidate_pool_miss",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_007",
+      "category": "single_source",
+      "query": "根据《v02_07_interview》说明这份资料的核心要求或结论。",
+      "cause": "route_source_filter_mismatch",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "interview"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_010",
+      "category": "single_source",
+      "query": "根据《02. Agent 长短期记忆如何分层?》说明这份资料的核心要求或结论。",
+      "cause": "route_source_filter_mismatch",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "interview"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_013",
+      "category": "single_source",
+      "query": "根据《*Deep*Doc》说明这份资料的核心要求或结论。",
+      "cause": "route_source_filter_mismatch",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "project_logs"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_014",
+      "category": "single_source",
+      "query": "根据《Deploy Local Models》说明这份资料的核心要求或结论。",
+      "cause": "route_source_filter_mismatch",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "project_logs"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_016",
+      "category": "single_source",
+      "query": "根据《Basic Component》说明这份资料的核心要求或结论。",
+      "cause": "route_source_filter_mismatch",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "project_logs"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_017",
+      "category": "single_source",
+      "query": "根据《建筑工程管理》说明这份资料的核心要求或结论。",
+      "cause": "ranking_or_single_route_insufficient",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_019",
+      "category": "single_source",
+      "query": "根据《Invite Members》说明这份资料的核心要求或结论。",
+      "cause": "route_source_filter_mismatch",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "project_logs"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_020",
+      "category": "single_source",
+      "query": "根据《v02_04_project_logs》说明这份资料的核心要求或结论。",
+      "cause": "route_source_filter_mismatch",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "project_logs"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_023",
+      "category": "single_source",
+      "query": "根据《产品管理》说明这份资料的核心要求或结论。",
+      "cause": "candidate_pool_miss",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_025",
+      "category": "single_source",
+      "query": "根据《generation_validation_iteration》说明这份资料的核心要求或结论。",
+      "cause": "route_source_filter_mismatch",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "project_logs"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_026",
+      "category": "single_source",
+      "query": "根据《Qwen-Agent Overview》说明这份资料的核心要求或结论。",
+      "cause": "route_source_filter_mismatch",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "project_logs"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_single_source_028",
+      "category": "single_source",
+      "query": "根据《v02_02_interview》说明这份资料的核心要求或结论。",
+      "cause": "route_source_filter_mismatch",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "interview"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_cross_source_022",
+      "category": "cross_source",
+      "query": "interview 与 project_logs 分别如何描述“关键词检索”，它们能提供哪些互补证据？",
+      "cause": "candidate_pool_miss",
+      "first_source_filter": [],
+      "gold_sources": [
+        "interview",
+        "project_logs"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_cross_source_023",
+      "category": "cross_source",
+      "query": "interview 与 resume 分别如何描述“关键词检索”，它们能提供哪些互补证据？",
+      "cause": "ranking_or_single_route_insufficient",
+      "first_source_filter": [],
+      "gold_sources": [
+        "interview",
+        "resume"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_cross_source_025",
+      "category": "cross_source",
+      "query": "jd 与 resume 分别如何描述“关键词检索”，它们能提供哪些互补证据？",
+      "cause": "ranking_or_single_route_insufficient",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "jd",
+        "resume"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_cross_source_026",
+      "category": "cross_source",
+      "query": "project_logs 与 resume 分别如何描述“关键词检索”，它们能提供哪些互补证据？",
+      "cause": "ranking_or_single_route_insufficient",
+      "first_source_filter": [],
+      "gold_sources": [
+        "project_logs",
+        "resume"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_004",
+      "category": "semantic_paraphrase",
+      "query": "不使用原文标题措辞，概括《search_algorithm_intern》主要解决的实际问题。",
+      "cause": "candidate_pool_miss",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_007",
+      "category": "semantic_paraphrase",
+      "query": "不使用原文标题措辞，概括《v02_07_interview》主要解决的实际问题。",
+      "cause": "candidate_pool_miss",
+      "first_source_filter": [],
+      "gold_sources": [
+        "interview"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_011",
+      "category": "semantic_paraphrase",
+      "query": "不使用原文标题措辞，概括《文员(J10243)》主要解决的实际问题。",
+      "cause": "candidate_pool_miss",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_016",
+      "category": "semantic_paraphrase",
+      "query": "不使用原文标题措辞，概括《Basic Component》主要解决的实际问题。",
+      "cause": "ranking_or_single_route_insufficient",
+      "first_source_filter": [],
+      "gold_sources": [
+        "project_logs"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_020",
+      "category": "semantic_paraphrase",
+      "query": "不使用原文标题措辞，概括《v02_04_project_logs》主要解决的实际问题。",
+      "cause": "candidate_pool_miss",
+      "first_source_filter": [],
+      "gold_sources": [
+        "project_logs"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_023",
+      "category": "semantic_paraphrase",
+      "query": "不使用原文标题措辞，概括《产品管理》主要解决的实际问题。",
+      "cause": "candidate_pool_miss",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_028",
+      "category": "semantic_paraphrase",
+      "query": "不使用原文标题措辞，概括《v02_02_interview》主要解决的实际问题。",
+      "cause": "candidate_pool_miss",
+      "first_source_filter": [],
+      "gold_sources": [
+        "interview"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_freshness_conflict_007",
+      "category": "freshness_conflict",
+      "query": "《文员(J10243)》这条岗位资料的状态、发布时间或采集时间是什么？",
+      "cause": "ranking_or_single_route_insufficient",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_freshness_conflict_011",
+      "category": "freshness_conflict",
+      "query": "《产品管理》这条岗位资料的状态、发布时间或采集时间是什么？",
+      "cause": "candidate_pool_miss",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_freshness_conflict_017",
+      "category": "freshness_conflict",
+      "query": "《backend_intern》这条岗位资料的状态、发布时间或采集时间是什么？",
+      "cause": "candidate_pool_miss",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_freshness_conflict_029",
+      "category": "freshness_conflict",
+      "query": "《v02_08_jd》这条岗位资料的状态、发布时间或采集时间是什么？",
+      "cause": "ranking_or_single_route_insufficient",
+      "first_source_filter": [
+        "jd"
+      ],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 1
+    },
+    {
+      "case_id": "v03_two_hop_001",
+      "category": "two_hop",
+      "query": "请沿知识关系说明“示例平台公司”与“请求追踪”之间的2跳联系（路径1）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_two_hop_007",
+      "category": "two_hop",
+      "query": "请沿知识关系说明“示例平台公司”与“请求追踪”之间的2跳联系（路径7）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_two_hop_022",
+      "category": "two_hop",
+      "query": "请沿知识关系说明“示例软件公司”与“PostgreSQL”之间的2跳联系（路径22）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_two_hop_023",
+      "category": "two_hop",
+      "query": "请沿知识关系说明“示例软件公司”与“Git”之间的2跳联系（路径23）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_two_hop_026",
+      "category": "two_hop",
+      "query": "请沿知识关系说明“示例软件公司”与“Linux”之间的2跳联系（路径26）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_two_hop_028",
+      "category": "two_hop",
+      "query": "请沿知识关系说明“示例软件公司”与“Git”之间的2跳联系（路径28）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_two_hop_029",
+      "category": "two_hop",
+      "query": "请沿知识关系说明“示例软件公司”与“Python”之间的2跳联系（路径29）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_three_hop_008",
+      "category": "three_hop",
+      "query": "请沿知识关系说明“示例平台公司”与“评估方式”之间的3跳联系（路径8）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_three_hop_011",
+      "category": "three_hop",
+      "query": "请沿知识关系说明“示例平台公司”与“下一实验”之间的3跳联系（路径11）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd",
+        "project_logs"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_three_hop_014",
+      "category": "three_hop",
+      "query": "请沿知识关系说明“示例平台公司”与“结果证据”之间的3跳联系（路径14）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd",
+        "resume"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_three_hop_017",
+      "category": "three_hop",
+      "query": "请沿知识关系说明“示例平台公司”与“能力边界”之间的3跳联系（路径17）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd",
+        "resume"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_three_hop_019",
+      "category": "three_hop",
+      "query": "请沿知识关系说明“示例平台公司”与“实现记录”之间的3跳联系（路径19）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd",
+        "project_logs"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_three_hop_023",
+      "category": "three_hop",
+      "query": "请沿知识关系说明“示例平台公司”与“当前短板”之间的3跳联系（路径23）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd",
+        "user_profile"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_three_hop_025",
+      "category": "three_hop",
+      "query": "请沿知识关系说明“示例平台公司”与“边界条件”之间的3跳联系（路径25）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "jd"
+      ],
+      "gold_in_top20_candidates": true,
+      "attempt_count": 2
+    },
+    {
+      "case_id": "v03_three_hop_028",
+      "category": "three_hop",
+      "query": "请沿知识关系说明“示例平台公司”与“Git”之间的3跳联系（路径28）。",
+      "cause": "graph_path_missing",
+      "first_source_filter": [],
+      "gold_sources": [
+        "interview",
+        "jd"
+      ],
+      "gold_in_top20_candidates": false,
+      "attempt_count": 2
+    }
+  ]
+}

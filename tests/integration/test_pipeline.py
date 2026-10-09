@@ -416,6 +416,72 @@ class PipelineIntegrationTests(unittest.TestCase):
             trace.attempts[0]["retrieval_decision"]["confidence"], 0.82
         )
 
+    def test_evidence_gap_rescue_runs_once_and_is_recorded_in_trace(self) -> None:
+        class FakeEvidenceGapRetriever:
+            def __init__(self) -> None:
+                self.trace = {}
+                self.rescue_calls = 0
+
+            def __call__(self, query, chunks, top_k=5, source_types=None):
+                del query, top_k, source_types
+                self.trace = {
+                    "selected_strategy": "bm25",
+                    "evidence_requirement": {"need_type": "exact_fact"},
+                    "evidence_gaps": ["exact_anchor_missing"],
+                    "rescue_invoked": False,
+                }
+                return [RetrievalResult(chunks[0].id, 0.8, 1, chunks[0])]
+
+            def rescue(
+                self, query, chunks, *, initial_results, top_k,
+                evidence_requirement=None, initial_trace=None,
+            ):
+                del query, initial_results, top_k, evidence_requirement, initial_trace
+                self.rescue_calls += 1
+                self.trace = {
+                    "selected_strategy": "evidence_gap_rescue",
+                    "base_strategy": "bm25",
+                    "evidence_requirement": {"need_type": "exact_fact"},
+                    "evidence_gaps": [],
+                    "rescue_invoked": True,
+                    "rescue_paths": ["dense"],
+                    "rescue_call_count": 1,
+                }
+                return [RetrievalResult(chunks[1].id, 0.9, 1, chunks[1])]
+
+            def get_last_trace(self):
+                return dict(self.trace)
+
+        retriever = FakeEvidenceGapRetriever()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            trace_path = Path(temp_dir) / "evidence-gap.jsonl"
+            response = RagPipeline(
+                chunks=_chunks(),
+                llm_client=FakeLlmClient([_raw_generation(
+                    answer="候选人使用 Python 开发过 RAG 项目。",
+                    cited_chunk_ids=["resume-1"],
+                    sufficient=True,
+                    reason="补检索找回项目经历。",
+                )]),
+                config=PipelineConfig(
+                    model="fake-model",
+                    evidence=EvidenceConfig(min_scores={}, require_source_coverage=False),
+                ),
+                trace_path=trace_path,
+                retrievers={"adaptive": retriever},
+            ).run(RagRequest(
+                query="分析《目标项目》能否证明岗位匹配",
+                retriever="adaptive",
+            ))
+            trace = read_traces_jsonl(trace_path)[0]
+
+        self.assertEqual(response.status, "answered")
+        self.assertEqual(retriever.rescue_calls, 1)
+        self.assertEqual([item["type"] for item in trace.attempts[:2]], [
+            "initial_retrieval", "evidence_gap_rescue",
+        ])
+        self.assertTrue(trace.retrieval["decision"]["rescue_invoked"])
+
     def test_insufficient_query_returns_controlled_abstention(self) -> None:
         response, traces = self._run_pipeline(
             "资料中有没有量子芯片流片经历？",

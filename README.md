@@ -17,7 +17,7 @@ Context、结构化生成与引用校验回答问题；同时用 Run/Span Trace�
 ```mermaid
 flowchart LR
     Q[RagRequest] --> RT[AgentRuntime]
-    RT --> R[Rule Router<br/>Hybrid / Feedback 可用于离线对照]
+    RT --> R[Feedback Hybrid Router]
     R --> QA[QueryFeatures -> EvidenceRequirement]
     QA --> CTRL[Bounded Agent Controller]
     CTRL -->|retrieve| RET[Adaptive BM25 / Dense / RRF / Graph+Vector]
@@ -43,6 +43,19 @@ Profile/History/Summary/Memory，ContextEngine 再在统一 token budget 下执�
 编排。Model Gateway 负责 timeout、瞬时错误有界重试、并发限制、熔断和 Provider fallback。
 
 完整数据结构与失败分支见 [架构图](docs/overview/architecture_diagram.md)。
+
+### Evidence-Gap 补检索候选（2026-10-09）
+
+首轮 Adaptive 后，通过证据需求、显式标题、来源覆盖与图路径判断缺口；Gate 请求重试时，
+最多一次调用互补 BM25、Dense 或已链接实体之间的 Graph path，再融合候选并保留 provenance。
+Context Engine 按完整路径组选择证据。候选配置为
+`configs/retrieval/adaptive_evidence_gap_v0.3.json`，服务默认配置暂保持原版。
+
+同一 v0.3/dev 的在线 Router 来源过滤条件下，首轮 Adaptive 与按需救援的 Recall@5 为
+51.25% / 72.92%，MRR 为 51.07% / 67.57%；34 条 Recall 改善、0 条退化，找回 21/45
+条历史 miss。额外检索调用率 64.38%，CPU P95 从 4.80s 增至 7.21s。
+完整真实 LLM E2E **NOT TESTED**：14/160 条后因 provider connection error 中断，
+不能据此宣称回答质量提升。详见 [dev 对照与失败分析](reports/ablations/p1-evidence-gap-v03-dev-20261009-r2/report.md)。
 
 ## 可复查结果
 

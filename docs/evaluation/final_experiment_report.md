@@ -612,3 +612,38 @@ Retrieval 的 gold 对照，不能证明 Rewrite 能恢复召回，因此本轮�
 `reports/ablations/p1-evidence-first-context-v03-dev-20261006/`；真实 E2E 工件位于
 `reports/runs/p1-task2-evidence-rerank-context-v03-dev-20261006/`。锁定配置为
 `configs/retrieval/adaptive_evidence_rerank_v0.3.json`。
+
+## 16. Evidence-Gap Guided Retrieval（2026-10-09）
+
+历史 45 条 retrieval miss 的离线 Trace 归因：来源过滤不匹配 11、候选池漏召回 12、
+排序或单路不足 7、图路径缺失 15；27 条 gold 未出现在保存的 Top-20 候选中。
+所有 gold Chunk 均存在于 Corpus，但这不代表标签语义已全部核验。
+
+同一 v0.3/dev（160 Case / 120 可答）使用真实 Feedback Router，比较首轮 Adaptive、
+固定三路召回和一次按需救援。gold 只在预测产生后参与指标计算。
+
+| 策略 | Recall@5 | MRR | NDCG@5 | 标注边完整率 | CPU P95 | 额外调用率 | 历史 miss 找回 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 当前 Adaptive 首轮 | 51.25% | 51.07% | 48.11% | 0.00% | 4800.03 ms | 0.00% | 0/45 |
+| 固定 BM25 + Dense + Graph path | 67.08% | 61.18% | 58.95% | 57.50% | 5508.03 ms | 100.00% | 21/45 |
+| 按需 Evidence-Gap Rescue | 72.92% | 67.57% | 65.98% | 57.50% | 7212.52 ms | 64.38% | 21/45 |
+
+按需方案有 34 条 Recall 改善、0 条 Recall 退化，仍有 25 条可答 Case 的 Recall 为零。
+初轮候选出现 6 条退化；修正标题补救的错误来源限制、已有图证据的无条件路径置顶后，
+重新运行候选全量 dev。参考策略复用相同代码产生的首次 prediction；两次报告并存。
+该对照的基线是带在线来源过滤的首轮结果，与全库 Retriever benchmark 或此前完整 E2E
+口径不同。路径完整率分母为 40 条关系 Case，检查标注边 ID 是否出现在返回的证据中。
+CPU 顺序运行的延迟不是重复采样的稳定 SLA，按需策略仍有明显尾延迟代价。
+
+真实 DeepSeek E2E：**NOT TESTED（完整对照）**。pre-r2 候选运行 14/160 条后，
+持续 connection error 和熔断导致中断；10 次 generation 调用、2 次 provider 成功，
+成功调用报告 Token 合计 3256。此 partial run 不用于宣称最终配置的 Success、拒答率、
+Gate Reject 或 Context Drop 改善。没有运行 frozen test。
+
+救援保持可配置候选，服务默认继续使用上一锁定版。剩余问题包括实体链接不完整、图路径组
+超过 top-k/预算、严格 anchor/source 检查带来的拒答，以及补检索 P95 开销。
+
+工件：[最终 dev 对照](../../reports/ablations/p1-evidence-gap-v03-dev-20261009-r2/report.md)、
+[历史失败归因](../../reports/ablations/p1-evidence-gap-v03-dev-20261009-r2/failure_analysis.md)、
+[首次负结果](../../reports/ablations/p1-evidence-gap-v03-dev-20261009/report.md)、
+[中断 E2E 状态](../../reports/runs/p1-evidence-gap-e2e-v03-dev-20261009/status.json)。

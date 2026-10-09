@@ -14,6 +14,7 @@ EvidenceReason = Literal[
     "sufficient_evidence", "unanswerable_route", "empty_retrieval",
     "weak_retrieval_score", "low_retrieval_confidence",
     "required_sources_missing", "graph_evidence_missing",
+    "evidence_gap_detected",
 ]
 
 
@@ -171,6 +172,7 @@ def check_evidence(
         "min_results": len(results) >= min_results,
         "source_coverage": not needs_source_coverage or not missing_sources,
         "graph_path": need != "relation_reasoning" or graph_path_valid,
+        "evidence_gap": not bool(trace.get("evidence_gaps", [])),
     }
     score_gate = config.calibrated_scores.get(effective)
     threshold = score_gate.threshold if score_gate and score_gate.enabled else None
@@ -208,6 +210,15 @@ def check_evidence(
         return _retry_or_stop("required_sources_missing", "多来源证据没有覆盖全部必要来源。", retry_count, max_retries, common)
     if need == "relation_reasoning" and not graph_path_valid:
         return _retry_or_stop("graph_evidence_missing", "关系问题缺少有效 Graph path 或关系边证据。", retry_count, max_retries, common)
+    evidence_gaps = [str(item) for item in trace.get("evidence_gaps", [])]
+    if evidence_gaps:
+        return _retry_or_stop(
+            "evidence_gap_detected",
+            "当前结果仍有可观测证据缺口：" + ", ".join(evidence_gaps) + "。",
+            retry_count,
+            max_retries,
+            common,
+        )
     if low_confidence and retry_count < max_retries:
         return _decision(
             "retryable", "low_retrieval_confidence",

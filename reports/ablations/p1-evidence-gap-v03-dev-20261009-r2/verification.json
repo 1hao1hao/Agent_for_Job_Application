@@ -1,0 +1,20 @@
+{
+  "targeted_tests": {
+    "command": "PYTHONPATH=src python -m pytest tests/unit/test_adaptive_retrieval.py tests/unit/test_agent_context.py tests/unit/test_agent_controller.py tests/unit/test_context_engine.py tests/unit/test_evidence.py tests/unit/test_evidence_gap_retrieval.py tests/unit/test_graph_retrieval.py tests/unit/test_failure_funnel.py tests/unit/test_deterministic_replay.py tests/unit/test_serving_runtime_config.py tests/integration/test_pipeline.py tests/regression -q",
+    "passed": 100,
+    "failed": 0,
+    "skipped": 0
+  },
+  "git_diff_check": "passed",
+  "full_suite": {
+    "command": "PYTHONPATH=src python -m pytest tests/unit tests/integration tests/regression -vv",
+    "passed": 280,
+    "failed": 0,
+    "skipped": 6,
+    "elapsed_seconds": 86.62,
+    "execution": "outside sandbox; Fake LLM tests; database/service tests skipped without configured infrastructure"
+  },
+  "complete_live_e2e": "NOT TESTED",
+  "frozen_test": "NOT TESTED",
+  "service_default_changed": false
+}
