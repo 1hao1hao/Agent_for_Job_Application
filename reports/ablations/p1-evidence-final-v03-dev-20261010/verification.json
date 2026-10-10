@@ -1,0 +1,33 @@
+{
+  "implementation_commit": "7a6cef3",
+  "tests": {
+    "command": "PYTHONPATH=src python -m pytest tests/unit tests/integration tests/regression -q",
+    "passed": 296,
+    "failed": 0,
+    "skipped": 6,
+    "warnings": 1,
+    "seconds": 68.89,
+    "skip_reason": "External database/Redis/stack integration conditions are not configured; not a claim of live-service validation."
+  },
+  "focused_tests": {
+    "command": "PYTHONPATH=src python -m pytest tests/unit/test_evidence_oriented.py tests/unit/test_context_engine.py tests/unit/test_graph_retrieval.py tests/unit/test_evidence_gap_retrieval.py tests/integration/test_pipeline.py -q",
+    "passed": 59
+  },
+  "ruff": {
+    "command": "python -m ruff check src/intern_rag/retrieval/evidence_plan.py src/intern_rag/retrieval/evidence_oriented.py src/intern_rag/retrieval/graph.py src/intern_rag/retrieval/adaptive.py src/intern_rag/retrieval/evidence_gap.py src/intern_rag/agent/context_engine.py src/intern_rag/agent/pipeline.py tests/unit/test_evidence_oriented.py scripts/run_evidence_freeze.py",
+    "result": "All checks passed"
+  },
+  "dev_command": "PYTHONPATH=src OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 TOKENIZERS_PARALLELISM=false python scripts/run_evidence_freeze.py",
+  "frozen_test": "NOT TESTED: expressly excluded by task_10_10",
+  "real_database_stack": "NOT TESTED: this is a local fixed-model dev retrieval experiment",
+  "paired_llm_e2e": "E2E NOT VERIFIED: external export of dataset evidence was blocked by security approval",
+  "deepseek_smoke": {
+    "status": "connected",
+    "calls": 1,
+    "input_tokens": 53,
+    "output_tokens": 5,
+    "total_tokens": 58,
+    "payload": "Fixed connection-check string; no local dataset content",
+    "cost": "NOT AVAILABLE: no configured provider price; not a zero-cost claim"
+  }
+}

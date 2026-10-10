@@ -1,0 +1,19 @@
+{
+  "status": "PROJECT_FROZEN",
+  "version": "evidence-final-dev-20261010",
+  "selected_candidate": "evidence_gap",
+  "selected_candidate_config": "configs/retrieval/adaptive_evidence_gap_v0.3.json",
+  "experimental_config": "configs/retrieval/evidence_oriented_v0.3.json",
+  "production_default_config": "configs/retrieval/adaptive_evidence_rerank_v0.3.json",
+  "production_default_changed": false,
+  "implementation_commit": "7a6cef3",
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "report": "reports/ablations/p1-evidence-final-v03-dev-20261010/report.md",
+  "acceptance_rule": "candidate and final-context Recall@5/MRR/path completeness must not be worse than Evidence-Gap; P95 <= 1.25x reference",
+  "acceptance_passed": false,
+  "reason": "Oriented final-context retention improves, but raw candidate Recall@5 and MRR regress; do not relax the preset acceptance rule",
+  "paired_e2e": "E2E NOT VERIFIED",
+  "frozen_test": "NOT TESTED: excluded by this task",
+  "development_closed": true
+}
