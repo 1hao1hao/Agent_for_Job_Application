@@ -1,0 +1,37 @@
+{
+  "gateway": {
+    "version": "model-gateway-v0.1",
+    "gateway": {
+      "max_attempts_per_provider": 1,
+      "timeout_seconds": 15.0,
+      "backoff_base_seconds": 0.25,
+      "backoff_max_seconds": 2.0,
+      "concurrency_limit": 4,
+      "circuit_failure_threshold": 3,
+      "circuit_recovery_seconds": 30.0
+    },
+    "providers": [
+      {
+        "name": "deepseek-primary",
+        "adapter": "deepseek_chat",
+        "model": "deepseek-v4-flash",
+        "api_key_env": "DEEPSEEK_API_KEY",
+        "base_url": "https://api.deepseek.com",
+        "max_tokens": 1200,
+        "input_usd_per_million": 0.0,
+        "output_usd_per_million": 0.0,
+        "pricing_note": "未在本任务中固化官方价格，成本字段仅在配置价格后计算"
+      }
+    ]
+  },
+  "case_ids": [
+    "v03_single_source_001",
+    "v03_cross_source_001",
+    "v03_two_hop_001",
+    "v03_unanswerable_001"
+  ],
+  "commit_sha": "31b821dbe3ac9a35852f7ed094bb6b3e0ee34d0d",
+  "authorization": "user explicitly approved dev questions and retrieved evidence export to DeepSeek",
+  "generation_limit": 8,
+  "frozen_test": "NOT TESTED"
+}

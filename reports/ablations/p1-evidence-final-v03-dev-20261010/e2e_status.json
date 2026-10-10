@@ -1,7 +1,8 @@
 {
-  "status": "E2E NOT VERIFIED",
-  "paired_e2e": "NOT TESTED",
-  "reason": "security approval rejected dataset evidence export to external provider",
-  "generation_calls": 1,
+  "status": "small paired dev completed; full quality E2E NOT VERIFIED",
+  "paired_e2e": "8 requests completed",
+  "reason": "Initially blocked; user subsequently explicitly authorized dev evidence export. Detailed results in authorized-e2e/",
+  "generation_calls": 6,
+  "connection_smoke_calls": 1,
   "frozen": "NOT TESTED"
 }

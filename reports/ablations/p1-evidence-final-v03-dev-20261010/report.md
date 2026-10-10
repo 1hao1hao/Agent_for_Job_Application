@@ -87,9 +87,31 @@ LLM 或宣称 Retriever 从未召回。具体 gold 的去向可从逐阶段 Chun
 全量 **296 passed / 6 skipped**，定向 **59 passed**，修改文件 Ruff 通过，
 `git diff --check` 通过。命令和范围见 [verification.json](verification.json)。
 
-DeepSeek 无敏感内容连接 Smoke 成功：1 次生成、53 input / 5 output / 58 total Tokens；
-价格未配置，成本 **NOT AVAILABLE**。安全审核未批准本地证据外发，
-少量配对 E2E **NOT TESTED / E2E NOT VERIFIED**；不得把连接成功视为 E2E 成功。
+DeepSeek 无敏感内容连接 Smoke 成功：1 次生成、53 input / 5 output / 58 total Tokens。
+最初证据外发被安全审核拦截；用户随后明确授权，本轮补充一次固定四类 dev 配对验证：
+
+| Case | Evidence-Gap | Evidence-Oriented |
+|---|---|---|
+| single_source_001（可答） | Context 未保留 gold，模型拒答 | Context 有 gold，但模型判内容不充分而拒答 |
+| cross_source_001（可答） | answered，引用 ID 校验通过 | 必要 Slot 不满足，生成前拒答 |
+| two_hop_001（可答） | Gate 拒绝，未生成 | answered，引用 ID 校验通过 |
+| unanswerable_001（不可答） | 模型拒答 | 模型拒答 |
+
+完成 **8/8 Pipeline 请求、6 次真实 DeepSeek 调用、0 Provider 错误**；6 次用量均可获取：
+7966 input / 1178 output / **9144 total Tokens**（不含连接 Smoke）。每种策略均为
+1 answered / 3 insufficient；不可答题双方都正确拒答。answered 仅代表链路和引用校验通过，
+本次未做语义要点/事实支持性审核，不能视为答案准确率或正式 E2E Success。
+完整回答质量仍为 **E2E NOT VERIFIED**，不更换线上默认，不重开架构优化。
+价格未配置，成本 **NOT AVAILABLE**，不能因为配置价格为零而宣称免费。
+逐 Case 和调用用量见 [配对结果](authorized-e2e/case_results.jsonl)、
+[用量记录](authorized-e2e/provider_calls.json)、[配对 Summary](authorized-e2e/summary.json)。
+公开 Trace 仅包含白名单阶段元数据、Chunk/Citation IDs、耗时和 Tokens；问题、证据正文、
+回答、模型原文和个人元数据不上传。完整 Trace 保留在本地忽略目录
+traces/private-evidence-paired-20261010/，不在 Git 提交中。
+
+复现命令（需显式证据外发授权，已有结果禁止覆盖重跑）：
+PYTHONPATH=src:scripts OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 TOKENIZERS_PARALLELISM=false python scripts/run_evidence_paired_smoke.py。
+补充脚本 Ruff 通过；Fake client 验证了八次调用硬上限、两次连续失败停止和用量转发。
 Frozen test **NOT TESTED**（任务明确不运行）；真实数据库服务验证本轮 **NOT TESTED**。
 
 剩余技术债：原始候选排名仍退化；关系组与长跨源证据仍竞争预算；Token 使用确定性

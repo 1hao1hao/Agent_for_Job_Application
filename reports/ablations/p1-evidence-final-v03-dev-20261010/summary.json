@@ -6014,5 +6014,6 @@
   "production_default_changed": false,
   "status": "PROJECT_FROZEN",
   "frozen_test": "NOT RUN by task requirement",
-  "e2e": "E2E NOT VERIFIED"
+  "e2e": "E2E NOT VERIFIED: full answer quality not graded",
+  "supplemental_paired_smoke": "authorized-e2e/summary.json"
 }

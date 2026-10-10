@@ -31,7 +31,7 @@ flowchart LR
 
 **PROJECT_FROZEN（2026-10-10）**：最后一次修复改善最终证据保留，但原始候选质量
 未达到 Evidence-Gap，故冻结 Evidence-Gap 为候选，以下四层架构仅保留为实验实现；
-线上默认仍不替换。本轮不运行 frozen test，配对真实 E2E 未验证。见
+线上默认仍不替换。本轮不运行 frozen test；四条 dev 配对已完成，完整 E2E 质量仍未验证。见
 [三阶段最终报告](../../reports/ablations/p1-evidence-final-v03-dev-20261010/report.md)。
 
 配置：`configs/retrieval/evidence_oriented_v0.3.json`。旧服务默认未替换；候选的

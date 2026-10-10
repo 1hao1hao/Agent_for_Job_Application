@@ -20,7 +20,7 @@
   "dev_command": "PYTHONPATH=src OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 TOKENIZERS_PARALLELISM=false python scripts/run_evidence_freeze.py",
   "frozen_test": "NOT TESTED: expressly excluded by task_10_10",
   "real_database_stack": "NOT TESTED: this is a local fixed-model dev retrieval experiment",
-  "paired_llm_e2e": "E2E NOT VERIFIED: external export of dataset evidence was blocked by security approval",
+  "paired_llm_e2e": "User subsequently authorized evidence export; 8 requests completed with 6 successful real model calls. Full answer quality E2E NOT VERIFIED; see authorized-e2e/summary.json",
   "deepseek_smoke": {
     "status": "connected",
     "calls": 1,

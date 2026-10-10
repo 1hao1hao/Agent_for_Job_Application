@@ -64,7 +64,8 @@ Context Engine 按完整路径组选择证据。候选配置为
 最后一次同集 dev 修复已完成：新架构最终 Context Recall@5 为 78.33%，找回之前
 41 条装箱丢失中的 36 条；但原始候选 Recall@5 为 69.58%，低于 Evidence-Gap 的 72.92%，
 未满足预定非退化门槛。因此冻结 **Evidence-Gap 为当前候选**，Evidence-Oriented 保留为
-实验代码，不切换线上默认、不继续架构重构。真实配对 E2E **E2E NOT VERIFIED**，
+实验代码，不切换线上默认、不继续架构重构。已补充 4 条 dev × 2 策略配对验证，
+实际 DeepSeek 调用 6 次、无 Provider 错误；小样本未审核完整回答质量，仍为 **E2E NOT VERIFIED**，
 本轮不运行 frozen test。三阶段口径、负结果和测试见
 [最终冻结报告](reports/ablations/p1-evidence-final-v03-dev-20261010/report.md)，
 配置状态见 [冻结清单](configs/retrieval/project_frozen_v0.3.json)。
