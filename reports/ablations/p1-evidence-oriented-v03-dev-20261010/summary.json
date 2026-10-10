@@ -1,0 +1,3400 @@
+{
+  "dataset_version": "evalrag_v0.3",
+  "split": "dev",
+  "case_count": 160,
+  "answerable_count": 120,
+  "strategies": {
+    "adaptive": {
+      "metrics": {
+        "recall_at_5": 0.5125,
+        "mrr": 0.5106944444444445,
+        "ndcg_at_5": 0.4811136463941089,
+        "path_completeness": 0.0
+      },
+      "latency_ms": {
+        "p50": 366.6834719479084,
+        "p95": 1098.8808870315552
+      },
+      "extra_retrieval_call_rate": 0.0,
+      "mean_extra_retrieval_calls": 0,
+      "historical_miss_recovered_count": 0,
+      "historical_miss_recovered_ids": [],
+      "rescue_path_counts": {}
+    },
+    "evidence_gap": {
+      "metrics": {
+        "recall_at_5": 0.7291666666666666,
+        "mrr": 0.6756944444444445,
+        "ndcg_at_5": 0.6598448339980899,
+        "path_completeness": 0.575
+      },
+      "latency_ms": {
+        "p50": 336.39413490891457,
+        "p95": 1076.8300369381905
+      },
+      "extra_retrieval_call_rate": 0.64375,
+      "mean_extra_retrieval_calls": 1.275,
+      "historical_miss_recovered_count": 0,
+      "historical_miss_recovered_ids": [],
+      "rescue_path_counts": {
+        "bm25": 101,
+        "dense": 43,
+        "graph_path": 60
+      }
+    },
+    "evidence_oriented": {
+      "metrics": {
+        "recall_at_5": 0.5625,
+        "mrr": 0.5652777777777778,
+        "ndcg_at_5": 0.5538210435378472,
+        "path_completeness": 0.125
+      },
+      "latency_ms": {
+        "p50": 820.4535059630871,
+        "p95": 1106.6025886684656
+      },
+      "extra_retrieval_call_rate": 0.5375,
+      "mean_extra_retrieval_calls": 0.7625,
+      "historical_miss_recovered_count": 8,
+      "historical_miss_recovered_ids": [
+        "v03_freshness_conflict_029",
+        "v03_semantic_paraphrase_011",
+        "v03_semantic_paraphrase_016",
+        "v03_semantic_paraphrase_023",
+        "v03_semantic_paraphrase_028",
+        "v03_single_source_016",
+        "v03_single_source_025",
+        "v03_single_source_028"
+      ],
+      "rescue_path_counts": {}
+    }
+  },
+  "historical_25_recovered": [
+    "v03_single_source_016",
+    "v03_single_source_025",
+    "v03_single_source_028",
+    "v03_semantic_paraphrase_011",
+    "v03_semantic_paraphrase_016",
+    "v03_semantic_paraphrase_023",
+    "v03_semantic_paraphrase_028",
+    "v03_freshness_conflict_029"
+  ],
+  "historical_25_remaining": [
+    "v03_single_source_002",
+    "v03_single_source_004",
+    "v03_single_source_007",
+    "v03_single_source_020",
+    "v03_cross_source_022",
+    "v03_semantic_paraphrase_002",
+    "v03_semantic_paraphrase_004",
+    "v03_semantic_paraphrase_007",
+    "v03_semantic_paraphrase_020",
+    "v03_freshness_conflict_017",
+    "v03_two_hop_022",
+    "v03_three_hop_008",
+    "v03_three_hop_011",
+    "v03_three_hop_014",
+    "v03_three_hop_017",
+    "v03_three_hop_023",
+    "v03_three_hop_025"
+  ],
+  "differences": [
+    {
+      "case_id": "v03_single_source_001",
+      "category": "single_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-00500b13c11a6c78-0-c65cd6668a9d",
+              "project_logs-doc-00500b13c11a6c78-1-c38deadb21fc",
+              "project_logs-doc-00500b13c11a6c78-3-e231f0980d00",
+              "project_logs-doc-00500b13c11a6c78-8-ace18ffce971",
+              "project_logs-doc-00500b13c11a6c78-17-b51e5e8373c6"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_002",
+      "category": "single_source",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-87f51c3b61fd2db0-1-fb0dd9423f79",
+              "jd-doc-cdd063bb823d55d5-1-bea35745e596",
+              "jd-doc-87f51c3b61fd2db0-0-1e4432b30b04"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_004",
+      "category": "single_source",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_005",
+      "category": "single_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-039cc7c21c14a10f-0-3bb6e00b4389"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_007",
+      "category": "single_source",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_008",
+      "category": "single_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-06a3c49ce17a1782-0-c89c6583434b"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_010",
+      "category": "single_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-07bf92fc58761f21-0-2d67840b490c",
+              "interview-doc-07bf92fc58761f21-1-91684f8cf1e7"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_011",
+      "category": "single_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-07cfc0ff8063d41b-0-d0bfb751b3c6"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_013",
+      "category": "single_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-5b6b2725b25e33db-1-9567424166a1",
+              "project_logs-doc-088040a3e9257199-0-faf9ff1ed75d",
+              "project_logs-doc-5b6b2725b25e33db-0-e492c71a53e1"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_014",
+      "category": "single_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-08c9b64d8b16013c-0-30e3e29edb54",
+              "project_logs-doc-08c9b64d8b16013c-2-749f1a5521d6",
+              "project_logs-doc-08c9b64d8b16013c-3-471b5a6f1f5b",
+              "project_logs-doc-08c9b64d8b16013c-20-01a48d0c1e6f",
+              "project_logs-doc-08c9b64d8b16013c-36-1168b915b2f5"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_016",
+      "category": "single_source",
+      "before_recall": 0.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-09e13ffd96c97bfe-0-ec73e5501cea"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_017",
+      "category": "single_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-0a3e99448918ab22-0-3323f967947c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_019",
+      "category": "single_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-0c06acd9b4291e73-2-bcdbafa71ef7",
+              "project_logs-doc-0c06acd9b4291e73-0-dfed7794954e"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_020",
+      "category": "single_source",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-0cde1b4b06dfbad3-3-5f53de823a55",
+              "project_logs-doc-0cde1b4b06dfbad3-1-14f5f24609c6"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-0cde1b4b06dfbad3-3-5f53de823a55",
+              "project_logs-doc-0cde1b4b06dfbad3-1-14f5f24609c6"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_022",
+      "category": "single_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-0d5f06244bf4ea80-0-b79c0377ba86"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_023",
+      "category": "single_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-0d6730060c1e65f2-0-d322dfa76d49"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_025",
+      "category": "single_source",
+      "before_recall": 0.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-0e8a9cc91e8f1b59-0-9de1d47b9d8a"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_026",
+      "category": "single_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-0ee11a4fe8ff0e64-0-e3d549c70e9e"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_028",
+      "category": "single_source",
+      "before_recall": 0.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-117fb62e85c11227-1-bc72fbbed117",
+              "interview-doc-117fb62e85c11227-3-232303741eda",
+              "interview-doc-117fb62e85c11227-0-256c352444c0",
+              "interview-doc-117fb62e85c11227-2-bd39fc1a1695"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-117fb62e85c11227-1-bc72fbbed117",
+              "interview-doc-117fb62e85c11227-3-232303741eda",
+              "interview-doc-117fb62e85c11227-0-256c352444c0",
+              "interview-doc-117fb62e85c11227-2-bd39fc1a1695"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_single_source_029",
+      "category": "single_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-11aa46b0f850a4ba-0-3dabef44ce7d"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_001",
+      "category": "cross_source",
+      "before_recall": 1.0,
+      "after_recall": 0.5,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+              "jd-doc-d6e4fe4e1d7b9df8-0-1cfce777d1f4"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "freshness",
+            "status": "unknown",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc"
+            ],
+            "reason": "active status and observation date are required"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_002",
+      "category": "cross_source",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "freshness",
+            "status": "unknown",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc"
+            ],
+            "reason": "active status and observation date are required"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_004",
+      "category": "cross_source",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+              "jd-doc-00692e65b54a109f-3-58b0908cb3fe"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:user_profile",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "freshness",
+            "status": "unknown",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+              "jd-doc-00692e65b54a109f-3-58b0908cb3fe"
+            ],
+            "reason": "active status and observation date are required"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_005",
+      "category": "cross_source",
+      "before_recall": 1.0,
+      "after_recall": 0.5,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-d5520be3a25bd3ce-0-b606487f4741",
+              "jd-doc-d6e4fe4e1d7b9df8-0-1cfce777d1f4"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "freshness",
+            "status": "unknown",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c"
+            ],
+            "reason": "active status and observation date are required"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_007",
+      "category": "cross_source",
+      "before_recall": 1.0,
+      "after_recall": 0.5,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+              "jd-doc-00692e65b54a109f-3-58b0908cb3fe"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+              "jd-doc-00692e65b54a109f-3-58b0908cb3fe"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:user_profile",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "freshness",
+            "status": "unknown",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+              "jd-doc-00692e65b54a109f-3-58b0908cb3fe"
+            ],
+            "reason": "active status and observation date are required"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_008",
+      "category": "cross_source",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "freshness",
+            "status": "unknown",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c"
+            ],
+            "reason": "active status and observation date are required"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_010",
+      "category": "cross_source",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:user_profile",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "freshness",
+            "status": "unknown",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c"
+            ],
+            "reason": "active status and observation date are required"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_011",
+      "category": "cross_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-ec3d749bba1825e2-0-b1f82c3c3823",
+              "jd-doc-cdd063bb823d55d5-0-6b79a2cfec00",
+              "interview-doc-ec3d749bba1825e2-1-92b540e4f396",
+              "jd-doc-cdd063bb823d55d5-1-bea35745e596"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-cdd063bb823d55d5-0-6b79a2cfec00",
+              "jd-doc-cdd063bb823d55d5-1-bea35745e596"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-ec3d749bba1825e2-0-b1f82c3c3823",
+              "interview-doc-ec3d749bba1825e2-1-92b540e4f396"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_013",
+      "category": "cross_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-ec3d749bba1825e2-0-b1f82c3c3823",
+              "resume-doc-bfe18d08fea130ad-0-840a91b18a18",
+              "resume-doc-bfe18d08fea130ad-2-e0634822a344",
+              "interview-doc-ec3d749bba1825e2-3-1bd0e53fba0a"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-ec3d749bba1825e2-0-b1f82c3c3823",
+              "interview-doc-ec3d749bba1825e2-3-1bd0e53fba0a"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "satisfied",
+            "evidence_ids": [
+              "resume-doc-bfe18d08fea130ad-0-840a91b18a18",
+              "resume-doc-bfe18d08fea130ad-2-e0634822a344"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_014",
+      "category": "cross_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-ec3d749bba1825e2-0-b1f82c3c3823",
+              "user_profile-doc-3f43e47d021d4a4d-0-1f22c6f2955e",
+              "user_profile-doc-3f43e47d021d4a4d-1-aead0cdbb54c",
+              "user_profile-doc-3f43e47d021d4a4d-2-e8dde88d3f1e"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-ec3d749bba1825e2-0-b1f82c3c3823"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:user_profile",
+            "status": "satisfied",
+            "evidence_ids": [
+              "user_profile-doc-3f43e47d021d4a4d-0-1f22c6f2955e",
+              "user_profile-doc-3f43e47d021d4a4d-1-aead0cdbb54c",
+              "user_profile-doc-3f43e47d021d4a4d-2-e8dde88d3f1e"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_016",
+      "category": "cross_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-cdd063bb823d55d5-0-6b79a2cfec00",
+              "resume-doc-bfe18d08fea130ad-0-840a91b18a18",
+              "resume-doc-bfe18d08fea130ad-2-e0634822a344",
+              "jd-doc-cdd063bb823d55d5-1-bea35745e596"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-cdd063bb823d55d5-0-6b79a2cfec00",
+              "jd-doc-cdd063bb823d55d5-1-bea35745e596"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "satisfied",
+            "evidence_ids": [
+              "resume-doc-bfe18d08fea130ad-0-840a91b18a18",
+              "resume-doc-bfe18d08fea130ad-2-e0634822a344"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_017",
+      "category": "cross_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "user_profile-doc-3f43e47d021d4a4d-0-1f22c6f2955e",
+              "jd-doc-cdd063bb823d55d5-0-6b79a2cfec00",
+              "user_profile-doc-3f43e47d021d4a4d-1-aead0cdbb54c",
+              "jd-doc-cdd063bb823d55d5-1-bea35745e596"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-cdd063bb823d55d5-0-6b79a2cfec00",
+              "jd-doc-cdd063bb823d55d5-1-bea35745e596"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:user_profile",
+            "status": "satisfied",
+            "evidence_ids": [
+              "user_profile-doc-3f43e47d021d4a4d-0-1f22c6f2955e",
+              "user_profile-doc-3f43e47d021d4a4d-1-aead0cdbb54c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_019",
+      "category": "cross_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-a2e552f6be67d59a-0-dcbd1fe6aaaa",
+              "user_profile-doc-3f43e47d021d4a4d-0-1f22c6f2955e",
+              "project_logs-doc-a2e552f6be67d59a-1-f8e8b1c31da8",
+              "user_profile-doc-3f43e47d021d4a4d-1-aead0cdbb54c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-a2e552f6be67d59a-0-dcbd1fe6aaaa",
+              "project_logs-doc-a2e552f6be67d59a-1-f8e8b1c31da8"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:user_profile",
+            "status": "satisfied",
+            "evidence_ids": [
+              "user_profile-doc-3f43e47d021d4a4d-0-1f22c6f2955e",
+              "user_profile-doc-3f43e47d021d4a4d-1-aead0cdbb54c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_020",
+      "category": "cross_source",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "user_profile-doc-3f43e47d021d4a4d-0-1f22c6f2955e",
+              "resume-doc-bfe18d08fea130ad-0-840a91b18a18",
+              "user_profile-doc-3f43e47d021d4a4d-1-aead0cdbb54c",
+              "resume-doc-bfe18d08fea130ad-2-e0634822a344"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "satisfied",
+            "evidence_ids": [
+              "resume-doc-bfe18d08fea130ad-0-840a91b18a18",
+              "resume-doc-bfe18d08fea130ad-2-e0634822a344"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:user_profile",
+            "status": "satisfied",
+            "evidence_ids": [
+              "user_profile-doc-3f43e47d021d4a4d-0-1f22c6f2955e",
+              "user_profile-doc-3f43e47d021d4a4d-1-aead0cdbb54c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_022",
+      "category": "cross_source",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-d41173267aaa5bd3-0-e8f968fdcf99"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-8a7e8853180d2e12-1-a7383c2d77e2",
+              "project_logs-doc-8a7e8853180d2e12-0-5e1c24ebcb74",
+              "project_logs-doc-8a7e8853180d2e12-3-c39d993da4b7"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_023",
+      "category": "cross_source",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-d41173267aaa5bd3-0-e8f968fdcf99"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "satisfied",
+            "evidence_ids": [
+              "resume-doc-2a6613012c978ced-2-2128b7372ad5",
+              "resume-doc-cd94e242ad0452da-2-7e40833e82fe",
+              "resume-doc-ebfaea8b6e22a262-2-f8e49b1ecd67"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_025",
+      "category": "cross_source",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-8dae5cfe2e5b184f-1-10074893952b",
+              "jd-doc-8dae5cfe2e5b184f-2-7fff80d902d3"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "satisfied",
+            "evidence_ids": [
+              "resume-doc-cd94e242ad0452da-2-7e40833e82fe"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_026",
+      "category": "cross_source",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-f4f56d89bdf97de0-0-0df8955d820a",
+              "project_logs-doc-7e39fee3c0409656-0-6d9b7341caf9",
+              "project_logs-doc-f4f56d89bdf97de0-1-13d6d828e86b",
+              "project_logs-doc-24d441816ef7d97a-0-a353edfdecf4"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_028",
+      "category": "cross_source",
+      "before_recall": 1.0,
+      "after_recall": 0.5,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-81a2dd4cdbea347a-0-f976dd9fec62"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-8a7e8853180d2e12-0-5e1c24ebcb74",
+              "project_logs-doc-8a7e8853180d2e12-3-c39d993da4b7"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_cross_source_029",
+      "category": "cross_source",
+      "before_recall": 1.0,
+      "after_recall": 0.5,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-81a2dd4cdbea347a-0-f976dd9fec62"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "satisfied",
+            "evidence_ids": [
+              "resume-doc-ebfaea8b6e22a262-0-8142f260c1a7",
+              "resume-doc-ebfaea8b6e22a262-2-f8e49b1ecd67",
+              "resume-doc-0d9999870e04c414-2-b8df9051c85c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_001",
+      "category": "semantic_paraphrase",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-00500b13c11a6c78-0-c65cd6668a9d"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_002",
+      "category": "semantic_paraphrase",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-84581a071e02d5b2-1-1979b28a0d25",
+              "jd-doc-4ecc5a12bf311de7-1-c4d03eb53c60"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_004",
+      "category": "semantic_paraphrase",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_005",
+      "category": "semantic_paraphrase",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-039cc7c21c14a10f-0-3bb6e00b4389"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_007",
+      "category": "semantic_paraphrase",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_008",
+      "category": "semantic_paraphrase",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-06a3c49ce17a1782-0-c89c6583434b"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_010",
+      "category": "semantic_paraphrase",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-07bf92fc58761f21-0-2d67840b490c",
+              "interview-doc-07bf92fc58761f21-1-91684f8cf1e7"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_011",
+      "category": "semantic_paraphrase",
+      "before_recall": 0.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-07cfc0ff8063d41b-0-d0bfb751b3c6"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_013",
+      "category": "semantic_paraphrase",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-088040a3e9257199-0-faf9ff1ed75d",
+              "project_logs-doc-5b6b2725b25e33db-1-9567424166a1",
+              "project_logs-doc-088040a3e9257199-3-a9a4fcc95822",
+              "project_logs-doc-5b6b2725b25e33db-0-e492c71a53e1"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_014",
+      "category": "semantic_paraphrase",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-08c9b64d8b16013c-0-30e3e29edb54",
+              "project_logs-doc-08c9b64d8b16013c-2-749f1a5521d6"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_016",
+      "category": "semantic_paraphrase",
+      "before_recall": 0.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-09e13ffd96c97bfe-30-d16eaef2a4f7",
+              "project_logs-doc-09e13ffd96c97bfe-0-ec73e5501cea"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_017",
+      "category": "semantic_paraphrase",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-0a3e99448918ab22-0-3323f967947c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_019",
+      "category": "semantic_paraphrase",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-0c06acd9b4291e73-0-dfed7794954e",
+              "project_logs-doc-0c06acd9b4291e73-2-bcdbafa71ef7"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_020",
+      "category": "semantic_paraphrase",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-45e81f3331865796-0-f924ef50671b",
+              "project_logs-doc-d03fe2edc533fdd5-0-658a10b5bbe7",
+              "project_logs-doc-8a7e8853180d2e12-0-5e1c24ebcb74",
+              "project_logs-doc-a0547fe36f434acd-0-d2fedf05ad00"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_022",
+      "category": "semantic_paraphrase",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-0d5f06244bf4ea80-0-b79c0377ba86"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_023",
+      "category": "semantic_paraphrase",
+      "before_recall": 0.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-0d6730060c1e65f2-0-d322dfa76d49"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_025",
+      "category": "semantic_paraphrase",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-0e8a9cc91e8f1b59-0-9de1d47b9d8a"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_026",
+      "category": "semantic_paraphrase",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-0ee11a4fe8ff0e64-0-e3d549c70e9e"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_028",
+      "category": "semantic_paraphrase",
+      "before_recall": 0.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-117fb62e85c11227-0-256c352444c0"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-117fb62e85c11227-0-256c352444c0",
+              "interview-doc-a5e7866879f48698-0-cf4907fb9fca",
+              "interview-doc-d65d77736d3710b6-0-aefe287887e2"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_029",
+      "category": "semantic_paraphrase",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-11aa46b0f850a4ba-0-3dabef44ce7d"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_001",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-3-58b0908cb3fe"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-3-58b0908cb3fe",
+              "jd-doc-b0e7bd8da4865e60-0-e3ae1fcdbe28",
+              "jd-doc-cdd063bb823d55d5-0-6b79a2cfec00"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_002",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00bcef37f56068fa-0-941544106005"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_004",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-039cc7c21c14a10f-0-3bb6e00b4389"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_005",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-06a3c49ce17a1782-0-c89c6583434b"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_007",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-07cfc0ff8063d41b-0-d0bfb751b3c6"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_008",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-0876c0f68ab9ef62-0-13f610debc9d"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_010",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-0d5f06244bf4ea80-0-b79c0377ba86"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_011",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-0d6730060c1e65f2-0-d322dfa76d49"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_013",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-11aa46b0f850a4ba-0-3dabef44ce7d"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_014",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-1231309b36cff36b-0-9a5505cf7195"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_016",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-1903662c04f51cbd-0-1ead1d60997e"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_017",
+      "category": "freshness_conflict",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_019",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-1b892647bacffe39-0-1c7be3094f4c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_020",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-1cf87527e6d2bdf7-0-f01cb1d60eb4"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_022",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-1e2d615f40dc7ade-0-f9c3f747a46b"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_023",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-1e74a5eb0c7ae320-0-69b3799d7e62"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_025",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-21016150446fadfb-0-8a4d5735770d"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_026",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-228cfb52c5e33739-0-6d3c36b0a954"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_028",
+      "category": "freshness_conflict",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-247b325e5cc9d8a8-0-4c3685d4346d"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_freshness_conflict_029",
+      "category": "freshness_conflict",
+      "before_recall": 0.0,
+      "after_recall": 1.0,
+      "before_path": null,
+      "after_path": null,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-2507fada3d287fc4-0-2110ef98c31f"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-2507fada3d287fc4-0-2110ef98c31f",
+              "jd-doc-87f51c3b61fd2db0-0-1e4432b30b04",
+              "jd-doc-7accb719ef3c89c4-0-2c7f56057b23",
+              "jd-doc-cdd063bb823d55d5-0-6b79a2cfec00"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_001",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_002",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-5119c87e7622cdb0-32-f7496229ffea"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_004",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_005",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": true,
+      "after_path": true,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+              "project_logs-doc-e6b669ebdb65476e-4-768cdcf82696",
+              "user_profile-doc-6d1a483271413fa7-0-8e3bf99ca0b8",
+              "interview-doc-829123f3496ff981-0-6805cf905434",
+              "project_logs-doc-e0b076cab1a0499a-18-a1c25ff58145"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_007",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_008",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-5119c87e7622cdb0-32-f7496229ffea"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_010",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_011",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+              "project_logs-doc-e0b076cab1a0499a-18-a1c25ff58145",
+              "user_profile-doc-6d1a483271413fa7-0-8e3bf99ca0b8",
+              "interview-doc-829123f3496ff981-0-6805cf905434",
+              "project_logs-doc-e6b669ebdb65476e-4-768cdcf82696"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_013",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-5119c87e7622cdb0-32-f7496229ffea"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_014",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_016",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_017",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-5119c87e7622cdb0-32-f7496229ffea"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_019",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": true,
+      "after_path": true,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-01d8f80a7f24335e-0-9f2ec154a0ba",
+              "jd-doc-3488f37bf1a27fba-0-8e792b97504d",
+              "interview-doc-829123f3496ff981-0-6805cf905434",
+              "project_logs-doc-827123a4b5b987c4-5-539a1cb6aa0d",
+              "jd-doc-38cd396030a09476-0-56ecba86a877"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_020",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_022",
+      "category": "two_hop",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_023",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_025",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585",
+              "jd-doc-199efcaebeb3cc61-0-117f0feba239",
+              "project_logs-doc-19310875aa7ed92e-2-eca9b4738d8d",
+              "user_profile-doc-6d1a483271413fa7-0-8e3bf99ca0b8",
+              "interview-doc-829123f3496ff981-0-6805cf905434"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_026",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_028",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_two_hop_029",
+      "category": "two_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-5119c87e7622cdb0-32-f7496229ffea",
+              "project_logs-doc-5119c87e7622cdb0-111-fb27083a79bd",
+              "project_logs-doc-5119c87e7622cdb0-41-007e1729ba9a",
+              "project_logs-doc-5119c87e7622cdb0-84-be15d94b1726"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_001",
+      "category": "three_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_002",
+      "category": "three_hop",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-f1fe1af954f2bca8-3-64e1013288c5"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_004",
+      "category": "three_hop",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_005",
+      "category": "three_hop",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": true,
+      "after_path": true,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+              "interview-doc-9e4cc341b0e505d5-0-2a11a19f4768"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_007",
+      "category": "three_hop",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-5119c87e7622cdb0-32-f7496229ffea"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_008",
+      "category": "three_hop",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_010",
+      "category": "three_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_011",
+      "category": "three_hop",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_013",
+      "category": "three_hop",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_014",
+      "category": "three_hop",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_016",
+      "category": "three_hop",
+      "before_recall": 1.0,
+      "after_recall": 0.0,
+      "before_path": false,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_017",
+      "category": "three_hop",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_019",
+      "category": "three_hop",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_020",
+      "category": "three_hop",
+      "before_recall": 1.0,
+      "after_recall": 1.0,
+      "before_path": true,
+      "after_path": true,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "resume-doc-c0d075a84054b1af-0-6e65b1b78666",
+              "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+              "user_profile-doc-808859b19781e782-0-2c76d96da873",
+              "user_profile-doc-27b064672d71ab07-3-99043b8b1959",
+              "project_logs-doc-19310875aa7ed92e-2-eca9b4738d8d"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_022",
+      "category": "three_hop",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_023",
+      "category": "three_hop",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "freshness",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_025",
+      "category": "three_hop",
+      "before_recall": 0.0,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_026",
+      "category": "three_hop",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_028",
+      "category": "three_hop",
+      "before_recall": 0.5,
+      "after_recall": 0.0,
+      "before_path": true,
+      "after_path": false,
+      "gate_status": "insufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      }
+    },
+    {
+      "case_id": "v03_three_hop_029",
+      "category": "three_hop",
+      "before_recall": 0.5,
+      "after_recall": 1.0,
+      "before_path": true,
+      "after_path": true,
+      "gate_status": "sufficient",
+      "slots": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+              "user_profile-doc-c20c71e818f2c15f-0-c01ce164cefb",
+              "project_logs-doc-4eea53de20bb02e8-0-89e60f31935e",
+              "resume-doc-5ba3de1e91538c08-0-70c1a56887e9",
+              "interview-doc-829123f3496ff981-0-6805cf905434"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      }
+    }
+  ],
+  "gate_distribution": {
+    "adaptive": {
+      "sufficient": 100,
+      "retryable": 60
+    },
+    "evidence_gap": {
+      "sufficient": 82,
+      "insufficient": 78
+    },
+    "evidence_oriented": {
+      "sufficient": 87,
+      "insufficient": 73
+    }
+  },
+  "limits": "structural readiness is not answer correctness; relation completeness uses labeled edges offline only"
+}

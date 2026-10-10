@@ -1,0 +1,17 @@
+{
+  "status": "NOT TESTED: paired E2E incomplete",
+  "completed_requests": 4,
+  "by_strategy": {
+    "evidence_gap": 4
+  },
+  "terminal_stages": {
+    "model_error": 3,
+    "retrieval_miss": 1
+  },
+  "pipeline_generation_calls": 3,
+  "smoke_generation_calls": 1,
+  "reported_smoke_tokens": 58,
+  "pipeline_tokens": "NOT AVAILABLE: failed calls returned no usage",
+  "api_cost": "NOT AVAILABLE: no price snapshot/billing evidence",
+  "frozen": "NOT TESTED"
+}

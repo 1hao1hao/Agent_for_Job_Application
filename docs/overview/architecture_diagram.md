@@ -27,6 +27,48 @@ flowchart LR
 
 ## 2. 在线回答链路
 
+### 2.1 Evidence-Oriented 候选链路
+
+配置：`configs/retrieval/evidence_oriented_v0.3.json`。旧服务默认未替换；候选的
+结构验证不等于答案事实支持度，后者仍需要离线 Grounding 审核。
+
+```mermaid
+flowchart TD
+    RQ[RagRequest] --> ROUTE[Router: 来源偏好]
+    ACL[服务端 EvidenceScope: 用户/租户授权] --> PLAN
+    ROUTE --> PLAN[EvidencePlanner: EvidencePlan / Slots]
+    PLAN --> ORCH[Retrieval Orchestrator: BM25 / Dense / Hybrid / Graph]
+    ORCH --> BUNDLE[EvidenceAssembler: 槽绑定 / 完整路径组 / provenance]
+    BUNDLE --> VERIFY[EvidenceVerifier: satisfied / missing / conflicting / unknown]
+    VERIFY -->|缺失且预算允许: 最多一次| RESCUE[按缺失 Slot 定向补检索: 不扩大 ACL]
+    RESCUE --> ORCH
+    VERIFY -->|冲突或补救耗尽| STOP[可靠拒答]
+    VERIFY -->|结构就绪| CTX[ContextPolicy / ContextEngine: 记忆与证据预算]
+    CTX --> POST[重验 Context 中的必要槽和完整组]
+    POST -->|不完整| STOP
+    POST -->|完整| GENERATE[Generator / Model Gateway]
+    GENERATE --> CV[Citation Validator + 引用槽覆盖验证]
+    CV --> RESP[RagResponse]
+    PLAN -.-> TRACE[Run/Span Trace: plan / history / bundle / verdict / budget]
+    ORCH -.-> TRACE
+    VERIFY -.-> TRACE
+    CTX -.-> TRACE
+    CV -.-> TRACE
+```
+
+| 层 | 实际处理 | 为什么单独设计 |
+|---|---|---|
+| Planner | 抽取标题锚点、必要来源、关系跳数和时效槽，保留路由偏好与可信授权 | 多来源路由不等于答案必须使用全部来源 |
+| Orchestrator | 每请求共享最多 6 次逻辑检索、2 路并行、一次重排、一次缺槽补救 | 避免每槽各自无限重试，复用模型/索引而不另建 Agent 框架 |
+| Assembler | 槽绑定、跨源组合、完整图组与 Token 装箱 | 有相关 Chunk 不代表已经保留完整关系证据 |
+| Verifier | 检查结构、正文、来源、显式冲突、同版本差异和 JD 状态；unknown 不算满足 | 不把相关分数当事实证明，Context 和引用阶段再次检查证据丢失 |
+
+授权 provider 是服务端能力；HTTP `user_id` 不是认证凭证。未接入认证 provider 时，
+带用户/租户归属的材料默认不可检索，共享演示语料仍可使用。候选实测见
+[Evidence-Oriented 报告](../../reports/ablations/p1-evidence-oriented-v03-dev-20261010/report.md)。
+
+### 2.2 已发布配置与旧策略回退
+
 ```mermaid
 flowchart TD
     REQ["RagRequest<br/>query / user_id / session_id / config"] --> RUNTIME["AgentRuntime<br/>root Run + checkpoint"]

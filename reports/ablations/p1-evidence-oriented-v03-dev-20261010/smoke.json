@@ -1,0 +1,11 @@
+{
+  "status": "connected",
+  "response": "{\"status\":\"OK\"}",
+  "usage": {
+    "input_tokens": 53,
+    "output_tokens": 5,
+    "total_tokens": 58,
+    "prompt_cache_hit_tokens": 0,
+    "prompt_cache_miss_tokens": 53
+  }
+}

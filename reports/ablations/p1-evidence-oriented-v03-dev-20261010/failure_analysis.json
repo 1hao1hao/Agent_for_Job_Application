@@ -1,0 +1,1538 @@
+{
+  "counts": {
+    "no_labeled_evidence_in_scheduled_candidates": 9,
+    "ranking_or_group_selection": 10,
+    "incomplete_group": 22,
+    "token_budget": 11
+  },
+  "cases": [
+    {
+      "case_id": "v03_single_source_002",
+      "category": "single_source",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "no_labeled_evidence_in_scheduled_candidates",
+      "gold_in_raw_candidates": [],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-87f51c3b61fd2db0-1-fb0dd9423f79",
+              "jd-doc-cdd063bb823d55d5-1-bea35745e596",
+              "jd-doc-87f51c3b61fd2db0-0-1e4432b30b04"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_single_source_004",
+      "category": "single_source",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "no_labeled_evidence_in_scheduled_candidates",
+      "gold_in_raw_candidates": [],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_single_source_007",
+      "category": "single_source",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "no_labeled_evidence_in_scheduled_candidates",
+      "gold_in_raw_candidates": [],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_single_source_020",
+      "category": "single_source",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "no_labeled_evidence_in_scheduled_candidates",
+      "gold_in_raw_candidates": [],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-0cde1b4b06dfbad3-3-5f53de823a55",
+              "project_logs-doc-0cde1b4b06dfbad3-1-14f5f24609c6"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-0cde1b4b06dfbad3-3-5f53de823a55",
+              "project_logs-doc-0cde1b4b06dfbad3-1-14f5f24609c6"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_cross_source_002",
+      "category": "cross_source",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "ranking_or_group_selection",
+      "gold_in_raw_candidates": [
+        "interview-doc-05d581bdedb02ed6-0-7d0af47366f4",
+        "project_logs-doc-72c5aefe9b70bfdc-0-e253f43c23e0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "freshness",
+            "status": "unknown",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc"
+            ],
+            "reason": "active status and observation date are required"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_cross_source_004",
+      "category": "cross_source",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "ranking_or_group_selection",
+      "gold_in_raw_candidates": [
+        "interview-doc-05d581bdedb02ed6-0-7d0af47366f4",
+        "user_profile-doc-6fa32d642bfc3ca6-0-72590cc783b4"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+              "jd-doc-00692e65b54a109f-3-58b0908cb3fe"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:user_profile",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "freshness",
+            "status": "unknown",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+              "jd-doc-00692e65b54a109f-3-58b0908cb3fe"
+            ],
+            "reason": "active status and observation date are required"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_cross_source_008",
+      "category": "cross_source",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "ranking_or_group_selection",
+      "gold_in_raw_candidates": [
+        "project_logs-doc-72c5aefe9b70bfdc-0-e253f43c23e0",
+        "resume-doc-86e266628270c337-0-5571fb30a82d"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "freshness",
+            "status": "unknown",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c"
+            ],
+            "reason": "active status and observation date are required"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_cross_source_010",
+      "category": "cross_source",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "ranking_or_group_selection",
+      "gold_in_raw_candidates": [
+        "resume-doc-86e266628270c337-0-5571fb30a82d",
+        "user_profile-doc-6fa32d642bfc3ca6-0-72590cc783b4"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:user_profile",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "freshness",
+            "status": "unknown",
+            "evidence_ids": [
+              "jd-doc-00692e65b54a109f-0-59f2e7ecda6b",
+              "jd-doc-00692e65b54a109f-2-6e5666af8cfc",
+              "jd-doc-00692e65b54a109f-1-8f928affcc5c"
+            ],
+            "reason": "active status and observation date are required"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_cross_source_022",
+      "category": "cross_source",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "ranking_or_group_selection",
+      "gold_in_raw_candidates": [
+        "interview-doc-35ef3335dd6f6b36-0-58ac0c241996"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-d41173267aaa5bd3-0-e8f968fdcf99"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-8a7e8853180d2e12-1-a7383c2d77e2",
+              "project_logs-doc-8a7e8853180d2e12-0-5e1c24ebcb74",
+              "project_logs-doc-8a7e8853180d2e12-3-c39d993da4b7"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_cross_source_023",
+      "category": "cross_source",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "ranking_or_group_selection",
+      "gold_in_raw_candidates": [
+        "interview-doc-35ef3335dd6f6b36-0-58ac0c241996",
+        "resume-doc-c0d075a84054b1af-0-6e65b1b78666"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "satisfied",
+            "evidence_ids": [
+              "interview-doc-d41173267aaa5bd3-0-e8f968fdcf99"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "satisfied",
+            "evidence_ids": [
+              "resume-doc-2a6613012c978ced-2-2128b7372ad5",
+              "resume-doc-cd94e242ad0452da-2-7e40833e82fe",
+              "resume-doc-ebfaea8b6e22a262-2-f8e49b1ecd67"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_cross_source_025",
+      "category": "cross_source",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "ranking_or_group_selection",
+      "gold_in_raw_candidates": [
+        "jd-doc-01d8f80a7f24335e-0-9f2ec154a0ba",
+        "resume-doc-c0d075a84054b1af-0-6e65b1b78666"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-8dae5cfe2e5b184f-1-10074893952b",
+              "jd-doc-8dae5cfe2e5b184f-2-7fff80d902d3"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "satisfied",
+            "evidence_ids": [
+              "resume-doc-cd94e242ad0452da-2-7e40833e82fe"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_cross_source_026",
+      "category": "cross_source",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "ranking_or_group_selection",
+      "gold_in_raw_candidates": [
+        "resume-doc-c0d075a84054b1af-0-6e65b1b78666"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-f4f56d89bdf97de0-0-0df8955d820a",
+              "project_logs-doc-7e39fee3c0409656-0-6d9b7341caf9",
+              "project_logs-doc-f4f56d89bdf97de0-1-13d6d828e86b",
+              "project_logs-doc-24d441816ef7d97a-0-a353edfdecf4"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_002",
+      "category": "semantic_paraphrase",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "no_labeled_evidence_in_scheduled_candidates",
+      "gold_in_raw_candidates": [],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:jd",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-84581a071e02d5b2-1-1979b28a0d25",
+              "jd-doc-4ecc5a12bf311de7-1-c4d03eb53c60"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_004",
+      "category": "semantic_paraphrase",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "no_labeled_evidence_in_scheduled_candidates",
+      "gold_in_raw_candidates": [],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_007",
+      "category": "semantic_paraphrase",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "no_labeled_evidence_in_scheduled_candidates",
+      "gold_in_raw_candidates": [],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:interview",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_semantic_paraphrase_020",
+      "category": "semantic_paraphrase",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "no_labeled_evidence_in_scheduled_candidates",
+      "gold_in_raw_candidates": [],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "satisfied",
+            "evidence_ids": [
+              "project_logs-doc-45e81f3331865796-0-f924ef50671b",
+              "project_logs-doc-d03fe2edc533fdd5-0-658a10b5bbe7",
+              "project_logs-doc-8a7e8853180d2e12-0-5e1c24ebcb74",
+              "project_logs-doc-a0547fe36f434acd-0-d2fedf05ad00"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_freshness_conflict_017",
+      "category": "freshness_conflict",
+      "zero_recall": true,
+      "path_complete": null,
+      "diagnosis": "no_labeled_evidence_in_scheduled_candidates",
+      "gold_in_raw_candidates": [],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_001",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_002",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-5119c87e7622cdb0-32-f7496229ffea"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_004",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_007",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_008",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-5119c87e7622cdb0-32-f7496229ffea"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_010",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_011",
+      "category": "two_hop",
+      "zero_recall": false,
+      "path_complete": false,
+      "diagnosis": "ranking_or_group_selection",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+              "project_logs-doc-e0b076cab1a0499a-18-a1c25ff58145",
+              "user_profile-doc-6d1a483271413fa7-0-8e3bf99ca0b8",
+              "interview-doc-829123f3496ff981-0-6805cf905434",
+              "project_logs-doc-e6b669ebdb65476e-4-768cdcf82696"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_013",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-01d8f80a7f24335e-0-9f2ec154a0ba"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-5119c87e7622cdb0-32-f7496229ffea"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_014",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "token_budget",
+      "gold_in_raw_candidates": [
+        "jd-doc-01d8f80a7f24335e-0-9f2ec154a0ba"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_016",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-01d8f80a7f24335e-0-9f2ec154a0ba"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_017",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-01d8f80a7f24335e-0-9f2ec154a0ba"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-5119c87e7622cdb0-32-f7496229ffea"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_020",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-01d8f80a7f24335e-0-9f2ec154a0ba"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_022",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "token_budget",
+      "gold_in_raw_candidates": [
+        "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_023",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_025",
+      "category": "two_hop",
+      "zero_recall": false,
+      "path_complete": false,
+      "diagnosis": "ranking_or_group_selection",
+      "gold_in_raw_candidates": [
+        "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "satisfied",
+            "evidence_ids": [
+              "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585",
+              "jd-doc-199efcaebeb3cc61-0-117f0feba239",
+              "project_logs-doc-19310875aa7ed92e-2-eca9b4738d8d",
+              "user_profile-doc-6d1a483271413fa7-0-8e3bf99ca0b8",
+              "interview-doc-829123f3496ff981-0-6805cf905434"
+            ],
+            "reason": "structural evidence ready; not a factual entailment verdict"
+          }
+        ],
+        "ready": true,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_026",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_028",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_two_hop_029",
+      "category": "two_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-ea6e0162206c2eeb-0-9fb69bc80585"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-5119c87e7622cdb0-32-f7496229ffea",
+              "project_logs-doc-5119c87e7622cdb0-111-fb27083a79bd",
+              "project_logs-doc-5119c87e7622cdb0-41-007e1729ba9a",
+              "project_logs-doc-5119c87e7622cdb0-84-be15d94b1726"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_001",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+        "jd-doc-b0e7bd8da4865e60-0-e3ae1fcdbe28"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_002",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-f1fe1af954f2bca8-3-64e1013288c5"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_004",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_007",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [
+              "project_logs-doc-5119c87e7622cdb0-32-f7496229ffea"
+            ],
+            "reason": "complete relation group of required hop length missing"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_008",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "token_budget",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+        "jd-doc-b0e7bd8da4865e60-2-a69c9f3638d4"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_010",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+        "resume-doc-f5910f509bf392ad-0-10d7712ea9e6"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:resume",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_011",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "token_budget",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+        "project_logs-doc-ac0c3b2e42bd86ec-3-42308bfb963f"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_013",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "interview-doc-6723d64fbe3d69ef-0-5a2df18e42d5",
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_014",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "token_budget",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+        "resume-doc-f5910f509bf392ad-2-f04c377123da"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_016",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+        "project_logs-doc-ac0c3b2e42bd86ec-0-3618f867169b"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "source:project_logs",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_017",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "token_budget",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+        "resume-doc-f5910f509bf392ad-3-3fff1cd7003f"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_019",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "token_budget",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+        "project_logs-doc-ac0c3b2e42bd86ec-1-8c1b7c75c12f"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_022",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "token_budget",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+        "user_profile-doc-7778232d62dbc95c-1-1ac27da889f5"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_023",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "token_budget",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+        "user_profile-doc-7778232d62dbc95c-2-f9a76074166c"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          },
+          {
+            "slot_id": "freshness",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_025",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "token_budget",
+      "gold_in_raw_candidates": [
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0",
+        "jd-doc-b0e7bd8da4865e60-3-41d0df903052"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_026",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "token_budget",
+      "gold_in_raw_candidates": [
+        "interview-doc-984d3317cab2133a-1-4e9841c4a8a2",
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    },
+    {
+      "case_id": "v03_three_hop_028",
+      "category": "three_hop",
+      "zero_recall": true,
+      "path_complete": false,
+      "diagnosis": "incomplete_group",
+      "gold_in_raw_candidates": [
+        "interview-doc-9e4cc341b0e505d5-0-2a11a19f4768",
+        "jd-doc-201bc274e8abb775-0-6f9e7605e6a0"
+      ],
+      "slot_verification": {
+        "verdicts": [
+          {
+            "slot_id": "primary",
+            "status": "missing",
+            "evidence_ids": [],
+            "reason": "no evidence bound to slot"
+          }
+        ],
+        "ready": false,
+        "retryable": false
+      },
+      "status": "open",
+      "boundary": "labels used only after online prediction; absence in candidates does not establish a corpus defect"
+    }
+  ]
+}

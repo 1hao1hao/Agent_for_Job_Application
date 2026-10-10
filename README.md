@@ -59,6 +59,18 @@ Context Engine 按完整路径组选择证据。候选配置为
 
 ## 可复查结果
 
+### Evidence-Oriented 架构候选
+
+新增 `EvidencePlan -> Retrieval Orchestrator -> EvidenceBundle -> EvidenceVerifier` 链路：
+先规划所需证据槽，再有限并行检索、整组装箱和逐槽验证；缺槽最多补救一次，授权范围不变。
+Context 裁剪和模型引用后再次检查必要槽，不把相关分数当事实证明。候选配置为
+`configs/retrieval/evidence_oriented_v0.3.json`，旧服务默认保留；正式结果与发布判断见
+[集中 dev 对照报告](reports/ablations/p1-evidence-oriented-v03-dev-20261010/report.md)。
+
+复现：`PYTHONPATH=src OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 python scripts/run_evidence_oriented_evaluation.py`。
+加 `--real-e2e --e2e-only` 可运行有界连接检查与分层 paired dev；工件逐 case 保存，
+相同配置和数据可断点续跑，不会自动重跑 frozen test。
+
 ### Corpus 与 Benchmark
 
 `evalrag_v0.3` 从固定 revision 的公开数据集/开源仓库和脱敏自有材料导入 669 份文档，经

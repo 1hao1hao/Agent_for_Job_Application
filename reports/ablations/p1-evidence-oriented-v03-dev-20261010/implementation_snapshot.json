@@ -1,0 +1,26 @@
+{
+  "tested_code_commit": "bc59e74",
+  "hashes": {
+    "configs/retrieval/evidence_oriented_v0.3.json": "0cf2046c19c104a4d18479f72dd1c256ebc6918339bd088c22de7662ca207ac0",
+    "scripts/run_evidence_oriented_evaluation.py": "e00140b087024485bb9a4661d053e8ecf91ea639cc219f789c49bf4ae26fd72a",
+    "src/intern_rag/agent/evidence.py": "b071b422d7316a7003dccaa536a22cf104cce5ee6debb8879863859f7f36b6be",
+    "src/intern_rag/agent/pipeline.py": "362e354717591c7ffe789b20a1481ae210c54cbc5ca353f01c2411228cf4f95b",
+    "src/intern_rag/evaluation/failure_funnel.py": "adf5e9028feae7ac08e951bcab8b26b67123d785ab815e960c935a4b79f1f9c4",
+    "src/intern_rag/retrieval/adaptive.py": "d9d503c8573499508ad96e409d59be33392c198aac1c6437367e4b228e1d4b8e",
+    "src/intern_rag/retrieval/evidence_oriented.py": "c1ce444d8aae232a6b91c2acf279f62c9df445da0dbb6f801eb9649c5f7ee190",
+    "src/intern_rag/retrieval/evidence_plan.py": "1f44afffb016941207c98e1597f7cbea3769ba6fb28064cd857511cf1ffb8f3e",
+    "src/intern_rag/retrieval/factory.py": "5a0dc329784767c033683df1dd0d4de0add6fdbebd7fc4201ef8acbecbc82b23",
+    "tests/unit/test_evidence_oriented.py": "b7ab5d05baad4f43a21034ca852182314dd016b9555ede4f66c60eef848846cb"
+  },
+  "tests": {
+    "passed": 293,
+    "skipped": 6
+  },
+  "env": {
+    "OMP_NUM_THREADS": 2,
+    "MKL_NUM_THREADS": 2,
+    "llm": "deepseek-v4-flash",
+    "timeout_seconds": 15,
+    "provider_attempt_limit": 1
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "status": "partial",
+  "reason": "two consecutive provider failures",
+  "frozen": "NOT TESTED"
+}
