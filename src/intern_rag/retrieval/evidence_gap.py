@@ -1,16 +1,16 @@
 from __future__ import annotations
 
+import re
+from collections.abc import Mapping
 from contextvars import ContextVar
 from dataclasses import asdict, dataclass
-import re
 from time import perf_counter
-from typing import Literal, Mapping
+from typing import Literal
 
 from intern_rag.ingestion import Chunk
 from intern_rag.retrieval.adaptive import AdaptiveRetriever
 from intern_rag.retrieval.base import RetrievalResult, Retriever
 from intern_rag.retrieval.graph import GraphRetriever
-
 
 EvidenceGap = Literal[
     "exact_anchor_missing",
@@ -82,9 +82,11 @@ class EvidenceGapGuidedRetriever:
         self.routes = dict(routes)
         self.graph_retriever = graph_retriever
         self.config = config or EvidenceGapConfig()
-        self._last_trace: ContextVar[dict[str, object]] = ContextVar(
-            f"evidence_gap_trace_{id(self)}", default={}
+        self._last_trace: ContextVar[dict[str, object] | None] = ContextVar(
+            f"evidence_gap_trace_{id(self)}", default=None
         )
+        self._candidates: ContextVar[list[RetrievalResult] | None] = ContextVar(
+            f"gap_candidates_{id(self)}", default=None)
 
     def __call__(
         self,
@@ -96,6 +98,7 @@ class EvidenceGapGuidedRetriever:
         """执行首轮 Adaptive，并记录系统可观察到的证据缺口。"""
 
         results = self.base(query, chunks, top_k=top_k, source_types=source_types)
+        self._candidates.set(self.base.get_candidates())
         trace = self.base.get_last_trace()
         assessment = assess_evidence_gap(query, results, trace)
         self._last_trace.set({
@@ -201,6 +204,7 @@ class EvidenceGapGuidedRetriever:
         else:
             ranked = self.base._rerank(query, fused) if fused else []
         output = ranked[:top_k]
+        self._candidates.set(ranked)
         final_assessment = assess_evidence_gap(query, output, {
             **trace, "evidence_requirement": requirement
         })
@@ -224,6 +228,10 @@ class EvidenceGapGuidedRetriever:
             "rescue_reason": ",".join(assessment.gaps),
         })
         return output
+
+    def get_candidates(self) -> list[RetrievalResult]:
+        """返回补检索融合后、top-k 截止前的候选，不改变旧检索行为。"""
+        return list(self._candidates.get() or [])
 
     def retrieve_fixed_multi_route(
         self,
@@ -257,7 +265,7 @@ class EvidenceGapGuidedRetriever:
     def get_last_trace(self) -> dict[str, object]:
         """返回首轮或补检索的完整决策 Trace。"""
 
-        return dict(self._last_trace.get())
+        return dict(self._last_trace.get() or {})
 
 
 def assess_evidence_gap(
@@ -404,7 +412,7 @@ def _quoted_anchor(query: str) -> str | None:
 def _result_contains_anchor(result: RetrievalResult, anchor: str) -> bool:
     needle = _normalize_anchor(anchor)
     haystack = _normalize_anchor(
-        " ".join((result.chunk.title, result.chunk.text, result.chunk.source_path))
+        f"{result.chunk.title} {result.chunk.text} {result.chunk.source_path}"
     )
     return bool(needle) and needle in haystack
 

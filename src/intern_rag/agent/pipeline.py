@@ -1,13 +1,18 @@
 from __future__ import annotations
 
+from collections.abc import Callable, Mapping
 from contextvars import ContextVar
 from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
 from time import perf_counter
-from typing import Callable, Mapping
 from uuid import uuid4
 
-from intern_rag.agent.context import ContextStrategy, build_context
+from intern_rag.agent.context import (
+    ContextStrategy,
+    build_context,
+    context_item_from_result,
+    format_context_item,
+)
 from intern_rag.agent.context_engine import (
     ContextBudgetError,
     ContextEngine,
@@ -47,7 +52,6 @@ from intern_rag.tracing import (
     build_agent_trace,
     write_trace_jsonl,
 )
-
 
 INSUFFICIENT_ANSWER = "当前证据不足，无法基于已提供的资料可靠回答该问题。"
 FORMAT_ERROR_ANSWER = "模型输出格式不符合系统契约，本次请求未返回答案。"
@@ -254,6 +258,21 @@ class RagPipeline:
             stage_started_at = perf_counter()
             route_decision = selected_router(request.query)
             latency_ms["routing"] = _elapsed_ms(stage_started_at)
+            configure_packing = getattr(selected_retriever, "configure_packing", None)
+            if callable(configure_packing) and self.context_engine is not None:
+                estimator = self.context_engine.estimator
+
+                def available_tokens(ids: list[str]) -> int:
+                    empty = BuiltContext(request.query, "", [], ids, [], 0, 0)
+                    reserved = estimator.count(build_generation_prompt(
+                        request.query, empty, self.config.prompt_version)) + self.config.context_prompt_safety_tokens
+                    return (self.config.context_token_budget - reserved
+                            - estimator.count(self.config.system_prompt) - estimator.count(request.query))
+
+                configure_packing(estimator.count,
+                                  lambda r: format_context_item(context_item_from_result(r)),
+                                  max_chars=self.config.context_max_chars,
+                                  available_tokens=available_tokens)
 
             agent_state = AgentState(
                 requested_retriever=request.retriever,
@@ -714,7 +733,7 @@ class RagPipeline:
                 answer=SYSTEM_ERROR_ANSWER,
                 routed_sources=route_decision.routed_sources,
             )
-        except Exception as error:
+        except Exception as error:  # noqa: BLE001 - 请求边界必须记录 Trace 并映射错误。
             error_type = _stage_error_type(current_stage)
             error_message = str(error)
             response = self._error_response(
@@ -800,7 +819,7 @@ class RagPipeline:
         self.last_trace_persistence_errors = []
         try:
             write_trace_jsonl(trace, self.trace_path)
-        except Exception as error:
+        except Exception as error:  # noqa: BLE001 - Trace 持久化失败不覆盖业务响应。
             self.last_trace_persistence_errors = [
                 *self.last_trace_persistence_errors,
                 f"jsonl:{type(error).__name__}: {error}",
@@ -808,7 +827,7 @@ class RagPipeline:
         if self.trace_sink is not None:
             try:
                 self.trace_sink(trace)
-            except Exception as error:
+            except Exception as error:  # noqa: BLE001 - 外部 Trace sink 的错误必须记录。
                 self.last_trace_persistence_errors = [
                     *self.last_trace_persistence_errors,
                     f"sink:{type(error).__name__}: {error}",

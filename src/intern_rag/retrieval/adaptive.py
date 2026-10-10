@@ -1,15 +1,15 @@
 from __future__ import annotations
 
+import re
+from collections.abc import Mapping
 from contextvars import ContextVar
 from dataclasses import asdict, dataclass, field
-import re
 from time import perf_counter
-from typing import Literal, Mapping
+from typing import Literal
 
 from intern_rag.ingestion import Chunk
 from intern_rag.retrieval.base import RetrievalResult, Retriever
 from intern_rag.retrieval.rerank import RerankScorer
-
 
 RetrievalStrategy = Literal["none", "bm25", "dense", "hybrid", "graph_hybrid"]
 RerankPolicy = Literal["never", "always", "low_confidence", "evidence_need"]
@@ -341,9 +341,11 @@ class AdaptiveRetriever:
         self._last_decision: ContextVar[RetrievalDecision | None] = ContextVar(
             f"adaptive_retrieval_decision_{id(self)}", default=None
         )
-        self._last_stage_trace: ContextVar[dict[str, object]] = ContextVar(
-            f"adaptive_retrieval_stage_trace_{id(self)}", default={}
+        self._last_stage_trace: ContextVar[dict[str, object] | None] = ContextVar(
+            f"adaptive_retrieval_stage_trace_{id(self)}", default=None
         )
+        self._candidates: ContextVar[list[RetrievalResult] | None] = ContextVar(
+            f"adaptive_candidates_{id(self)}", default=None)
 
     def __call__(
         self,
@@ -370,6 +372,7 @@ class AdaptiveRetriever:
             else None
         )
         if top_k <= 0 or not query.strip() or strategy == "none":
+            self._candidates.set([])
             decision = RetrievalDecision(
                 strategy=strategy,
                 confidence=1.0 if features.is_unanswerable_route else 0.0,
@@ -475,14 +478,19 @@ class AdaptiveRetriever:
         )
         self._last_decision.set(decision)
         self._last_stage_trace.set(stage_trace)
-        return _attach_decision(ranked[:top_k], decision)
+        self._candidates.set(_attach_decision(ranked, decision))
+        return (self._candidates.get() or [])[:top_k]
+
+    def get_candidates(self) -> list[RetrievalResult]:
+        """返回最终 top-k 截止前候选，供离线阶段审计使用。"""
+        return list(self._candidates.get() or [])
 
     def get_last_trace(self) -> dict[str, object]:
         """返回当前执行上下文中最近一次检索决策，供 Pipeline/Runner 记录。"""
 
         decision = self._last_decision.get()
         return (
-            {**self._last_stage_trace.get(), **decision.to_trace()}
+            {**(self._last_stage_trace.get() or {}), **decision.to_trace()}
             if decision is not None
             else {}
         )

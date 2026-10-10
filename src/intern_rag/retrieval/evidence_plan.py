@@ -5,10 +5,11 @@
 """
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, replace
 import json
 import re
-from typing import Callable, Literal
+from collections.abc import Callable
+from dataclasses import asdict, dataclass, replace
+from typing import Literal
 
 from intern_rag.ingestion import Chunk
 from intern_rag.retrieval.adaptive import EvidenceRequirement, QueryAnalyzer
@@ -118,7 +119,7 @@ class EvidencePlanner:
                 extra = tuple(EvidenceSlot(f"decomposed:{i}", "fact", q)
                               for i, q in enumerate(dict.fromkeys(subqueries)))
                 plan = replace(plan, slots=(*plan.slots, *extra), planner="structured_once")
-            except Exception as error:
+            except Exception as error:  # noqa: BLE001 - 可注入规划器的任意失败均回退确定性计划。
                 plan = replace(plan, fallback_reason=type(error).__name__)
         return plan
 
@@ -164,53 +165,111 @@ class EvidenceAssembler:
     """将结果绑定到槽，并按完整路径/跨源组进行 Token 装箱。"""
 
     def assemble(self, plan: EvidencePlan, results: list[RetrievalResult],
-                 token_budget: int, count_tokens: Callable[[str], int]) -> EvidenceBundle:
-        """输入计划和候选，去重、分组、完整性检查后整组保留或整组丢弃。
+                 token_budget: int, count_tokens: Callable[[str], int], *,
+                 max_chars: int | None = None,
+                 format_result: Callable[[RetrievalResult], str] | None = None) -> EvidenceBundle:
+        """完整候选 -> 路径成员账本/单条选项 -> 增量预算选择 -> EvidenceBundle。
 
-        预算包括 ID、标题、来源和正文的保守格式开销；ContextEngine 仍负责最终
-        Prompt 预算，Pipeline 在其裁剪后再验证，防止装箱后证据再次丢失。
+        先识别完整组，再按新增槽覆盖和原始 rank 选择可装入组合。共享成员只
+        计一次 Token；无法装入的路径不算完整，但其成员仍可作为普通事实证据。
+        输出保持原始相关性顺序，不以路径组身份重新排到最前面。
         """
         unique = {r.chunk_id: r for r in reversed(results) if plan.scope.permits(r.chunk)}
         ordered = sorted(unique.values(), key=lambda r: (r.rank, r.chunk_id))
-        by_group: dict[str, list[RetrievalResult]] = {}
-        for r in ordered:
-            key = str(r.details.get("path_group_id") or r.chunk_id)
-            by_group.setdefault(key, []).append(r)
-        if plan.requirement.multi_source_required and not plan.requirement.graph_required:
-            selected = {r.chunk_id for slot in plan.slots if slot.kind == "source"
-                        for r in slot_candidates(slot, ordered)[:1]}
-            if selected:
-                by_group = {key: [r for r in rows if r.chunk_id not in selected]
-                            for key, rows in by_group.items()}
-                by_group["cross-source"] = [r for r in ordered if r.chunk_id in selected]
-        kept: list[RetrievalResult] = []
-        groups: list[EvidenceGroup] = []
-        dropped: list[dict[str, object]] = []
-        tokens = 0
-        for group_id, rows in sorted(by_group.items(), key=lambda p: min(
-                (r.rank for r in p[1]), default=10**9)):
-            if not rows:
-                continue
-            expected = max(int(r.details.get("path_group_size") or 1) for r in rows)
-            complete = len(rows) >= expected
-            group = EvidenceGroup(group_id, tuple(r.chunk_id for r in rows),
-                                  str(rows[0].details.get("graph_path") or ""),
-                                  tuple(str(rows[0].details.get("graph_edge_ids") or "").split("|"))
-                                  if rows[0].details.get("graph_edge_ids") else (), complete)
-            cost = sum(count_tokens(f"[{r.chunk_id}] {r.chunk.source_type} {r.chunk.title}\n"
-                                    f"{r.chunk.source_path}\n{r.chunk.text}\n") + 16 for r in rows)
-            groups.append(group)
-            if not complete or tokens + cost > token_budget:
-                dropped.append({"group_id": group_id, "chunk_ids": list(group.chunk_ids),
-                                "reason": "incomplete_group" if not complete else "token_budget"})
-                continue
+        groups = read_evidence_groups(ordered)
+        formatter = format_result or (lambda r: (
+            f"[{r.chunk_id}] {r.chunk.source_type} {r.chunk.title}\n"
+            f"{r.chunk.source_path}\n{r.chunk.text}\n"))
+        texts = {r.chunk_id: formatter(r) for r in ordered}
+        costs = {cid: count_tokens(f"[evidence:{cid}]\n{text}") for cid, text in texts.items()}
+        options = [(g.group_id, set(g.chunk_ids)) for g in groups if g.complete]
+        options += [(r.chunk_id, {r.chunk_id}) for r in ordered]
+        selected: set[str] = set()
+        covered: set[str] = set()
+        tokens = chars = 0
+        by_id = {r.chunk_id: r for r in ordered}
+        while options:
+            viable = []
+            for key, members in options:
+                extra = members - selected
+                if not extra or not members <= set(by_id):
+                    continue
+                cost = sum(costs[cid] for cid in extra)
+                length = sum(len(texts[cid]) + 2 for cid in extra)
+                if tokens + cost > token_budget or (max_chars is not None and chars + length > max_chars):
+                    continue
+                rows = [by_id[cid] for cid in members]
+                slot_cover = {s.slot_id for s in plan.slots if s.kind != "relation"
+                              and slot_candidates(s, rows)}
+                if any(g.complete and set(g.chunk_ids) <= members and len(g.edge_ids) >= s.min_hops
+                       for g in groups for s in plan.slots if s.kind == "relation"):
+                    slot_cover.add("primary")
+                # 相关性不是事实证明，只用于装箱价值；Gate 标准在后面独立检查。
+                relevance = sum(1 / max(1, by_id[cid].rank) for cid in extra)
+                value = (3 * len(slot_cover - covered) + relevance) / (1 + cost / max(1, token_budget))
+                viable.append((value, min(by_id[cid].rank for cid in extra), key,
+                               members, slot_cover, cost, length))
+            if not viable:
+                break
+            best = min(viable, key=lambda v: (-v[0], v[1], v[2]))
+            _, _, key, members, slot_cover, cost, length = best
+            selected |= members
+            covered |= slot_cover
             tokens += cost
-            kept.extend(rows)
+            chars += length
+            options = [(k, ids) for k, ids in options if k != key]
+        complete_groups = [g for g in groups if g.complete and set(g.chunk_ids) <= selected]
+        dropped: list[dict[str, object]] = []
+        for group in groups:
+            if group not in complete_groups:
+                dropped.append({"group_id": group.group_id, "chunk_ids": list(group.chunk_ids),
+                                "reason": "incomplete_group" if not group.complete else "effective_budget"})
+        kept = []
+        for r in ordered:
+            if r.chunk_id not in selected:
+                dropped.append({"chunk_ids": [r.chunk_id], "reason": "effective_budget"})
+                continue
+            memberships = [g for g in complete_groups if r.chunk_id in g.chunk_ids]
+            details = {**r.details, "evidence_bundle_packed": 1,
+                       "path_groups_json": json.dumps([asdict(g) for g in memberships], ensure_ascii=False)}
+            if memberships:
+                g = memberships[0]
+                details.update({"path_group_id": g.group_id, "path_group_size": len(g.chunk_ids),
+                                "graph_path": g.path, "graph_edge_ids": "|".join(g.edge_ids), "path_valid": 1})
+            else:
+                for key in ("path_group_id", "path_group_size", "graph_path", "graph_edge_ids"):
+                    details.pop(key, None)
+                details["path_valid"] = 0
+            kept.append(replace(r, details=details))
         kept = [replace(r, rank=i) for i, r in enumerate(kept, 1)]
         return EvidenceBundle(tuple(kept), {
             slot.slot_id: tuple(r.chunk_id for r in slot_candidates(slot, kept))
             for slot in plan.slots
-        }, tuple(groups), tuple(dropped), tokens)
+        }, tuple(complete_groups), tuple(dropped), tokens)
+
+
+def read_evidence_groups(results: list[RetrievalResult]) -> list[EvidenceGroup]:
+    """恢复多路径成员账本；兼容旧单组字段，缺成员时绝不伪造完整组。"""
+    groups: dict[str, EvidenceGroup] = {}
+    legacy: dict[str, list[RetrievalResult]] = {}
+    available = {r.chunk_id for r in results}
+    for r in results:
+        raw = r.details.get("path_groups_json")
+        if raw is not None:
+            for data in json.loads(str(raw)):
+                ids = tuple(str(cid) for cid in data["chunk_ids"])
+                groups[str(data["group_id"])] = EvidenceGroup(
+                    str(data["group_id"]), ids, str(data["path"]), tuple(data["edge_ids"]),
+                    bool(data.get("complete", True)) and set(ids) <= available)
+        elif r.details.get("path_group_id"):
+            legacy.setdefault(str(r.details["path_group_id"]), []).append(r)
+    for key, rows in legacy.items():
+        expected = max(int(r.details.get("path_group_size", 1)) for r in rows)
+        groups[key] = EvidenceGroup(key, tuple(r.chunk_id for r in rows),
+                                   str(rows[0].details.get("graph_path", "")),
+                                   tuple(str(rows[0].details.get("graph_edge_ids", "")).split("|")),
+                                   len(rows) >= expected)
+    return list(groups.values())
 
 
 @dataclass(frozen=True)

@@ -1,7 +1,7 @@
 {
   "retriever_name": "graph_adaptive",
   "dataset_version": "evalrag_v0.3",
-  "config_version": "evidence-oriented-v1-dev-candidate",
+  "config_version": "evidence-oriented-v1.1-final-quality-fix",
   "top_k": 5,
   "bm25_index_path": "data/processed/indexes/evalrag_v0.3/bm25-v1/index.json",
   "index_dir": "data/processed/indexes/evalrag_v0.3/bge-small-zh-v1.5",

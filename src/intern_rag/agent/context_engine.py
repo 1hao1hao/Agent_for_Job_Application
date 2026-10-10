@@ -1,14 +1,19 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
+import json
 import re
-from typing import TYPE_CHECKING, Callable, Literal, Protocol, Sequence
+from collections.abc import Callable, Sequence
+from dataclasses import dataclass, replace
+from datetime import datetime, timezone
+from typing import TYPE_CHECKING, Literal, Protocol
 
-from intern_rag.agent.context import build_context, format_context_item
+from intern_rag.agent.context import (
+    build_context,
+    context_item_from_result,
+    format_context_item,
+)
 from intern_rag.agent.schemas import BuiltContext
 from intern_rag.retrieval import RetrievalResult
-
 
 ContextMode = Literal[
     "no_memory", "full_history", "recent_window", "summary_recent", "semantic_memory",
@@ -33,7 +38,7 @@ class TokenEstimator(Protocol):
 class TextSummarizer(Protocol):
     """把历史消息压缩成保留事实的摘要。"""
 
-    def summarize(self, messages: Sequence["ConversationMessage"]) -> str:
+    def summarize(self, messages: Sequence[ConversationMessage]) -> str:
         """返回摘要；失败时由 Context Engine 回退。"""
 
 
@@ -162,8 +167,8 @@ class ManagedContext:
     dropped: tuple[dict[str, str], ...]
     recalled_memory_ids: tuple[str, ...]
     compression_fallbacks: tuple[str, ...] = ()
-    context_signals: "ContextSignals | None" = None
-    context_plan: "ContextPlan | None" = None
+    context_signals: ContextSignals | None = None
+    context_plan: ContextPlan | None = None
 
     def as_built_context(self) -> BuiltContext:
         """复用 Citation Validator 所需的 BuiltContext 证据字段。"""
@@ -259,8 +264,8 @@ class ContextEngine:
         history: Sequence[ConversationMessage] = (),
         memories: Sequence[MemoryItem] = (),
         history_summary: str | None = None,
-        plan: "ContextPlan | None" = None,
-        signals: "ContextSignals | None" = None,
+        plan: ContextPlan | None = None,
+        signals: ContextSignals | None = None,
     ) -> ManagedContext:
         """按固定 baseline mode 或自适应 ContextPlan 构造完整上下文。
 
@@ -325,10 +330,15 @@ class ContextEngine:
             threshold=self.deduplication_threshold,
         )
 
+        packed_bundle = any(r.details.get("evidence_bundle_packed") for r in retrieved_results)
         evidence = build_context(
             query,
             _deduplicate_results(retrieved_results),
-            max_chars=config.evidence_char_budget,
+            # 已装箱证据不能先按字符前缀截断再检查组；其字符/Token 预算由
+            # Pipeline 注入同一个格式器。未使用新 Assembler 的旧配置保持不变。
+            max_chars=(max(config.evidence_char_budget, sum(len(format_context_item(
+                context_item_from_result(r))) + 2 for r in retrieved_results))
+                       if packed_bundle else config.evidence_char_budget),
             strategy=config.evidence_strategy,  # type: ignore[arg-type]
             required_source_types=required_source_types,
         )
@@ -341,7 +351,7 @@ class ContextEngine:
                         evidence_body = compressed
                     else:
                         fallbacks.append(f"evidence:{item.chunk_id}:empty_compression")
-                except Exception:
+                except Exception:  # noqa: BLE001 - 可注入压缩器失败必须回退原文。
                     fallbacks.append(f"evidence:{item.chunk_id}:compression_error")
             # 压缩器只处理正文，citation 所需的结构化头始终由 Engine 重建。
             text = format_context_item(item, text=evidence_body)
@@ -358,7 +368,7 @@ class ContextEngine:
                     f"rank={item.rank},score={item.score:.6f}",
                     group_id=(
                         str(item.retrieval_details["path_group_id"])
-                        if item.retrieval_details.get("path_group_id")
+                        if item.retrieval_details.get("path_group_id") and not packed_bundle
                         else None
                     ),
                 )
@@ -369,8 +379,34 @@ class ContextEngine:
         # Python 排序稳定：同一层保持 Context Builder 已确定的 rank/source 顺序。
         # 不能再按随机化 chunk id 排序，否则高排名 gold evidence 可能被预算挤出。
         ordered_candidates = sorted(candidates, key=lambda item: -item.priority)
+        ledger: dict[str, dict[str, object]] = {}
+        if packed_bundle:
+            for result in retrieved_results:
+                for group in json.loads(str(result.details.get("path_groups_json", "[]"))):
+                    ledger[str(group["group_id"])] = group
+            ordered_candidates = [replace(s, token_count=self.estimator.count(_format_segment(s)))
+                                  if s.kind == "evidence" else s for s in ordered_candidates]
+        evidence_segments = {s.segment_id: s for s in ordered_candidates if s.kind == "evidence"}
+        kept_ids = {s.segment_id for s in kept}
         path_groups: dict[str, list[ContextSegment]] = {}
         for segment in ordered_candidates:
+            if segment.segment_id in kept_ids:
+                continue
+            memberships = [g for g in ledger.values() if segment.segment_id in g["chunk_ids"]]
+            if segment.kind == "evidence" and memberships:
+                complete = [g for g in memberships if set(g["chunk_ids"]) <= set(evidence_segments)]
+                viable = [(sum(evidence_segments[cid].token_count for cid in set(g["chunk_ids"]) - kept_ids), g)
+                          for g in complete]
+                viable = [(cost, g) for cost, g in viable if used_tokens + cost <= managed_budget]
+                if not viable:
+                    dropped.append({"segment_id": segment.segment_id, "reason": "complete_group_budget"})
+                    continue
+                cost, group = min(viable, key=lambda v: (v[0], str(v[1]["group_id"])))
+                members = [evidence_segments[cid] for cid in group["chunk_ids"] if cid not in kept_ids]
+                kept.extend(members)
+                kept_ids.update(s.segment_id for s in members)
+                used_tokens += cost
+                continue
             if segment.kind == "evidence" and segment.group_id:
                 path_groups.setdefault(segment.group_id, []).append(segment)
         expected_group_sizes = {
@@ -401,12 +437,14 @@ class ContextEngine:
                     )
                     continue
                 kept.extend(group)
+                kept_ids.update(s.segment_id for s in group)
                 used_tokens += group_tokens
                 continue
             if used_tokens + segment.token_count > managed_budget:
                 dropped.append({"segment_id": segment.segment_id, "reason": "token_budget"})
                 continue
             kept.append(segment)
+            kept_ids.add(segment.segment_id)
             used_tokens += segment.token_count
         kept_evidence_ids = {
             segment.segment_id for segment in kept if segment.kind == "evidence"
@@ -440,7 +478,7 @@ class ContextEngine:
         history_summary: str | None,
         dropped: list[dict[str, str]],
         fallbacks: list[str],
-        plan: "ContextPlan | None",
+        plan: ContextPlan | None,
     ) -> list[ContextSegment]:
         if plan is not None:
             recent_count = plan.recent_history_count
@@ -461,7 +499,7 @@ class ContextEngine:
             if summary is None and self.summarizer is not None:
                 try:
                     summary = self.summarizer.summarize(history[:-len(recent)] if recent else history)
-                except Exception:
+                except Exception:  # noqa: BLE001 - 摘要插件失败必须受控保留历史。
                     fallbacks.append("history:summary_error")
             if summary:
                 output.append(self._segment("summary", "history-summary", summary, 60, "compressed_history"))

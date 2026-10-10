@@ -1,19 +1,24 @@
 """有界的证据任务调度：规划 -> 多路检索 -> 组装 -> 验证 -> 定向补救一次。"""
 from __future__ import annotations
 
+import re
+from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
 from contextvars import ContextVar
 from dataclasses import asdict, dataclass, field, replace
 from time import perf_counter
-from typing import Callable
-import re
 
 from intern_rag.ingestion import Chunk
 from intern_rag.retrieval.adaptive import AdaptiveRetriever
 from intern_rag.retrieval.base import RetrievalResult
 from intern_rag.retrieval.evidence_plan import (
-    EvidenceAssembler, EvidenceBundle, EvidencePlan, EvidencePlanner, EvidenceScope,
-    EvidenceVerification, EvidenceVerifier,
+    EvidenceAssembler,
+    EvidenceBundle,
+    EvidencePlan,
+    EvidencePlanner,
+    EvidenceScope,
+    EvidenceVerification,
+    EvidenceVerifier,
 )
 
 
@@ -68,6 +73,17 @@ class EvidenceOrientedRetriever:
         )
         self._state: ContextVar[_RequestState | None] = ContextVar(
             f"evidence_oriented_{id(self)}", default=None)
+        self._packing: ContextVar[tuple | None] = ContextVar(f"evidence_packing_{id(self)}", default=None)
+
+    def configure_packing(self, count_tokens, format_result, *, max_chars: int,
+                          available_tokens: Callable[[list[str]], int]) -> None:
+        """注入与实际 ContextEngine 相同的格式器和有效预算，不读取用户/评测标签。"""
+        self._packing.set((count_tokens, format_result, max_chars, available_tokens))
+
+    def get_candidates(self) -> list[RetrievalResult]:
+        """返回装箱前完整排序候选，用于三阶段审计，不是在线 gold 信息。"""
+        state = self._state.get()
+        return list(state.candidates) if state is not None else []
 
     def __call__(self, query: str, chunks: list[Chunk], top_k: int = 5,
                  source_types: set[str] | None = None) -> list[RetrievalResult]:
@@ -151,7 +167,7 @@ class EvidenceOrientedRetriever:
                     rows = self.graph_retriever.retrieve_linked_paths(
                         query, authorized, self.config.candidate_k,
                         set(sources) if sources is not None else None,
-                        max_paths=self.config.max_paths)
+                        max_paths=self.config.max_paths, complete_groups=True)
                     # 路径中的边不能引用不在授权子库的出处。
                     allowed_ids = {c.id for c in authorized}
                     edges = {e.edge_id: e for e in self.graph_retriever.graph.edges}
@@ -167,7 +183,7 @@ class EvidenceOrientedRetriever:
                                           "semantic_channel": int(strategy in {"dense", "hybrid"})})
                         for r in rows if state.plan.scope.permits(r.chunk)]
                 error = None
-            except Exception as exc:
+            except Exception as exc:  # noqa: BLE001 - 第三方检索通道异常必须记录并受控降级。
                 rows, error = [], type(exc).__name__
             return rows, {"strategy": strategy, "query": query, "source_filter": sources,
                           "chunk_ids": [r.chunk_id for r in rows], "error_type": error,
@@ -186,7 +202,7 @@ class EvidenceOrientedRetriever:
                 previous = merged.get(r.chunk_id)
                 details = {**(previous.details if previous else {}), **r.details}
                 if previous and previous.details.get("path_group_id"):
-                    details.update({k: v for k, v in previous.details.items() if k.startswith("path_") or k.startswith("graph_")})
+                    details.update({k: v for k, v in previous.details.items() if k.startswith(("path_", "graph_"))})
                 details["semantic_channel"] = max(int(details.get("semantic_channel", 0)),
                                                     int(previous.details.get("semantic_channel", 0)) if previous else 0)
                 merged[r.chunk_id] = replace(r, details=details)
@@ -195,24 +211,28 @@ class EvidenceOrientedRetriever:
                             for i, cid in enumerate(ordered, 1)]
 
     def _finish(self, state: _RequestState, top_k: int, *, exhausted: bool) -> list[RetrievalResult]:
-        """最多一次统一重排，优先完整证据组；top-k 不截断路径组。"""
+        """保留全池排序 -> 完整组识别/增量装箱 -> 按原标准验证。
+
+        CrossEncoder 只处理有界前排，尾部候选不删除。Top-k 仅是评测/展示
+        截止位，不在完整组识别前截断成员；有效预算由 Context 格式器统一约束。
+        """
         candidates = state.candidates
         if self.config.rerank and not state.reranked and candidates and not state.plan.requirement.graph_required:
             state.reranked = True
-            candidates = self.base._rerank(state.plan.query, candidates[:self.config.candidate_k])
-            state.candidates = candidates
-        # 显式标题与关系路径是组装约束，而不是 gold 优先排序。
-        anchors = tuple(a for slot in state.plan.slots for a in slot.anchors)
-        candidates = sorted(candidates, key=lambda r: (
-            0 if (state.plan.requirement.graph_required and r.details.get("path_group_id"))
-                 or any(a.lower() in (r.chunk.title or "").lower() for a in anchors) else 1,
-            r.rank, r.chunk_id))
+            candidates = (self.base._rerank(state.plan.query, candidates[:self.config.candidate_k])
+                          + candidates[self.config.candidate_k:])
         candidates = [replace(r, rank=i) for i, r in enumerate(candidates, 1)]
-        # 先选择 top-k 的整组闭包，多出来的组成员受统一 Token 预算约束。
-        selected_groups = {str(r.details.get("path_group_id") or r.chunk_id) for r in candidates[:top_k]}
-        selected = [r for r in candidates if str(r.details.get("path_group_id") or r.chunk_id) in selected_groups]
-        state.bundle = self.assembler.assemble(state.plan, selected,
-                                               self.config.evidence_token_budget, self.count_tokens)
+        state.candidates = candidates
+        packing = self._packing.get()
+        counter, formatter, chars = (packing[:3] if packing else (self.count_tokens, None, None))
+        budget = self.config.evidence_token_budget
+        state.bundle = self.assembler.assemble(state.plan, candidates, budget, counter,
+                                               max_chars=chars, format_result=formatter)
+        if packing:
+            effective = max(0, min(budget, packing[3]([r.chunk_id for r in state.bundle.results])))
+            if effective < budget:
+                state.bundle = self.assembler.assemble(state.plan, candidates, effective, counter,
+                                                       max_chars=chars, format_result=formatter)
         state.verification = self.verifier.verify(state.plan, state.bundle, exhausted)
         return list(state.bundle.results)
 
@@ -237,6 +257,7 @@ class EvidenceOrientedRetriever:
         return {"config_version": self.config.version, "selected_strategy": "evidence_oriented",
                 "evidence_requirement": asdict(requirement), "evidence_plan": state.plan.to_trace(),
                 "evidence_bundle": state.bundle.to_trace() if state.bundle else {},
+                "candidate_chunk_ids": [r.chunk_id for r in state.candidates],
                 "slot_verification": asdict(state.verification) if state.verification else {},
                 "retrieval_history": state.history, "retrieval_call_count": len(state.cache),
                 "rescue_invoked": state.rescued,

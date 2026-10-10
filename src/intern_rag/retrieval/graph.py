@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from collections import deque
 from contextvars import ContextVar
 from dataclasses import asdict, dataclass
@@ -194,6 +195,7 @@ class GraphRetriever:
         top_k: int = 20,
         source_types: set[str] | None = None,
         max_paths: int = 2,
+        complete_groups: bool = False,
     ) -> list[RetrievalResult]:
         """召回 Query 已链接实体之间的完整有界路径证据组。
 
@@ -240,6 +242,7 @@ class GraphRetriever:
                 break
 
         candidates: dict[str, tuple[float, str, tuple[str, ...], str, int]] = {}
+        memberships: dict[str, list[dict[str, object]]] = {}
         for path_index, (node_ids, edges) in enumerate(paths, 1):
             edge_ids = tuple(edge.edge_id for edge in edges)
             group_id = "path-" + sha1("|".join(edge_ids).encode("utf-8")).hexdigest()[:12]
@@ -256,11 +259,32 @@ class GraphRetriever:
             valid_ids = tuple(dict.fromkeys(
                 chunk_id for chunk_id in chunk_ids if chunk_id in chunk_by_id
             ))
+            if complete_groups:
+                # 同一关系可由多个出处证明；完整路径需要每条边至少一个原文见证，
+                # 并非把所有可替代出处都当成必须成员。共享见证只保存/计费一次。
+                witnesses = [set(edge.chunk_ids) & set(chunk_by_id) for edge in edges]
+                if any(not ids for ids in witnesses):
+                    continue
+                uncovered = set(range(len(witnesses)))
+                chosen: list[str] = []
+                while uncovered:
+                    options = set().union(*(witnesses[i] for i in uncovered))
+                    best = min(options, key=lambda cid: (
+                        -sum(cid in witnesses[i] for i in uncovered),
+                        len(chunk_by_id[cid].text), cid))
+                    chosen.append(best)
+                    uncovered -= {i for i in uncovered if best in witnesses[i]}
+                valid_ids = tuple(chosen)
             group_size = len(valid_ids)
             for position, chunk_id in enumerate(valid_ids):
                 score = 2.0 / (1 + len(edges)) + 0.01 / (1 + position)
                 current = candidates.get(chunk_id)
                 value = (score, path_text, edge_ids, group_id, group_size)
+                if complete_groups:
+                    memberships.setdefault(chunk_id, []).append({
+                        "group_id": group_id, "chunk_ids": list(valid_ids),
+                        "path": path_text, "edge_ids": list(edge_ids), "complete": True,
+                    })
                 if current is None or value[0] > current[0]:
                     candidates[chunk_id] = value
 
@@ -283,8 +307,15 @@ class GraphRetriever:
                     "linked_path_rescue": 1,
                 },
             )
-            for rank, (chunk_id, value) in enumerate(ordered[:top_k], 1)
+            for rank, (chunk_id, value) in enumerate(
+                ordered if complete_groups else ordered[:top_k], 1)
         ]
+        if complete_groups:
+            results = [RetrievalResult(
+                chunk_id=r.chunk_id, score=r.score, rank=r.rank, chunk=r.chunk,
+                reason=r.reason, details={**r.details, "path_groups_json": json.dumps(
+                    memberships[r.chunk_id], ensure_ascii=False, sort_keys=True)},
+            ) for r in results]
         self._set_trace(
             decomposition.to_trace(), linked, len(visited_nodes), len(paths),
             None if paths else "no bounded path connects linked entities",
@@ -328,8 +359,8 @@ class GraphVectorRetriever:
         self.vector_retriever = vector_retriever
         self.rrf_k = rrf_k
         self.candidate_multiplier = candidate_multiplier
-        self._last_trace: ContextVar[dict[str, object]] = ContextVar(
-            f"graph_vector_trace_{id(self)}", default={}
+        self._last_trace: ContextVar[dict[str, object] | None] = ContextVar(
+            f"graph_vector_trace_{id(self)}", default=None
         )
 
     def __call__(
@@ -430,7 +461,7 @@ class GraphVectorRetriever:
     def get_last_trace(self) -> dict[str, object]:
         """返回分解、图遍历和融合摘要。"""
 
-        return dict(self._last_trace.get())
+        return dict(self._last_trace.get() or {})
 
 
 def _build_adjacency(

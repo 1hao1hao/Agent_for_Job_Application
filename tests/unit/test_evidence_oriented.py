@@ -1,15 +1,22 @@
-from dataclasses import replace
 import json
 import tempfile
+from dataclasses import replace
 from pathlib import Path
 
 from intern_rag.agent import FakeLlmClient, PipelineConfig, RagPipeline, RagRequest
 from intern_rag.ingestion import Chunk
 from intern_rag.retrieval import AdaptiveRetriever, FakeRerankScorer, RetrievalResult
-from intern_rag.retrieval.evidence_plan import (
-    EvidenceAssembler, EvidencePlanner, EvidenceScope, EvidenceVerifier,
+from intern_rag.retrieval.evidence_oriented import (
+    EvidenceOrientedRetriever,
+    OrchestratorConfig,
+    _RequestState,
 )
-from intern_rag.retrieval.evidence_oriented import EvidenceOrientedRetriever, OrchestratorConfig
+from intern_rag.retrieval.evidence_plan import (
+    EvidenceAssembler,
+    EvidencePlanner,
+    EvidenceScope,
+    EvidenceVerifier,
+)
 from intern_rag.routing import RouteDecision
 
 
@@ -181,3 +188,38 @@ def test_conflict_is_not_rescued_or_generated():
         assert response.status == "insufficient_evidence"
         assert pipeline.last_trace.evidence["reason"] == "slot_conflicting"
         assert backend.calls == 1
+
+
+def test_shared_paths_pay_once_and_bad_path_does_not_delete_good_path():
+    plan = EvidencePlanner().plan("哪些项目通过两跳关系证明技能？")
+    groups = [
+        {"group_id": "p1", "chunk_ids": ["a", "b"], "path": "J->S->P", "edge_ids": ["e1", "e2"]},
+        {"group_id": "p2", "chunk_ids": ["b", "c"], "path": "S->P->E", "edge_ids": ["e2", "e3"]},
+        {"group_id": "bad", "chunk_ids": ["b", "absent"], "path": "S->X", "edge_ids": ["e4"]},
+    ]
+    rows = [result(chunk(cid), path_groups_json=json.dumps(groups)) for cid in ("a", "b", "c")]
+    bundle = EvidenceAssembler().assemble(plan, rows, 1000, len, format_result=lambda r: r.chunk.text)
+    assert {g.group_id for g in bundle.groups} == {"p1", "p2"}
+    assert bundle.token_count == sum(len(f"[evidence:{r.chunk_id}]\n{r.chunk.text}") for r in rows)
+    assert EvidenceVerifier().verify(plan, bundle).ready
+
+
+def test_topk_does_not_discard_members_before_group_recognition():
+    engine, _ = retriever()
+    rows = [replace(result(chunk(str(i)), semantic_channel=1), rank=i + 1) for i in range(7)]
+    group = {"group_id": "tail", "chunk_ids": ["5", "6"], "path": "J->S->P", "edge_ids": ["e1", "e2"]}
+    rows[5:] = [replace(r, details={"path_groups_json": json.dumps([group])}) for r in rows[5:]]
+    state = _RequestState(EvidencePlanner().plan("哪些项目通过两跳关系证明技能？"), candidates=rows)
+    engine._state.set(state)
+    out = engine._finish(state, 1, exhausted=True)
+    assert {"5", "6"} <= {r.chunk_id for r in out}
+    assert len(engine.get_candidates()) == 7
+
+
+def test_rerank_head_does_not_delete_tail_candidates():
+    engine, _ = retriever(OrchestratorConfig(candidate_k=2, rerank=True))
+    rows = [replace(result(chunk(str(i)), semantic_channel=1), rank=i + 1) for i in range(4)]
+    state = _RequestState(EvidencePlanner().plan("解释检索"), candidates=rows)
+    engine._state.set(state)
+    engine._finish(state, 1, exhausted=True)
+    assert len(engine.get_candidates()) == 4
