@@ -39,6 +39,7 @@ from intern_rag.agent.schemas import BuiltContext, RagRequest, RagResponse
 from intern_rag.agent.validation import ValidationResult, validate_generation
 from intern_rag.ingestion import Chunk
 from intern_rag.retrieval import RetrievalResult, Retriever, retrieve_top_k
+from intern_rag.retrieval.evidence_plan import EvidenceScope
 from intern_rag.routing import RouteDecision, Router, route_query
 from intern_rag.tracing import (
     AgentTrace,
@@ -52,6 +53,10 @@ INSUFFICIENT_ANSWER = "当前证据不足，无法基于已提供的资料可靠
 FORMAT_ERROR_ANSWER = "模型输出格式不符合系统契约，本次请求未返回答案。"
 CITATION_ERROR_ANSWER = "模型返回了无法验证的引用，本次请求未返回答案。"
 SYSTEM_ERROR_ANSWER = "请求处理失败，请根据 trace 中的错误阶段排查。"
+
+
+class ContextEvidenceMissing(RuntimeError):
+    """Context 裁剪后证据组不完整，受控拒答而不是继续生成。"""
 
 @dataclass(frozen=True)
 class PipelineConfig:
@@ -133,6 +138,7 @@ class RagPipeline:
         context_signal_extractor: ContextSignalExtractor | None = None,
         context_policy: ContextPolicy | None = None,
         agent_controller: AgentController | None = None,
+        evidence_scope_provider: Callable[[RagRequest], EvidenceScope] | None = None,
     ) -> None:
         self.chunks = list(chunks)
         self.llm_client = llm_client
@@ -149,6 +155,7 @@ class RagPipeline:
         self.trace_sink = trace_sink
         self.context_engine = context_engine
         self.context_provider = context_provider
+        self.evidence_scope_provider = evidence_scope_provider
         self.context_signal_extractor = context_signal_extractor or ContextSignalExtractor(
             estimator=context_engine.estimator if context_engine is not None else None
         )
@@ -282,6 +289,15 @@ class RagPipeline:
                         evidence_requirement=evidence_requirement_trace,
                         initial_trace=retrieval_decision_trace,
                     )
+                elif callable(getattr(selected_retriever, "retrieve_evidence", None)):
+                    scope = (
+                        self.evidence_scope_provider(request)
+                        if self.evidence_scope_provider is not None
+                        # HTTP user_id 是会话标识，不是认证凭证；默认只开放共享资料。
+                        else EvidenceScope()
+                    )
+                    retrieved_results = selected_retriever.retrieve_evidence(
+                        request.query, self.chunks, request.top_k, source_types, scope)
                 else:
                     retrieved_results = selected_retriever(
                         request.query,
@@ -490,6 +506,13 @@ class RagPipeline:
                             managed_context.context_plan
                         )
 
+                verify_context = getattr(selected_retriever, "verify_context", None)
+                if callable(verify_context):
+                    context_verification = verify_context(built_context.used_chunk_ids)
+                    context_trace["slot_verification"] = asdict(context_verification)
+                    if not context_verification.ready:
+                        raise ContextEvidenceMissing("Context 裁剪后必要证据槽或路径不完整")
+
                 while True:
                     agent_state = replace(
                         agent_state,
@@ -569,6 +592,12 @@ class RagPipeline:
                 )
                 latency_ms["validation"] = _elapsed_ms(stage_started_at)
                 validation_trace = _validation_to_trace(validation_result)
+                if callable(verify_context) and generation_result.sufficient and validation_result.is_valid:
+                    cited_verification = verify_context(
+                        [c.chunk_id for c in validation_result.citations])
+                    validation_trace["slot_verification"] = asdict(cited_verification)
+                    if not cited_verification.ready:
+                        raise ContextEvidenceMissing("模型引用未覆盖必要证据槽或完整路径")
 
                 safe_abstention_with_citations = (
                     not generation_result.sufficient
@@ -626,6 +655,16 @@ class RagPipeline:
                         status="answered",
                         latency_ms=0.0,
                     )
+        except ContextEvidenceMissing as error:
+            error_type = "none"
+            error_message = str(error)
+            context_trace["evidence_dropped"] = current_stage == "context"
+            validation_trace["citation_slot_failure"] = current_stage == "validation"
+            response = RagResponse(
+                request_id=request.request_id, trace_id=trace_id,
+                answer=INSUFFICIENT_ANSWER, citations=[],
+                routed_sources=route_decision.routed_sources,
+                status="insufficient_evidence", latency_ms=0.0)
         except GenerationParseError as error:
             error_type = "llm_format_error"
             error_message = f"{error.error_type}: {error}"

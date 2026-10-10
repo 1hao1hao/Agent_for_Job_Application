@@ -19,6 +19,7 @@ from intern_rag.retrieval.evidence_gap import (
     EvidenceGapConfig,
     EvidenceGapGuidedRetriever,
 )
+from intern_rag.retrieval.evidence_oriented import EvidenceOrientedRetriever, OrchestratorConfig
 from intern_rag.retrieval.hybrid import HybridRetriever
 from intern_rag.retrieval.graph import GraphRetriever, GraphVectorRetriever
 from intern_rag.retrieval.keyword import retrieve_top_k
@@ -192,6 +193,19 @@ def build_retriever_from_config(config: dict[str, object]) -> Retriever:
             ),
             graph_retriever=graph_vector,
         )
+        if bool(config.get("evidence_oriented_enabled", False)):
+            return EvidenceOrientedRetriever(
+                adaptive, graph_retriever=graph_retriever,
+                config=OrchestratorConfig(
+                    version=str(config.get("config_version", "evidence-oriented-v1")),
+                    max_calls=int(config.get("evidence_max_calls", 6)),
+                    max_workers=int(config.get("evidence_max_workers", 2)),
+                    candidate_k=int(config.get("reranker_candidate_k", 20)),
+                    max_paths=int(config.get("evidence_max_paths", 2)),
+                    evidence_token_budget=int(config.get("evidence_token_budget", 1200)),
+                    rerank=bool(config.get("evidence_rerank", True)),
+                ),
+            )
         if bool(config.get("evidence_gap_rescue_enabled", False)):
             return EvidenceGapGuidedRetriever(
                 adaptive,
@@ -250,6 +264,8 @@ def _build_query_analyzer(config: dict[str, object]) -> QueryAnalyzer:
             exact_fact_markers=tuple(analyzer_data.get("exact_fact_markers", defaults.exact_fact_markers)),
             exact_terms=tuple(analyzer_data.get("exact_terms", defaults.exact_terms)),
             latin_token_is_exact=bool(analyzer_data.get("latin_token_is_exact", False)),
+            routing_sources_are_requirements=bool(analyzer_data.get(
+                "routing_sources_are_requirements", True)),
             entity_markers=defaults.entity_markers,
         ),
         StrategySelectionConfig(

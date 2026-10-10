@@ -19,6 +19,7 @@ TerminalStage = Literal[
     "citation_invalid",
     "model_error",
     "answered",
+    "planning_error", "slot_missing", "conflicting_evidence",
 ]
 
 
@@ -84,7 +85,23 @@ def classify_failure_stage(
     evidence_status = str(trace.evidence.get("status", ""))
     evidence_reason = str(trace.evidence.get("reason", ""))
 
-    if response.status == "answered":
+    decision = trace.retrieval.get("decision", {})
+    if trace.context.get("evidence_dropped"):
+        stage: TerminalStage = "context_evidence_dropped"
+        reason = "Context packing removed a required evidence slot/group"
+    elif trace.validation.get("citation_slot_failure"):
+        stage = "citation_invalid"
+        reason = "cited evidence does not cover required slots"
+    elif evidence_reason == "slot_conflicting":
+        stage = "conflicting_evidence"
+        reason = "explicit conflict/expired evidence prevented generation"
+    elif evidence_reason in {"slot_missing", "slot_unknown"} and (relevant & attempt_ids):
+        stage = "slot_missing"
+        reason = "relevant retrieval does not satisfy every planned slot"
+    elif response.status == "error" and isinstance(decision, dict) and decision.get("planning_error"):
+        stage = "planning_error"
+        reason = "evidence planning failed"
+    elif response.status == "answered":
         stage: TerminalStage = "answered"
         reason = "pipeline returned an answered response"
     elif response.error_type in {"citation_error", "citation_invalid"}:

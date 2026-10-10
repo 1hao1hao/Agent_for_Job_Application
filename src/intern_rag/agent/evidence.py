@@ -15,6 +15,7 @@ EvidenceReason = Literal[
     "weak_retrieval_score", "low_retrieval_confidence",
     "required_sources_missing", "graph_evidence_missing",
     "evidence_gap_detected",
+    "slot_missing", "slot_conflicting", "slot_unknown",
 ]
 
 
@@ -80,6 +81,7 @@ class EvidenceDecision:
     relation_evidence_present: bool = False
     structural_checks: Mapping[str, bool] = field(default_factory=dict)
     config_version: str = "legacy"
+    slot_verification: Mapping[str, object] = field(default_factory=dict)
 
 
 def load_evidence_config(path: Path) -> EvidenceConfig:
@@ -200,6 +202,23 @@ def check_evidence(
         "structural_checks": structural_checks,
         "config_version": config.config_version,
     }
+    verification = trace.get("slot_verification")
+    if isinstance(verification, dict):
+        verdicts = verification.get("verdicts", [])
+        conflicting = any(v.get("status") == "conflicting" for v in verdicts)
+        unknown = any(v.get("status") == "unknown" for v in verdicts)
+        ready = bool(verification.get("ready"))
+        retryable = bool(verification.get("retryable")) and retry_count < max_retries
+        common.update({
+            "slot_verification": verification,
+            "config_version": str(trace.get("config_version", "evidence-oriented")),
+            "threshold": None, "threshold_status": "slot_structural_verification",
+            "structural_checks": {str(v["slot_id"]): v["status"] == "satisfied" for v in verdicts},
+        })
+        return _decision(
+            "sufficient" if ready else "retryable" if retryable and not conflicting else "insufficient",
+            "sufficient_evidence" if ready else "slot_conflicting" if conflicting else "slot_unknown" if unknown else "slot_missing",
+            "逐槽结构就绪验证；相关分数不作为事实证明。", common)
     if need == "unanswerable" or (
         (route.intent == "unknown" or not route.routed_sources) and not results
     ):

@@ -65,6 +65,7 @@ class QueryAnalyzerConfig:
         "cross-encoder", "fastapi", "docker compose", "citation", "trace id",
     )
     latin_token_is_exact: bool = False
+    routing_sources_are_requirements: bool = False
     entity_markers: Mapping[str, tuple[str, ...]] = field(default_factory=lambda: {
         "job": ("岗位", "职位", "jd", "招聘"),
         "skill": ("技能", "能力", "要求", "技术栈"),
@@ -217,7 +218,7 @@ class QueryAnalyzer:
         )
         needs_multi_source = (
             len(explicit_sources) >= 2
-            or len(sources) >= 2
+            or (self.config.routing_sources_are_requirements and len(sources) >= 2)
             or any(marker in normalized for marker in self.config.multi_source_markers)
         )
         requires_entity_reasoning = bool(strong_relations) or (
@@ -236,7 +237,8 @@ class QueryAnalyzer:
             required_source_types=(
                 explicit_sources
                 if explicit_sources
-                else tuple(sorted(sources)) if len(sources) >= 2 else ()
+                else tuple(sorted(sources))
+                if self.config.routing_sources_are_requirements and len(sources) >= 2 else ()
             ),
         )
 
